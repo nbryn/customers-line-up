@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 using Logic.Models;
 using Logic.Services;
 using Data;
 
-namespace CLup.Controllers
+namespace API
 {
     [ApiController]
     [Route("[controller]")]
@@ -28,15 +27,15 @@ namespace CLup.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] UserDTO user)
         {
-            var id = await _repository.Create(user);
+            var id = await _service.RegisterUser(user);
 
             return CreatedAtAction(nameof(Get), new { id }, default);
         }
 
         [HttpGet]
-        public async Task<IEnumerable<UserDTO>> Get()
+        public IEnumerable<UserDTO> Get()
         {
-            return null;
+            return _repository.Read().ToList();
         }
     }
 }

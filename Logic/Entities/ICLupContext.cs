@@ -8,5 +8,7 @@ namespace Logic.Entities
     public interface ICLupContext
     {
         DbSet<User> Users { get; }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }
