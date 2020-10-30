@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace CLup.Entities
+namespace Logic.Entities
 {
     public class CLupContext : DbContext
     {

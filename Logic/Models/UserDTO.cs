@@ -1,4 +1,4 @@
-namespace CLup.Models
+namespace Logic.Models
 {
     public class UserDTO
     {

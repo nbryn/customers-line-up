@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-using CLup.Models;
-using CLup.Services;
-using CLup.Repositories;
+using Logic.Models;
+using Logic.Services;
+using Data;
 
 namespace CLup.Controllers
 {

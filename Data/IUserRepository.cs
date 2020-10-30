@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 
-using CLup.Models;
+using Logic.Models;
 
-namespace CLup.Repositories
+namespace Data
 {
     public interface IUserRepository
     {

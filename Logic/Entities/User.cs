@@ -1,4 +1,4 @@
-namespace CLup.Entities
+namespace Logic.Entities
 {
     public class User
     {

@@ -2,9 +2,9 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-using CLup.Models;
+using Logic.Models;
 
-namespace CLup.Repositories
+namespace Data
 {
     public class UserRepository : IUserRepository
     {

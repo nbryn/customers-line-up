@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace CLup.Entities
+namespace Logic.Entities
 {
     public interface ICLupContext
     {
