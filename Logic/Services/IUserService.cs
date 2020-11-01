@@ -6,7 +6,9 @@ namespace Logic.Services
 {
     public interface IUserService
     {
-        Task<int> RegisterUser(UserDTO user);
+        Task<int> RegisterUser(RegisterDTO user);
+
+        Task<UserDTO> Authenticate(LoginDTO user);
          
     }
 }

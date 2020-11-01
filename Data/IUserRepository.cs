@@ -8,9 +8,10 @@ namespace Data
 {
     public interface IUserRepository
     {
-        Task<int> Create(UserDTO user);
+        Task<UserDTO>FindByEmail(string email);
+        Task<int> Register(RegisterDTO user);
         Task<UserDTO> Read(int userId);
-        IEnumerable<UserDTO> Read();
+        IQueryable<UserDTO> Read();
 
     }
 }

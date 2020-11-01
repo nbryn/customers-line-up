@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -17,7 +19,21 @@ namespace Data
         {
             _context = context;
         }
-        public async Task<int> Create(UserDTO user)
+
+        public async Task<UserDTO> FindByEmail(string email)
+        {
+            return await _context.Users.Where(u => u.Email == email)
+                                       .Select(u =>
+                                            new UserDTO
+                                            {
+                                                Name = u.Name,
+                                                Email = u.Email,
+                                                Password = u.Password,
+                                                Zip = u.Zip
+                                            })
+                                        .FirstOrDefaultAsync();
+        }
+        public async Task<int> Register(RegisterDTO user)
         {
             User newUser = new User
             {
@@ -39,7 +55,7 @@ namespace Data
             return null;
         }
 
-        public IEnumerable<UserDTO> Read()
+        public IQueryable<UserDTO> Read()
         {
             return from u in _context.Users
                    select new UserDTO
