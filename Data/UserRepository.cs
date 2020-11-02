@@ -26,6 +26,7 @@ namespace Data
                                        .Select(u =>
                                             new UserDTO
                                             {
+                                                Id = u.Id,
                                                 Name = u.Name,
                                                 Email = u.Email,
                                                 Password = u.Password,

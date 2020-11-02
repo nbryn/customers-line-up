@@ -4,6 +4,8 @@ namespace Logic.Models
 {
     public class UserDTO
     {
+
+        public int Id { get; set; }
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
@@ -16,5 +18,6 @@ namespace Logic.Models
 
         [Required]
         public string Zip { get; set; }
+
     }
 }

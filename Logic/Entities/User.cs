@@ -18,5 +18,6 @@ namespace Logic.Entities
 
         [Required]
         public string Zip { get; set; }
+
     }
 }

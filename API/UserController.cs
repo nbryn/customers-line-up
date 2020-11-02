@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Logic.Exceptions;
 using Logic.Models;
 using Logic.Services;
+using Logic.Auth;
 using Data;
 
 namespace API
 {
     [ApiController]
+    [Authorize(Policy = Policies.User)]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
@@ -24,30 +27,6 @@ namespace API
         {
             _repository = repository;
             _service = service;
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RegisterDTO user)
-        {
-            var id = await _service.RegisterUser(user);
-
-            return CreatedAtAction(nameof(Get), new { id }, default);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
-        {
-            try
-            {
-                UserDTO user = await _service.Authenticate(loginRequest);
-
-                return CreatedAtAction(nameof(Get), new { user }, default);
-
-            }
-            catch (AuthenticationFailedException e)
-            {
-                return CreatedAtAction(nameof(Get), new { e.Message }, default);
-            }
         }
 
         [HttpGet]

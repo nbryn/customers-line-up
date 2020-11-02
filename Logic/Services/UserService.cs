@@ -1,6 +1,4 @@
-using BC = BCrypt.Net.BCrypt;
 using System.Threading.Tasks;
-
 
 using Data;
 using Logic.Entities;
@@ -18,24 +16,5 @@ namespace Logic.Services
         {
             _repository = repository;
         }
-        public async Task<int> RegisterUser(RegisterDTO user)
-        {
-            user.Password = BC.HashPassword(user.Password);
-            return await _repository.Register(user);
-        }
-
-        public async Task<UserDTO> Authenticate(LoginDTO loginRequest)
-        {
-
-            UserDTO user = await _repository.FindByEmail(loginRequest.Email);
-
-            if (user == null || !BC.Verify(loginRequest.Password, user.Password))
-            {
-                throw new AuthenticationFailedException("Invalid email/password combination");
-            }
-
-            return user;
-        }
-
     }
 }
