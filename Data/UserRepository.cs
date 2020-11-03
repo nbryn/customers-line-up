@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 using Logic.Users;
 using Logic.Context;
-using Logic.Models;
+using Logic.Users.Models;
 
 namespace Data
 {

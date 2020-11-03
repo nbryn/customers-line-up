@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Logic.Models;
+using Logic.Users.Models;
 
 namespace Data
 {

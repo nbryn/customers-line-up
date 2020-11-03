@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Logic.Models
+namespace Logic.Users.Models
 {
     public class LoginResponseDTO
     {

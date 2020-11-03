@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Logic.Exceptions;
-using Logic.Models;
+using Logic.Users.Models;
 using Logic.Users;
 using Logic.Auth;
 using Data;

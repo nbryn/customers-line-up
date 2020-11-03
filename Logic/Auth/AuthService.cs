@@ -8,7 +8,7 @@ using System;
 using System.Text;
 
 using Data;
-using Logic.Models;
+using Logic.Users.Models;
 using Logic.Exceptions;
 
 namespace Logic.Auth

@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Logic.Models;
+using Logic.Users.Models;
 using Logic.Auth;
 
 

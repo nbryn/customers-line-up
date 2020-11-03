@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-using Logic.Models;
+using Logic.Users.Models;
 
 namespace Logic.Auth
 {
