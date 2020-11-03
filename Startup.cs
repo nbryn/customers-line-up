@@ -10,6 +10,7 @@ using System;
 using System.Text;
 
 using Data;
+using Logic.Businesses;
 using Logic.Context;
 using Logic.Users;
 using Logic.Auth;
@@ -34,6 +35,7 @@ namespace CLup
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
              .AddJwtBearer(options =>
                 {
+                    options.SaveToken = true;
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -55,6 +57,8 @@ namespace CLup
 
             services.AddScoped<ICLupContext, CLupContext>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IBusinessService, BusinessService>();
+            services.AddScoped<IBusinessRepository, BusinessRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddControllers();

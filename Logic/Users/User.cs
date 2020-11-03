@@ -1,9 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+
+using Logic.Businesses;
+using Logic.Users.Models;
 
 namespace Logic.Users
 {
     public class User
     {
+
         public int Id { get; set; }
 
         [Required]
@@ -18,6 +23,22 @@ namespace Logic.Users
 
         [Required]
         public string Zip { get; set; }
+
+        public ICollection<Business> Businesses;
+
+        public User()
+        {
+
+        }
+        public User(UserDTO dto)
+        {
+            Id = dto.Id;
+            Name = dto.Name;
+            Email = dto.Email;
+            Password = dto.Password;
+            Zip = dto.Zip;
+
+        }
 
     }
 }
