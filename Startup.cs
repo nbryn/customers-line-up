@@ -10,8 +10,8 @@ using System;
 using System.Text;
 
 using Data;
-using Logic.Entities;
-using Logic.Services;
+using Logic.Context;
+using Logic.Users;
 using Logic.Auth;
 
 namespace CLup

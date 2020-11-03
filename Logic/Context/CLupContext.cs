@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Logic.Entities
+using Logic.Users;
+
+namespace Logic.Context
 {
     public class CLupContext : DbContext, ICLupContext
     {

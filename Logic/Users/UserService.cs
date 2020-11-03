@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 
 using Data;
-using Logic.Entities;
+using Logic.Users;
 using Logic.Exceptions;
 using Logic.Models;
 
 
-namespace Logic.Services
+namespace Logic.Users
 {
     public class UserService : IUserService
     {

@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace Logic.Entities
+using Logic.Users;
+
+namespace Logic.Context
 {
     public interface ICLupContext
     {

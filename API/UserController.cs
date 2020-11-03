@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Logic.Exceptions;
 using Logic.Models;
-using Logic.Services;
+using Logic.Users;
 using Logic.Auth;
 using Data;
 

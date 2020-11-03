@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 using Logic.Models;
 
-namespace Logic.Services
+namespace Logic.Auth
 {
     public interface IAuthService
     {

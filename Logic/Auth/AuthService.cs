@@ -11,7 +11,7 @@ using Data;
 using Logic.Models;
 using Logic.Exceptions;
 
-namespace Logic.Services
+namespace Logic.Auth
 {
     public class AuthService : IAuthService
     {

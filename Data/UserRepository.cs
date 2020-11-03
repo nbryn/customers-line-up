@@ -5,7 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-using Logic.Entities;
+using Logic.Users;
+using Logic.Context;
 using Logic.Models;
 
 namespace Data

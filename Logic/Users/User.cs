@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Logic.Entities
+namespace Logic.Users
 {
     public class User
     {
