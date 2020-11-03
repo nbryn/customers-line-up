@@ -27,29 +27,27 @@ namespace API
             _service = service;
         }
         [HttpPost]
-        [Route("Register")]
+        [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO user)
         {
             LoginResponseDTO response = await _service.RegisterUser(user);
 
-            return CreatedAtAction("Get", new { response }, default);
+            return Ok(response);
         }
 
         [HttpPost]
-        [Route("Login")]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
         {
-            try
-            {
                 LoginResponseDTO user = await _service.Authenticate(loginRequest);
 
-                return CreatedAtAction("Get", new { user }, default);
+                if (user == null)
+                {
+                    return Unauthorized();
+                }
 
-            }
-            catch (AuthenticationFailedException e)
-            {
-                return CreatedAtAction("Get", new { e.Message }, default);
-            }
+                return Ok(user);
+
         }
     }
 }

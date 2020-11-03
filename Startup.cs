@@ -18,44 +18,43 @@ namespace CLup
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
 
-        public IConfiguration Configuration { get; }
+        internal static IConfiguration _config { get; private set; }
+        public Startup(IConfiguration config)
+        {
+            _config = config;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CLupContext>(opt =>
             opt.UseInMemoryDatabase("CLup"));
+            services.AddSingleton<IConfiguration>(_config);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-
-            .AddJwtBearer(options =>
+             .AddJwtBearer(options =>
                 {
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = Configuration["Jwt: Issuer"],
-                        ValidAudience = Configuration["Jwt: Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt: SecretKey"])),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"])),
                         ClockSkew = TimeSpan.Zero
                     };
                 });
 
             services.AddAuthorization(config =>
             {
-            config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
-            config.AddPolicy(Policies.User, Policies.UserPolicy());
+                config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
+                config.AddPolicy(Policies.User, Policies.UserPolicy());
             });
 
             services.AddScoped<ICLupContext, CLupContext>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddControllers();

@@ -30,9 +30,10 @@ namespace API
         }
 
         [HttpGet]
-        public IEnumerable<UserDTO> Get()
+        [Route("all")]
+        public ActionResult<IEnumerable<UserDTO>> Get()
         {
-            return _repository.Read().ToList();
+            return Ok(_repository.Read().ToList());
         }
     }
 }

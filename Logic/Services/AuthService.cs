@@ -9,6 +9,7 @@ using System.Text;
 
 using Data;
 using Logic.Models;
+using Logic.Exceptions;
 
 namespace Logic.Services
 {
@@ -47,6 +48,11 @@ namespace Logic.Services
 
             UserDTO user = await _userRepository.FindByEmail(loginRequest.Email);
 
+            if (user == null || !BC.Verify(loginRequest.Password, user.Password))
+            {
+                return null;
+            }
+
             LoginResponseDTO response = new LoginResponseDTO{
                 Id = user.Id,
                 Email = user.Email,
@@ -70,8 +76,6 @@ namespace Logic.Services
             };
 
             var token = new JwtSecurityToken(
-            issuer: _config["Jwt: Issuer"],
-            audience: _config["Jwt: Audience"],
             claims: claims,
             expires: DateTime.Now.AddMinutes(120),
             signingCredentials: credentials
