@@ -6,8 +6,6 @@ namespace Logic.Auth
 {
     public interface IAuthService
     {
-        Task<LoginResponseDTO> RegisterUser(RegisterDTO user);
-
-        Task<LoginResponseDTO> Authenticate(LoginDTO user); 
+       string GenerateJWTToken(LoginDTO user);
     }
 }

@@ -1,4 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+
+using Logic.Businesses.Models;
 
 namespace Logic.Users.Models
 {
@@ -6,6 +9,7 @@ namespace Logic.Users.Models
     {
 
         public int Id { get; set; }
+
         [Required]
         [StringLength(50)]
         public string Name { get; set; }
@@ -18,6 +22,8 @@ namespace Logic.Users.Models
 
         [Required]
         public string Zip { get; set; }
+
+        public IEnumerable<BusinessDTO> Businesses {get; set;}
 
     }
 }

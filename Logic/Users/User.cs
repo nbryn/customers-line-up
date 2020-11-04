@@ -24,21 +24,7 @@ namespace Logic.Users
         [Required]
         public string Zip { get; set; }
 
-        public ICollection<Business> Businesses;
-
-        public User()
-        {
-
-        }
-        public User(UserDTO dto)
-        {
-            Id = dto.Id;
-            Name = dto.Name;
-            Email = dto.Email;
-            Password = dto.Password;
-            Zip = dto.Zip;
-
-        }
+        public ICollection<Business>? Businesses { get; set; }
 
     }
 }

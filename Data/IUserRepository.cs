@@ -8,9 +8,9 @@ namespace Data
 {
     public interface IUserRepository
     {
-        Task<UserDTO>FindByEmail(string email);
-        Task<int> Register(RegisterDTO user);
-        Task<UserDTO> Read(int userId);
+        Task<UserDTO> GetUserByEmail(string email);
+        Task<int> CreateUser(RegisterDTO user);
+        Task<UserDTO> GetUserById(int userId);
         IQueryable<UserDTO> Read();
 
     }

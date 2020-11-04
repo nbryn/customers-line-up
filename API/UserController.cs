@@ -32,7 +32,7 @@ namespace API
 
         [HttpGet]
         [Route("all")]
-        public ActionResult<IEnumerable<UserDTO>> Get()
+        public ActionResult<IEnumerable<UserDTO>> GetAll()
         {
             return Ok(_repository.Read().ToList());
         }

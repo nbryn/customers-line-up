@@ -19,14 +19,16 @@ namespace API
     [Route("[controller]")]
     public class BusinessController : ControllerBase
     {
+        private IBusinessRepository _repository;
         private IBusinessService _service;
 
-        public BusinessController(IBusinessService service)
+        public BusinessController(IBusinessRepository repository, IBusinessService service)
         {
+            _repository = repository;
             _service = service;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("create")]
         public async Task<IActionResult> NewBusiness([FromBody] CreateBusinessDTO dto)
         {
@@ -35,6 +37,14 @@ namespace API
             BusinessDTO business = await _service.RegisterBusiness(ownerEmail, dto);
 
             return Ok(business);
+        }
+
+        [HttpGet]
+        [Route("all")]
+        public ActionResult<IEnumerable<BusinessDTO>> GetAll()
+        {
+
+            return Ok(_repository.Read().ToList());
         }
     }
 }

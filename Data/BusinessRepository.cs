@@ -1,4 +1,7 @@
 using System.Threading.Tasks;
+using System.Linq;
+using System;
+using Microsoft.EntityFrameworkCore;
 
 using Logic.Context;
 using Logic.Users;
@@ -18,22 +21,35 @@ namespace Data
             _context = context;
         }
 
-        public async Task<int> Register(CreateBusinessDTO business, UserDTO owner)
+        public async Task<BusinessDTO> CreateBusiness(CreateBusinessDTO business, string ownerEmail)
         {
             Business newBusiness = new Business
             {
                 Name = business.Name,
-                Owner = new User(owner),
-                OwnerEmail = owner.Email,
-                Zip = business.Zip,
+                Owner = await GetOwner(ownerEmail),
+                OwnerEmail = ownerEmail,
+                Zip = business.Zip
             };
+
             _context.Businesses.Add(newBusiness);
 
             await _context.SaveChangesAsync();
 
-            return newBusiness.Id;
+            return new BusinessDTO(newBusiness);
 
         }
 
+        public IQueryable<BusinessDTO> Read()
+        {
+            return from b in _context.Businesses
+                   select new BusinessDTO
+                   {
+                       Id = b.Id,
+                       Name = b.Name,
+                       OwnerEmail = b.OwnerEmail,
+                       Zip = b.Zip
+                   };
+        }
+        private Task<User> GetOwner(string email) => _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
     }
 }

@@ -1,5 +1,3 @@
-using BC = BCrypt.Net.BCrypt;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -24,45 +22,7 @@ namespace Logic.Auth
             _config = config;
         }
 
-        public async Task<LoginResponseDTO> RegisterUser(RegisterDTO user)
-        {
-            string token = GenerateJWTToken(user);
-            user.Password = BC.HashPassword(user.Password);
-
-            int userId = await _userRepository.Register(user);
-
-            LoginResponseDTO response = new LoginResponseDTO
-            {
-                Id = userId,
-                Email = user.Email,
-                Token = token,
-            };
-
-
-            return response;
-
-        }
-        public async Task<LoginResponseDTO> Authenticate(LoginDTO loginRequest)
-        {
-            string token = GenerateJWTToken(loginRequest);
-
-            UserDTO user = await _userRepository.FindByEmail(loginRequest.Email);
-
-            if (user == null || !BC.Verify(loginRequest.Password, user.Password))
-            {
-                return null;
-            }
-
-            LoginResponseDTO response = new LoginResponseDTO{
-                Id = user.Id,
-                Email = user.Email,
-                Token = token,
-            };
-
-            return response;
-        }
-
-        private string GenerateJWTToken(LoginDTO user)
+        public string GenerateJWTToken(LoginDTO user)
         {
             var securityKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));

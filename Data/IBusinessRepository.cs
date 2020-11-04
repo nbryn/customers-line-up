@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-
+using System.Linq;
 
 using Logic.Businesses;
 using Logic.Businesses.Models;
@@ -9,6 +9,8 @@ namespace Data
 {
     public interface IBusinessRepository
     {
-         Task<int> Register(CreateBusinessDTO business, UserDTO owner);
+         Task<BusinessDTO> CreateBusiness(CreateBusinessDTO business, string ownerEmail);
+
+         IQueryable<BusinessDTO> Read();
     }
 }

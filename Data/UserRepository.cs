@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Logic.Users;
 using Logic.Context;
 using Logic.Users.Models;
+using Logic.Businesses.Models;
 
 namespace Data
 {
@@ -21,7 +22,7 @@ namespace Data
             _context = context;
         }
 
-        public async Task<UserDTO> FindByEmail(string email)
+        public async Task<UserDTO> GetUserByEmail(string email)
         {
             return await _context.Users.Where(u => u.Email == email)
                                        .Select(u =>
@@ -35,7 +36,7 @@ namespace Data
                                             })
                                         .FirstOrDefaultAsync();
         }
-        public async Task<int> Register(RegisterDTO user)
+        public async Task<int> CreateUser(RegisterDTO user)
         {
             User newUser = new User
             {
@@ -52,7 +53,7 @@ namespace Data
             return newUser.Id;
         }
 
-        public Task<UserDTO> Read(int userId)
+        public Task<UserDTO> GetUserById(int userId)
         {
             return null;
         }
@@ -65,7 +66,17 @@ namespace Data
                        Name = u.Name,
                        Email = u.Email,
                        Password = u.Password,
-                       Zip = u.Zip
+                       Zip = u.Zip,
+                       Businesses = from b in u.Businesses
+                                    select new BusinessDTO
+                                    {
+                                        Id = b.Id,
+                                        Name = b.Name,
+                                        Zip = b.Zip,
+                                        OwnerEmail = b.OwnerEmail
+                                    }
+
+
                    };
         }
     }
