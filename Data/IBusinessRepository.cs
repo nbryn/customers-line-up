@@ -11,6 +11,7 @@ namespace Data
     {
          Task<BusinessDTO> CreateBusiness(CreateBusinessDTO business, string ownerEmail);
 
+        
          IQueryable<BusinessDTO> Read();
     }
 }

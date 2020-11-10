@@ -31,7 +31,6 @@ namespace Data
                                                 Id = u.Id,
                                                 Name = u.Name,
                                                 Email = u.Email,
-                                                Password = u.Password,
                                                 Zip = u.Zip
                                             })
                                         .FirstOrDefaultAsync();
@@ -65,18 +64,7 @@ namespace Data
                    {
                        Name = u.Name,
                        Email = u.Email,
-                       Password = u.Password,
                        Zip = u.Zip,
-                       Businesses = from b in u.Businesses
-                                    select new BusinessDTO
-                                    {
-                                        Id = b.Id,
-                                        Name = b.Name,
-                                        Zip = b.Zip,
-                                        OwnerEmail = b.OwnerEmail
-                                    }
-
-
                    };
         }
     }

@@ -1,8 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-
-using Logic.Businesses;
-using Logic.Users.Models;
 
 namespace Logic.Users
 {
@@ -24,7 +20,6 @@ namespace Logic.Users
         [Required]
         public string Zip { get; set; }
 
-        public ICollection<Business>? Businesses { get; set; }
-
+       
     }
 }

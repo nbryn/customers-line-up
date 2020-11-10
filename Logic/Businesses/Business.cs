@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-using Logic.Users;
+using Logic.BusinessOwners;
 
 namespace Logic.Businesses
 {
@@ -16,7 +16,7 @@ namespace Logic.Businesses
         public string OwnerEmail { get; set; }
 
         [Required]
-        public User Owner { get; set; }
+        public BusinessOwner Owner { get; set; }
 
         [Required]
         public string Zip { get; set; }

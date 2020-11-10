@@ -17,13 +17,10 @@ namespace Logic.Users.Models
         [Required]
         public string Email { get; set; }
 
-        [Required]
-        public string Password { get; set; }
+        public string Password {get; set;}
 
         [Required]
         public string Zip { get; set; }
-
-        public IEnumerable<BusinessDTO> Businesses {get; set;}
 
     }
 }

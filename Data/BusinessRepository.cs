@@ -7,6 +7,7 @@ using Logic.Context;
 using Logic.Users;
 using Logic.Users.Models;
 using Logic.Businesses;
+using Logic.BusinessOwners;
 using Logic.Businesses.Models;
 
 namespace Data
@@ -50,6 +51,7 @@ namespace Data
                        Zip = b.Zip
                    };
         }
-        private Task<User> GetOwner(string email) => _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
+        private Task<BusinessOwner> GetOwner(string email) =>
+             _context.BusinessOwners.FirstOrDefaultAsync(u => u.UserEmail.Equals(email));
     }
 }

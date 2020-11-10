@@ -57,6 +57,7 @@ namespace CLup
 
             services.AddScoped<ICLupContext, CLupContext>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IBusinessOwnerRepository, BusinessOwnerRepository>();
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IBusinessRepository, BusinessRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

@@ -1,3 +1,5 @@
+
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,9 +34,9 @@ namespace API
 
         [HttpGet]
         [Route("all")]
-        public ActionResult<IEnumerable<UserDTO>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
-            return Ok(_repository.Read().ToList());
+            return Ok(await _repository.Read().ToListAsync());
         }
     }
 }

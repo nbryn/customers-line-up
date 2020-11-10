@@ -8,16 +8,20 @@ namespace Logic.Businesses
 {
     public class BusinessService : IBusinessService
     {
-        private readonly IBusinessRepository _businessRepository;
-        private readonly IUserRepository _userRepository;
 
-        public BusinessService(IBusinessRepository businessRepository, IUserRepository userRepository)
+        private readonly IBusinessOwnerRepository _businessOwnerRepository;
+        private readonly IBusinessRepository _businessRepository;
+
+
+        public BusinessService(IBusinessOwnerRepository businessOwnerRepository, IBusinessRepository businessRepository)
         {
+            _businessOwnerRepository = businessOwnerRepository;
             _businessRepository = businessRepository;
-            _userRepository = userRepository;
+            
         }
         public async Task<BusinessDTO> RegisterBusiness(string ownerEmail, CreateBusinessDTO business)
         {
+            await _businessOwnerRepository.CreateBusinessOwner(ownerEmail);
             BusinessDTO businessDTO = await _businessRepository.CreateBusiness(business, ownerEmail);
 
             return businessDTO;
