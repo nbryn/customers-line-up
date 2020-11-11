@@ -10,8 +10,6 @@ namespace Data
     public interface IBusinessRepository
     {
          Task<BusinessDTO> CreateBusiness(CreateBusinessDTO business, string ownerEmail);
-
-        
          IQueryable<BusinessDTO> Read();
     }
 }

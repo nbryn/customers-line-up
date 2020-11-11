@@ -35,12 +35,10 @@ namespace Logic.Users
                 Token = token,
             };
 
-
             return response;
         }
         public async Task<LoginResponseDTO> AuthenticateUser(LoginDTO loginRequest)
         {
-
             UserDTO user = await _repository.GetUserByEmail(loginRequest.Email);
 
             if (user == null || !BC.Verify(loginRequest.Password, user.Password))
