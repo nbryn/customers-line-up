@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 using Logic.Auth;
 using Logic.Businesses;
-using Logic.Businesses.Models;
+using Logic.DTO;
 using Data;
 
 namespace API
@@ -34,7 +34,7 @@ namespace API
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            BusinessDTO business = await _service.RegisterBusiness(ownerEmail, dto);
+            BusinessDTO business = await _service.RegisterBusiness(dto, ownerEmail);
 
             return Ok(business);
         }

@@ -20,5 +20,9 @@ namespace Logic.Businesses
 
         [Required]
         public string Zip { get; set; }
+
+        public int OpeningTime {get; set;}
+
+        public int ClosingTime {get; set;}
     }
 }

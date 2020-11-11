@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Logic.Businesses.Models
+namespace Logic.DTO
 {
     public class CreateBusinessDTO
     {

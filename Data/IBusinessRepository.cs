@@ -2,8 +2,8 @@ using System.Threading.Tasks;
 using System.Linq;
 
 using Logic.Businesses;
-using Logic.Businesses.Models;
-using Logic.Users.Models;
+using Logic.DTO;
+using Logic.DTO.User;
 
 namespace Data
 {

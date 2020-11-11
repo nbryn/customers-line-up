@@ -1,9 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-using Logic.Businesses.Models;
-
-namespace Logic.Users.Models
+namespace Logic.DTO.User
 {
     public class UserDTO
     {

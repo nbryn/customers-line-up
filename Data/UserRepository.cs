@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 using Logic.Users;
 using Logic.Context;
-using Logic.Users.Models;
-using Logic.Businesses.Models;
+using Logic.DTO.User;
+using Logic.DTO;
 
 namespace Data
 {

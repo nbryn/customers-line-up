@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 using Logic.Context;
 using Logic.Users;
-using Logic.Users.Models;
+using Logic.DTO.User;
 using Logic.Businesses;
 using Logic.BusinessOwners;
-using Logic.Businesses.Models;
+using Logic.DTO;
 
 namespace Data
 {

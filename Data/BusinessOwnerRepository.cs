@@ -4,9 +4,8 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-using Logic.Businesses.Models;
+using Logic.DTO;
 using Logic.BusinessOwners;
-using Logic.BusinessOwners.Models;
 using Logic.Context;
 
 namespace Data

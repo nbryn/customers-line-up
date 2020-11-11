@@ -1,4 +1,7 @@
-namespace Logic.Businesses.Models
+
+using Logic.Businesses;
+
+namespace Logic.DTO
 {
     public class BusinessDTO : CreateBusinessDTO
     {

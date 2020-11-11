@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 
 using Data;
-using Logic.Businesses.Models;
-using Logic.Users.Models;
+using Logic.DTO;
+using Logic.DTO.User;
 
 namespace Logic.Businesses
 {
@@ -19,7 +19,7 @@ namespace Logic.Businesses
             _businessRepository = businessRepository;
             
         }
-        public async Task<BusinessDTO> RegisterBusiness(string ownerEmail, CreateBusinessDTO business)
+        public async Task<BusinessDTO> RegisterBusiness(CreateBusinessDTO business, string ownerEmail)
         {
             await _businessOwnerRepository.CreateBusinessOwner(ownerEmail);
             BusinessDTO businessDTO = await _businessRepository.CreateBusiness(business, ownerEmail);

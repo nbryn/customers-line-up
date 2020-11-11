@@ -6,7 +6,7 @@ using System;
 using System.Text;
 
 using Data;
-using Logic.Users.Models;
+using Logic.DTO.User;
 using Logic.Exceptions;
 
 namespace Logic.Auth

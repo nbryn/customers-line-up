@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Logic.BusinessOwners;
-using Logic.BusinessOwners.Models;
+using Logic.DTO;
 
 namespace Data
 {

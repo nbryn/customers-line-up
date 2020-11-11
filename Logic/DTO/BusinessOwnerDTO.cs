@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 
-using Logic.Businesses.Models;
-
-namespace Logic.BusinessOwners.Models
+namespace Logic.DTO
 {
     public class BusinessOwnerDTO
     {

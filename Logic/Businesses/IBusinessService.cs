@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
 
-using Logic.Businesses.Models;
+using Logic.DTO;
 
 namespace Logic.Businesses
 {
     public interface IBusinessService
     {
-        Task<BusinessDTO> RegisterBusiness(string ownerEmail, CreateBusinessDTO business);
+        Task<BusinessDTO> RegisterBusiness(CreateBusinessDTO business, string ownerEmail);
 
     }
 }

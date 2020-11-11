@@ -5,7 +5,7 @@ using Data;
 using Logic.Auth;
 using Logic.Users;
 using Logic.Exceptions;
-using Logic.Users.Models;
+using Logic.DTO.User;
 
 
 namespace Logic.Users

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 using Logic.Exceptions;
-using Logic.Users.Models;
+using Logic.DTO.User;
 using Logic.Users;
 using Logic.Auth;
 using Data;
@@ -22,7 +22,6 @@ namespace API
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-
         private readonly IUserRepository _repository;
         private readonly IUserService _service;
 

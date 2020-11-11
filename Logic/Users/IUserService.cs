@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-using Logic.Users.Models;
+using Logic.DTO.User;
 
 namespace Logic.Users
 {
