@@ -16,9 +16,7 @@ namespace Logic.BusinessQueues
         public Business Business { get; set; }
         [Required]
         public int Capacity { get; set; }
-        [Required]
-        public double Length { get; set; }
-
+      
         [Required]
         public DateTime Start { get; set; }
         [Required]

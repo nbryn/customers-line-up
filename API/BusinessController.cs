@@ -43,7 +43,6 @@ namespace API
         [Route("all")]
         public ActionResult<IEnumerable<BusinessDTO>> GetAll()
         {
-
             return Ok(_repository.Read().ToList());
         }
     }

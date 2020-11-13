@@ -37,7 +37,7 @@ namespace Logic.Auth
 
             var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.Now.AddMinutes(120),
+            expires: DateTime.Now.AddDays(1),
             signingCredentials: credentials
             );
 

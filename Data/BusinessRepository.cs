@@ -29,6 +29,9 @@ namespace Data
                 Name = business.Name,
                 Owner = await GetOwner(ownerEmail),
                 OwnerEmail = ownerEmail,
+                Capacity = business.Capacity,
+                OpeningTime = business.OpeningTime,
+                ClosingTime = business.ClosingTime,
                 Zip = business.Zip
             };
 
@@ -36,8 +39,15 @@ namespace Data
 
             await _context.SaveChangesAsync();
 
-            return new BusinessDTO(newBusiness);
+            return ConvertToDTO(newBusiness);
 
+        }
+
+        public async Task<BusinessDTO> GetBusinessById(int businessId)
+        {
+            Business business = await _context.Businesses.FindAsync(businessId);
+
+            return ConvertToDTO(business);
         }
 
         public IQueryable<BusinessDTO> Read()
@@ -48,10 +58,27 @@ namespace Data
                        Id = b.Id,
                        Name = b.Name,
                        OwnerEmail = b.OwnerEmail,
-                       Zip = b.Zip
+                       Zip = b.Zip,
+                       OpeningTime = b.OpeningTime,
+                       ClosingTime = b.ClosingTime,
+                       Capacity = b.Capacity
                    };
         }
         private Task<BusinessOwner> GetOwner(string email) =>
              _context.BusinessOwners.FirstOrDefaultAsync(u => u.UserEmail.Equals(email));
+
+        private BusinessDTO ConvertToDTO(Business business)
+        {
+            return new BusinessDTO
+            {
+                Id = business.Id,
+                OwnerEmail = business.OwnerEmail,
+                Name = business.Name,
+                Zip = business.Zip,
+                OpeningTime = business.OpeningTime,
+                ClosingTime = business.ClosingTime,
+                Capacity = business.Capacity,
+            };
+        }
     }
 }

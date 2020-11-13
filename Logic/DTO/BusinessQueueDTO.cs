@@ -15,6 +15,6 @@ namespace Logic.DTO
 
         public DateTime End { get; set; }
         
-        public ICollection<UserDTO> Customers { get; set; }
+        public IEnumerable<UserDTO> Customers { get; set; }
     }
 }

@@ -25,9 +25,9 @@ namespace Logic.Businesses
 
         public int Capacity { get; set; }
 
-        public int OpeningTime { get; set; }
+        public double OpeningTime { get; set; }
 
-        public int ClosingTime { get; set; }
+        public double ClosingTime { get; set; }
 
         public IEnumerable<BusinessQueue> Queues { get; set; }
     }

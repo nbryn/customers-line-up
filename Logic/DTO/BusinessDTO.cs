@@ -9,18 +9,5 @@ namespace Logic.DTO
 
         public string OwnerEmail { get; set; }
 
-        public BusinessDTO()
-        {
-
-        }
-
-        public BusinessDTO(Business business)
-        {
-            Id = business.Id;
-            OwnerEmail = business.OwnerEmail;
-            Name = business.Name;
-            Zip = business.Zip;
-
-        }
     }
 }

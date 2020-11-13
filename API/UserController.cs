@@ -18,7 +18,6 @@ using Data;
 namespace API
 {
     [ApiController]
-    [Authorize(Policy = Policies.User)]
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
@@ -31,8 +30,35 @@ namespace API
             _service = service;
         }
 
-        [HttpGet]
+        [AllowAnonymous]
+        [Route("register")]
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterDTO user)
+        {
+            LoginResponseDTO response = await _service.RegisterUser(user);
+
+            return Ok(response);
+        }
+
+        [AllowAnonymous]
+        [Route("login")]
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
+        {
+            LoginResponseDTO user = await _service.AuthenticateUser(loginRequest);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(user);
+        }
+
+        [Authorize(Policy = Policies.User)]
         [Route("all")]
+        [HttpGet]
+
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
         {
             return Ok(await _repository.Read().ToListAsync());
