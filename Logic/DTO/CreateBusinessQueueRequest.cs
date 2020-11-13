@@ -3,8 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Logic.DTO
 {
-    public class CreateBusinessQueueDTO
+    public class CreateBusinessQueueRequest
     {
+
+        [Required]
+        public int TimeInterval { get; set; }
+
         [Required]
         public int BusinessId { get; set; }
 
@@ -13,5 +17,6 @@ namespace Logic.DTO
 
         [Required]
         public DateTime End { get; set; }
+
     }
 }

@@ -19,8 +19,8 @@ namespace API
     [Route("[controller]")]
     public class BusinessController : ControllerBase
     {
-        private IBusinessRepository _repository;
-        private IBusinessService _service;
+        private readonly IBusinessRepository _repository;
+        private readonly IBusinessService _service;
 
         public BusinessController(IBusinessRepository repository, IBusinessService service)
         {

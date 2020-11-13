@@ -7,6 +7,6 @@ namespace Logic.BusinessQueues
 {
     public interface IBusinessQueueService
     {
-        Task<IEnumerable<BusinessQueueDTO>> CreateQueues(CreateBusinessQueueDTO dto);
+        Task<IEnumerable<BusinessQueueDTO>> GenerateQueues(CreateBusinessQueueRequest request);
     }
 }

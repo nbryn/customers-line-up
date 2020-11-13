@@ -8,10 +8,8 @@ namespace Logic.Businesses
 {
     public class BusinessService : IBusinessService
     {
-
         private readonly IBusinessOwnerRepository _businessOwnerRepository;
         private readonly IBusinessRepository _businessRepository;
-
 
         public BusinessService(IBusinessOwnerRepository businessOwnerRepository, IBusinessRepository businessRepository)
         {

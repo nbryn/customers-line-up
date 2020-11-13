@@ -11,6 +11,7 @@ using System.Text;
 
 using Data;
 using Logic.Businesses;
+using Logic.BusinessQueues;
 using Logic.Context;
 using Logic.Users;
 using Logic.Auth;
@@ -54,6 +55,9 @@ namespace CLup
                 config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
                 config.AddPolicy(Policies.User, Policies.UserPolicy());
             });
+
+            services.AddScoped<IBusinessQueueService, BusinessQueueService>();
+            services.AddScoped<IBusinessQueueRepository, BusinessQueueRepository>();
 
             services.AddScoped<ICLupContext, CLupContext>();
             services.AddScoped<IAuthService, AuthService>();

@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 using Logic.BusinessOwners;
+using Logic.BusinessQueues;
 
 namespace Logic.Businesses
 {
@@ -21,8 +23,12 @@ namespace Logic.Businesses
         [Required]
         public string Zip { get; set; }
 
-        public int OpeningTime {get; set;}
+        public int Capacity { get; set; }
 
-        public int ClosingTime {get; set;}
+        public int OpeningTime { get; set; }
+
+        public int ClosingTime { get; set; }
+
+        public IEnumerable<BusinessQueue> Queues { get; set; }
     }
 }

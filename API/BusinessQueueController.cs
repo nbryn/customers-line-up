@@ -1,4 +1,4 @@
-
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -16,18 +16,19 @@ namespace API
     [Route("[controller]")]
     public class BusinessQueueController : ControllerBase
     {
-        private IBusinessQueueService _service;
+        private readonly IBusinessQueueService _service;
 
-         public BusinessQueueController(IBusinessQueueService service)
+        public BusinessQueueController(IBusinessQueueService service)
         {
             _service = service;
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> NewQueue([FromBody] CreateBusinessQueueDTO dto)
+        public async Task<IActionResult> NewQueue([FromBody] CreateBusinessQueueRequest dto)
         {
-            IEnumerable<BusinessQueueDTO> queues = await _service.CreateQueues(dto);
+            
+            IEnumerable<BusinessQueueDTO> queues = await _service.GenerateQueues(dto);
 
             return Ok(queues);
         }

@@ -6,7 +6,6 @@ namespace Logic.BusinessOwners
 {
     public class BusinessOwner
     {
-
         public int Id { get; set; }
 
         public string UserEmail { get; set; }

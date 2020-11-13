@@ -7,7 +7,7 @@ namespace Logic.DTO
 {
     public class BusinessQueueDTO
     {
-        public BusinessDTO Business {get; set; }
+        public int BusinessId {get; set; }
 
         public int Capacity {get; set;}
 
