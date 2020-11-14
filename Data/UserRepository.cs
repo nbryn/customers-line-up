@@ -22,17 +22,9 @@ namespace Data
             _context = context;
         }
 
-        public async Task<UserDTO> GetUserByEmail(string email)
+        public async Task<User> FindUserByEmail(string email)
         {
             return await _context.Users.Where(u => u.Email == email)
-                                       .Select(u =>
-                                            new UserDTO
-                                            {
-                                                Id = u.Id,
-                                                Name = u.Name,
-                                                Email = u.Email,
-                                                Zip = u.Zip
-                                            })
                                         .FirstOrDefaultAsync();
         }
         public async Task<int> CreateUser(RegisterDTO user)
@@ -52,7 +44,7 @@ namespace Data
             return newUser.Id;
         }
 
-        public Task<UserDTO> GetUserById(int userId)
+        public Task<User> FindUserById(int userId)
         {
             return null;
         }

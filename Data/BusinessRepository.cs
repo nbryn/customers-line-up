@@ -43,11 +43,11 @@ namespace Data
 
         }
 
-        public async Task<BusinessDTO> GetBusinessById(int businessId)
+        public async Task<Business> FindBusinessById(int businessId)
         {
             Business business = await _context.Businesses.FindAsync(businessId);
 
-            return ConvertToDTO(business);
+            return business;
         }
 
         public IQueryable<BusinessDTO> Read()

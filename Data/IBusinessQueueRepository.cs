@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 
-using Logic.DTO;
+using Logic.BusinessQueues;
 
 namespace Data
 {
     public interface IBusinessQueueRepository
     {
-        Task<BusinessQueueDTO> CreateBusinessQueue(CreateBusinessQueueDTO dto);
+        Task<int> CreateBusinessQueue(BusinessQueue queue);
 
-        Task<BusinessQueueDTO> AddUserToQueue(AddUserToQueueRequest request);
+        Task<IList<BusinessQueue>> FindQueuesByBusiness(int businessId);
 
-        Task<ICollection<BusinessQueueDTO>> GetQueuesByBusiness(int businessId);
+        Task<BusinessQueue> FindQueueByBusinessAndStart(int businessId, DateTime queueStart);
+
+        Task<int> UpdateQueue(BusinessQueue queue);
+
+        
     }
 }

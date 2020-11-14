@@ -20,78 +20,37 @@ namespace Data
         {
             _context = context;
         }
-        public async Task<BusinessQueueDTO> CreateBusinessQueue(CreateBusinessQueueDTO dto)
+        public async Task<int> CreateBusinessQueue(BusinessQueue queue)
         {
-            Business business = await GetBusiness(dto.BusinessId);
-
-            BusinessQueue businessQueue = new BusinessQueue
-            {
-                BusinessId = business.Id,
-                Business = business,
-                Capacity = business.Capacity,
-                Start = dto.Start,
-                End = dto.End,
-            };
-
-            _context.BusinessQueues.Add(businessQueue);
+            _context.BusinessQueues.Add(queue);
 
             await _context.SaveChangesAsync();
 
-            return ConvertToDTO(businessQueue);
-
-        }
-        public async Task<BusinessQueueDTO> AddUserToQueue(AddUserToQueueRequest request)
-        {
-            BusinessQueue queue = await _context.BusinessQueues.FirstOrDefaultAsync(x =>
-                                                        x.BusinessId == request.BusinessId &&
-                                                        x.Start.Equals(request.QueueStart));
-
-
-            (queue.Customers ??= new List<User>()).Add(await GetUser(request.UserMail));
-
-            _context.BusinessQueues.Update(queue);
-
-            await _context.SaveChangesAsync();
-
-            return ConvertToDTO(queue);
+            return queue.Id;
         }
 
-        public async Task<ICollection<BusinessQueueDTO>> GetQueuesByBusiness(int businessId)
+        public async Task<BusinessQueue> FindQueueByBusinessAndStart(int businessId, DateTime queueStart)
         {
-            ICollection<BusinessQueueDTO> queues = await _context.BusinessQueues.Include(x => x.Customers)
-                                                                                .Where(x => x.BusinessId == businessId)
-                                                                                .Select(x => ConvertToDTO(x))
-                                                                                .ToListAsync();
+            BusinessQueue queue = await _context.BusinessQueues.Include(x => x.Customers)
+                                                               .FirstOrDefaultAsync(x =>
+                                                                    x.BusinessId == businessId &&
+                                                                    x.Start.Equals(queueStart));
+            return queue;
+        }
+
+        public async Task<IList<BusinessQueue>> FindQueuesByBusiness(int businessId)
+        {
+            IList<BusinessQueue> queues = await _context.BusinessQueues.Include(x => x.Customers)
+                                                                       .Where(x => x.BusinessId == businessId)
+                                                                       .ToListAsync();
             return queues;
         }
 
-        private Task<Business> GetBusiness(int businessId) =>
-             _context.Businesses.FirstOrDefaultAsync(b => b.Id == businessId);
-
-        private Task<User> GetUser(string email) =>
-            _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
-
-        private static BusinessQueueDTO ConvertToDTO(BusinessQueue queue)
+        public async Task<int> UpdateQueue(BusinessQueue queue)
         {
-            return new BusinessQueueDTO
-            {
-                BusinessId = queue.BusinessId,
-                Capacity = queue.Capacity,
-                Start = queue.Start,
-                End = queue.End,
-                Customers = queue.Customers?.Select(x => ConvertToDTO(x))
-                                            .AsEnumerable()
-            };
-        }
+            _context.BusinessQueues.Update(queue);
 
-        private static UserDTO ConvertToDTO(User user)
-        {
-            return new UserDTO
-            {
-                Name = user.Name,
-                Email = user.Email,
-                Zip = user.Zip,
-            };
+            return await _context.SaveChangesAsync();
         }
     }
 }

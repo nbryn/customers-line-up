@@ -41,18 +41,18 @@ namespace API
         {
             dto.UserMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var response = await _repository.AddUserToQueue(dto);
+            var response = await _service.AddUserToQueue(dto);
 
             return Ok(response);
         }
 
         [HttpGet("{id}")]
         [Route("business")]
-        public async Task<ICollection<BusinessQueueDTO>> FetchQueuesForBusiness(int businessId)
+        public async Task<IActionResult> FetchQueuesForBusiness(int businessId)
         {
-            var s = await _repository.GetQueuesByBusiness(businessId);
+            IEnumerable<BusinessQueueDTO> queues = await _service.GetAllQueuesForBusiness(businessId);
 
-            return s;
+            return Ok(queues);
         }
     }
 }

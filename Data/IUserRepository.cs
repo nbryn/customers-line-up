@@ -3,14 +3,15 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Logic.DTO.User;
+using Logic.Users;
 
 namespace Data
 {
     public interface IUserRepository
     {
-        Task<UserDTO> GetUserByEmail(string email);
+        Task<User> FindUserByEmail(string email);
         Task<int> CreateUser(RegisterDTO user);
-        Task<UserDTO> GetUserById(int userId);
+        Task<User> FindUserById(int userId);
         IQueryable<UserDTO> Read();
 
     }
