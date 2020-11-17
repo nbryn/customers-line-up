@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import reportWebVitals from './reportWebVitals';
 
-import { MainView } from "./views/MainView";
+import {MainView} from './views/MainView';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <MainView />
-  </React.StrictMode>,
-  document.getElementById('root')
+   <React.StrictMode>
+      <MainView />
+   </React.StrictMode>,
+   document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
