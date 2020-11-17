@@ -20,7 +20,7 @@ namespace Data
         }
 
 
-        public async Task<int> CreateBusinessOwner(string ownerEmail)
+        public async Task<BusinessOwner> CreateBusinessOwner(string ownerEmail)
         {
             BusinessOwner newOwner = new BusinessOwner
             {
@@ -31,24 +31,14 @@ namespace Data
 
             await _context.SaveChangesAsync();
 
-            return newOwner.Id;
+            return newOwner;
         }
 
-        public IQueryable<BusinessOwnerDTO> Read()
+        public async Task<BusinessOwner> FindOwnerByEmail(string ownerEmail)
         {
-            return from x in _context.BusinessOwners
-                   select new BusinessOwnerDTO
-                   {
-                       UserEmail = x.UserEmail,
-                       Businesses = from b in x.Businesses
-                                    select new BusinessDTO
-                                    {
-                                        Id = b.Id,
-                                        Name = b.Name,
-                                        Zip = b.Zip,
-                                        OwnerEmail = b.OwnerEmail
-                                    }
-                   };
+            BusinessOwner owner = await _context.BusinessOwners.FindAsync(ownerEmail);
+
+            return owner;
         }
 
     }

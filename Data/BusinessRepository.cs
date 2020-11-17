@@ -22,7 +22,7 @@ namespace Data
             _context = context;
         }
 
-        public async Task<BusinessDTO> CreateBusiness(CreateBusinessDTO business, string ownerEmail)
+        public async Task<Business> CreateBusiness(CreateBusinessDTO business, string ownerEmail)
         {
             Business newBusiness = new Business
             {
@@ -39,7 +39,7 @@ namespace Data
 
             await _context.SaveChangesAsync();
 
-            return ConvertToDTO(newBusiness);
+            return newBusiness;
 
         }
 
@@ -50,20 +50,6 @@ namespace Data
             return business;
         }
 
-        public IQueryable<BusinessDTO> Read()
-        {
-            return from b in _context.Businesses
-                   select new BusinessDTO
-                   {
-                       Id = b.Id,
-                       Name = b.Name,
-                       OwnerEmail = b.OwnerEmail,
-                       Zip = b.Zip,
-                       OpeningTime = b.OpeningTime,
-                       ClosingTime = b.ClosingTime,
-                       Capacity = b.Capacity
-                   };
-        }
         private Task<BusinessOwner> GetOwner(string email) =>
              _context.BusinessOwners.FirstOrDefaultAsync(u => u.UserEmail.Equals(email));
 

@@ -28,9 +28,17 @@ namespace Logic.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            modelBuilder.Entity<User>()
+                        .HasIndex(c => c.Email)
+                        .IsUnique();
+
             modelBuilder.Entity<BusinessOwner>()
                         .HasMany(c => c.Businesses)
                         .WithOne(c => c.Owner);
+
+            modelBuilder.Entity<BusinessOwner>()
+                        .HasIndex(c => c.UserEmail)
+                        .IsUnique();
 
             modelBuilder.Entity<Business>()
                         .HasMany(x => x.Queues)

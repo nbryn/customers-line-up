@@ -9,9 +9,8 @@ namespace Data
 {
     public interface IBusinessRepository
     {
-         Task<BusinessDTO> CreateBusiness(CreateBusinessDTO business, string ownerEmail);
+         Task<Business> CreateBusiness(CreateBusinessDTO business, string ownerEmail);
 
          Task<Business> FindBusinessById(int businessId);
-         IQueryable<BusinessDTO> Read();
     }
 }

@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
+using Logic.BusinessOwners;
+
 namespace Logic.DTO
 {
     public class CreateBusinessDTO
@@ -11,6 +13,8 @@ namespace Logic.DTO
         [Required]
         [StringLength(50)]
         public string Zip { get; set; }
+
+        public BusinessOwner Owner {get; set;}
 
         [Required]
         public double OpeningTime { get; set; }

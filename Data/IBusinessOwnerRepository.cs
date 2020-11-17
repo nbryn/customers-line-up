@@ -9,10 +9,9 @@ namespace Data
 {
     public interface IBusinessOwnerRepository
     {
-       Task<int> CreateBusinessOwner(string ownerEmail);
+       Task<BusinessOwner> CreateBusinessOwner(string ownerEmail);
 
-       IQueryable<BusinessOwnerDTO> Read();
-
+       Task<BusinessOwner> FindOwnerByEmail(string ownerEmail);
  
     }
 }

@@ -2,12 +2,14 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 using Logic.Businesses;
 using Data;
 using Logic.DTO;
 using Logic.DTO.User;
 using Logic.Users;
+using Logic.Util;
 
 namespace Logic.BusinessQueues
 {
@@ -16,14 +18,17 @@ namespace Logic.BusinessQueues
         private readonly IBusinessQueueRepository _queueRepository;
         private readonly IBusinessRepository _businessRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IDTOMapper _dtoMapper;
 
 
         public BusinessQueueService(IBusinessQueueRepository queueRepository,
-            IBusinessRepository businessRepository, IUserRepository userRepository)
+            IBusinessRepository businessRepository, IUserRepository userRepository, 
+            IDTOMapper dtoMapper)
         {
             _businessRepository = businessRepository;
             _queueRepository = queueRepository;
             _userRepository = userRepository;
+            _dtoMapper = dtoMapper;
         }
 
         public async Task<IEnumerable<BusinessQueueDTO>> GenerateQueues(CreateBusinessQueueRequest request)
@@ -59,7 +64,9 @@ namespace Logic.BusinessQueues
 
                 queue.Id = await _queueRepository.CreateBusinessQueue(queue);
 
-                queues.Add(ConvertQueueToDTO(queue));
+                BusinessQueueDTO dto = _dtoMapper.ConvertQueueToDTO(queue);
+
+                queues.Add(dto);
             }
 
             return queues;
@@ -80,36 +87,16 @@ namespace Logic.BusinessQueues
 
             await _queueRepository.UpdateQueue(queue);
 
-            return ConvertQueueToDTO(queue);
+            BusinessQueueDTO dto = _dtoMapper.ConvertQueueToDTO(queue);
+
+            return dto;
         }
 
-        public async Task<IEnumerable<BusinessQueueDTO>> GetAllQueuesForBusiness(int businessId)
+        public async Task<ICollection<BusinessQueueDTO>> GetAllQueuesForBusiness(int businessId)
         {
             IList<BusinessQueue> queues = await _queueRepository.FindQueuesByBusiness(businessId);
 
-            return queues.Select(x => ConvertQueueToDTO(x));
-        }
-
-        private BusinessQueueDTO ConvertQueueToDTO(BusinessQueue queue)
-        {
-            return new BusinessQueueDTO
-            {
-                BusinessId = queue.Business.Id,
-                Capacity = queue.Capacity,
-                Start = queue.Start,
-                End = queue.End,
-                Customers = queue.Customers?.Select(x => ConvertToDTO(x))
-            };
-        }
-
-        private UserDTO ConvertToDTO(User user)
-        {
-            return new UserDTO
-            {
-                Name = user.Name,
-                Email = user.Email,
-                Zip = user.Zip,
-            };
+            return queues.Select(x => _dtoMapper.ConvertQueueToDTO(x)).ToList();
         }
     }
 }

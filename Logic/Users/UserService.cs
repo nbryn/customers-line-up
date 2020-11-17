@@ -23,6 +23,13 @@ namespace Logic.Users
 
         public async Task<LoginResponseDTO> RegisterUser(RegisterDTO user)
         {
+            User emailExists = await _repository.FindUserByEmail(user.Email);
+
+            if (emailExists != null)
+            {
+                // TODO: Email already exists in system
+            }
+
             string token = _authService.GenerateJWTToken(user);
             user.Password = BC.HashPassword(user.Password);
 
@@ -39,13 +46,13 @@ namespace Logic.Users
         }
         public async Task<LoginResponseDTO> AuthenticateUser(LoginDTO loginRequest)
         {
-            UserDTO user = await _repository.GetUserByEmail(loginRequest.Email);
+            User user = await _repository.FindUserByEmail(loginRequest.Email);
 
             if (user == null || !BC.Verify(loginRequest.Password, user.Password))
             {
                 return null;
             }
-            
+
             string token = _authService.GenerateJWTToken(loginRequest);
 
             LoginResponseDTO response = new LoginResponseDTO

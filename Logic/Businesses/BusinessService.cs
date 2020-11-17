@@ -2,6 +2,8 @@ using System.Threading.Tasks;
 
 using Data;
 using Logic.DTO;
+using Logic.BusinessOwners;
+using Logic.Util;
 using Logic.DTO.User;
 
 namespace Logic.Businesses
@@ -10,19 +12,32 @@ namespace Logic.Businesses
     {
         private readonly IBusinessOwnerRepository _businessOwnerRepository;
         private readonly IBusinessRepository _businessRepository;
+        private readonly IDTOMapper _dtoMapper;
 
-        public BusinessService(IBusinessOwnerRepository businessOwnerRepository, IBusinessRepository businessRepository)
+
+
+        public BusinessService(IBusinessOwnerRepository businessOwnerRepository,
+        IBusinessRepository businessRepository, IDTOMapper dtoMapper)
         {
             _businessOwnerRepository = businessOwnerRepository;
             _businessRepository = businessRepository;
-            
+            _dtoMapper = dtoMapper;
+
         }
         public async Task<BusinessDTO> RegisterBusiness(CreateBusinessDTO business, string ownerEmail)
         {
-            await _businessOwnerRepository.CreateBusinessOwner(ownerEmail);
-            BusinessDTO businessDTO = await _businessRepository.CreateBusiness(business, ownerEmail);
+            BusinessOwner owner = await _businessOwnerRepository.FindOwnerByEmail(ownerEmail);
 
-            return businessDTO;
+            if (owner == null)
+            {
+                owner = await _businessOwnerRepository.CreateBusinessOwner(ownerEmail);
+            }
+            
+            business.Owner = owner;
+
+            Business newBusiness = await _businessRepository.CreateBusiness(business, ownerEmail);
+
+            return _dtoMapper.ConvertBusinessToDTO(newBusiness);
         }
     }
 }
