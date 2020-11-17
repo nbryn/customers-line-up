@@ -7,7 +7,6 @@ using Logic.Users;
 using Logic.Exceptions;
 using Logic.DTO.User;
 
-
 namespace Logic.Users
 {
     public class UserService : IUserService
@@ -23,9 +22,9 @@ namespace Logic.Users
 
         public async Task<LoginResponseDTO> RegisterUser(RegisterDTO user)
         {
-            User emailExists = await _repository.FindUserByEmail(user.Email);
+            User userExists = await _repository.FindUserByEmail(user.Email);
 
-            if (emailExists != null)
+            if (userExists != null)
             {
                 // TODO: Email already exists in system
             }
@@ -50,7 +49,7 @@ namespace Logic.Users
 
             if (user == null || !BC.Verify(loginRequest.Password, user.Password))
             {
-                return null;
+                // TODO: User does not exist / wrong password
             }
 
             string token = _authService.GenerateJWTToken(loginRequest);

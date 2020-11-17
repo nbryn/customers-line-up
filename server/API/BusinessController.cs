@@ -10,6 +10,7 @@ using System.Security.Claims;
 using Logic.Auth;
 using Logic.Businesses;
 using Logic.DTO;
+using Logic.Util;
 using Data;
 
 namespace API
@@ -21,11 +22,15 @@ namespace API
     {
         private readonly IBusinessRepository _repository;
         private readonly IBusinessService _service;
+        private readonly IDTOMapper _dtoMapper;
 
-        public BusinessController(IBusinessRepository repository, IBusinessService service)
+        public BusinessController(IBusinessRepository repository, 
+        IBusinessService service, IDTOMapper dtoMapper)
         {
             _repository = repository;
+            _dtoMapper = dtoMapper;
             _service = service;
+            
         }
 
         [HttpPost]
@@ -41,9 +46,11 @@ namespace API
 
         [HttpGet]
         [Route("all")]
-        public ActionResult<IEnumerable<BusinessDTO>> GetAll()
+        public async Task<IEnumerable<BusinessDTO>> FetchAll()
         {
-            return Ok(_repository.Read().ToList());
+            var all = await _repository.GetAll();
+            
+            return all.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
         }
     }
 }

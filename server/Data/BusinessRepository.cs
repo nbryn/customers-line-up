@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 using Logic.Context;
 using Logic.Users;
@@ -27,7 +28,7 @@ namespace Data
             Business newBusiness = new Business
             {
                 Name = business.Name,
-                Owner = await GetOwner(ownerEmail),
+                Owner = business.Owner,
                 OwnerEmail = ownerEmail,
                 Capacity = business.Capacity,
                 OpeningTime = business.OpeningTime,
@@ -50,21 +51,10 @@ namespace Data
             return business;
         }
 
-        private Task<BusinessOwner> GetOwner(string email) =>
-             _context.BusinessOwners.FirstOrDefaultAsync(u => u.UserEmail.Equals(email));
-
-        private BusinessDTO ConvertToDTO(Business business)
+       public async Task<IList<Business>> GetAll()
         {
-            return new BusinessDTO
-            {
-                Id = business.Id,
-                OwnerEmail = business.OwnerEmail,
-                Name = business.Name,
-                Zip = business.Zip,
-                OpeningTime = business.OpeningTime,
-                ClosingTime = business.ClosingTime,
-                Capacity = business.Capacity,
-            };
+            return await _context.Businesses.ToListAsync();
         }
+
     }
 }

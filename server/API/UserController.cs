@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 using Logic.Exceptions;
+using Logic.Util;
 using Logic.DTO.User;
 using Logic.Users;
 using Logic.Auth;
@@ -23,10 +24,14 @@ namespace API
     {
         private readonly IUserRepository _repository;
         private readonly IUserService _service;
+        private readonly IDTOMapper _dtoMapper;
 
-        public UserController(IUserRepository repository, IUserService service)
+
+        public UserController(IUserRepository repository, IDTOMapper dtoMapper,
+        IUserService service)
         {
             _repository = repository;
+            _dtoMapper = dtoMapper;
             _service = service;
         }
 
@@ -59,9 +64,11 @@ namespace API
         [Route("all")]
         [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
+        public async Task<IEnumerable<UserDTO>> FetchAll()
         {
-            return Ok(await _repository.Read().ToListAsync());
+            var all = await _repository.GetAll();
+
+            return all.Select(x => _dtoMapper.ConvertUserToDTO(x));
         }
     }
 }

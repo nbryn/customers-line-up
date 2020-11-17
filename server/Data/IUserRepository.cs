@@ -12,7 +12,8 @@ namespace Data
         Task<User> FindUserByEmail(string email);
         Task<int> CreateUser(RegisterDTO user);
         Task<User> FindUserById(int userId);
-        IQueryable<UserDTO> Read();
+        
+        Task<IList<User>> GetAll();
 
     }
 }

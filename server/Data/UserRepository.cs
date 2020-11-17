@@ -24,8 +24,7 @@ namespace Data
 
         public async Task<User> FindUserByEmail(string email)
         {
-            return await _context.Users.Where(u => u.Email == email)
-                                        .FirstOrDefaultAsync();
+            return await _context.Users.FindAsync(email);
         }
         public async Task<int> CreateUser(RegisterDTO user)
         {
@@ -49,16 +48,11 @@ namespace Data
             return null;
         }
 
-        public IQueryable<UserDTO> Read()
-        {
-            return from u in _context.Users
-                   select new UserDTO
-                   {
-                       Name = u.Name,
-                       Email = u.Email,
-                       Zip = u.Zip,
-                   };
-        }
+       public async Task<IList<User>> GetAll()
+       {
+           return await _context.Users.ToListAsync();
+       }
+
     }
 }
 
