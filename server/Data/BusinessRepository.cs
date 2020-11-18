@@ -32,7 +32,8 @@ namespace Data
                 Capacity = business.Capacity,
                 OpeningTime = business.OpeningTime,
                 ClosingTime = business.ClosingTime,
-                Zip = business.Zip
+                Zip = business.Zip,
+                Type = business.Type,
             };
 
             _context.Businesses.Add(newBusiness);

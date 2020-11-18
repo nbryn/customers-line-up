@@ -20,6 +20,8 @@ namespace Logic.Businesses
         [Required]
         public string Zip { get; set; }
 
+        public string Type { get; set; }
+
         public int Capacity { get; set; }
 
         public double OpeningTime { get; set; }

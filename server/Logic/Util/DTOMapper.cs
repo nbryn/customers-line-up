@@ -38,13 +38,11 @@ namespace Logic.Util
         {
             return new BusinessDTO
             {
-                Id = business.Id,
-                OwnerEmail = business.OwnerEmail,
                 Name = business.Name,
                 Zip = business.Zip,
                 OpeningTime = business.OpeningTime,
                 ClosingTime = business.ClosingTime,
-                Capacity = business.Capacity,
+                Type = business.Type
             };
         }
     }

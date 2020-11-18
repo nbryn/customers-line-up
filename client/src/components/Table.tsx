@@ -13,11 +13,11 @@ type ColumnData = {
 
 type Props = {
    columnNames: string[];
-   data: ColumnData[];
+   data: string[][];
 };
 
 export const Table: React.FC<Props> = (props: Props) => {
-   const [data, setData] = useState<ColumnData[]>([]);
+   const [data, setData] = useState<string[][]>([]);
 
    useEffect(() => {
       setData(props.data);
@@ -31,7 +31,7 @@ export const Table: React.FC<Props> = (props: Props) => {
                   <TableHead>
                      <TableRow>
                         {props.columnNames.map((x, index) => {
-                           if (index == 0) {
+                           if (index === 0) {
                               return <TableCell align="left">{x}</TableCell>;
                            }
                            return <TableCell align="right">{x}</TableCell>;
@@ -39,15 +39,22 @@ export const Table: React.FC<Props> = (props: Props) => {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {data.map((x) => (
-                        <TableRow key={x.prop1}>
-                           <TableCell component="th" scope="row">
-                              {x.prop2}
-                           </TableCell>
-                           <TableCell align="right">{x.prop3}</TableCell>
-                           <TableCell align="right">{x.prop4}</TableCell>
-                        </TableRow>
-                     ))}
+                     {data.map((x) => {
+                        return (
+                           <TableRow key="s">
+                              {x.map((c, index) => {
+                                 if (index === 0) {
+                                    return (
+                                       <TableCell component="th" scope="row">
+                                          {c}
+                                       </TableCell>
+                                    );
+                                 }
+                                 return <TableCell align="right">{c}</TableCell>;
+                              })}
+                           </TableRow>
+                        );
+                     })}
                   </TableBody>
                </MaterialUITable>
             </TableContainer>

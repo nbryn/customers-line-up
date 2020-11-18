@@ -10,17 +10,21 @@ import {useUserContext} from '../context/UserContext';
 export const BusinessOverview: React.FC = () => {
    const {token} = useUserContext();
 
-   const [businesses, setBusinesses] = useState<BusinessDTO[]>([]);
+   const [businesses, setBusinesses] = useState<string[][]>([]);
 
-   const columnNames = ['Name', 'Zip', 'Type', 'Opens', 'Closes'];
+   const columnNames = ['Name', 'Zip', 'Opens', 'Closes', 'Type'];
 
    useEffect(() => {
       (async () => {
-         const businesses = await BusinessService.fetchAllBusinesses(token);
+         const businesses: BusinessDTO[] = await BusinessService.fetchAllBusinesses(token);
 
          console.log(businesses);
 
-         setBusinesses(businesses);
+         const temp = businesses.map((x) => {
+            return Object.keys(x).map((c) => x[c]);
+         });
+
+         setBusinesses(temp);
       })();
    }, []);
 
