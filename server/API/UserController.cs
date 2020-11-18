@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 using System.Security.Claims;
 
 using Logic.Exceptions;
@@ -63,7 +64,6 @@ namespace API
         [Authorize(Policy = Policies.User)]
         [Route("all")]
         [HttpGet]
-
         public async Task<IEnumerable<UserDTO>> FetchAll()
         {
             var all = await _repository.GetAll();

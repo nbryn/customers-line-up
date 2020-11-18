@@ -25,5 +25,8 @@ namespace Logic.DTO
         [Required]
         public int Capacity {get; set;}
 
+        [Required]
+        public string Type {get; set;}
+
     }
 }

@@ -11,18 +11,22 @@ namespace Logic.Users
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _repository;
+        private readonly IBusinessOwnerRepository _ownerRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
 
-        public UserService(IUserRepository repository, IAuthService authService)
+        public UserService(IBusinessOwnerRepository ownerRepository,
+            IUserRepository userRepository, IAuthService authService)
         {
+            _ownerRepository = ownerRepository;
+            _userRepository = userRepository;
             _authService = authService;
-            _repository = repository;
+
         }
 
         public async Task<LoginResponseDTO> RegisterUser(RegisterDTO user)
         {
-            User userExists = await _repository.FindUserByEmail(user.Email);
+            User userExists = await _userRepository.FindUserByEmail(user.Email);
 
             if (userExists != null)
             {
@@ -32,7 +36,7 @@ namespace Logic.Users
             string token = _authService.GenerateJWTToken(user);
             user.Password = BC.HashPassword(user.Password);
 
-            int userId = await _repository.CreateUser(user);
+            int userId = await _userRepository.CreateUser(user);
 
             LoginResponseDTO response = new LoginResponseDTO
             {
@@ -45,7 +49,7 @@ namespace Logic.Users
         }
         public async Task<LoginResponseDTO> AuthenticateUser(LoginDTO loginRequest)
         {
-            User user = await _repository.FindUserByEmail(loginRequest.Email);
+            User user = await _userRepository.FindUserByEmail(loginRequest.Email);
 
             if (user == null || !BC.Verify(loginRequest.Password, user.Password))
             {
@@ -54,11 +58,15 @@ namespace Logic.Users
 
             string token = _authService.GenerateJWTToken(loginRequest);
 
+            bool isOwner = _ownerRepository.FindOwnerByEmail(loginRequest.Email) == null ? false : true;
+
             LoginResponseDTO response = new LoginResponseDTO
             {
                 Id = user.Id,
                 Email = user.Email,
+                Name = user.Name,
                 Token = token,
+                isOwner = isOwner
             };
 
             return response;

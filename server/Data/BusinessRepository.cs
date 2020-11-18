@@ -28,7 +28,6 @@ namespace Data
             Business newBusiness = new Business
             {
                 Name = business.Name,
-                Owner = business.Owner,
                 OwnerEmail = ownerEmail,
                 Capacity = business.Capacity,
                 OpeningTime = business.OpeningTime,
@@ -46,7 +45,7 @@ namespace Data
 
         public async Task<Business> FindBusinessById(int businessId)
         {
-            Business business = await _context.Businesses.FindAsync(businessId);
+            Business business = await _context.Businesses.FirstOrDefaultAsync(x => x.Id == businessId);
 
             return business;
         }

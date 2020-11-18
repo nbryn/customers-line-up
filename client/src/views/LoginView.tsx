@@ -1,18 +1,12 @@
-import Alert from 'react-bootstrap/Alert';
-import Badge from 'react-bootstrap/Badge';
-import Button from 'react-bootstrap/Button';
+import {Alert, Button, Badge, Col, Container, Form, Row} from 'react-bootstrap';
 import Card from '@material-ui/core/Card';
-import Col from 'react-bootstrap/Col';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
-import Row from 'react-bootstrap/Row';
-
 import {SignupView} from './SignupView';
 import {TextField} from '../components/TextField';
-import {UserDTO} from './dto/User';
-import UserService from '../services/UserService'
+import {UserDTO} from '../services/dto/User';
+import UserService from '../services/UserService';
+import {useUserContext} from '../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({
    alert: {
@@ -50,13 +44,13 @@ const useStyles = makeStyles((theme) => ({
       width: '35%',
    },
    wrapper: {
-      justifyContent: 'center'   
+      justifyContent: 'center',
    },
-
 }));
 
 export const LoginView: React.FC = () => {
    const styles = useStyles();
+   const {setUser} = useUserContext();
 
    const [renderSignUp, setRenderSignUp] = useState(false);
 
@@ -70,9 +64,9 @@ export const LoginView: React.FC = () => {
 
          const user: UserDTO = await UserService.login({email, password});
 
-         //const user = await login(loginRequest);
+         setUser(user);
       } catch (err) {
-         setErrorMsg('Wrong email or password');
+         setErrorMsg('Wrong email/password combination');
       }
    };
 
@@ -82,7 +76,7 @@ export const LoginView: React.FC = () => {
             <SignupView />
          ) : (
             <Row className={styles.wrapper}>
-               <Col sm={10} lg={6} >
+               <Col sm={10} lg={6}>
                   <Card className={styles.card}>
                      <h1>
                         <Badge className={styles.badge} variant="primary">

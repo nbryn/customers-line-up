@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Text;
 
@@ -23,6 +24,8 @@ namespace CLup
     {
 
         internal static IConfiguration _config { get; private set; }
+
+        readonly string CorsApi = "CorsApi";
         public Startup(IConfiguration config)
         {
             _config = config;
@@ -31,13 +34,26 @@ namespace CLup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CLupContext>(opt =>
-            opt.UseInMemoryDatabase("CLup"));
+
+            services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddCors(options =>
+                                       {
+                                           options.AddPolicy("CorsApi",
+                                                             builder =>
+                                                             {
+                                                                 builder.WithOrigins("http://localhost:3000")
+                                                                        .AllowAnyMethod()
+                                                                        .AllowAnyHeader()
+                                                                        .AllowCredentials();
+
+                                                             });
+                                       });
+
             services.AddSingleton<IConfiguration>(_config);
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
              .AddJwtBearer(options =>
                 {
-                    options.SaveToken = true;
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -57,19 +73,30 @@ namespace CLup
                 config.AddPolicy(Policies.User, Policies.UserPolicy());
             });
 
+            services.AddScoped<ICLupContext, CLupContext>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IDTOMapper, DTOMapper>();
+
             services.AddScoped<IBusinessQueueService, BusinessQueueService>();
             services.AddScoped<IBusinessQueueRepository, BusinessQueueRepository>();
 
-            services.AddScoped<ICLupContext, CLupContext>();
-            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IBusinessOwnerRepository, BusinessOwnerRepository>();
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IBusinessRepository, BusinessRepository>();
+
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddControllers();
-            services.AddRouting(options => options.LowercaseUrls = true);
+
+            var connectionString = "DataSource=myshareddb;mode=memory;cache=shared";
+            var keepAliveConnection = new SqliteConnection(connectionString);
+            keepAliveConnection.Open();
+
+            services.AddDbContext<CLupContext>(options =>
+            { 
+                options.UseSqlite(connectionString);
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,9 +109,11 @@ namespace CLup
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-
             app.UseRouting();
+
+            app.UseCors("CorsApi");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

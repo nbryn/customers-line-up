@@ -12,11 +12,11 @@ namespace Logic.Context
 {
     public interface ICLupContext
     {
-        DbSet<User> Users { get; }
-        DbSet<BusinessOwner> BusinessOwners { get; }
-        DbSet<Business> Businesses { get; }
+        DbSet<User> Users { get; set; }
+        DbSet<BusinessOwner> BusinessOwners { get; set; }
+        DbSet<Business> Businesses { get; set; }
 
-        DbSet<BusinessQueue> BusinessQueues { get; }
+        DbSet<BusinessQueue> BusinessQueues { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

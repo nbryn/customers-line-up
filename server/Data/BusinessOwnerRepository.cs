@@ -36,7 +36,7 @@ namespace Data
 
         public async Task<BusinessOwner> FindOwnerByEmail(string ownerEmail)
         {
-            BusinessOwner owner = await _context.BusinessOwners.FindAsync(ownerEmail);
+            BusinessOwner owner = await _context.BusinessOwners.FirstOrDefaultAsync(x => x.UserEmail.Equals(ownerEmail));
 
             return owner;
         }

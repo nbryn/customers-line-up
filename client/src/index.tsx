@@ -1,12 +1,18 @@
+import {BrowserRouter as Router} from 'react-router-dom';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 
+import {UserContextProvider} from '../src/context/UserContext';
 import {MainView} from './views/MainView';
 
 ReactDOM.render(
    <React.StrictMode>
-      <MainView />
+      <UserContextProvider>
+         <Router>
+            <MainView />
+         </Router>
+      </UserContextProvider>
    </React.StrictMode>,
    document.getElementById('root')
 );

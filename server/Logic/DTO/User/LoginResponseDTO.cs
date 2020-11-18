@@ -8,6 +8,10 @@ namespace Logic.DTO.User
         [Required]
         public string Email { get; set; }
 
-        public string Token {get; set;}
+        public string Name { get; set; }
+
+        public string Token { get; set; }
+
+        public bool isOwner { get; set; }
     }
 }

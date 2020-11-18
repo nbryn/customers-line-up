@@ -3,4 +3,5 @@ export type UserDTO = {
     name: string;
     zip: string;
     token: string;
- } | null;
+    isOwner?: boolean;
+ };

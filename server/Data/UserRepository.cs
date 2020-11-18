@@ -24,7 +24,7 @@ namespace Data
 
         public async Task<User> FindUserByEmail(string email)
         {
-            return await _context.Users.FindAsync(email);
+            return await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
         }
         public async Task<int> CreateUser(RegisterDTO user)
         {
