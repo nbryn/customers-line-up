@@ -14,19 +14,19 @@ namespace Logic.DTO
         [StringLength(50)]
         public string Zip { get; set; }
 
-        public BusinessOwner Owner {get; set;}
+        public string OwnerEmail { get; set; }
 
         [Required]
-        public double OpeningTime { get; set; }
+        public double Opens { get; set; }
 
         [Required]
-        public double ClosingTime { get; set; }
+        public double Closes { get; set; }
 
         [Required]
-        public int Capacity {get; set;}
+        public int Capacity { get; set; }
 
         [Required]
-        public string Type {get; set;}
+        public string Type { get; set; }
 
     }
 }

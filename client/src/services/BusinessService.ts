@@ -12,13 +12,16 @@ async function fetchAllBusinesses(): Promise<BusinessDTO[]> {
 async function fetchBusinessesForOwner(ownerEmail: string): Promise<BusinessDTO[]> {
     const businesses: BusinessDTO[] = await fetchFromServer<BusinessDTO[]>(BASE_URL + `business/owner?email=${ownerEmail}`, 'get')
 
-
-    console.log(businesses);
-
     return businesses;
 }
 
+async function createBusiness(business: BusinessDTO): Promise<void> {
+    console.log(business);
+    await fetchFromServer(BASE_URL + 'business/create', 'post', business);
+}
+
 export default {
+    createBusiness,
     fetchAllBusinesses,
     fetchBusinessesForOwner
 };

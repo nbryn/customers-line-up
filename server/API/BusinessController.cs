@@ -39,7 +39,9 @@ namespace API
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            BusinessDTO business = await _service.RegisterBusiness(dto, ownerEmail);
+            dto.OwnerEmail = ownerEmail;
+
+            BusinessDTO business = await _service.RegisterBusiness(dto);
 
             return Ok(business);
         }

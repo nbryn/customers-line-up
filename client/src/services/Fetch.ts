@@ -18,7 +18,7 @@ export async function fetchFromServer<T>(url: string, method: Method, request?: 
     });
 
   } catch (err) {
-    console.log(err);
+    console.log(err.response);
     const errors = new Map();
 
     Object.keys(err.response.data).forEach((error) => {

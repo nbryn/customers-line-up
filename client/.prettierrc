@@ -6,5 +6,5 @@
     "quoteProps": "consistent",
     "bracketSpacing": false,
     "arrowParens": "always",
-    "printWidth": 105
+    "printWidth": 100
  }

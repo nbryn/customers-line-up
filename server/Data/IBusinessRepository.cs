@@ -10,7 +10,7 @@ namespace Data
 {
     public interface IBusinessRepository
     {
-         Task<Business> CreateBusiness(CreateBusinessDTO business, string ownerEmail);
+         Task<Business> CreateBusiness(CreateBusinessDTO business);
 
          Task<Business> FindBusinessById(int businessId);
 

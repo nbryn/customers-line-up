@@ -17,6 +17,8 @@ type Props = {
    select?: boolean;
    className?: any;
    variant?: 'filled' | 'outlined';
+   defaultValue?: string;
+   inputLabelProps?: any;
 };
 
 export const TextField: React.FC<Props> = (props) => {
@@ -39,6 +41,8 @@ export const TextField: React.FC<Props> = (props) => {
          type={props.type}
          autoFocus={props.autoFocus}
          select={props.select}
+         defaultValue={props.defaultValue}
+         InputLabelProps={props.inputLabelProps}
       >
          {props.children}
       </MaterialUITextField>

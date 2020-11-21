@@ -23,15 +23,15 @@ namespace Data
             _context = context;
         }
 
-        public async Task<Business> CreateBusiness(CreateBusinessDTO business, string ownerEmail)
+        public async Task<Business> CreateBusiness(CreateBusinessDTO business)
         {
             Business newBusiness = new Business
             {
                 Name = business.Name,
-                OwnerEmail = ownerEmail,
+                OwnerEmail = business.OwnerEmail,
                 Capacity = business.Capacity,
-                OpeningTime = business.OpeningTime,
-                ClosingTime = business.ClosingTime,
+                OpeningTime = business.Opens,
+                ClosingTime = business.Closes,
                 Zip = business.Zip,
                 Type = business.Type,
             };

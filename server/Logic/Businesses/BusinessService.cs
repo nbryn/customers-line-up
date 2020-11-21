@@ -24,18 +24,16 @@ namespace Logic.Businesses
             _dtoMapper = dtoMapper;
 
         }
-        public async Task<BusinessDTO> RegisterBusiness(CreateBusinessDTO business, string ownerEmail)
+        public async Task<BusinessDTO> RegisterBusiness(CreateBusinessDTO business)
         {
-            BusinessOwner owner = await _businessOwnerRepository.FindOwnerByEmail(ownerEmail);
+            BusinessOwner owner = await _businessOwnerRepository.FindOwnerByEmail(business.OwnerEmail);
 
             if (owner == null)
             {
-                owner = await _businessOwnerRepository.CreateBusinessOwner(ownerEmail);
+                await _businessOwnerRepository.CreateBusinessOwner(business.OwnerEmail);
             }
-            
-            business.Owner = owner;
 
-            Business newBusiness = await _businessRepository.CreateBusiness(business, ownerEmail);
+            Business newBusiness = await _businessRepository.CreateBusiness(business);
 
             return _dtoMapper.ConvertBusinessToDTO(newBusiness);
         }

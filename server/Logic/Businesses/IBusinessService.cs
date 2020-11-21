@@ -6,7 +6,7 @@ namespace Logic.Businesses
 {
     public interface IBusinessService
     {
-        Task<BusinessDTO> RegisterBusiness(CreateBusinessDTO business, string ownerEmail);
+        Task<BusinessDTO> RegisterBusiness(CreateBusinessDTO business);
 
     }
 }
