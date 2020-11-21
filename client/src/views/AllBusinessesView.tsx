@@ -3,28 +3,17 @@ import React, {useEffect, useState} from 'react';
 
 import {BusinessDTO} from '../services/dto/Business';
 import BusinessService from '../services/BusinessService';
+import {BusinessTable} from '../components/BusinessTable';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {Table} from '../components/Table';
-import {useUserContext} from '../context/UserContext';
 
-export const BusinessOverview: React.FC = () => {
-   const {token} = useUserContext();
-
-   const [businesses, setBusinesses] = useState<string[][]>([]);
-
-   const columnNames = ['Name', 'Zip', 'Opens', 'Closes', 'Type'];
+export const AllBusinessesView: React.FC = () => {
+   const [businesses, setBusinesses] = useState<BusinessDTO[]>([]);
 
    useEffect(() => {
       (async () => {
-         const businesses: BusinessDTO[] = await BusinessService.fetchAllBusinesses(token);
+         const businesses: BusinessDTO[] = await BusinessService.fetchAllBusinesses();
 
-         console.log(businesses);
-
-         const temp = businesses.map((x) => {
-            return Object.keys(x).map((c) => x[c]);
-         });
-
-         setBusinesses(temp);
+         setBusinesses(businesses);
       })();
    }, []);
 
@@ -41,14 +30,10 @@ export const BusinessOverview: React.FC = () => {
             <Col sm={8} md={8} lg={4}>
                <h1>
                   <Badge style={{marginBottom: 50}} variant="primary">
-                     Businesses
+                     Available Businesses
                   </Badge>
                </h1>
-               {businesses.length === 0 ? (
-                  <CircularProgress />
-               ) : (
-                  <Table data={businesses} columnNames={columnNames} />
-               )}
+               {businesses.length === 0 ? <CircularProgress /> : <BusinessTable data={businesses} />}
             </Col>
          </div>
       </Container>

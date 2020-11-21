@@ -51,7 +51,15 @@ namespace Data
             return business;
         }
 
-       public async Task<IList<Business>> GetAll()
+        public async Task<IList<Business>> FindBusinessesByOwner(string ownerEmail)
+        {
+            IList<Business> businesses = await _context.Businesses.Where(x => x.OwnerEmail.Equals(ownerEmail))
+                                                                  .ToListAsync();
+
+            return businesses;
+        }
+
+        public async Task<IList<Business>> GetAll()
         {
             return await _context.Businesses.ToListAsync();
         }

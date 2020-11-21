@@ -1,9 +1,12 @@
 import axios, { AxiosResponse, Method } from "axios";
+import Cookies from 'js-cookie';
 
 import { Error } from "./Error";
 
 export async function fetchFromServer<T>(url: string, method: Method, request?: any): Promise<T> {
   let response: AxiosResponse<T>;
+
+  setTokenInHeader();
 
   try {
     response = await axios({
@@ -28,6 +31,11 @@ export async function fetchFromServer<T>(url: string, method: Method, request?: 
   return response.data;
 }
 
-export function setTokenInHeader(token: string): void {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+export function setTokenInHeader(): void {
+  if (Cookies.get('token')) {
+    const token = Cookies.get('token');
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+  }
 }

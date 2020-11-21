@@ -24,13 +24,13 @@ namespace API
         private readonly IBusinessService _service;
         private readonly IDTOMapper _dtoMapper;
 
-        public BusinessController(IBusinessRepository repository, 
+        public BusinessController(IBusinessRepository repository,
         IBusinessService service, IDTOMapper dtoMapper)
         {
             _repository = repository;
             _dtoMapper = dtoMapper;
             _service = service;
-            
+
         }
 
         [HttpPost]
@@ -44,12 +44,21 @@ namespace API
             return Ok(business);
         }
 
+        [HttpGet("{email}")]
+        [Route("owner")]
+        public async Task<IEnumerable<BusinessDTO>> FetchBusinessesForOwner([FromQuery] string email)
+        {
+            var all = await _repository.FindBusinessesByOwner(email);
+
+            return all.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
+        }
+
         [HttpGet]
         [Route("all")]
         public async Task<IEnumerable<BusinessDTO>> FetchAll()
         {
             var all = await _repository.GetAll();
-            
+
             return all.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
         }
     }

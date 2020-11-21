@@ -1,18 +1,33 @@
-import axios from "axios";
+import Cookies from 'js-cookie';
 
-import {BASE_URL} from './Url';
-import {fetchFromServer, setTokenInHeader} from './Fetch';
-import {UserDTO} from './dto/User';
+import { BASE_URL } from './Url';
+import { fetchFromServer, setTokenInHeader } from './Fetch';
+import { UserDTO } from './dto/User';
 
 export type LoginRequest = {
    email: string;
    password: string;
 };
 
-async function login(request: LoginRequest): Promise<UserDTO> {
-   const user: UserDTO = await fetchFromServer<UserDTO>(BASE_URL + 'user/login', 'post', request);
+export type LoginResponse = {
+   email: string;
+   name: string;
+   zip: string;
+   token: string;
+   isOwner: boolean;
+}
 
-   console.log(user);
+async function login(request: LoginRequest): Promise<UserDTO> {
+   const response: LoginResponse = await fetchFromServer<LoginResponse>(BASE_URL + 'user/login', 'post', request);
+
+   Cookies.set('token', response.token);
+
+   const user: UserDTO = {
+      name: response.name,
+      email: response.email,
+      zip: response.zip,
+      isOwner: response.isOwner as boolean
+   };
 
    return user;
 }
@@ -25,5 +40,4 @@ async function login(request: LoginRequest): Promise<UserDTO> {
 
 export default {
    login,
-   
 };

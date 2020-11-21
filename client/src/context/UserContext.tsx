@@ -1,20 +1,20 @@
+import Cookies from 'js-cookie';
 import React, {useContext, useEffect, useState} from 'react';
 
 import {UserDTO} from '../services/dto/User';
 
 export type ContextValue = {
    user: UserDTO;
-   token: string;
    logout: () => void;
    setUser: (user: UserDTO) => void;
    userLoggedIn: boolean;
 };
 
-const initialUserState: UserDTO = {email: '', name: '', zip: '', token: ''};
+
+const initialUserState: UserDTO = {name: '', email: '', zip: ''};
 
 export const UserContext = React.createContext<ContextValue>({
-   user: initialUserState,
-   token: '',
+   user: (Cookies.get('user') as unknown) as UserDTO,
    setUser: () => null,
    logout: () => null,
    userLoggedIn: false,
@@ -26,36 +26,32 @@ type Props = {
 
 export const UserContextProvider: React.FC<Props> = (props: Props) => {
    const [user, setCurrentUser] = useState<UserDTO>(initialUserState);
-   const [token, setToken] = useState<string>('');
    const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
 
    const setUser = (user: UserDTO) => {
       setUserLoggedIn(true);
       setCurrentUser(user);
-      setToken(user.token);
 
-      localStorage.setItem('User', JSON.stringify(user));
+      Cookies.set('user', user);
    };
 
    const logout = () => {
-      localStorage.removeItem('User');
+      Cookies.set('user', '');
 
       setUser(initialUserState);
       setUserLoggedIn(false);
    };
 
    useEffect(() => {
-      if (localStorage.getItem('User')) {
-         const user = JSON.parse(localStorage.getItem('User')!) as UserDTO;
+      if (Cookies.get('user')) {
+         const user = (Cookies.get('user') as unknown) as UserDTO;
 
          setCurrentUser(user);
-         setToken(user.token);
       }
    }, []);
 
    const contextValue: ContextValue = {
       user,
-      token,
       logout,
       setUser,
       userLoggedIn,
@@ -66,5 +62,6 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
 
 export const useUserContext = (): ContextValue => {
    const context = useContext(UserContext);
+   
    return context;
 };

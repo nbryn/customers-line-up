@@ -11,7 +11,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 
-//import Logo 
+//import Logo
 import {useUserContext} from '../context/UserContext';
 
 const drawerWidth = 210;
@@ -70,14 +70,19 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
          path: '/',
       },
       {
-         label: 'Business List',
+         label: 'All Businesses',
          icon: <DashboardIcon />,
-         path: '/businessoverview',
+         path: '/businesses',
       },
       {
          label: 'My Bookings',
          icon: <DashboardIcon />,
          path: '/bookings',
+      },
+      {
+         label: 'Create Business',
+         icon: <DashboardIcon />,
+         path: '/create',
       },
    ];
 
@@ -130,6 +135,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
                   <ListItemText primary={menuItem.label} />
                </ListItem>
             ))}
+         <Divider />
       </>
    );
 

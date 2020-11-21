@@ -40,8 +40,8 @@ namespace Logic.Util
             {
                 Name = business.Name,
                 Zip = business.Zip,
-                OpeningTime = business.OpeningTime,
-                ClosingTime = business.ClosingTime,
+                Opens = business.OpeningTime,
+                Closes = business.ClosingTime,
                 Type = business.Type
             };
         }

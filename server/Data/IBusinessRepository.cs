@@ -14,6 +14,8 @@ namespace Data
 
          Task<Business> FindBusinessById(int businessId);
 
+         Task<IList<Business>> FindBusinessesByOwner(string ownerEmail);
+
          Task<IList<Business>> GetAll();
     }
 }
