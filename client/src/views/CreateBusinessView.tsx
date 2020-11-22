@@ -6,6 +6,8 @@ import React, {useState} from 'react';
 import {BusinessDTO} from '../services/dto/Business';
 import BusinessService from '../services/BusinessService';
 import {TextField} from '../components/TextField';
+import BusinessValidator from '../validation/BusinessValidation';
+import ValidationRunner from '../validation/ValidationRunner';
 
 const useStyles = makeStyles((theme) => ({
    alert: {
@@ -71,6 +73,8 @@ export const CreateBusinessView: React.FC = () => {
             closes: closes.replace(':', '.'),
          };
 
+         console.log(business);
+
          await BusinessService.createBusiness(business);
       } catch (err) {
          setErrorMsg('Wrong email/password combination');
@@ -100,8 +104,9 @@ export const CreateBusinessView: React.FC = () => {
                            id="name"
                            label="Name"
                            type="text"
-                           onChange={(e) => setName(e.target.value)}
                            value={name}
+                           setValue={setName}
+                           validateInput={BusinessValidator.validateBusinessName}
                         />
                      </Form.Group>
 

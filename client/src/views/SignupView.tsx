@@ -59,7 +59,7 @@ export const SignupView: React.FC = () => {
 
    const [errorMsg, setErrorMsg] = useState('');
 
-   const handleSubmit = async (event: any) => {
+   const handleSubmit = async (event: React.FormEvent) => {
       try {
          event.preventDefault();
       } catch (err) {
