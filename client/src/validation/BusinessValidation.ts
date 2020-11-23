@@ -1,25 +1,16 @@
-//import { validate } from 'validate.js';
+import * as yup from 'yup';
 
-import { ValidationResult } from './ValidationRunner';
+export const generalCreateBusinessErrorMsg = 'An error occured';
 
-const businessNameConstraints = {
-    name: {
-        presence: true,
-        length: {
-            minimum: 2,
-            maximum: 30,
-            message: 'must be between 2 and 30 characters',
-        },
-    },
-};
-
-// function validateBusinessName(name: string): ValidationResult {
-//     const result: ValidationResult = validate({ name }, businessNameConstraints);
-
-//     return result;
-// }
-
-// export default {
-//     validateBusinessName,
-// }
-
+export const createBusinessValidationSchema: yup.ObjectSchema = yup.object({
+    name: yup.string().min(2, 'Name should be minimum 2 characters').required('Name is required'),
+    zip: yup
+        .string()
+        .min(4, 'Zip should be 4 characters')
+        .max(4, 'Zip should be 4 characters')
+        .required('Zip is required'),
+    type: yup.string().required('Type is required'),
+    capacity: yup.number().min(1, 'Capcity should be over 0').required('Capacity is required'),
+    opens: yup.string().required('Opens is required'),
+    closes: yup.string().required('Closes is required'),
+});

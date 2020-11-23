@@ -3,14 +3,14 @@ import Card from '@material-ui/core/Card';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
-import {useFormik, Formik} from 'formik';
-import * as yup from 'yup';
-
-import {BusinessDTO} from '../services/dto/Business';
+import {CreateBusinessDTO} from '../services/dto/Business';
 import BusinessService from '../services/BusinessService';
+import {
+   createBusinessValidationSchema,
+   generalCreateBusinessErrorMsg,
+} from '../validation/BusinessValidation';
 import {TextField} from '../components/TextField';
-// import BusinessValidator from '../validation/BusinessValidation';
-// import ValidationRunner from '../validation/ValidationRunner';
+import {useForm} from '../util/useForm';
 
 const useStyles = makeStyles((theme) => ({
    alert: {
@@ -52,58 +52,24 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-const businessValidationSchema = yup.object({
-   name: yup.string().min(2, 'Name should be minimum 2 characters').required('Name is required'),
-   zip: yup
-      .string()
-      .min(4, 'Name should be 4 characters')
-      .max(4, 'Name should be 4 characters')
-      .required('Zip is required'),
-   type: yup.string().required('Type is required'),
-   capacity: yup.number().min(1, 'Capcity should be over 0').required('Capacity is required'),
-   opens: yup.string().required('Opens is required'),
-   closes: yup.string().required('Closes is required'),
-});
-
 export const CreateBusinessView: React.FC = () => {
    const styles = useStyles();
 
-   const [errorMsg, setErrorMsg] = useState<string>('');
+   const initialValues = {
+      name: '',
+      zip: '',
+      capacity: '',
+      type: '',
+      opens: '',
+      closes: '',
+   };
 
-   const formik = useFormik({
-      initialValues: {
-         name: '',
-         zip: '',
-         capacity: '',
-         type: '',
-         opens: '',
-         closes: '',
-      },
-      validationSchema: businessValidationSchema,
-      validateOnBlur: true,
-      validateOnChange: true,
-      validateOnMount: true,
-      initialTouched: {
-         name: true,
-      },
-
-      onSubmit: async (values) => {
-         try {
-            const business: BusinessDTO = {
-               ...values,
-               opens: values.opens.replace(':', '.'),
-               closes: values.closes.replace(':', '.'),
-            };
-
-            console.log(business);
-
-            await BusinessService.createBusiness(business);
-         } catch (err) {
-            console.log(err);
-            setErrorMsg('Wrong email/password combination');
-         }
-      },
-   });
+   const {formik, errorMessage} = useForm<CreateBusinessDTO>(
+      initialValues,
+      createBusinessValidationSchema,
+      BusinessService.createBusiness,
+      generalCreateBusinessErrorMsg
+   );
 
    return (
       <Container>
@@ -117,9 +83,9 @@ export const CreateBusinessView: React.FC = () => {
                   </h1>
 
                   <Form onSubmit={formik.handleSubmit}>
-                     {errorMsg && (
+                     {errorMessage && (
                         <Alert className={styles.alert} variant="danger">
-                           {errorMsg}
+                           {errorMessage}
                         </Alert>
                      )}
                      <Form.Group>
@@ -130,8 +96,9 @@ export const CreateBusinessView: React.FC = () => {
                            type="text"
                            value={formik.values.name}
                            onChange={formik.handleChange}
-                           error={formik.touched.zip && Boolean(formik.errors.name)}
-                           helperText={formik.touched.zip && formik.errors.name}
+                           onBlur={formik.handleBlur}
+                           error={formik.touched.name && Boolean(formik.errors.name)}
+                           helperText={formik.touched.name && formik.errors.name}
                         />
                      </Form.Group>
 
@@ -143,6 +110,7 @@ export const CreateBusinessView: React.FC = () => {
                            type="text"
                            value={formik.values.zip}
                            onChange={formik.handleChange}
+                           onBlur={formik.handleBlur}
                            error={formik.touched.zip && Boolean(formik.errors.zip)}
                            helperText={formik.touched.zip && formik.errors.zip}
                         />
@@ -155,6 +123,7 @@ export const CreateBusinessView: React.FC = () => {
                            type="text"
                            value={formik.values.capacity}
                            onChange={formik.handleChange}
+                           onBlur={formik.handleBlur}
                            error={formik.touched.capacity && Boolean(formik.errors.capacity)}
                            helperText={formik.touched.capacity && formik.errors.capacity}
                         />
@@ -167,6 +136,7 @@ export const CreateBusinessView: React.FC = () => {
                            type="text"
                            value={formik.values.type}
                            onChange={formik.handleChange}
+                           onBlur={formik.handleBlur}
                            error={formik.touched.type && Boolean(formik.errors.type)}
                            helperText={formik.touched.type && formik.errors.type}
                         />
@@ -180,6 +150,7 @@ export const CreateBusinessView: React.FC = () => {
                            defaultValue="08:00"
                            value={formik.values.opens}
                            onChange={formik.handleChange}
+                           onBlur={formik.handleBlur}
                            error={formik.touched.opens && Boolean(formik.errors.opens)}
                            helperText={formik.touched.opens && formik.errors.opens}
                            inputLabelProps={{
