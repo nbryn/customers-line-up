@@ -13,10 +13,9 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
    id: string;
    label: string | undefined;
-   value?: string;
-   setValue?: (input: string) => void;
+   value: string;
    onBlur?: (event: React.FocusEvent) => void;
-   helperText?: string;
+   helperText?: string | boolean;
    formHelperTextProps?: any;
    inputProps?: any;
    size?: 'small' | 'medium';
@@ -30,37 +29,26 @@ type Props = {
    defaultValue?: string;
    inputLabelProps?: any;
    validateInput?: (input: string) => ValidationResult;
+   error?: boolean;
 };
 
 export const TextField: React.FC<Props> = (props) => {
    const styles = useStyles();
 
-   const [errorMessage, setErrorMessage] = useState<string>('');
 
-   const validateInput = (input: string) => {
-      props.setValue!(input);
-      const validation: ValidationResult = props.validateInput!(input);
-
-      if (validation) {
-         setErrorMessage(validation[props.id]);
-      } else {
-         setErrorMessage('');
-      }
-   };
    return (
       <MaterialUITextField
          className={props.className}
          variant={props.variant}
          margin={props.margin}
          size={props.size}
-         helperText={errorMessage}
+         helperText={props.helperText}
          FormHelperTextProps={{className: styles.helperText}}
          inputProps={props.inputProps}
          fullWidth
-         required
          id={props.id}
          onBlur={props.onBlur}
-         onChange={(e) => validateInput(e.target.value)}
+         onChange={props.onChange}
          label={props.label}
          value={props.value}
          type={props.type}
@@ -68,6 +56,7 @@ export const TextField: React.FC<Props> = (props) => {
          select={props.select}
          defaultValue={props.defaultValue}
          InputLabelProps={props.inputLabelProps}
+         error={props.error}
       >
          {props.children}
       </MaterialUITextField>

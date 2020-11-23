@@ -1,4 +1,4 @@
-import { validate } from 'validate.js';
+//import { validate } from 'validate.js';
 
 import { ValidationResult } from './ValidationRunner';
 
@@ -13,13 +13,13 @@ const businessNameConstraints = {
     },
 };
 
-function validateBusinessName(name: string): ValidationResult {
-    const result: ValidationResult = validate({ name }, businessNameConstraints);
+// function validateBusinessName(name: string): ValidationResult {
+//     const result: ValidationResult = validate({ name }, businessNameConstraints);
 
-    return result;
-}
+//     return result;
+// }
 
-export default {
-    validateBusinessName,
-}
+// export default {
+//     validateBusinessName,
+// }
 

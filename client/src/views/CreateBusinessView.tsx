@@ -3,11 +3,14 @@ import Card from '@material-ui/core/Card';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
+import {useFormik, Formik} from 'formik';
+import * as yup from 'yup';
+
 import {BusinessDTO} from '../services/dto/Business';
 import BusinessService from '../services/BusinessService';
 import {TextField} from '../components/TextField';
-import BusinessValidator from '../validation/BusinessValidation';
-import ValidationRunner from '../validation/ValidationRunner';
+// import BusinessValidator from '../validation/BusinessValidation';
+// import ValidationRunner from '../validation/ValidationRunner';
 
 const useStyles = makeStyles((theme) => ({
    alert: {
@@ -49,37 +52,58 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
+const businessValidationSchema = yup.object({
+   name: yup.string().min(2, 'Name should be minimum 2 characters').required('Name is required'),
+   zip: yup
+      .string()
+      .min(4, 'Name should be 4 characters')
+      .max(4, 'Name should be 4 characters')
+      .required('Zip is required'),
+   type: yup.string().required('Type is required'),
+   capacity: yup.number().min(1, 'Capcity should be over 0').required('Capacity is required'),
+   opens: yup.string().required('Opens is required'),
+   closes: yup.string().required('Closes is required'),
+});
+
 export const CreateBusinessView: React.FC = () => {
    const styles = useStyles();
 
-   const [name, setName] = useState<string>('');
-   const [zip, setZip] = useState<string>('');
-   const [capacity, setCapacity] = useState<string>('');
-   const [type, setType] = useState<string>('');
-   const [opens, setOpens] = useState<string>('');
-   const [closes, setCloses] = useState<string>('');
    const [errorMsg, setErrorMsg] = useState<string>('');
 
-   const handleSubmit = async (event: React.FormEvent) => {
-      try {
-         event.preventDefault();
+   const formik = useFormik({
+      initialValues: {
+         name: '',
+         zip: '',
+         capacity: '',
+         type: '',
+         opens: '',
+         closes: '',
+      },
+      validationSchema: businessValidationSchema,
+      validateOnBlur: true,
+      validateOnChange: true,
+      validateOnMount: true,
+      initialTouched: {
+         name: true,
+      },
 
-         const business: BusinessDTO = {
-            name,
-            zip,
-            capacity,
-            type,
-            opens: opens.replace(':', '.'),
-            closes: closes.replace(':', '.'),
-         };
+      onSubmit: async (values) => {
+         try {
+            const business: BusinessDTO = {
+               ...values,
+               opens: values.opens.replace(':', '.'),
+               closes: values.closes.replace(':', '.'),
+            };
 
-         console.log(business);
+            console.log(business);
 
-         await BusinessService.createBusiness(business);
-      } catch (err) {
-         setErrorMsg('Wrong email/password combination');
-      }
-   };
+            await BusinessService.createBusiness(business);
+         } catch (err) {
+            console.log(err);
+            setErrorMsg('Wrong email/password combination');
+         }
+      },
+   });
 
    return (
       <Container>
@@ -92,7 +116,7 @@ export const CreateBusinessView: React.FC = () => {
                      </Badge>
                   </h1>
 
-                  <Form onSubmit={handleSubmit}>
+                  <Form onSubmit={formik.handleSubmit}>
                      {errorMsg && (
                         <Alert className={styles.alert} variant="danger">
                            {errorMsg}
@@ -104,9 +128,10 @@ export const CreateBusinessView: React.FC = () => {
                            id="name"
                            label="Name"
                            type="text"
-                           value={name}
-                           setValue={setName}
-                           validateInput={BusinessValidator.validateBusinessName}
+                           value={formik.values.name}
+                           onChange={formik.handleChange}
+                           error={formik.touched.zip && Boolean(formik.errors.name)}
+                           helperText={formik.touched.zip && formik.errors.name}
                         />
                      </Form.Group>
 
@@ -116,8 +141,10 @@ export const CreateBusinessView: React.FC = () => {
                            id="zip"
                            label="Zip"
                            type="text"
-                           onChange={(e) => setZip(e.target.value)}
-                           value={zip}
+                           value={formik.values.zip}
+                           onChange={formik.handleChange}
+                           error={formik.touched.zip && Boolean(formik.errors.zip)}
+                           helperText={formik.touched.zip && formik.errors.zip}
                         />
                      </Form.Group>
                      <Form.Group>
@@ -126,8 +153,10 @@ export const CreateBusinessView: React.FC = () => {
                            id="capacity"
                            label="Capacity"
                            type="text"
-                           onChange={(e) => setCapacity(e.target.value)}
-                           value={capacity}
+                           value={formik.values.capacity}
+                           onChange={formik.handleChange}
+                           error={formik.touched.capacity && Boolean(formik.errors.capacity)}
+                           helperText={formik.touched.capacity && formik.errors.capacity}
                         />
                      </Form.Group>
                      <Form.Group>
@@ -136,8 +165,10 @@ export const CreateBusinessView: React.FC = () => {
                            id="type"
                            label="Type"
                            type="text"
-                           onChange={(e) => setType(e.target.value)}
-                           value={type}
+                           value={formik.values.type}
+                           onChange={formik.handleChange}
+                           error={formik.touched.type && Boolean(formik.errors.type)}
+                           helperText={formik.touched.type && formik.errors.type}
                         />
                      </Form.Group>
                      <Form.Group>
@@ -147,8 +178,10 @@ export const CreateBusinessView: React.FC = () => {
                            label="Opens"
                            type="time"
                            defaultValue="08:00"
-                           onChange={(e) => setOpens(e.target.value)}
-                           value={opens}
+                           value={formik.values.opens}
+                           onChange={formik.handleChange}
+                           error={formik.touched.opens && Boolean(formik.errors.opens)}
+                           helperText={formik.touched.opens && formik.errors.opens}
                            inputLabelProps={{
                               shrink: true,
                            }}
@@ -164,8 +197,10 @@ export const CreateBusinessView: React.FC = () => {
                            label="Closes"
                            type="time"
                            defaultValue="04:00"
-                           onChange={(e) => setCloses(e.target.value)}
-                           value={closes}
+                           value={formik.values.closes}
+                           onChange={formik.handleChange}
+                           error={formik.touched.closes && Boolean(formik.errors.closes)}
+                           helperText={formik.touched.closes && formik.errors.closes}
                            inputLabelProps={{
                               shrink: true,
                            }}
@@ -179,7 +214,7 @@ export const CreateBusinessView: React.FC = () => {
                            className={styles.button}
                            variant="primary"
                            type="submit"
-                           //disabled={!(email && password)}
+                           disabled={!formik.isValid}
                         >
                            Create
                         </Button>
