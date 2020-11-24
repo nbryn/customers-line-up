@@ -1,65 +1,35 @@
-import Paper from '@material-ui/core/Paper';
-import React, {useEffect, useState} from 'react';
-import MaterialTable from 'material-table'
-import MaterialUITable from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import MaterialTable from 'material-table';
+import IRowData from 'material-table/types';
+import React from 'react';
 
-type ColumnData = {
-   [key: string]: string;
+export type TableColumn = {
+   title: string;
+   field: string;
+   hidden?: boolean;
+};
+
+export type BusinessData = {
+   name: string;
+   zip: string;
+   opens: string;
+   closes: string;
+   type: string;
 };
 
 type Props = {
-   columnNames: string[];
-   data: string[][];
+   actions: any;
+   columns: TableColumn[];
+   data: any;
+   title: string;
 };
 
-export const Table: React.FC<Props> = (props: Props) => {
-   const [data, setData] = useState<string[][]>([]);
-
-   useEffect(() => {
-      setData(props.data);
-   }, [props]);
-
+export const Table: React.FC<Props> = ({actions, columns, data, title}: Props) => {
    return (
-      <>
-         {data && (
-            <TableContainer component={Paper}>
-               <MaterialUITable aria-label="customized table">
-                  <TableHead>
-                     <TableRow>
-                        {props.columnNames.map((x, index) => {
-                           if (index === 0) {
-                              return <TableCell align="left">{x}</TableCell>;
-                           }
-                           return <TableCell align="right">{x}</TableCell>;
-                        })}
-                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                     {data.map((x) => {
-                        return (
-                           <TableRow key="s">
-                              {x.map((c, index) => {
-                                 if (index === 0) {
-                                    return (
-                                       <TableCell component="th" scope="row">
-                                          {c}
-                                       </TableCell>
-                                    );
-                                 }
-                                 return <TableCell align="right">{c}</TableCell>;
-                              })}
-                           </TableRow>
-                        );
-                     })}
-                  </TableBody>
-               </MaterialUITable>
-            </TableContainer>
-         )}
-      </>
+      <MaterialTable
+         columns={columns}
+         data={data}
+         actions={actions}
+         title={title}
+      ></MaterialTable>
    );
 };

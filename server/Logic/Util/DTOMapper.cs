@@ -16,11 +16,8 @@ namespace Logic.Util
         {
             return new BusinessQueueDTO
             {
-                BusinessId = queue.Business.Id,
-                Capacity = queue.Capacity,
                 Start = queue.Start,
                 End = queue.End,
-                Customers = queue.Customers?.Select(x => ConvertUserToDTO(x))
             };
         }
 
@@ -38,6 +35,7 @@ namespace Logic.Util
         {
             return new BusinessDTO
             {
+                Id = business.Id,
                 Name = business.Name,
                 Zip = business.Zip,
                 Opens = business.OpeningTime,

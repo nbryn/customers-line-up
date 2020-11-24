@@ -4,7 +4,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 import {SignupView} from './SignupView';
 import {TextField} from '../components/TextField';
-import {UserDTO} from '../services/dto/User';
+import {UserDTO} from '../models/dto/User';
 import UserService from '../services/UserService';
 import {useUserContext} from '../context/UserContext';
 

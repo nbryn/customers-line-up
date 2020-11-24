@@ -3,14 +3,14 @@ import Card from '@material-ui/core/Card';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
-import {CreateBusinessDTO} from '../services/dto/Business';
-import BusinessService from '../services/BusinessService';
+import {CreateBusinessDTO} from '../../models/dto/Business';
+import BusinessService from '../../services/BusinessService';
 import {
    createBusinessValidationSchema,
    generalCreateBusinessErrorMsg,
-} from '../validation/BusinessValidation';
-import {TextField} from '../components/TextField';
-import {useForm} from '../util/useForm';
+} from '../../validation/BusinessValidation';
+import {TextField} from '../../components/TextField';
+import {useForm} from '../../util/useForm';
 
 const useStyles = makeStyles((theme) => ({
    alert: {
@@ -55,10 +55,10 @@ const useStyles = makeStyles((theme) => ({
 export const CreateBusinessView: React.FC = () => {
    const styles = useStyles();
 
-   const initialValues = {
+   const initialValues: CreateBusinessDTO = {
       name: '',
-      zip: '',
-      capacity: '',
+      zip: 0,
+      capacity: 0,
       type: '',
       opens: '',
       closes: '',

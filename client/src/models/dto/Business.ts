@@ -1,11 +1,17 @@
 export interface BusinessDTO {
+    id?: number;
     name: string;
-    zip: string;
+    zip: number;
     type: string;
     opens: string;
     closes: string;  
 }
 
 export interface CreateBusinessDTO extends BusinessDTO {
-    capacity: string;
+    capacity: number;
+}
+
+export type BusinessQueueDTO = {
+    start: string;
+    end: string;
 }

@@ -2,11 +2,11 @@ import {Badge, Col, Container} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
 
-import {BusinessDTO} from '../services/dto/Business';
-import BusinessService from '../services/BusinessService';
-import {BusinessTable} from '../components/BusinessTable';
+import {BusinessDTO} from '../../models/dto/Business';
+import BusinessService from '../../services/BusinessService';
+import {Table, TableColumn} from '../../components/Table';
 
-import {useUserContext} from '../context/UserContext';
+import {useUserContext} from '../../context/UserContext';
 
 export const OwnerBusinessesView: React.FC = () => {
    const {user} = useUserContext();
@@ -19,6 +19,24 @@ export const OwnerBusinessesView: React.FC = () => {
          setBusinesses(businesses);
       })();
    }, []);
+
+   const columns: TableColumn[] = [
+      {title: 'Name', field: 'name'},
+      {title: 'Zip', field: 'zip'},
+      {title: 'Opens', field: 'opens'},
+      {title: 'Closes', field: 'closes'},
+      {title: 'Type', field: 'type'},
+   ];
+
+   const actions = [
+      {
+         icon: 'edit',
+         tooltip: 'Edit Business',
+         onClick: (event: any, rowData: any) => {
+            console.log(rowData);
+         },
+      },
+   ];
 
    return (
       <Container>
@@ -36,7 +54,7 @@ export const OwnerBusinessesView: React.FC = () => {
                      Your Businesses
                   </Badge>
                </h1>
-               {businesses.length === 0 ? <CircularProgress /> : <BusinessTable data={businesses} />}
+               {businesses.length === 0 ? <CircularProgress /> : <Table actions={actions} columns={columns} data={businesses} title='Businesses' />}
             </Col>
          </div>
       </Container>

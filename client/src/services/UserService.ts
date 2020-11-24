@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 
 import { BASE_URL } from './Url';
 import { fetchFromServer, setTokenInHeader } from './Fetch';
-import { UserDTO } from './dto/User';
+import { UserDTO } from '../models/dto/User';
 
 export type LoginRequest = {
    email: string;
