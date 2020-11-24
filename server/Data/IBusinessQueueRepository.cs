@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 
+using Logic.DTO;
 using Logic.BusinessQueues;
 
 namespace Data
@@ -12,6 +13,8 @@ namespace Data
         Task<int> CreateBusinessQueue(BusinessQueue queue);
 
         Task<IList<BusinessQueue>> FindQueuesByBusiness(int businessId);
+
+        Task<IList<BusinessQueue>> FindAvailableQueuesByBusiness(AvailableQueuesRequest request);
 
         Task<BusinessQueue> FindQueueByBusinessAndStart(int businessId, DateTime queueStart);
 

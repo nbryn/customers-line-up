@@ -46,6 +46,16 @@ namespace Data
             return queues;
         }
 
+        public async Task<IList<BusinessQueue>> FindAvailableQueuesByBusiness(AvailableQueuesRequest request)
+        {
+            IList<BusinessQueue> queues = await _context.BusinessQueues.Include(x => x.Customers)
+                                                                        .Where(x => x.BusinessId == request.BusinessId
+                                                                        && (x.Start < request.Start && x.End > request.End))
+                                                                        .ToListAsync();
+
+            return queues;
+        }
+
         public async Task<int> UpdateQueue(BusinessQueue queue)
         {
             _context.BusinessQueues.Update(queue);

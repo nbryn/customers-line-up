@@ -11,7 +11,5 @@ namespace Logic.BusinessQueues
 
         Task<BusinessQueueDTO> AddUserToQueue(AddUserToQueueRequest request);
 
-        Task<ICollection<BusinessQueueDTO>> GetAllQueuesForBusiness(int businessId);
-
     }
 }

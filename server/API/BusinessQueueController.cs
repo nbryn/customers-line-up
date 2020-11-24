@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Linq;
 
 using Logic.Auth;
 using Logic.BusinessQueues;
 using Logic.DTO;
 using Data;
+using Logic.Util;
 
 namespace API
 {
@@ -20,10 +22,15 @@ namespace API
         private readonly IBusinessQueueRepository _repository;
         private readonly IBusinessQueueService _service;
 
-        public BusinessQueueController(IBusinessQueueRepository repository, IBusinessQueueService service)
+        private readonly IDTOMapper _dtoMapper;
+
+        public BusinessQueueController(IBusinessQueueRepository repository,
+        IBusinessQueueService service, IDTOMapper dtoMapper)
         {
             _repository = repository;
+            _dtoMapper = dtoMapper;
             _service = service;
+
         }
 
         [HttpPost]
@@ -48,11 +55,19 @@ namespace API
 
         [HttpGet("{id}")]
         [Route("business")]
-        public async Task<IActionResult> FetchQueuesForBusiness(int businessId)
+        public async Task<ICollection<BusinessQueueDTO>> FetchAllQueuesForBusiness(int businessId)
         {
-            IEnumerable<BusinessQueueDTO> queues = await _service.GetAllQueuesForBusiness(businessId);
+            IList<BusinessQueue> queues = await _repository.FindQueuesByBusiness(businessId);
 
-            return Ok(queues);
+            return queues.Select(x => _dtoMapper.ConvertQueueToDTO(x)).ToList();
+        }
+
+        [Route("available")]
+        public async Task<ICollection<BusinessQueueDTO>> FetchAllAvailableQueuesForBusiness([FromBody] AvailableQueuesRequest request)
+        {
+            IList<BusinessQueue> queues = await _repository.FindAvailableQueuesByBusiness(request);
+
+            return queues.Select(x => _dtoMapper.ConvertQueueToDTO(x)).ToList();
         }
     }
 }

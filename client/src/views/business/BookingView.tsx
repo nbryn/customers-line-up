@@ -1,12 +1,34 @@
 import {Badge, Col, Container} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
+import {useLocation} from 'react-router-dom';
 
-import {BusinessQueueDTO} from '../../models/dto/Business';
+import {BusinessDTO, BusinessQueueDTO} from '../../models/dto/Business';
+import BusinessService from '../../services/BusinessService';
 import {Table, TableColumn} from '../../components/Table';
+import {useUserContext} from '../../context/UserContext';
+
+interface LocationState {
+   data: BusinessDTO;
+}
 
 export const BookingView: React.FC = () => {
-   const [timeSlots, setTimeSlots] = useState<BusinessQueueDTO[]>([]);
+   const location = useLocation<LocationState>();
+   const {user} = useUserContext();
+
+   const [queues, setQueues] = useState<BusinessQueueDTO[]>([]);
+
+   const business: BusinessDTO = location.state.data;
+
+   useEffect(() => {
+      (async () => {
+         const queues: BusinessQueueDTO[] = await BusinessService.fetchAvailableQueuesForBusiness(
+            business.id!
+         );
+
+         setQueues(queues);
+      })();
+   }, []);
 
    const columns: TableColumn[] = [
       {title: 'Start', field: 'start'},
@@ -38,10 +60,10 @@ export const BookingView: React.FC = () => {
                      Available Time Slots
                   </Badge>
                </h1>
-               {timeSlots.length === 0 ? (
+               {queues.length === 0 ? (
                   <CircularProgress />
                ) : (
-                  <Table actions={actions} columns={columns} data={timeSlots} title="Time Slots" />
+                  <Table actions={actions} columns={columns} data={queues} title="Time Slots" />
                )}
             </Col>
          </div>
