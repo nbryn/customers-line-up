@@ -22,6 +22,7 @@ export const BookingView: React.FC = () => {
 
    useEffect(() => {
       (async () => {
+         console.log(business);
          const queues: BusinessQueueDTO[] = await BusinessService.fetchAvailableQueuesForBusiness(
             business.id!
          );

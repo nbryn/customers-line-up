@@ -8,6 +8,8 @@ export async function fetchFromServer<T>(url: string, method: Method, request?: 
 
   setTokenInHeader();
 
+  console.log(request);
+
   try {
     response = await axios({
       url,
