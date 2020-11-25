@@ -11,10 +11,8 @@ namespace Logic.BusinessQueues
     {
         public int Id { get; set; }
 
-        public int BusinessId { get; set; }
-
         [Required]
-        public Business Business { get; set; }
+        public int BusinessId { get; set; }
 
         [Required]
         public int Capacity { get; set; }
@@ -25,6 +23,6 @@ namespace Logic.BusinessQueues
         [Required]
         public DateTime End { get; set; }
 
-        public ICollection<User>? Customers { get; set; }
+        public ICollection<UserQueue>? Customers { get; set; }
     }
 }

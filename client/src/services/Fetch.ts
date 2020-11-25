@@ -18,6 +18,7 @@ export async function fetchFromServer<T>(url: string, method: Method, request?: 
     });
 
   } catch (err) {
+    console.log(err);
     console.log(err.response);
     const errors = new Map();
 
@@ -36,6 +37,5 @@ export function setTokenInHeader(): void {
     const token = Cookies.get('token');
 
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
   }
 }

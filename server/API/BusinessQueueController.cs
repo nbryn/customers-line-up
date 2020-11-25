@@ -55,13 +55,15 @@ namespace API
 
         [HttpGet("{id}")]
         [Route("business")]
-        public async Task<ICollection<BusinessQueueDTO>> FetchAllQueuesForBusiness(int businessId)
+        public async Task<ICollection<BusinessQueueDTO>> FetchAllQueuesForBusiness([FromQuery] int id)
         {
-            IList<BusinessQueue> queues = await _repository.FindQueuesByBusiness(businessId);
+            Console.WriteLine(id);
+            IList<BusinessQueue> queues = await _repository.FindQueuesByBusiness(id);
 
             return queues.Select(x => _dtoMapper.ConvertQueueToDTO(x)).ToList();
         }
-
+        
+        [HttpGet]
         [Route("available")]
         public async Task<ICollection<BusinessQueueDTO>> FetchAllAvailableQueuesForBusiness([FromBody] AvailableQueuesRequest request)
         {

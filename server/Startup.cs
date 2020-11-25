@@ -22,7 +22,6 @@ namespace CLup
 {
     public class Startup
     {
-
         internal static IConfiguration _config { get; private set; }
 
         readonly string CorsApi = "CorsApi";

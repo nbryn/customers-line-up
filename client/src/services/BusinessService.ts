@@ -29,7 +29,7 @@ async function fetchAvailableQueuesForBusiness(businessId: number): Promise<Busi
         end: new Date().getDate() + 3,
     };
 
-    const queues: BusinessQueueDTO[] = await fetchFromServer<BusinessQueueDTO[]>(BASE_URL + 'business/available', 'get', request);
+    const queues: BusinessQueueDTO[] = await fetchFromServer<BusinessQueueDTO[]>(BASE_URL + 'businessqueue/available', 'get', request);
 
     return queues;
 }

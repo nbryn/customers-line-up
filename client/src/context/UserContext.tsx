@@ -37,6 +37,7 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
 
    const logout = () => {
       Cookies.set('user', '');
+      Cookies.set('token', '');
 
       setUser(initialUserState);
       setUserLoggedIn(false);
