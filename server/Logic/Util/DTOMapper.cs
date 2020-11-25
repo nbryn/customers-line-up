@@ -16,6 +16,7 @@ namespace Logic.Util
         {
             return new BusinessQueueDTO
             {
+                BusinessId = queue.BusinessId,
                 Start = queue.Start,
                 End = queue.End,
             };

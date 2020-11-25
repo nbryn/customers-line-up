@@ -18,6 +18,8 @@ namespace Logic.Context
 
         DbSet<BusinessQueue> BusinessQueues { get; set; }
 
+        DbSet<UserQueue> UserQueues { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

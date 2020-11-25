@@ -1,6 +1,7 @@
 using BC = BCrypt.Net.BCrypt;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System;
 
 using Logic.Businesses;
 using Logic.BusinessOwners;
@@ -18,6 +19,8 @@ namespace Logic.Context
         public DbSet<Business> Businesses { get; set; }
 
         public DbSet<BusinessQueue> BusinessQueues { get; set; }
+
+        public DbSet<UserQueue> UserQueues { get; set; }
         public CLupContext(DbContextOptions<CLupContext> options)
             : base(options)
         {
@@ -34,6 +37,8 @@ namespace Logic.Context
         {
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserQueue>().HasKey(c => new { c.UserEmail, c.BusinessQueueId });
 
             modelBuilder.Entity<User>()
                         .HasIndex(c => c.Email)
@@ -63,8 +68,7 @@ namespace Logic.Context
             modelBuilder.Entity<BusinessOwner>().HasData(owners);
 
             modelBuilder.Entity<Business>()
-                        .HasMany(x => x.Queues)
-                        .WithOne(x => x.Business);
+                        .HasMany(x => x.Queues);
 
             var businesses = new[]
             {
@@ -77,6 +81,37 @@ namespace Logic.Context
             };
 
             modelBuilder.Entity<Business>().HasData(businesses);
+
+            modelBuilder.Entity<BusinessQueue>()
+                        .HasMany(b => b.Customers);
+
+
+            var queues = new[]
+            {
+                new BusinessQueue {Id = 1, BusinessId = 1, Capacity = 50,
+                                    Start = DateTime.Now.AddHours(3), End = DateTime.Now.AddHours(4),
+                                    },
+
+                new BusinessQueue {Id = 2, BusinessId = 1, Capacity = 40,
+                                    Start = DateTime.Now.AddHours(4), End = DateTime.Now.AddHours(5),
+                                    },
+
+                new BusinessQueue {Id = 3, BusinessId = 1, Capacity = 30,
+                                    Start = DateTime.Now.AddHours(5), End = DateTime.Now.AddHours(6),
+                                    },
+            };
+
+            modelBuilder.Entity<BusinessQueue>().HasData(queues);
+
+
+            var userQueues = new[]
+            {
+                new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[0].Id},
+                new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[1].Id},
+                new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[2].Id}
+            };
+
+            modelBuilder.Entity<UserQueue>().HasData(userQueues);
 
         }
     }

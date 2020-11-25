@@ -51,6 +51,7 @@ namespace API
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
         {
+            Console.WriteLine(loginRequest.Email);
             LoginResponseDTO user = await _service.AuthenticateUser(loginRequest);
 
             if (user == null)

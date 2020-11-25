@@ -123,7 +123,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
             ))}
          </List>
          <Divider />
-         {user?.isOwner &&
+         {user.isOwner &&
             ownerItems.map((menuItem) => (
                <ListItem
                   className={styles.listItem}

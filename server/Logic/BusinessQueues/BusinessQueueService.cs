@@ -22,7 +22,7 @@ namespace Logic.BusinessQueues
 
 
         public BusinessQueueService(IBusinessQueueRepository queueRepository,
-            IBusinessRepository businessRepository, IUserRepository userRepository, 
+            IBusinessRepository businessRepository, IUserRepository userRepository,
             IDTOMapper dtoMapper)
         {
             _businessRepository = businessRepository;
@@ -56,7 +56,6 @@ namespace Logic.BusinessQueues
                 BusinessQueue queue = new BusinessQueue
                 {
                     BusinessId = business.Id,
-                    Business = business,
                     Start = date,
                     End = date.AddHours(request.TimeInterval),
                     Capacity = business.Capacity,
@@ -83,7 +82,9 @@ namespace Logic.BusinessQueues
 
             User user = await _userRepository.FindUserByEmail(request.UserMail);
 
-            (queue.Customers ??= new List<User>()).Add(user);
+            UserQueue s = new UserQueue { UserEmail = request.UserMail, BusinessQueueId = queue.Id };
+
+            (queue.Customers ??= new List<UserQueue>()).Add(s);
 
             await _queueRepository.UpdateQueue(queue);
 
