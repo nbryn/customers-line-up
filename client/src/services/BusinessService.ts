@@ -25,16 +25,14 @@ async function createBusiness(business: BusinessDTO): Promise<void> {
 async function fetchAvailableQueuesForBusiness(businessId: number): Promise<BusinessQueueDTO[]> {
     const today = new Date();
     const tomorrow = new Date();
-    tomorrow.setDate(today.getHours() + 10);
-    const request = {
-        businessId: businessId.toString(),
-        start: today.toISOString().substring(0, 10),
-        end: tomorrow.toISOString().substring(0, 10),
-    };
+    tomorrow.setDate(tomorrow.getDate() + 3);
 
-    console.log(request);
+    const start = today.toISOString().substring(0, 10);
+    const end = tomorrow.toISOString().substring(0, 10);
 
-    const queues: BusinessQueueDTO[] = await fetchFromServer<BusinessQueueDTO[]>(BASE_URL + 'businessqueue/available', 'get', request);
+    const queues: BusinessQueueDTO[] = await fetchFromServer<BusinessQueueDTO[]>(BASE_URL + `businessqueue/available?businessid=${businessId}&start=${start}&end=${end}`, 'get');
+
+    console.log(queues);
 
     return queues;
 }

@@ -65,7 +65,7 @@ namespace API
         
         [HttpGet]
         [Route("available")]
-        public async Task<ICollection<BusinessQueueDTO>> FetchAllAvailableQueuesForBusiness([FromBody] AvailableQueuesRequest request)
+        public async Task<ICollection<BusinessQueueDTO>> FetchAllAvailableQueuesForBusiness([FromQuery] AvailableQueuesRequest request)
         {
             IList<BusinessQueue> queues = await _repository.FindAvailableQueuesByBusiness(request);
 

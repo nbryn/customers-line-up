@@ -8,20 +8,23 @@ export async function fetchFromServer<T>(url: string, method: Method, request?: 
 
   setTokenInHeader();
 
-  console.log(request);
+  console.log(url);
+
+  // /* eslint-disable no-debugger */
+  // debugger;
 
   try {
     response = await axios({
       url,
       method,
       data: {
-        ...request
+       ...request
       },
     });
 
   } catch (err) {
     console.log(err);
-    console.log(err.response);
+    console.log(err.response.data.errors);
     const errors = new Map();
 
     Object.keys(err.response.data).forEach((error) => {
