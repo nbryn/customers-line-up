@@ -1,20 +1,16 @@
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 using Logic.Users;
 using Logic.Context;
 using Logic.DTO.User;
-using Logic.DTO;
 
 namespace Data
 {
     public class UserRepository : IUserRepository
     {
-
+        
         private readonly ICLupContext _context;
 
         public UserRepository(ICLupContext context)
@@ -27,10 +23,6 @@ namespace Data
             return await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
         }
 
-         public async Task<UserQueue> FindUserQueueByEmail(string email)
-        {
-            return await _context.UserQueues.FirstOrDefaultAsync(x => x.UserEmail.Equals(email));
-        }
         public async Task<int> CreateUser(RegisterDTO user)
         {
             User newUser = new User
@@ -53,10 +45,10 @@ namespace Data
             return null;
         }
 
-       public async Task<IList<User>> GetAll()
-       {
-           return await _context.Users.ToListAsync();
-       }
+        public async Task<IList<User>> GetAll()
+        {
+            return await _context.Users.ToListAsync();
+        }
 
     }
 }

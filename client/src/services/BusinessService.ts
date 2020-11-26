@@ -1,6 +1,6 @@
 import { BASE_URL } from './Url';
 import { fetchFromServer } from './Fetch';
-import { BusinessDTO, BusinessQueueDTO } from '../models/dto/Business';
+import { BusinessDTO } from '../models/dto/Business';
 
 async function fetchAllBusinesses(): Promise<BusinessDTO[]> {
     const businesses: BusinessDTO[] = await fetchFromServer<BusinessDTO[]>(BASE_URL + 'business/all', 'get');
@@ -21,28 +21,10 @@ async function createBusiness(business: BusinessDTO): Promise<void> {
     await fetchFromServer(BASE_URL + 'business/create', 'post', business);
 }
 
-async function fetchAvailableQueuesForBusiness(businessId: number): Promise<BusinessQueueDTO[]> {
-    const today = new Date();
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 3);
-
-    const start = today.toISOString().substring(0, 10);
-    const end = tomorrow.toISOString().substring(0, 10);
-
-    const queues: BusinessQueueDTO[] = await fetchFromServer<BusinessQueueDTO[]>(BASE_URL + `businessqueue/available?businessid=${businessId}&start=${start}&end=${end}`, 'get');
-
-    return queues;
-}
-
-async function addUserToQueue(queueId: number): Promise<void> {
-    await fetchFromServer<void>(BASE_URL + `businessqueue/adduser?queueId=${queueId}`, 'put',);
-}
 
 
 export default {
-    addUserToQueue,
     createBusiness,
     fetchAllBusinesses,
-    fetchAvailableQueuesForBusiness,
     fetchBusinessesForOwner,
 };

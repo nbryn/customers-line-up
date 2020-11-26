@@ -11,7 +11,7 @@ export interface CreateBusinessDTO extends BusinessDTO {
     capacity: number;
 }
 
-export type BusinessQueueDTO = {
+export type TimeSlotDTO = {
     id: number;
     date: string;
     start: string;

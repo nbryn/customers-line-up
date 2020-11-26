@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Logic.DTO
 {
-    public class CreateBusinessQueueRequest
+    public class CreateTimeSlotRequest
     {
 
         [Required]

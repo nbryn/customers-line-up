@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 using Logic.BusinessOwners;
-using Logic.BusinessQueues;
+using Logic.TimeSlots;
 
 namespace Logic.Businesses
 {
@@ -28,6 +28,6 @@ namespace Logic.Businesses
 
         public double ClosingTime { get; set; }
 
-        public IEnumerable<BusinessQueue> Queues { get; set; }
+        public IEnumerable<TimeSlot> Queues { get; set; }
     }
 }

@@ -5,8 +5,9 @@ using System;
 
 using Logic.Businesses;
 using Logic.BusinessOwners;
-using Logic.BusinessQueues;
+using Logic.TimeSlots;
 using Logic.Users;
+using Logic.Bookings;
 
 namespace Logic.Context
 {
@@ -18,9 +19,9 @@ namespace Logic.Context
 
         public DbSet<Business> Businesses { get; set; }
 
-        public DbSet<BusinessQueue> BusinessQueues { get; set; }
+        public DbSet<TimeSlot> TimeSlots { get; set; }
 
-        public DbSet<UserQueue> UserQueues { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
         public CLupContext(DbContextOptions<CLupContext> options)
             : base(options)
         {
@@ -38,7 +39,7 @@ namespace Logic.Context
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<UserQueue>().HasKey(c => new { c.UserEmail, c.BusinessQueueId });
+            modelBuilder.Entity<Booking>().HasKey(c => new { c.UserEmail, c.TimeSlotId });
 
             modelBuilder.Entity<User>()
                         .HasIndex(c => c.Email)
@@ -82,33 +83,33 @@ namespace Logic.Context
 
             modelBuilder.Entity<Business>().HasData(businesses);
 
-            modelBuilder.Entity<BusinessQueue>()
-                        .HasMany(b => b.Customers);
+            modelBuilder.Entity<TimeSlot>()
+                        .HasMany(b => b.Bookings);
 
 
             var queues = new[]
             {
-                new BusinessQueue {Id = 1, BusinessId = 1, Capacity = 50,
+                new TimeSlot {Id = 1, BusinessId = 1, Capacity = 50,
                                     Start = DateTime.Now.AddHours(3), End = DateTime.Now.AddHours(4),
                                     },
 
-                new BusinessQueue {Id = 2, BusinessId = 1, Capacity = 40,
+                new TimeSlot {Id = 2, BusinessId = 1, Capacity = 40,
                                     Start = DateTime.Now.AddHours(4), End = DateTime.Now.AddHours(5),
                                     },
 
-                new BusinessQueue {Id = 3, BusinessId = 1, Capacity = 30,
+                new TimeSlot {Id = 3, BusinessId = 1, Capacity = 30,
                                     Start = DateTime.Now.AddHours(5), End = DateTime.Now.AddHours(6),
                                     },
             };
 
-            modelBuilder.Entity<BusinessQueue>().HasData(queues);
+            modelBuilder.Entity<TimeSlot>().HasData(queues);
 
 
             // var userQueues = new[]
             // {
-            //     new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[0].Id},
-            //     new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[1].Id},
-            //     new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[2].Id}
+            //     new UserQueue {UserEmail = users[0].Email, TimeSlotId = queues[0].Id},
+            //     new UserQueue {UserEmail = users[0].Email, TimeSlotId = queues[1].Id},
+            //     new UserQueue {UserEmail = users[0].Email, TimeSlotId = queues[2].Id}
             // };
 
             // modelBuilder.Entity<UserQueue>().HasData(userQueues);

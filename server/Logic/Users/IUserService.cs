@@ -9,5 +9,6 @@ namespace Logic.Users
         Task<LoginResponseDTO> RegisterUser(RegisterDTO user);
 
         Task<LoginResponseDTO> AuthenticateUser(LoginDTO user);
+
     }
 }

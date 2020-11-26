@@ -1,23 +1,18 @@
-
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Cors;
 using System.Security.Claims;
 
 using Logic.Exceptions;
 using Logic.Util;
 using Logic.DTO.User;
-using Logic.Users;
 using Logic.Auth;
+using Logic.DTO;
 using Data;
 
-namespace API
+namespace Logic.Users
 {
     [ApiController]
     [Route("[controller]")]
@@ -26,7 +21,6 @@ namespace API
         private readonly IUserRepository _repository;
         private readonly IUserService _service;
         private readonly IDTOMapper _dtoMapper;
-
 
         public UserController(IUserRepository repository, IDTOMapper dtoMapper,
         IUserService service)
@@ -60,6 +54,8 @@ namespace API
 
             return Ok(user);
         }
+
+       
 
         [Authorize(Policy = Policies.User)]
         [Route("all")]

@@ -3,8 +3,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
-import {BusinessDTO, BusinessQueueDTO} from '../../models/dto/Business';
-import BusinessService from '../../services/BusinessService';
+import BookingService from '../../services/BookingService';
+import {BusinessDTO, TimeSlotDTO} from '../../models/dto/Business';
+import TimeSlotService from '../../services/TimeSlotService';
 import {Table, TableColumn} from '../../components/Table';
 
 interface LocationState {
@@ -14,14 +15,14 @@ interface LocationState {
 export const CreateBookingView: React.FC = () => {
    const location = useLocation<LocationState>();
 
-   const [queues, setQueues] = useState<BusinessQueueDTO[]>([]);
+   const [queues, setQueues] = useState<TimeSlotDTO[]>([]);
 
    const business: BusinessDTO = location.state.data;
 
    useEffect(() => {
       (async () => {
          console.log(business);
-         const queues: BusinessQueueDTO[] = await BusinessService.fetchAvailableQueuesForBusiness(
+         const queues: TimeSlotDTO[] = await TimeSlotService.fetchAvailableTimeSlotsForBusiness(
             business.id!
          );
 
@@ -40,9 +41,9 @@ export const CreateBookingView: React.FC = () => {
       {
          icon: 'book',
          tooltip: 'Book Time',
-         onClick: async (event: any, rowData: BusinessQueueDTO) => {
+         onClick: async (event: any, rowData: TimeSlotDTO) => {
             console.log(rowData);
-            await BusinessService.addUserToQueue(rowData.id);
+            await BookingService.createBooking(rowData.id);
          },
       },
    ];

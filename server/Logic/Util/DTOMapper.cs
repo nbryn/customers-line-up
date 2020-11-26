@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using System.Linq;
 
 using Data;
-using Logic.BusinessQueues;
+using Logic.TimeSlots;
 using Logic.Businesses;
 using Logic.DTO.User;
 using Logic.Users;
@@ -19,17 +19,17 @@ namespace Logic.Util
         {
             _businessRepository = businessRepository;
         }
-        public async Task<BusinessQueueDTO> ConvertQueueToDTO(BusinessQueue queue)
+        public async Task<TimeSlotDTO> ConvertTimeSlotToDTO(TimeSlot timeSlot)
         {
-            Business business = await _businessRepository.FindBusinessById(queue.BusinessId);
-            return new BusinessQueueDTO
+            Business business = await _businessRepository.FindBusinessById(timeSlot.BusinessId);
+            return new TimeSlotDTO
             {
-                Id = queue.Id,
-                BusinessId = queue.BusinessId,
+                Id = timeSlot.Id,
+                BusinessId = timeSlot.BusinessId,
                 Business = business.Name,
-                Date = queue.Start.ToString("dd/MM/yyyy"),
-                Start = queue.Start.TimeOfDay.ToString().Substring(0, 5),
-                End = queue.End.TimeOfDay.ToString().Substring(0, 5),
+                Date = timeSlot.Start.ToString("dd/MM/yyyy"),
+                Start = timeSlot.Start.TimeOfDay.ToString().Substring(0, 5),
+                End = timeSlot.End.TimeOfDay.ToString().Substring(0, 5),
             };
         }
 

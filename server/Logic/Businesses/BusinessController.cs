@@ -13,7 +13,7 @@ using Logic.DTO;
 using Logic.Util;
 using Data;
 
-namespace API
+namespace Logic.Businesses
 {
     [ApiController]
     [Authorize(Policy = Policies.User)]

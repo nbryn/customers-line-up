@@ -1,10 +1,6 @@
 using System.Threading.Tasks;
-using System.Linq;
-using System;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
-using Logic.DTO;
 using Logic.BusinessOwners;
 using Logic.Context;
 

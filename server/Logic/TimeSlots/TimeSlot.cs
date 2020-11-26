@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-using Logic.Users;
-using Logic.Businesses;
+using Logic.Bookings;
 
-namespace Logic.BusinessQueues
+namespace Logic.TimeSlots
 {
-    public class BusinessQueue
+    public class TimeSlot
     {
         public int Id { get; set; }
 
@@ -23,6 +22,6 @@ namespace Logic.BusinessQueues
         [Required]
         public DateTime End { get; set; }
 
-        public ICollection<UserQueue>? Customers { get; set; }
+        public ICollection<Booking>? Bookings { get; set; }
     }
 }

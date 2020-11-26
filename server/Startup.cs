@@ -12,11 +12,12 @@ using System.Text;
 
 using Data;
 using Logic.Businesses;
-using Logic.BusinessQueues;
+using Logic.TimeSlots;
 using Logic.Context;
 using Logic.Users;
 using Logic.Auth;
 using Logic.Util;
+using Logic.Bookings;
 
 namespace CLup
 {
@@ -77,8 +78,11 @@ namespace CLup
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IDTOMapper, DTOMapper>();
 
-            services.AddScoped<IBusinessQueueService, BusinessQueueService>();
-            services.AddScoped<IBusinessQueueRepository, BusinessQueueRepository>();
+            services.AddScoped<ITimeSlotService, TimeSlotService>();
+            services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
+
+            services.AddScoped<IBookingService, BookingService>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
 
             services.AddScoped<IBusinessOwnerRepository, BusinessOwnerRepository>();
             services.AddScoped<IBusinessService, BusinessService>();

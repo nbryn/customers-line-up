@@ -1,13 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-using Logic.BusinessQueues;
+using Logic.Bookings;
 
 namespace Logic.Users
 {
     public class User
     {
-
         public int Id { get; set; }
 
         [Required]
@@ -23,7 +22,7 @@ namespace Logic.Users
         [Required]
         public string Zip { get; set; }
 
-        public IList<UserQueue> BusinessQueues { get; set; }
+        public IList<Booking> Bookings { get; set; }
 
 
     }

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using System.Linq;
 
-using Logic.BusinessQueues;
+using Logic.TimeSlots;
 using Logic.Businesses;
 using Logic.DTO.User;
 using Logic.Users;
@@ -11,7 +11,7 @@ namespace Logic.Util
 {
     public interface IDTOMapper
     {
-       Task<BusinessQueueDTO> ConvertQueueToDTO(BusinessQueue queue);
+       Task<TimeSlotDTO> ConvertTimeSlotToDTO(TimeSlot timeSlot);
 
        UserDTO ConvertUserToDTO(User user); 
 

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 using Logic.DTO.User;
@@ -12,10 +11,11 @@ namespace Data
         Task<User> FindUserByEmail(string email);
         Task<int> CreateUser(RegisterDTO user);
         Task<User> FindUserById(int userId);
-        
         Task<IList<User>> GetAll();
 
-        Task<UserQueue> FindUserQueueByEmail(string email);
+        
+
+        
 
     }
 }
