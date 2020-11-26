@@ -104,14 +104,14 @@ namespace Logic.Context
             modelBuilder.Entity<BusinessQueue>().HasData(queues);
 
 
-            var userQueues = new[]
-            {
-                new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[0].Id},
-                new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[1].Id},
-                new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[2].Id}
-            };
+            // var userQueues = new[]
+            // {
+            //     new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[0].Id},
+            //     new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[1].Id},
+            //     new UserQueue {UserEmail = users[0].Email, BusinessQueueId = queues[2].Id}
+            // };
 
-            modelBuilder.Entity<UserQueue>().HasData(userQueues);
+            // modelBuilder.Entity<UserQueue>().HasData(userQueues);
 
         }
     }

@@ -12,6 +12,9 @@ export interface CreateBusinessDTO extends BusinessDTO {
 }
 
 export type BusinessQueueDTO = {
+    id: number;
+    date: string;
     start: string;
     end: string;
+    business?: string;
 }

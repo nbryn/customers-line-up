@@ -1,6 +1,7 @@
-using System;
+using System.Threading.Tasks;
 using System.Linq;
 
+using Data;
 using Logic.BusinessQueues;
 using Logic.Businesses;
 using Logic.DTO.User;
@@ -12,13 +13,23 @@ namespace Logic.Util
 {
     public class DTOMapper : IDTOMapper
     {
-        public BusinessQueueDTO ConvertQueueToDTO(BusinessQueue queue)
+        private readonly IBusinessRepository _businessRepository;
+
+        public DTOMapper(IBusinessRepository businessRepository)
         {
+            _businessRepository = businessRepository;
+        }
+        public async Task<BusinessQueueDTO> ConvertQueueToDTO(BusinessQueue queue)
+        {
+            Business business = await _businessRepository.FindBusinessById(queue.BusinessId);
             return new BusinessQueueDTO
             {
+                Id = queue.Id,
                 BusinessId = queue.BusinessId,
-                Start = queue.Start,
-                End = queue.End,
+                Business = business.Name,
+                Date = queue.Start.ToString("dd/MM/yyyy"),
+                Start = queue.Start.TimeOfDay.ToString().Substring(0, 5),
+                End = queue.End.TimeOfDay.ToString().Substring(0, 5),
             };
         }
 

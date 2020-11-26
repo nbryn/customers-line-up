@@ -6,15 +6,13 @@ import {useLocation} from 'react-router-dom';
 import {BusinessDTO, BusinessQueueDTO} from '../../models/dto/Business';
 import BusinessService from '../../services/BusinessService';
 import {Table, TableColumn} from '../../components/Table';
-import {useUserContext} from '../../context/UserContext';
 
 interface LocationState {
    data: BusinessDTO;
 }
 
-export const BookingView: React.FC = () => {
+export const CreateBookingView: React.FC = () => {
    const location = useLocation<LocationState>();
-   const {user} = useUserContext();
 
    const [queues, setQueues] = useState<BusinessQueueDTO[]>([]);
 
@@ -32,6 +30,8 @@ export const BookingView: React.FC = () => {
    }, []);
 
    const columns: TableColumn[] = [
+      {title: 'id', field: 'id', hidden: true},
+      {title: 'Date', field: 'date'},
       {title: 'Start', field: 'start'},
       {title: 'End', field: 'end'},
    ];
@@ -40,8 +40,9 @@ export const BookingView: React.FC = () => {
       {
          icon: 'book',
          tooltip: 'Book Time',
-         onClick: (event: any, rowData: any) => {
+         onClick: async (event: any, rowData: BusinessQueueDTO) => {
             console.log(rowData);
+            await BusinessService.addUserToQueue(rowData.id);
          },
       },
    ];
@@ -58,7 +59,7 @@ export const BookingView: React.FC = () => {
             <Col sm={8} md={8} lg={4}>
                <h1>
                   <Badge style={{marginBottom: 50}} variant="primary">
-                     Available Time Slots
+                     Available Time Slots for {business.name}
                   </Badge>
                </h1>
                {queues.length === 0 ? (

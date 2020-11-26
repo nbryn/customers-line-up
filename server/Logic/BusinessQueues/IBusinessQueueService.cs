@@ -9,7 +9,9 @@ namespace Logic.BusinessQueues
     {
         Task<IEnumerable<BusinessQueueDTO>> GenerateQueues(CreateBusinessQueueRequest request);
 
-        Task<BusinessQueueDTO> AddUserToQueue(AddUserToQueueRequest request);
+        Task<int> AddUserToQueue(string userEmail, int queueId);
+
+        Task<int> RemoverUserFromQueue(string userEmail, int queueId);
 
     }
 }

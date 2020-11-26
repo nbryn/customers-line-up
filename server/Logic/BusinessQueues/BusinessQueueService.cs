@@ -63,7 +63,7 @@ namespace Logic.BusinessQueues
 
                 queue.Id = await _queueRepository.CreateBusinessQueue(queue);
 
-                BusinessQueueDTO dto = _dtoMapper.ConvertQueueToDTO(queue);
+                BusinessQueueDTO dto = await _dtoMapper.ConvertQueueToDTO(queue);
 
                 queues.Add(dto);
             }
@@ -71,33 +71,46 @@ namespace Logic.BusinessQueues
             return queues;
         }
 
-        public async Task<BusinessQueueDTO> AddUserToQueue(AddUserToQueueRequest request)
+        public async Task<int> AddUserToQueue(string userEmail, int queueId)
         {
-            BusinessQueue queue = await _queueRepository.FindQueueByBusinessAndStart(request.BusinessId, request.QueueStart);
+            BusinessQueue queue = await _queueRepository.FindQueueById(queueId);
 
             if (queue.Customers?.Count >= queue.Capacity)
             {
                 // TODO: Handle
             }
 
-            User user = await _userRepository.FindUserByEmail(request.UserMail);
+            User user = await _userRepository.FindUserByEmail(userEmail);
 
-            UserQueue s = new UserQueue { UserEmail = request.UserMail, BusinessQueueId = queue.Id };
+            UserQueue s = new UserQueue { UserEmail = userEmail, BusinessQueueId = queueId };
 
             (queue.Customers ??= new List<UserQueue>()).Add(s);
 
             await _queueRepository.UpdateQueue(queue);
 
-            BusinessQueueDTO dto = _dtoMapper.ConvertQueueToDTO(queue);
+            return 1;
+        }
 
-            return dto;
+        public async Task<int> RemoverUserFromQueue(string userEmail, int queueId)
+        {
+            BusinessQueue queue = await _queueRepository.FindQueueById(queueId);
+
+            UserQueue user = await _userRepository.FindUserQueueByEmail(userEmail);
+
+            queue.Customers.Remove(user);
+
+            await _queueRepository.UpdateQueue(queue);
+
+            return 1;
         }
 
         public async Task<ICollection<BusinessQueueDTO>> GetAllQueuesForBusiness(int businessId)
         {
             IList<BusinessQueue> queues = await _queueRepository.FindQueuesByBusiness(businessId);
 
-            return queues.Select(x => _dtoMapper.ConvertQueueToDTO(x)).ToList();
+            var dtos = queues.Select(async x => await _dtoMapper.ConvertQueueToDTO(x));
+
+            return await Task.WhenAll(dtos.ToList());
         }
     }
 }

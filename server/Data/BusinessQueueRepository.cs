@@ -29,6 +29,14 @@ namespace Data
             return queue.Id;
         }
 
+        public async Task<BusinessQueue> FindQueueById(int queueId)
+        {
+            BusinessQueue queue = await _context.BusinessQueues.Include(x => x.Customers)
+                                                               .FirstOrDefaultAsync(x => x.Id == queueId);
+
+            return queue;
+        }
+
         public async Task<BusinessQueue> FindQueueByBusinessAndStart(int businessId, DateTime queueStart)
         {
             BusinessQueue queue = await _context.BusinessQueues.Include(x => x.Customers)
@@ -54,6 +62,25 @@ namespace Data
                                                                         .ToListAsync();
 
             return queues;
+        }
+
+        public async Task<IList<BusinessQueue>> FindQueuesByUser(string userEmail)
+        {
+            IList<BusinessQueue> temp = await _context.BusinessQueues.Include(x => x.Customers)
+                                                                      .Where(x => x.Customers.Any(u => u.UserEmail.Equals(userEmail)))
+                                                                      .ToListAsync();
+            return temp;
+            // IList<BusinessQueue> userQueues = new List<BusinessQueue>();
+
+            // foreach (BusinessQueue queue in temp)
+            // {
+            //     if (queue.Customers.Any(x => x.UserEmail.Equals(userEmail)))
+            //     {
+            //         userQueues.Add(queue);
+            //     }
+            // }
+
+            // return userQueues;
         }
 
         public async Task<int> UpdateQueue(BusinessQueue queue)

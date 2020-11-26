@@ -21,7 +21,6 @@ namespace API
     {
         private readonly IBusinessQueueRepository _repository;
         private readonly IBusinessQueueService _service;
-
         private readonly IDTOMapper _dtoMapper;
 
         public BusinessQueueController(IBusinessQueueRepository repository,
@@ -44,32 +43,57 @@ namespace API
 
         [HttpPut]
         [Route("adduser")]
-        public async Task<IActionResult> AddUserToQueue([FromBody] AddUserToQueueRequest dto)
+        public async Task<IActionResult> AddUserToQueue([FromQuery] int queueId)
         {
-            dto.UserMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var response = await _service.AddUserToQueue(dto);
+            var response = await _service.AddUserToQueue(userMail, queueId);
 
             return Ok(response);
+        }
+
+        [HttpDelete]
+        [Route("removeuser")]
+        public async Task<IActionResult> RemoveUserFromQueue([FromQuery] int queueId)
+        {
+            string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var response = await _service.RemoverUserFromQueue(userMail, queueId);
+
+            return Ok(response);
+        }
+
+        [Route("user")]
+        public async Task<ICollection<BusinessQueueDTO>> FetchQueuesForUser()
+        {
+            string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            IList<BusinessQueue> queues = await _repository.FindQueuesByUser(userMail);
+
+            var dtos = queues.Select(async x => await _dtoMapper.ConvertQueueToDTO(x));
+
+            return await Task.WhenAll(dtos.ToList());
         }
 
         [HttpGet("{id}")]
         [Route("business")]
         public async Task<ICollection<BusinessQueueDTO>> FetchAllQueuesForBusiness([FromQuery] int id)
         {
-            Console.WriteLine(id);
             IList<BusinessQueue> queues = await _repository.FindQueuesByBusiness(id);
 
-            return queues.Select(x => _dtoMapper.ConvertQueueToDTO(x)).ToList();
+            var dtos = queues.Select(async x => await _dtoMapper.ConvertQueueToDTO(x));
+
+            return await Task.WhenAll(dtos.ToList());
         }
-        
+
         [HttpGet]
         [Route("available")]
         public async Task<ICollection<BusinessQueueDTO>> FetchAllAvailableQueuesForBusiness([FromQuery] AvailableQueuesRequest request)
         {
             IList<BusinessQueue> queues = await _repository.FindAvailableQueuesByBusiness(request);
 
-            return queues.Select(x => _dtoMapper.ConvertQueueToDTO(x)).ToList();
+            var dtos = queues.Select(async x => await _dtoMapper.ConvertQueueToDTO(x));
+
+            return await Task.WhenAll(dtos.ToList());
         }
     }
 }

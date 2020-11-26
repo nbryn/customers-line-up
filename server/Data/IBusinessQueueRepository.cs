@@ -18,6 +18,10 @@ namespace Data
 
         Task<BusinessQueue> FindQueueByBusinessAndStart(int businessId, DateTime queueStart);
 
+        Task<BusinessQueue> FindQueueById(int queueId);
+
+        Task<IList<BusinessQueue>> FindQueuesByUser(string userMail);
+
         Task<int> UpdateQueue(BusinessQueue queue);
         
     }

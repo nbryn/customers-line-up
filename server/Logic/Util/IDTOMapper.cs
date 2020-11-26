@@ -1,4 +1,4 @@
-using System;
+using System.Threading.Tasks;
 using System.Linq;
 
 using Logic.BusinessQueues;
@@ -11,7 +11,7 @@ namespace Logic.Util
 {
     public interface IDTOMapper
     {
-       BusinessQueueDTO ConvertQueueToDTO(BusinessQueue queue);
+       Task<BusinessQueueDTO> ConvertQueueToDTO(BusinessQueue queue);
 
        UserDTO ConvertUserToDTO(User user); 
 

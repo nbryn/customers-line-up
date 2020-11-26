@@ -77,7 +77,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
       {
          label: 'My Bookings',
          icon: <DashboardIcon />,
-         path: '/bookings',
+         path: '/mybookings',
       },
       {
          label: 'Create Business',

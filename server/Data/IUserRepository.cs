@@ -15,5 +15,7 @@ namespace Data
         
         Task<IList<User>> GetAll();
 
+        Task<UserQueue> FindUserQueueByEmail(string email);
+
     }
 }

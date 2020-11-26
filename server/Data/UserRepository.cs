@@ -26,6 +26,11 @@ namespace Data
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
         }
+
+         public async Task<UserQueue> FindUserQueueByEmail(string email)
+        {
+            return await _context.UserQueues.FirstOrDefaultAsync(x => x.UserEmail.Equals(email));
+        }
         public async Task<int> CreateUser(RegisterDTO user)
         {
             User newUser = new User
