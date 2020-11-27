@@ -8,13 +8,13 @@ import {Table, TableColumn} from '../../components/Table';
 
 export const UserBookingView: React.FC = () => {
    const [loading, setLoading] = useState<boolean>(true);
-   const [queues, setQueues] = useState<TimeSlotDTO[]>([]);
+   const [bookings, setbookings] = useState<TimeSlotDTO[]>([]);
 
    useEffect(() => {
       (async () => {
-         const queues: TimeSlotDTO[] = await BookingService.fetchUserBookings();
+         const bookings: TimeSlotDTO[] = await BookingService.fetchUserBookings();
 
-         setQueues(queues);
+         setbookings(bookings);
          setLoading(false);
       })();
    }, []);
@@ -32,6 +32,9 @@ export const UserBookingView: React.FC = () => {
          icon: 'delete',
          tooltip: 'Delete Booking',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
+            const _bookings = bookings.filter((b) => b.id !== rowData.id);
+            setbookings(_bookings);
+
             await BookingService.deleteBooking(rowData.id);
          },
       },
@@ -59,7 +62,7 @@ export const UserBookingView: React.FC = () => {
                   <Table
                      actions={actions}
                      columns={columns}
-                     data={queues}
+                     data={bookings}
                      title="Bookings"
                      emptyMessage="No Bookings Yet"
                   />

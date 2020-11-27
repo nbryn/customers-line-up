@@ -8,6 +8,8 @@ import {BusinessDTO, TimeSlotDTO} from '../../models/dto/Business';
 import TimeSlotService from '../../services/TimeSlotService';
 import {Table, TableColumn} from '../../components/Table';
 
+import Modal from 'react-bootstrap/Modal';
+
 interface LocationState {
    data: BusinessDTO;
 }
@@ -15,18 +17,21 @@ interface LocationState {
 export const CreateBookingView: React.FC = () => {
    const location = useLocation<LocationState>();
 
-   const [queues, setQueues] = useState<TimeSlotDTO[]>([]);
+   const [showModal, setShowModal] = useState(false);
+   const [loading, setLoading] = useState<boolean>(true);
+   const [bookings, setBookings] = useState<number[]>([]);
+   const [timeSlots, setTimeSlots] = useState<TimeSlotDTO[]>([]);
 
    const business: BusinessDTO = location.state.data;
 
    useEffect(() => {
       (async () => {
-         console.log(business);
-         const queues: TimeSlotDTO[] = await TimeSlotService.fetchAvailableTimeSlotsForBusiness(
+         const timeSlots: TimeSlotDTO[] = await TimeSlotService.fetchAvailableTimeSlotsForBusiness(
             business.id!
          );
 
-         setQueues(queues);
+         setTimeSlots(timeSlots);
+         setLoading(false);
       })();
    }, []);
 
@@ -42,8 +47,13 @@ export const CreateBookingView: React.FC = () => {
          icon: 'book',
          tooltip: 'Book Time',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
-            console.log(rowData);
-            await BookingService.createBooking(rowData.id);
+            console.log(rowData.id);
+            if (bookings.includes(rowData.id)) {
+               setShowModal(true);
+            } else {
+               setBookings((prevBookings) => [...prevBookings, rowData.id]);
+               await BookingService.createBooking(rowData.id);
+            }
          },
       },
    ];
@@ -63,10 +73,19 @@ export const CreateBookingView: React.FC = () => {
                      Available Time Slots for {business.name}
                   </Badge>
                </h1>
-               {queues.length === 0 ? (
+               {loading ? (
                   <CircularProgress />
                ) : (
-                  <Table actions={actions} columns={columns} data={queues} title="Time Slots" />
+                  <>
+                     <Modal show={showModal}>Already Booked</Modal>
+                     <Table
+                        actions={actions}
+                        columns={columns}
+                        data={timeSlots}
+                        title="Time Slots"
+                        emptyMessage="No Time Slots Available"
+                     />
+                  </>
                )}
             </Col>
          </div>
