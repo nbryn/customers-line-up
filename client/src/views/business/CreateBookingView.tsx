@@ -1,14 +1,15 @@
 import {Badge, Col, Container} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useHistory} from 'react-router-dom';
 
 import BookingService from '../../services/BookingService';
 import {BusinessDTO, TimeSlotDTO} from '../../models/dto/Business';
+import {Modal} from '../../components/Modal';
 import TimeSlotService from '../../services/TimeSlotService';
 import {Table, TableColumn} from '../../components/Table';
 
-import Modal from 'react-bootstrap/Modal';
+import {apiCall} from '../../services/Fetch';
 
 interface LocationState {
    data: BusinessDTO;
@@ -16,10 +17,10 @@ interface LocationState {
 
 export const CreateBookingView: React.FC = () => {
    const location = useLocation<LocationState>();
+   const history = useHistory();
 
-   const [showModal, setShowModal] = useState(false);
+   const [modalText, setModalText] = useState<string>('');
    const [loading, setLoading] = useState<boolean>(true);
-   const [bookings, setBookings] = useState<number[]>([]);
    const [timeSlots, setTimeSlots] = useState<TimeSlotDTO[]>([]);
 
    const business: BusinessDTO = location.state.data;
@@ -48,12 +49,9 @@ export const CreateBookingView: React.FC = () => {
          tooltip: 'Book Time',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
             console.log(rowData.id);
-            if (bookings.includes(rowData.id)) {
-               setShowModal(true);
-            } else {
-               setBookings((prevBookings) => [...prevBookings, rowData.id]);
-               await BookingService.createBooking(rowData.id);
-            }
+            apiCall<void>(() => BookingService.createBooking(rowData.id), setModalText).c;
+
+            setModalText('Booking Made - Go to my bookings to see your bookings');
          },
       },
    ];
@@ -73,11 +71,19 @@ export const CreateBookingView: React.FC = () => {
                      Available Time Slots for {business.name}
                   </Badge>
                </h1>
+
                {loading ? (
                   <CircularProgress />
                ) : (
                   <>
-                     <Modal show={showModal}>Already Booked</Modal>
+                     <Modal
+                        show={modalText ? true : false}
+                        title="Booking Info"
+                        text={modalText}
+                        secondaryAction={() => setModalText('')}
+                        primaryAction={() => history.push('/mybookings')}
+                        primaryActionText="My Bookings"
+                     />
                      <Table
                         actions={actions}
                         columns={columns}

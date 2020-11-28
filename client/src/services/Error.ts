@@ -1,11 +1,11 @@
 export class Error {
-    errors: any;
+    errorMessage: string;
 
-    constructor(errors: any) {
-      this.errors = errors;
+    constructor(errorMessage: string) {
+      this.errorMessage = errorMessage;
     }
   
-    getErrors() {
-      return this.errors;
+    getErrorMessage(): string {
+      return this.errorMessage;
     }
   }

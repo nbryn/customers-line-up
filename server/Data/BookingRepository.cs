@@ -25,9 +25,10 @@ namespace Data
             return (booking.UserEmail, booking.TimeSlotId);
         }
 
-        public async Task<Booking> FindBookingByEmail(string email)
+        public async Task<Booking> FindBookingById(string email, int timeSlotId)
         {
-            return await _context.Bookings.FirstOrDefaultAsync(x => x.UserEmail.Equals(email));
+            return await _context.Bookings.FirstOrDefaultAsync(x => x.UserEmail.Equals(email) && 
+                                                              x.TimeSlotId == timeSlotId);
         }
 
         public async Task<IList<Booking>> FindBookingsByUser(string userEmail)

@@ -1,6 +1,6 @@
 using System;
 
-namespace Logic.Exceptions
+namespace Logic.Errors
 {
     public class AuthenticationFailedException : Exception
     {

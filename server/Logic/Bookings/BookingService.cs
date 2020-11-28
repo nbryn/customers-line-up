@@ -1,7 +1,9 @@
 using System.Threading.Tasks;
+using System;
 
 using Data;
 using Logic.TimeSlots;
+using Logic.Errors;
 
 namespace Logic.Bookings
 {
@@ -17,11 +19,18 @@ namespace Logic.Bookings
         }
         public async Task<int> CreateBooking(string userEmail, int timeSlotId)
         {
+            Booking bookingExists = await _bookingRepository.FindBookingById(userEmail, timeSlotId);
+
+            if (bookingExists != null)
+            {
+                throw new BookingExistsException("Already Booked");
+            }
+
             TimeSlot timeSlot = await _timeSlotRepository.FindTimeSlotById(timeSlotId);
 
             if (timeSlot.Bookings?.Count >= timeSlot.Capacity)
             {
-                // TODO: Handle
+                throw new Exception("Time Slot is full");
             }
 
             Booking booking = new Booking { UserEmail = userEmail, TimeSlotId = timeSlotId };

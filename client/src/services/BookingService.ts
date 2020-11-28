@@ -16,7 +16,7 @@ async function fetchUserBookings(): Promise<TimeSlotDTO[]> {
  }
 
  async function createBooking(timeSlotId: number): Promise<void> {
-    await fetchFromServer<void>(BASE_URL + `booking/new?TimeSlotId=${timeSlotId}`, 'put');
+    await fetchFromServer<void>(BASE_URL + `booking/new?TimeSlotId=${timeSlotId}`, 'post');
 }
 
  export default {

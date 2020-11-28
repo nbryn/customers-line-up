@@ -23,7 +23,7 @@ namespace CLup
 {
     public class Startup
     {
-        
+
         internal static IConfiguration _config { get; private set; }
 
         readonly string CorsApi = "CorsApi";
@@ -97,7 +97,7 @@ namespace CLup
             keepAliveConnection.Open();
 
             services.AddDbContext<CLupContext>(options =>
-            { 
+            {
                 options.UseSqlite(connectionString);
             });
 
@@ -112,6 +112,8 @@ namespace CLup
             }
 
             app.UseHttpsRedirection();
+
+            app.UseExceptionHandler("/error");
 
             app.UseRouting();
 

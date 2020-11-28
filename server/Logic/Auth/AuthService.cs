@@ -7,7 +7,7 @@ using System.Text;
 
 using Data;
 using Logic.DTO.User;
-using Logic.Exceptions;
+using Logic.Errors;
 
 namespace Logic.Auth
 {

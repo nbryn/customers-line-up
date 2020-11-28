@@ -29,7 +29,7 @@ namespace Logic.Bookings
             _service = service;
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("new")]
         public async Task<IActionResult> NewBooking([FromQuery] int timeSlotId)
         {

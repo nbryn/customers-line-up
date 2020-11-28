@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Data;
 using Logic.Auth;
 using Logic.Users;
-using Logic.Exceptions;
+using Logic.Errors;
 using Logic.DTO.User;
 
 namespace Logic.Users
