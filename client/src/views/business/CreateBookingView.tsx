@@ -9,7 +9,7 @@ import {Modal} from '../../components/Modal';
 import TimeSlotService from '../../services/TimeSlotService';
 import {Table, TableColumn} from '../../components/Table';
 
-import {apiCall} from '../../services/Fetch';
+import ApiService from '../../services/ApiService';
 
 interface LocationState {
    data: BusinessDTO;
@@ -27,8 +27,9 @@ export const CreateBookingView: React.FC = () => {
 
    useEffect(() => {
       (async () => {
-         const timeSlots: TimeSlotDTO[] = await TimeSlotService.fetchAvailableTimeSlotsForBusiness(
-            business.id!
+         const timeSlots: TimeSlotDTO[] = await ApiService.request(
+            () => TimeSlotService.fetchAvailableTimeSlotsForBusiness(business.id!),
+            setModalText
          );
 
          setTimeSlots(timeSlots);
@@ -49,7 +50,7 @@ export const CreateBookingView: React.FC = () => {
          tooltip: 'Book Time',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
             console.log(rowData.id);
-            apiCall<void>(() => BookingService.createBooking(rowData.id), setModalText).c;
+            ApiService.request(() => BookingService.createBooking(rowData.id), setModalText);
 
             setModalText('Booking Made - Go to my bookings to see your bookings');
          },

@@ -3,15 +3,12 @@ import Cookies from 'js-cookie';
 
 import { Error } from "./Error";
 
-export async function fetchFromServer<T>(url: string, method: Method, request?: any): Promise<T> {
+export async function fetch<T>(url: string, method: Method, request?: any): Promise<T> {
   let response: AxiosResponse<T>;
 
   setTokenInHeader();
 
   console.log(url);
-
-  // /* eslint-disable no-debugger */
-  // debugger;
 
   try {
     response = await axios({
@@ -24,14 +21,23 @@ export async function fetchFromServer<T>(url: string, method: Method, request?: 
 
   } catch (err) {
     console.log(err);
-    console.log(err.response.data);
+    if (err.reponse) {
+      console.log(err.response.data);
+      throw new Error(err.response.data.message);
+
+    } else if (err.request) {
+      console.log(err.request);
+      throw new Error("Network Error - Please try again");
+
+    } else {
+      throw new Error("Undefined Error!")
+    }
     // const errors = new Map();
 
     // Object.keys(err.response.data).forEach((error) => {
     //   errors.set(error, err.response.data[error]);
     // });
 
-    throw new Error(err.response.data.message);
   }
 
   return response.data;
@@ -45,8 +51,8 @@ export function setTokenInHeader(): void {
   }
 }
 
-export async function apiCall<T>(query: () => T, showErrorMsg: (errorMsg: string) => void): Promise<T | null> {
-  let t = null;
+export async function request<T>(query: () => T, showErrorMsg: (errorMsg: string) => void): Promise<T> {
+  let t: T;
   try {
 
     t = await query();
@@ -55,5 +61,10 @@ export async function apiCall<T>(query: () => T, showErrorMsg: (errorMsg: string
     showErrorMsg(err.getErrorMessage());
   }
 
-  return t;
+  return t!;
 }
+
+export default {
+  fetch,
+  request
+};

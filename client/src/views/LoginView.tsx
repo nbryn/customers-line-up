@@ -2,6 +2,8 @@ import {Alert, Button, Badge, Col, Container, Form, Row} from 'react-bootstrap';
 import Card from '@material-ui/core/Card';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
+
+import ApiService from '../services/ApiService';
 import {SignupView} from './SignupView';
 import {TextField} from '../components/TextField';
 import {UserDTO} from '../models/dto/User';
@@ -56,18 +58,17 @@ export const LoginView: React.FC = () => {
 
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
-   const [errorMsg, setErrorMsg] = useState('');
+   const [errorMessage, setErrorMessage] = useState('');
 
    const handleSubmit = async (event: React.FormEvent) => {
-      try {
-         event.preventDefault();
+      event.preventDefault();
 
-         const user: UserDTO = await UserService.login({email, password});
+      const user: UserDTO = await ApiService.request(
+         () => UserService.login({email, password}),
+         setErrorMessage
+      );
 
-         setUser(user);
-      } catch (err) {
-         setErrorMsg('Wrong email/password combination');
-      }
+      setUser(user);
    };
 
    return (
@@ -85,9 +86,9 @@ export const LoginView: React.FC = () => {
                      </h1>
 
                      <Form onSubmit={handleSubmit}>
-                        {errorMsg && (
+                        {errorMessage && (
                            <Alert className={styles.alert} variant="danger">
-                              {errorMsg}
+                              {errorMessage}
                            </Alert>
                         )}
                         <Form.Group>

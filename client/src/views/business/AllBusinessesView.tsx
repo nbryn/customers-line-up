@@ -31,7 +31,7 @@ export const AllBusinessesView: React.FC = () => {
    const actions = [
       {
          icon: 'info',
-         tooltip: 'Book Visit',
+         tooltip: 'See available time slots',
          onClick: (event: any, rowData: any) => {
             history.push('/booking', {data: rowData});
          },

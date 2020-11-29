@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 
 import { BASE_URL } from './Url';
-import { fetchFromServer } from './Fetch';
+import { fetchFromServer } from './ApiService';
 import { UserDTO } from '../models/dto/User';
 
 

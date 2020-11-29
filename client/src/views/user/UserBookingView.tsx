@@ -2,6 +2,7 @@ import {Badge, Col, Container} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
 
+import ApiService from '../../services/ApiService';
 import {TimeSlotDTO} from '../../models/dto/Business';
 import BookingService from '../../services/BookingService';
 import {Table, TableColumn} from '../../components/Table';
@@ -9,10 +10,14 @@ import {Table, TableColumn} from '../../components/Table';
 export const UserBookingView: React.FC = () => {
    const [loading, setLoading] = useState<boolean>(true);
    const [bookings, setbookings] = useState<TimeSlotDTO[]>([]);
+   const [errorMessage, setErrorMessage] = useState<string>('');
 
    useEffect(() => {
       (async () => {
-         const bookings: TimeSlotDTO[] = await BookingService.fetchUserBookings();
+         const bookings: TimeSlotDTO[] = await ApiService.request(
+            () => BookingService.fetchUserBookings(),
+            setErrorMessage
+         );
 
          setbookings(bookings);
          setLoading(false);
@@ -35,7 +40,10 @@ export const UserBookingView: React.FC = () => {
             const _bookings = bookings.filter((b) => b.id !== rowData.id);
             setbookings(_bookings);
 
-            await BookingService.deleteBooking(rowData.id);
+            await ApiService.request(
+               () => BookingService.deleteBooking(rowData.id),
+               setErrorMessage
+            );
          },
       },
    ];

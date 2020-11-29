@@ -1,5 +1,5 @@
 import { BASE_URL } from './Url';
-import { fetchFromServer } from './Fetch';
+import ApiService from './ApiService';
 import { TimeSlotDTO } from '../models/dto/Business';
 
 async function fetchAvailableTimeSlotsForBusiness(businessId: number): Promise<TimeSlotDTO[]> {
@@ -10,7 +10,7 @@ async function fetchAvailableTimeSlotsForBusiness(businessId: number): Promise<T
     const start = today.toISOString().substring(0, 10);
     const end = tomorrow.toISOString().substring(0, 10);
 
-    const queues: TimeSlotDTO[] = await fetchFromServer<TimeSlotDTO[]>(BASE_URL + `timeslot/available?businessid=${businessId}&start=${start}&end=${end}`, 'get');
+    const queues: TimeSlotDTO[] = await ApiService.fetch<TimeSlotDTO[]>(BASE_URL + `timeslot/available?businessid=${businessId}&start=${start}&end=${end}`, 'get');
 
     return queues;
 }
