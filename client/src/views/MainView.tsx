@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-export const MainView = () => {
+export const MainView: React.FC = () => {
    const styles = useStyles();
    const [mobileOpen, setMobileOpen] = useState(false);
    const {userLoggedIn} = useUserContext();
@@ -29,16 +29,14 @@ export const MainView = () => {
 
    return (
       <>
-      <CssBaseline />
+         <CssBaseline />
          {!userLoggedIn ? (
             <LoginView />
          ) : (
             <>
                <MainMenu mobileOpen={mobileOpen} onClose={handleMenuClose} />
 
-               
-                  <Routes />
-               
+               <Routes />
             </>
          )}
       </>

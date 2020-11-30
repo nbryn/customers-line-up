@@ -6,8 +6,10 @@ import {useLocation, useHistory} from 'react-router-dom';
 import BookingService from '../../services/BookingService';
 import {BusinessDTO, TimeSlotDTO} from '../../models/dto/Business';
 import {Modal} from '../../components/Modal';
-import TimeSlotService from '../../services/TimeSlotService';
+import URLService from '../../services/TimeSlotService';
 import {Table, TableColumn} from '../../components/Table';
+
+import {RequestHandler, useRequest} from '../../services/ApiService';
 
 import ApiService from '../../services/ApiService';
 
@@ -23,13 +25,19 @@ export const CreateBookingView: React.FC = () => {
    const [loading, setLoading] = useState<boolean>(true);
    const [timeSlots, setTimeSlots] = useState<TimeSlotDTO[]>([]);
 
+   const requestHandler: RequestHandler<TimeSlotDTO[], void> = useRequest();
+
    const business: BusinessDTO = location.state.data;
 
    useEffect(() => {
       (async () => {
-         const timeSlots: TimeSlotDTO[] = await ApiService.request(
-            () => TimeSlotService.fetchAvailableTimeSlotsForBusiness(business.id!),
-            setModalText
+         // const timeSlots: TimeSlotDTO[] = await ApiService.request(
+         //    () => TimeSlotService.fetchAvailableTimeSlotsForBusiness(business.id!),
+         //    setModalText
+         // );
+
+         const timeSlots: TimeSlotDTO[] = await requestHandler.query(
+            URLService.getTimeSlotURL(business.id!)
          );
 
          setTimeSlots(timeSlots);
@@ -50,9 +58,11 @@ export const CreateBookingView: React.FC = () => {
          tooltip: 'Book Time',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
             console.log(rowData.id);
-            ApiService.request(() => BookingService.createBooking(rowData.id), setModalText);
+            //ApiService.request(() => BookingService.createBooking(rowData.id), setModalText);
 
-            setModalText('Booking Made - Go to my bookings to see your bookings');
+            requestHandler.mutation(URLService.getCreateBookingURL(rowData.id), 'POST');
+
+            requestHandler.setRequestInfo('Booking Made - Go to my bookings to see your bookings');
          },
       },
    ];
@@ -78,10 +88,10 @@ export const CreateBookingView: React.FC = () => {
                ) : (
                   <>
                      <Modal
-                        show={modalText ? true : false}
+                        show={requestHandler.requestInfo ? true : false}
                         title="Booking Info"
-                        text={modalText}
-                        secondaryAction={() => setModalText('')}
+                        text={requestHandler.requestInfo}
+                        secondaryAction={() => requestHandler.setRequestInfo('')}
                         primaryAction={() => history.push('/mybookings')}
                         primaryActionText="My Bookings"
                      />

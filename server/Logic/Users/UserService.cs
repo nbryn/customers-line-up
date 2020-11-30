@@ -30,7 +30,10 @@ namespace Logic.Users
 
             if (userExists != null)
             {
-                // TODO: Email already exists in system
+                return new LoginResponseDTO
+                {
+                    isError = true,
+                };
             }
 
             string token = _authService.GenerateJWTToken(user);
@@ -53,7 +56,10 @@ namespace Logic.Users
 
             if (user == null || !BC.Verify(loginRequest.Password, user.Password))
             {
-                // TODO: User does not exist / wrong password
+                return new LoginResponseDTO
+                {
+                    isError = true,
+                };
             }
 
             string token = _authService.GenerateJWTToken(loginRequest);

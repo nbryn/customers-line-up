@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 
 import { BASE_URL } from './Url';
-import { fetchFromServer } from './ApiService';
+import { fetch} from './ApiService';
 import { UserDTO } from '../models/dto/User';
 
 
@@ -19,7 +19,7 @@ export type LoginResponse = {
 }
 
 async function login(request: LoginRequest): Promise<UserDTO> {
-   const response: LoginResponse = await fetchFromServer<LoginResponse>(BASE_URL + 'user/login', 'post', request);
+   const response: LoginResponse = await fetch<LoginResponse>(BASE_URL + 'user/login', 'post', request);
 
    Cookies.set('token', response.token);
 

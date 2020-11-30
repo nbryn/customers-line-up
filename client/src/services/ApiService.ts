@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, Method } from "axios";
 import Cookies from 'js-cookie';
+import React, { useState } from 'react';
 
 import { Error } from "./Error";
 
@@ -62,6 +63,54 @@ export async function request<T>(query: () => T, showErrorMsg: (errorMsg: string
   }
 
   return t!;
+}
+
+export interface RequestHandler<T, U> {
+  mutation: (url: string, method: Method, request?: any) => Promise<U>;
+  query: (url: string) => Promise<T>
+  requestInfo: string;
+  setRequestInfo: (info: string) => void;
+}
+
+export function useRequest<T, U>(): RequestHandler<T, U> {
+  const [requestInfo, setRequestInfo] = useState<string>('');
+
+  const mutation = async (url: string, method: Method, request?: any): Promise<U> => {
+    let u: U;
+    try {
+      u = await fetch<U>(url, method, request);
+
+
+    } catch (err) {
+      console.log(err);
+      setRequestInfo(err.getErrorMessage());
+    }
+
+    return u!;
+  }
+
+
+  const query = async (url: string): Promise<T> => {
+    let t: T;
+    try {
+      t = await fetch<T>(url, 'GET',);
+
+
+      return t;
+
+    } catch (err) {
+      setRequestInfo(err.getErrorMessage());
+    }
+
+    return t!;
+  }
+
+  return {
+    query,
+    mutation,
+    requestInfo,
+    setRequestInfo,
+  }
 }
 
 export default {

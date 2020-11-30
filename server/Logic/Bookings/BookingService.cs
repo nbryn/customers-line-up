@@ -23,7 +23,7 @@ namespace Logic.Bookings
 
             if (bookingExists != null)
             {
-                throw new BookingExistsException("Already Booked");
+                return 409;
             }
 
             TimeSlot timeSlot = await _timeSlotRepository.FindTimeSlotById(timeSlotId);

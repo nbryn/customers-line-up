@@ -3,12 +3,14 @@ import Card from '@material-ui/core/Card';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
-import ApiService from '../services/ApiService';
 import {SignupView} from './SignupView';
 import {TextField} from '../components/TextField';
 import {UserDTO} from '../models/dto/User';
-import UserService from '../services/UserService';
 import {useUserContext} from '../context/UserContext';
+
+import {RequestHandler, useRequest} from '../services/ApiService';
+
+import URLService from '../services/TimeSlotService';
 
 const useStyles = makeStyles((theme) => ({
    alert: {
@@ -58,17 +60,20 @@ export const LoginView: React.FC = () => {
 
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
-   const [errorMessage, setErrorMessage] = useState('');
+
+   const requestHandler: RequestHandler<void, UserDTO> = useRequest();
 
    const handleSubmit = async (event: React.FormEvent) => {
       event.preventDefault();
 
-      const user: UserDTO = await ApiService.request(
-         () => UserService.login({email, password}),
-         setErrorMessage
-      );
+      const user: UserDTO = await requestHandler.mutation(URLService.getLoginURL(), 'POST', {
+         email,
+         password,
+      });
 
-      setUser(user);
+      console.log(user);
+
+      if (user) setUser(user);
    };
 
    return (
@@ -86,9 +91,9 @@ export const LoginView: React.FC = () => {
                      </h1>
 
                      <Form onSubmit={handleSubmit}>
-                        {errorMessage && (
+                        {requestHandler.requestInfo && (
                            <Alert className={styles.alert} variant="danger">
-                              {errorMessage}
+                              {requestHandler.requestInfo}
                            </Alert>
                         )}
                         <Form.Group>

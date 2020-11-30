@@ -15,6 +15,24 @@ async function fetchAvailableTimeSlotsForBusiness(businessId: number): Promise<T
     return queues;
 }
 
+const getTimeSlotURL = (businessId: number): string => {
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 3);
+
+    const start = today.toISOString().substring(0, 10);
+    const end = tomorrow.toISOString().substring(0, 10);
+    
+    return BASE_URL + `timeslot/available?businessid=${businessId}&start=${start}&end=${end}`;
+}
+
+const getCreateBookingURL = (timeSlotId: number): string => BASE_URL + `booking/new?TimeSlotId=${timeSlotId}`;
+
+const getLoginURL = (): string => BASE_URL + 'user/login';
+
+
 export default {
-    fetchAvailableTimeSlotsForBusiness,
+    getCreateBookingURL,
+    getLoginURL,
+    getTimeSlotURL
 };

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
+
 using Logic.Util;
 using Logic.DTO.User;
 using Logic.Auth;
@@ -36,6 +37,11 @@ namespace Logic.Users
         {
             LoginResponseDTO response = await _service.RegisterUser(user);
 
+            if (response.isError)
+            {
+                return Conflict(new { message = $"An existing record with the email '{user.Email}' was already found." });
+            }
+
             return Ok(response);
         }
 
@@ -46,7 +52,7 @@ namespace Logic.Users
         {
             LoginResponseDTO user = await _service.AuthenticateUser(loginRequest);
 
-            if (user == null)
+            if (user.isError)
             {
                 return Unauthorized();
             }
@@ -54,7 +60,7 @@ namespace Logic.Users
             return Ok(user);
         }
 
-       
+
 
         [Authorize(Policy = Policies.User)]
         [Route("all")]
