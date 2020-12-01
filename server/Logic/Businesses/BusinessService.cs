@@ -4,7 +4,6 @@ using Data;
 using Logic.DTO;
 using Logic.BusinessOwners;
 using Logic.Util;
-using Logic.DTO.User;
 
 namespace Logic.Businesses
 {

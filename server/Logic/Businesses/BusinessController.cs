@@ -46,11 +46,13 @@ namespace Logic.Businesses
             return Ok(business);
         }
 
-        [HttpGet("{email}")]
+        [HttpGet]
         [Route("owner")]
-        public async Task<IEnumerable<BusinessDTO>> FetchBusinessesForOwner([FromQuery] string email)
+        public async Task<IEnumerable<BusinessDTO>> FetchBusinessesForOwner()
         {
-            var all = await _repository.FindBusinessesByOwner(email);
+            string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var all = await _repository.FindBusinessesByOwner(ownerEmail);
 
             return all.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
         }

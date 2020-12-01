@@ -1,15 +1,16 @@
 import {Alert, Button, Badge, Col, Container, Form, Row} from 'react-bootstrap';
 import Card from '@material-ui/core/Card';
 import {makeStyles} from '@material-ui/core/styles';
-import React, {useState} from 'react';
+import React from 'react';
 
 import {CreateBusinessDTO} from '../../models/dto/Business';
-import BusinessService from '../../services/BusinessService';
 import {
    createBusinessValidationSchema,
    generalCreateBusinessErrorMsg,
 } from '../../validation/BusinessValidation';
+import {RequestHandler, useRequest} from '../../services/ApiService';
 import {TextField} from '../../components/TextField';
+import {CREATE_BUSINESS_URL} from '../../services/URL';
 import {useForm} from '../../util/useForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -64,10 +65,14 @@ export const CreateBusinessView: React.FC = () => {
       closes: '',
    };
 
+   const requestHandler: RequestHandler<void, void> = useRequest();
+
    const {formik, errorMessage} = useForm<CreateBusinessDTO>(
       initialValues,
       createBusinessValidationSchema,
-      BusinessService.createBusiness,
+      requestHandler.mutation,
+      CREATE_BUSINESS_URL,
+      'POST',
       generalCreateBusinessErrorMsg
    );
 
@@ -148,7 +153,7 @@ export const CreateBusinessView: React.FC = () => {
                            label="Opens"
                            type="time"
                            defaultValue="08:00"
-                           value={formik.values.opens}
+                           value={formik.values.opens.replace(':', '.')}
                            onChange={formik.handleChange}
                            onBlur={formik.handleBlur}
                            error={formik.touched.opens && Boolean(formik.errors.opens)}
@@ -168,7 +173,7 @@ export const CreateBusinessView: React.FC = () => {
                            label="Closes"
                            type="time"
                            defaultValue="04:00"
-                           value={formik.values.closes}
+                           value={formik.values.closes.replace(':', '.')}
                            onChange={formik.handleChange}
                            error={formik.touched.closes && Boolean(formik.errors.closes)}
                            helperText={formik.touched.closes && formik.errors.closes}

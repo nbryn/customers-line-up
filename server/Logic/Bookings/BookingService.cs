@@ -4,6 +4,9 @@ using System;
 using Data;
 using Logic.TimeSlots;
 using Logic.Errors;
+using Microsoft.AspNetCore.Mvc;
+
+using Logic.Context;
 
 namespace Logic.Bookings
 {
@@ -17,27 +20,27 @@ namespace Logic.Bookings
             _timeSlotRepository = timeSlotRepository;
             _bookingRepository = bookingRepository;
         }
-        public async Task<int> CreateBooking(string userEmail, int timeSlotId)
+        public async Task<Response> CreateBooking(string userEmail, int timeSlotId)
         {
             Booking bookingExists = await _bookingRepository.FindBookingById(userEmail, timeSlotId);
 
             if (bookingExists != null)
             {
-                return 409;
+                return Response.Conflict;
             }
 
             TimeSlot timeSlot = await _timeSlotRepository.FindTimeSlotById(timeSlotId);
 
             if (timeSlot.Bookings?.Count >= timeSlot.Capacity)
             {
-                throw new Exception("Time Slot is full");
+                return Response.Conflict;
             }
 
             Booking booking = new Booking { UserEmail = userEmail, TimeSlotId = timeSlotId };
 
             await _bookingRepository.SaveBooking(booking);
 
-            return 1;
+            return Response.Created;
         }
     }
 }

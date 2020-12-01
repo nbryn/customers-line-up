@@ -3,15 +3,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 
-import BookingService from '../../services/BookingService';
 import {BusinessDTO, TimeSlotDTO} from '../../models/dto/Business';
 import {Modal} from '../../components/Modal';
-import URLService from '../../services/TimeSlotService';
-import {Table, TableColumn} from '../../components/Table';
-
 import {RequestHandler, useRequest} from '../../services/ApiService';
+import {Table, TableColumn} from '../../components/Table';
+import URLService from '../../services/URL';
 
-import ApiService from '../../services/ApiService';
 
 interface LocationState {
    data: BusinessDTO;
@@ -58,7 +55,6 @@ export const CreateBookingView: React.FC = () => {
          tooltip: 'Book Time',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
             console.log(rowData.id);
-            //ApiService.request(() => BookingService.createBooking(rowData.id), setModalText);
 
             requestHandler.mutation(URLService.getCreateBookingURL(rowData.id), 'POST');
 

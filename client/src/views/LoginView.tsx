@@ -10,7 +10,7 @@ import {useUserContext} from '../context/UserContext';
 
 import {RequestHandler, useRequest} from '../services/ApiService';
 
-import URLService from '../services/TimeSlotService';
+import {LOGIN_URL} from '../services/URL';
 
 const useStyles = makeStyles((theme) => ({
    alert: {
@@ -66,14 +66,18 @@ export const LoginView: React.FC = () => {
    const handleSubmit = async (event: React.FormEvent) => {
       event.preventDefault();
 
-      const user: UserDTO = await requestHandler.mutation(URLService.getLoginURL(), 'POST', {
+      const user: UserDTO = await requestHandler.mutation(LOGIN_URL, 'POST', {
          email,
          password,
       });
 
       console.log(user);
 
-      if (user) setUser(user);
+      if (user) {
+          setUser(user);
+      } else {
+         requestHandler.setRequestInfo("Wrong Email/Password")
+      }
    };
 
    return (

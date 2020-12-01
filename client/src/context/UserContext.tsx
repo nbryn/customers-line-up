@@ -11,8 +11,6 @@ export type ContextValue = {
 };
 
 
-const initialUserState: UserDTO = {name: '', email: '', zip: ''};
-
 export const UserContext = React.createContext<ContextValue>({
    user: (Cookies.get('user') as unknown) as UserDTO,
    setUser: () => null,
@@ -25,21 +23,21 @@ type Props = {
 };
 
 export const UserContextProvider: React.FC<Props> = (props: Props) => {
-   const [user, setCurrentUser] = useState<UserDTO>(initialUserState);
+   const [user, setCurrentUser] = useState<UserDTO>({name: '', email: '', zip: '', token: ''});
    const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
 
    const setUser = (user: UserDTO) => {
       setUserLoggedIn(true);
       setCurrentUser(user);
 
+      Cookies.set('token', user.token);
       Cookies.set('user', user);
    };
 
    const logout = () => {
-      Cookies.set('user', '');
-      Cookies.set('token', '');
+      Cookies.remove('user');
+      Cookies.remove('token');
 
-      setUser(initialUserState);
       setUserLoggedIn(false);
    };
 

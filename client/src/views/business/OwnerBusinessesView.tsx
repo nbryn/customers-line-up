@@ -2,24 +2,20 @@ import {Badge, Col, Container} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
 
-import ApiService from '../../services/ApiService';
+import {BUSINESSES_OWNER_URL} from '../../services/URL';
 import {BusinessDTO} from '../../models/dto/Business';
-import BusinessService from '../../services/BusinessService';
+import {RequestHandler, useRequest} from '../../services/ApiService';
 import {Table, TableColumn} from '../../components/Table';
 
-import {useUserContext} from '../../context/UserContext';
-
 export const OwnerBusinessesView: React.FC = () => {
-   const {user} = useUserContext();
-
    const [businesses, setBusinesses] = useState<BusinessDTO[]>([]);
-   const [errorMessage, setErrorMessage] = useState<string>('');
+
+   const requestHandler: RequestHandler<BusinessDTO[], void> = useRequest();
 
    useEffect(() => {
       (async () => {
-         const businesses: BusinessDTO[] = await ApiService.request(
-            () => BusinessService.fetchBusinessesForOwner(user.email),
-            setErrorMessage
+         const businesses: BusinessDTO[] = await requestHandler.query(
+            BUSINESSES_OWNER_URL
          );
 
          setBusinesses(businesses);

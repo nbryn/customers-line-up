@@ -3,13 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-
 
 using Logic.Util;
 using Logic.DTO.User;
 using Logic.Auth;
-using Logic.DTO;
 using Data;
 
 namespace Logic.Users
@@ -59,8 +56,6 @@ namespace Logic.Users
 
             return Ok(user);
         }
-
-
 
         [Authorize(Policy = Policies.User)]
         [Route("all")]

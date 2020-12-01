@@ -37,18 +37,20 @@ namespace Data
                                             .Where(x => x.UserEmail.Equals(userEmail)).ToListAsync();
         }
 
-        public async Task<int> DeleteBooking(string userEmail, int timeSlotId)
+        public async Task<Response> DeleteBooking(string userEmail, int timeSlotId)
         {
             Booking booking = await _context.Bookings.FirstOrDefaultAsync(b => b.UserEmail.Equals(userEmail)
                                                                           && b.TimeSlotId == timeSlotId);
             if (booking == null)
             {
-                return 
+                return Response.NotFound;
             }
 
             _context.Bookings.Remove(booking);
 
             await _context.SaveChangesAsync();
+
+            return Response.Deleted;
         }
     }
 }

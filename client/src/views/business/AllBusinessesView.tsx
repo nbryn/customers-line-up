@@ -4,16 +4,20 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router';
 
 import {BusinessDTO} from '../../models/dto/Business';
-import BusinessService from '../../services/BusinessService';
+import {RequestHandler, useRequest} from '../../services/ApiService';
 import {Table, TableColumn} from '../../components/Table';
+import {ALL_BUSINESSES_URL} from '../../services/URL';
+
 
 export const AllBusinessesView: React.FC = () => {
    const history = useHistory();
    const [businesses, setBusinesses] = useState<BusinessDTO[]>([]);
 
+   const requestHandler: RequestHandler<BusinessDTO[], void> = useRequest();
+
    useEffect(() => {
       (async () => {
-         const businesses: BusinessDTO[] = await BusinessService.fetchAllBusinesses();
+         const businesses: BusinessDTO[] = await requestHandler.query(ALL_BUSINESSES_URL);
 
          setBusinesses(businesses);
       })();
@@ -32,7 +36,7 @@ export const AllBusinessesView: React.FC = () => {
       {
          icon: 'info',
          tooltip: 'See available time slots',
-         onClick: (event: any, rowData: any) => {
+         onClick: (event: any, rowData: BusinessDTO) => {
             history.push('/booking', {data: rowData});
          },
       },

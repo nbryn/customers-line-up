@@ -9,6 +9,7 @@ using Data;
 using Logic.Auth;
 using Logic.DTO;
 using Logic.Util;
+using Logic.Context;
 
 namespace Logic.Bookings
 {
@@ -35,7 +36,7 @@ namespace Logic.Bookings
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            int response = await _service.CreateBooking(userMail, timeSlotId);
+            Response response = await _service.CreateBooking(userMail, timeSlotId);
 
             return new StatusCodeResult((int)response);
         }
@@ -46,9 +47,9 @@ namespace Logic.Bookings
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            await _repository.DeleteBooking(userMail, timeSlotId);
+            Response response = await _repository.DeleteBooking(userMail, timeSlotId);
 
-            return Ok();
+            return new StatusCodeResult((int)response);
         }
 
         [Route("user")]

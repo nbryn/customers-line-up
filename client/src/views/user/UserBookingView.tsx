@@ -2,22 +2,20 @@ import {Badge, Col, Container} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
 
-import ApiService from '../../services/ApiService';
+import {RequestHandler, useRequest} from '../../services/ApiService';
 import {TimeSlotDTO} from '../../models/dto/Business';
-import BookingService from '../../services/BookingService';
 import {Table, TableColumn} from '../../components/Table';
+import URLService, {USER_BOOKINGS_URL} from '../../services/URL';
 
 export const UserBookingView: React.FC = () => {
    const [loading, setLoading] = useState<boolean>(true);
    const [bookings, setbookings] = useState<TimeSlotDTO[]>([]);
-   const [errorMessage, setErrorMessage] = useState<string>('');
+
+   const requestHandler: RequestHandler<TimeSlotDTO[], void> = useRequest();
 
    useEffect(() => {
       (async () => {
-         const bookings: TimeSlotDTO[] = await ApiService.request(
-            () => BookingService.fetchUserBookings(),
-            setErrorMessage
-         );
+         const bookings: TimeSlotDTO[] = await requestHandler.query(USER_BOOKINGS_URL);
 
          setbookings(bookings);
          setLoading(false);
@@ -40,10 +38,7 @@ export const UserBookingView: React.FC = () => {
             const _bookings = bookings.filter((b) => b.id !== rowData.id);
             setbookings(_bookings);
 
-            await ApiService.request(
-               () => BookingService.deleteBooking(rowData.id),
-               setErrorMessage
-            );
+            await requestHandler.mutation(URLService.getDeleteBookingURL(rowData.id), 'DELETE');
          },
       },
    ];
