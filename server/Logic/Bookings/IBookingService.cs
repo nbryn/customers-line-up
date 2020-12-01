@@ -7,6 +7,6 @@ namespace Logic.Bookings
 {
     public interface IBookingService
     {
-        Task<Response> CreateBooking(string userEmail, int timeSlotId);
+        Task<(Response, string?)> CreateBooking(string userEmail, int timeSlotId);
     }
 }

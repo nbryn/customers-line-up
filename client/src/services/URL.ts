@@ -28,7 +28,7 @@ export const BUSINESSES_OWNER_URL = BASE_URL + `business/owner`;
 
 export const CREATE_BUSINESS_URL = BASE_URL + 'business/create';
 
-export const USER_BOOKINGS_URL = BASE_URL + 'bookings/user';
+export const USER_BOOKINGS_URL = BASE_URL + 'booking/user';
 
 
 export default {

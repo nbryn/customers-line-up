@@ -11,8 +11,7 @@ namespace Logic.DTO
         public string Name { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public string Zip { get; set; }
+        public int Zip { get; set; }
 
         public string OwnerEmail { get; set; }
 

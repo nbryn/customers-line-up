@@ -73,11 +73,11 @@ namespace Logic.Context
 
             var businesses = new[]
             {
-                new Business {Id = 1, Name = "Cool", OwnerEmail = "h@h.com", Zip = "3520",
+                new Business {Id = 1, Name = "Cool", OwnerEmail = "h@h.com", Zip = 3520,
                              OpeningTime = 10.00, ClosingTime = 16.00, Capacity = 50, Type = "Supermarket"},
-                new Business {Id = 2, Name = "Shop", OwnerEmail = "h@h.com", Zip = "3520",
+                new Business {Id = 2, Name = "Shop", OwnerEmail = "h@h.com", Zip = 3520,
                              OpeningTime = 09.00, ClosingTime = 14.00, Capacity = 40, Type = "Museum"},
-                new Business {Id = 3, Name = "1337", OwnerEmail = "h@h.com", Zip = "4720",
+                new Business {Id = 3, Name = "1337", OwnerEmail = "h@h.com", Zip = 4720,
                              OpeningTime = 08.30, ClosingTime = 15.30, Capacity = 30, Type = "Kiosk"}
             };
 

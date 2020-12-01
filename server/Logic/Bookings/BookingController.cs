@@ -36,9 +36,9 @@ namespace Logic.Bookings
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            Response response = await _service.CreateBooking(userMail, timeSlotId);
+            (Response response, string message) = await _service.CreateBooking(userMail, timeSlotId);
 
-            return new StatusCodeResult((int)response);
+            return new ObjectResult(message) {StatusCode = (int)response};
         }
 
         [HttpDelete]

@@ -18,7 +18,7 @@ namespace Logic.Businesses
         public string OwnerEmail { get; set; }
 
         [Required]
-        public string Zip { get; set; }
+        public int Zip { get; set; }
 
         public string Type { get; set; }
 

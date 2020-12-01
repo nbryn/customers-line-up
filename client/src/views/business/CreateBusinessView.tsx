@@ -6,6 +6,7 @@ import React from 'react';
 import {CreateBusinessDTO} from '../../models/dto/Business';
 import {
    createBusinessValidationSchema,
+   formatBusinessDTO,
    generalCreateBusinessErrorMsg,
 } from '../../validation/BusinessValidation';
 import {RequestHandler, useRequest} from '../../services/ApiService';
@@ -58,8 +59,8 @@ export const CreateBusinessView: React.FC = () => {
 
    const initialValues: CreateBusinessDTO = {
       name: '',
-      zip: 0,
-      capacity: 0,
+      zip: '',
+      capacity: '',
       type: '',
       opens: '',
       closes: '',
@@ -73,7 +74,8 @@ export const CreateBusinessView: React.FC = () => {
       requestHandler.mutation,
       CREATE_BUSINESS_URL,
       'POST',
-      generalCreateBusinessErrorMsg
+      generalCreateBusinessErrorMsg,
+      formatBusinessDTO
    );
 
    return (
@@ -112,7 +114,7 @@ export const CreateBusinessView: React.FC = () => {
                            className={styles.textField}
                            id="zip"
                            label="Zip"
-                           type="text"
+                           type="number"
                            value={formik.values.zip}
                            onChange={formik.handleChange}
                            onBlur={formik.handleBlur}
@@ -125,7 +127,7 @@ export const CreateBusinessView: React.FC = () => {
                            className={styles.textField}
                            id="capacity"
                            label="Capacity"
-                           type="text"
+                           type="number"
                            value={formik.values.capacity}
                            onChange={formik.handleChange}
                            onBlur={formik.handleBlur}
@@ -153,7 +155,7 @@ export const CreateBusinessView: React.FC = () => {
                            label="Opens"
                            type="time"
                            defaultValue="08:00"
-                           value={formik.values.opens.replace(':', '.')}
+                           value={formik.values.opens}
                            onChange={formik.handleChange}
                            onBlur={formik.handleBlur}
                            error={formik.touched.opens && Boolean(formik.errors.opens)}
@@ -173,8 +175,9 @@ export const CreateBusinessView: React.FC = () => {
                            label="Closes"
                            type="time"
                            defaultValue="04:00"
-                           value={formik.values.closes.replace(':', '.')}
+                           value={formik.values.closes}
                            onChange={formik.handleChange}
+                           onBlur={formik.handleBlur}
                            error={formik.touched.closes && Boolean(formik.errors.closes)}
                            helperText={formik.touched.closes && formik.errors.closes}
                            inputLabelProps={{
