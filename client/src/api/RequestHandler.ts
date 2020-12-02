@@ -9,29 +9,37 @@ export interface RequestHandler<T> {
   query: (url: string) => Promise<T>
   requestInfo: string;
   setRequestInfo: (info: string) => void;
+  working: boolean;
 }
 
 export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
+  const [working, setWorking] = useState<boolean>(false);
   const [requestInfo, setRequestInfo] = useState<string>('');
 
   const mutation = async (url: string, method: Method, request?: any): Promise<void> => {
     try {
+      setWorking(true);
       await fetch(url, method, request);
       if (succesMessage) setRequestInfo(succesMessage);
 
     } catch (err) {
       console.log(err);
       setRequestInfo(err.getErrorMessage());
+    } finally {
+      setWorking(false);
     }
   }
 
   const query = async (url: string): Promise<T> => {
     let response: T;
     try {
+      setWorking(true);
       response = await fetch<T>(url, 'GET',);
 
     } catch (err) {
       setRequestInfo(err.getErrorMessage());
+    } finally {
+      setWorking(false);
     }
 
     return response!;
@@ -42,6 +50,7 @@ export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
     mutation,
     requestInfo,
     setRequestInfo,
+    working,
   }
 }
 
