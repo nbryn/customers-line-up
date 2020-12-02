@@ -1,19 +1,31 @@
-import {Badge, Col, Container} from 'react-bootstrap';
+import {Badge, Col, Container, Row} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {makeStyles} from '@material-ui/core/styles';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router';
 
 import {BusinessDTO} from '../../models/dto/Business';
-import {RequestHandler, useRequest} from '../../services/ApiService';
+import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {Table, TableColumn} from '../../components/Table';
-import {ALL_BUSINESSES_URL} from '../../services/URL';
+import {ALL_BUSINESSES_URL} from '../../api/URL';
 
+const useStyles = makeStyles((theme) => ({
+   badge: {
+      marginTop: 15,
+      marginBottom: 25,
+      textAlign: 'center'
+   },
+   row: {
+      justifyContent: 'center',
+   },
+}));
 
 export const AllBusinessesView: React.FC = () => {
+   const styles = useStyles();
    const history = useHistory();
-   const [businesses, setBusinesses] = useState<BusinessDTO[]>([]);
 
-   const requestHandler: RequestHandler<BusinessDTO[], void> = useRequest();
+   const [businesses, setBusinesses] = useState<BusinessDTO[]>([]);
+   const requestHandler: RequestHandler<BusinessDTO[]> = useRequest();
 
    useEffect(() => {
       (async () => {
@@ -44,27 +56,22 @@ export const AllBusinessesView: React.FC = () => {
 
    return (
       <Container>
-         <div
-            style={{
-               position: 'absolute',
-               left: '35%',
-               width: 2000,
-               textAlign: 'center',
-            }}
-         >
-            <Col sm={8} md={8} lg={4}>
+         <Row className={styles.row}>
+            <Col sm={6} md={8} lg={6} xl={8} className={styles.badge}>
                <h1>
-                  <Badge style={{marginBottom: 50}} variant="primary">
-                     Available Businesses
-                  </Badge>
+                  <Badge variant="primary">Available Businesses</Badge>
                </h1>
+            </Col>
+         </Row>
+         <Row className={styles.row}>
+            <Col sm={6} md={8} lg={6} xl={10}>
                {businesses.length === 0 ? (
                   <CircularProgress />
                ) : (
                   <Table actions={actions} columns={columns} data={businesses} title="Businesses" />
                )}
             </Col>
-         </div>
+         </Row>
       </Container>
    );
 };

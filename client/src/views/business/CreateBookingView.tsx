@@ -1,40 +1,48 @@
-import {Badge, Col, Container} from 'react-bootstrap';
+import {Badge, Col, Container, Row} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {makeStyles} from '@material-ui/core/styles';
 import React, {useEffect, useState} from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import {BusinessDTO, TimeSlotDTO} from '../../models/dto/Business';
 import {Modal} from '../../components/Modal';
-import {RequestHandler, useRequest} from '../../services/ApiService';
+import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {Table, TableColumn} from '../../components/Table';
-import URLService from '../../services/URL';
+import URL from '../../api/URL';
 
+const useStyles = makeStyles((theme) => ({
+   badge: {
+      marginTop: 15,
+      marginBottom: 25,
+      textAlign: 'center',
+   },
+   row: {
+      justifyContent: 'center',
+   },
+}));
 
 interface LocationState {
    data: BusinessDTO;
 }
 
+const SUCCESS_MESSAGE = 'Booking Made - Go to my bookings to see your bookings';
+
 export const CreateBookingView: React.FC = () => {
+   const styles = useStyles();
    const location = useLocation<LocationState>();
    const history = useHistory();
 
-   const [modalText, setModalText] = useState<string>('');
    const [loading, setLoading] = useState<boolean>(true);
    const [timeSlots, setTimeSlots] = useState<TimeSlotDTO[]>([]);
 
-   const requestHandler: RequestHandler<TimeSlotDTO[], void> = useRequest();
+   const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest(SUCCESS_MESSAGE);
 
    const business: BusinessDTO = location.state.data;
 
    useEffect(() => {
       (async () => {
-         // const timeSlots: TimeSlotDTO[] = await ApiService.request(
-         //    () => TimeSlotService.fetchAvailableTimeSlotsForBusiness(business.id!),
-         //    setModalText
-         // );
-
          const timeSlots: TimeSlotDTO[] = await requestHandler.query(
-            URLService.getTimeSlotURL(business.id!)
+            URL.getTimeSlotURL(business.id!)
          );
 
          setTimeSlots(timeSlots);
@@ -56,29 +64,23 @@ export const CreateBookingView: React.FC = () => {
          onClick: async (event: any, rowData: TimeSlotDTO) => {
             console.log(rowData.id);
 
-            requestHandler.mutation(URLService.getCreateBookingURL(rowData.id), 'POST');
-
-            requestHandler.setRequestInfo('Booking Made - Go to my bookings to see your bookings');
+            requestHandler.mutation(URL.getCreateBookingURL(rowData.id), 'POST');
          },
       },
    ];
    return (
       <Container>
-         <div
-            style={{
-               position: 'absolute',
-               left: '35%',
-               width: 2000,
-               textAlign: 'center',
-            }}
-         >
-            <Col sm={8} md={8} lg={4}>
+         <Row className={styles.row}>
+            <Col sm={6} md={8} lg={6} xl={8} className={styles.badge}>
                <h1>
                   <Badge style={{marginBottom: 50}} variant="primary">
                      Available Time Slots for {business.name}
                   </Badge>
                </h1>
-
+            </Col>
+         </Row>
+         <Row className={styles.row}>
+            <Col sm={6} md={8} lg={6} xl={10}>
                {loading ? (
                   <CircularProgress />
                ) : (
@@ -101,7 +103,7 @@ export const CreateBookingView: React.FC = () => {
                   </>
                )}
             </Col>
-         </div>
+         </Row>
       </Container>
    );
 };

@@ -1,4 +1,4 @@
-const BASE_URL = "https://localhost:5001/";
+export const BASE_URL = "https://localhost:5001/";
 
 const getTimeSlotURL = (businessId: number): string => {
     const today = new Date();

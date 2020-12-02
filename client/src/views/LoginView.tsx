@@ -6,11 +6,8 @@ import React, {useState} from 'react';
 import {SignupView} from './SignupView';
 import {TextField} from '../components/TextField';
 import {UserDTO} from '../models/dto/User';
+import UserService from '../services/UserService';
 import {useUserContext} from '../context/UserContext';
-
-import {RequestHandler, useRequest} from '../services/ApiService';
-
-import {LOGIN_URL} from '../services/URL';
 
 const useStyles = makeStyles((theme) => ({
    alert: {
@@ -60,23 +57,19 @@ export const LoginView: React.FC = () => {
 
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
-
-   const requestHandler: RequestHandler<void, UserDTO> = useRequest();
+   const [errorMessage, setErrorMessage] = useState('');
 
    const handleSubmit = async (event: React.FormEvent) => {
       event.preventDefault();
 
-      const user: UserDTO = await requestHandler.mutation(LOGIN_URL, 'POST', {
-         email,
-         password,
-      });
+      const user: UserDTO = await UserService.login(email, password)
 
       console.log(user);
 
       if (user) {
           setUser(user);
       } else {
-         requestHandler.setRequestInfo("Wrong Email/Password")
+         setErrorMessage('Wrong Email/Password')
       }
    };
 
@@ -95,9 +88,9 @@ export const LoginView: React.FC = () => {
                      </h1>
 
                      <Form onSubmit={handleSubmit}>
-                        {requestHandler.requestInfo && (
+                        {errorMessage && (
                            <Alert className={styles.alert} variant="danger">
-                              {requestHandler.requestInfo}
+                              {errorMessage}
                            </Alert>
                         )}
                         <Form.Group>

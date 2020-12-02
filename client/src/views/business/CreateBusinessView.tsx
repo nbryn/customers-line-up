@@ -1,17 +1,15 @@
-import {Alert, Button, Badge, Col, Container, Form, Row} from 'react-bootstrap';
+import {Button, Badge, Col, Container, Form, Row} from 'react-bootstrap';
 import Card from '@material-ui/core/Card';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
+import {useHistory} from 'react-router-dom';
 
 import {CreateBusinessDTO} from '../../models/dto/Business';
-import {
-   createBusinessValidationSchema,
-   formatBusinessDTO,
-   generalCreateBusinessErrorMsg,
-} from '../../validation/BusinessValidation';
-import {RequestHandler, useRequest} from '../../services/ApiService';
+import {createBusinessValidationSchema} from '../../validation/BusinessValidation';
+import {Modal} from '../../components/Modal';
+import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TextField} from '../../components/TextField';
-import {CREATE_BUSINESS_URL} from '../../services/URL';
+import {CREATE_BUSINESS_URL} from '../../api/URL';
 import {useForm} from '../../util/useForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,8 +52,11 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
+const SUCCESS_MESSAGE = 'Business Created - Go to my businesses to see your businesses';
+
 export const CreateBusinessView: React.FC = () => {
    const styles = useStyles();
+   const history = useHistory();
 
    const initialValues: CreateBusinessDTO = {
       name: '',
@@ -66,22 +67,34 @@ export const CreateBusinessView: React.FC = () => {
       closes: '',
    };
 
-   const requestHandler: RequestHandler<void, void> = useRequest();
+   const requestHandler: RequestHandler<void> = useRequest(SUCCESS_MESSAGE);
 
-   const {formik, errorMessage} = useForm<CreateBusinessDTO>(
+   const formik = useForm<CreateBusinessDTO>(
       initialValues,
       createBusinessValidationSchema,
-      requestHandler.mutation,
+      requestHandler,
       CREATE_BUSINESS_URL,
       'POST',
-      generalCreateBusinessErrorMsg,
-      formatBusinessDTO
+      (business) => {
+         business.opens = business.opens.replace(':', '.');
+         business.closes = business.closes.replace(':', '.');
+
+         return business;
+      }
    );
 
    return (
       <Container>
          <Row className={styles.wrapper}>
             <Col sm={10} lg={6}>
+               <Modal
+                  show={requestHandler.requestInfo ? true : false}
+                  title="Business Info"
+                  text={requestHandler.requestInfo}
+                  primaryAction={() => history.push('/mybusinesses')}
+                  primaryActionText="My Businesses"
+                  secondaryAction={() => requestHandler.setRequestInfo('')}
+               />
                <Card className={styles.card}>
                   <h1>
                      <Badge className={styles.badge} variant="primary">
@@ -90,11 +103,6 @@ export const CreateBusinessView: React.FC = () => {
                   </h1>
 
                   <Form onSubmit={formik.handleSubmit}>
-                     {errorMessage && (
-                        <Alert className={styles.alert} variant="danger">
-                           {errorMessage}
-                        </Alert>
-                     )}
                      <Form.Group>
                         <TextField
                            className={styles.textField}

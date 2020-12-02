@@ -4,44 +4,37 @@ import { useState } from 'react';
 
 import { Error } from "./Error";
 
-export interface RequestHandler<T, U> {
-  mutation: (url: string, method: Method, request?: any) => Promise<U>;
+export interface RequestHandler<T> {
+  mutation: (url: string, method: Method, request?: any) => Promise<void>;
   query: (url: string) => Promise<T>
   requestInfo: string;
   setRequestInfo: (info: string) => void;
 }
 
-export function useRequest<T, U>(): RequestHandler<T, U> {
+export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
   const [requestInfo, setRequestInfo] = useState<string>('');
 
-  const mutation = async (url: string, method: Method, request?: any): Promise<U> => {
-    let u: U;
+  const mutation = async (url: string, method: Method, request?: any): Promise<void> => {
     try {
-      u = await fetch<U>(url, method, request);
-
+      await fetch(url, method, request);
+      if (succesMessage) setRequestInfo(succesMessage);
 
     } catch (err) {
       console.log(err);
       setRequestInfo(err.getErrorMessage());
     }
-
-    return u!;
   }
 
-
   const query = async (url: string): Promise<T> => {
-    let t: T;
+    let response: T;
     try {
-      t = await fetch<T>(url, 'GET',);
-
-
-      return t;
+      response = await fetch<T>(url, 'GET',);
 
     } catch (err) {
       setRequestInfo(err.getErrorMessage());
     }
 
-    return t!;
+    return response!;
   }
 
   return {
@@ -75,7 +68,7 @@ export async function fetch<T>(url: string, method: Method, request?: any): Prom
       if (err.request.response.message) {
         throw new Error(err.request.response.message);
       }
-      
+
       throw new Error(err.request.response);
     } else {
       throw new Error("Network/Undefined Error!")

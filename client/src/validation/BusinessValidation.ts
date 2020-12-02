@@ -1,7 +1,5 @@
 import * as yup from 'yup';
 
-import {CreateBusinessDTO} from '../models/dto/Business';
-
 export const generalCreateBusinessErrorMsg = 'An error occured';
 
 export const createBusinessValidationSchema: yup.ObjectSchema = yup.object({
@@ -15,10 +13,3 @@ export const createBusinessValidationSchema: yup.ObjectSchema = yup.object({
     opens: yup.string().required('Opens is required'),
     closes: yup.string().required('Closes is required'),
 });
-
-export const formatBusinessDTO = (dto: CreateBusinessDTO): CreateBusinessDTO => {
-    dto.opens = dto.opens.replace(':', '.');
-    dto.closes = dto.closes.replace(':', '.');
-
-    return dto;
-}

@@ -1,20 +1,18 @@
 import { Method } from "axios";
 import { ObjectSchema } from 'yup';
-import { useState } from 'react';
-import { useFormik, FormikComputedProps, FormikHandlers, FormikHelpers, FormikState } from 'formik';
+import { useFormik, FormikComputedProps, FormikHandlers, FormikState } from 'formik';
 
-export type Form<T> = {
-    formik: FormikState<T> & FormikComputedProps<T> & FormikHelpers<T> & FormikHandlers;
-    errorMessage: string;
-}
+import { RequestHandler } from '../api/RequestHandler';
 
-export const useForm = <T>(initialValues: T, validationSchema: ObjectSchema,
-    onSubmit: (url: string, method: Method, request?: any) => Promise<void>,
+export type Form<T> = FormikState<T> & FormikComputedProps<T> & FormikHandlers;
+
+export const useForm = <T>(
+    initialValues: T, 
+    validationSchema: ObjectSchema,
+    requestHandler: RequestHandler<void>,
     url: string,
     method: Method,
-    errorMsg: string,
     formatter?: (dto: T) => T): Form<T> => {
-    const [errorMessage, setErrorMessage] = useState<string>('');
 
     const formik = useFormik<T>({
         initialValues,
@@ -22,20 +20,9 @@ export const useForm = <T>(initialValues: T, validationSchema: ObjectSchema,
         onSubmit: async (values) => {
             if (formatter) values = formatter(values);
 
-            console.log(values);
-
-            try {
-
-                await onSubmit(url, method, values);
-            } catch (err) {
-                console.log(err);
-                setErrorMessage(errorMsg);
-            }
+            await requestHandler.mutation(url, method, values);
         },
     });
 
-    return {
-        formik,
-        errorMessage
-    };
+  return formik;
 }

@@ -1,23 +1,13 @@
-import Cookies from 'js-cookie';
-
-import { fetch} from './ApiService';
+import {LOGIN_URL} from '../api/URL';
+import { fetch} from '../api/RequestHandler';
 import { UserDTO } from '../models/dto/User';
 
+async function login(email: string, password: string): Promise<UserDTO> {
+   const user: UserDTO = await fetch(LOGIN_URL, 'post', {email, password});
 
-// async function login(request: LoginRequest): Promise<UserDTO> {
-//    const response: LoginResponse = await fetch<LoginResponse>(BASE_URL + 'user/login', 'post', request);
 
-//    Cookies.set('token', response.token);
-
-//    const user: UserDTO = {
-//       name: response.name,
-//       email: response.email,
-//       zip: response.zip,
-//       isOwner: response.isOwner as boolean
-//    };
-
-//    return user;
-// }
+   return user;
+}
 
 
 // async function signup(request) {
@@ -26,3 +16,7 @@ import { UserDTO } from '../models/dto/User';
 //    return user;
 // }
 
+
+export default {
+    login
+}

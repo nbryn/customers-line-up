@@ -1,6 +1,6 @@
 import BsModal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import React, {useState} from 'react';
+import React from 'react';
 
 type Props = {
    show: boolean;
@@ -23,7 +23,7 @@ export const Modal: React.FC<Props> = ({
       <>
          <BsModal show={show}>
             <BsModal.Dialog>
-               <BsModal.Header closeButton>
+               <BsModal.Header >
                   <BsModal.Title>{title}</BsModal.Title>
                </BsModal.Header>
 
