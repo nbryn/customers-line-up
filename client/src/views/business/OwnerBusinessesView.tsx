@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import {BUSINESSES_OWNER_URL} from '../../api/URL';
 import {BusinessDTO} from '../../models/dto/Business';
@@ -6,19 +6,8 @@ import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
 
-
 export const OwnerBusinessesView: React.FC = () => {
-   const [businesses, setBusinesses] = useState<BusinessDTO[]>([]);
-
    const requestHandler: RequestHandler<BusinessDTO[]> = useRequest();
-
-   useEffect(() => {
-      (async () => {
-         const businesses: BusinessDTO[] = await requestHandler.query(BUSINESSES_OWNER_URL);
-
-         setBusinesses(businesses);
-      })();
-   }, []);
 
    const columns: TableColumn[] = [
       {title: 'Name', field: 'name'},
@@ -42,8 +31,7 @@ export const OwnerBusinessesView: React.FC = () => {
       <TableContainer
          actions={actions}
          columns={columns}
-         data={businesses}
-         loading={requestHandler.working}
+         fetchTableData={async () => await requestHandler.query(BUSINESSES_OWNER_URL)}
          badgeTitle="Your Businesses"
          tableTitle="Businesses"
       />

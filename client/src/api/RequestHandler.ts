@@ -7,8 +7,8 @@ import { Error } from "./Error";
 export interface RequestHandler<T> {
   mutation: (url: string, method: Method, request?: any) => Promise<void>;
   query: (url: string) => Promise<T>
-  requestInfo: string;
   setRequestInfo: (info: string) => void;
+  requestInfo: string;
   working: boolean;
 }
 

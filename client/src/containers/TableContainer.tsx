@@ -1,8 +1,9 @@
 import {Badge, Col, Container, Row} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {makeStyles} from '@material-ui/core/styles';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
+import {DTO} from '../models/dto/Business';
 import {Table, TableColumn} from '../components/Table';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,11 +20,10 @@ const useStyles = makeStyles((theme) => ({
 export type Props = {
    actions: any;
    columns: TableColumn[];
-   data: Array<any>;
-   loading: boolean;
    badgeTitle: string;
-  
    tableTitle: string;
+   fetchTableData: () => Promise<DTO[]>;
+   removeEntryId?: number | null;
    emptyMessage?: string;
 };
 
@@ -31,12 +31,30 @@ export const TableContainer: React.FC<Props> = ({
    actions,
    badgeTitle,
    columns,
-   data,
-   loading,
    tableTitle,
+   fetchTableData,
+   removeEntryId,
    emptyMessage,
 }: Props) => {
    const styles = useStyles();
+   
+   const [loading, setLoading] = useState<boolean>(true);
+   const [tableData, setTableData] = useState<DTO[]>([]);
+
+   useEffect(() => {
+      (async () => {
+         const tableData = await fetchTableData();
+
+         setTableData(tableData);
+         setLoading(false);
+      })();
+   }, []);
+
+   useEffect(() => {
+      const updatedData = tableData.filter((b) => b.id !== removeEntryId);
+    
+      setTableData(updatedData);
+   }, [removeEntryId]);
 
    return (
       <Container>
@@ -49,13 +67,13 @@ export const TableContainer: React.FC<Props> = ({
          </Row>
          <Row className={styles.row}>
             <Col sm={6} md={8} lg={6} xl={10}>
-               {loading? (
+               {loading ? (
                   <CircularProgress />
                ) : (
                   <Table
                      actions={actions}
                      columns={columns}
-                     data={data}
+                     data={tableData}
                      title={tableTitle}
                      emptyMessage={emptyMessage}
                   />

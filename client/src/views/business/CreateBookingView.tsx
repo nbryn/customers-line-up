@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import {BusinessDTO, TimeSlotDTO} from '../../models/dto/Business';
@@ -17,21 +17,10 @@ const SUCCESS_MESSAGE = 'Booking Made - Go to my bookings to see your bookings';
 export const CreateBookingView: React.FC = () => {
    const location = useLocation<LocationState>();
    const history = useHistory();
-   const [timeSlots, setTimeSlots] = useState<TimeSlotDTO[]>([]);
 
    const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest(SUCCESS_MESSAGE);
 
    const business: BusinessDTO = location.state.data;
-
-   useEffect(() => {
-      (async () => {
-         const timeSlots: TimeSlotDTO[] = await requestHandler.query(
-            URL.getTimeSlotURL(business.id!)
-         );
-
-         setTimeSlots(timeSlots);
-      })();
-   }, []);
 
    const columns: TableColumn[] = [
       {title: 'id', field: 'id', hidden: true},
@@ -56,8 +45,7 @@ export const CreateBookingView: React.FC = () => {
          <TableContainer
             actions={actions}
             columns={columns}
-            data={timeSlots}
-            loading={requestHandler.working}
+            fetchTableData={async () => await requestHandler.query(URL.getTimeSlotURL(business.id!))}
             badgeTitle={`Available Time Slots For ${business.name}`}
             tableTitle="Time Slots"
             emptyMessage="No Time Slots Available"

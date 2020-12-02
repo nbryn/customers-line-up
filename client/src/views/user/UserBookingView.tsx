@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TimeSlotDTO} from '../../models/dto/Business';
@@ -7,17 +7,9 @@ import {TableContainer} from '../../containers/TableContainer';
 import URL, {USER_BOOKINGS_URL} from '../../api/URL';
 
 export const UserBookingView: React.FC = () => {
-   const [bookings, setbookings] = useState<TimeSlotDTO[]>([]);
+   const [idToBeRemoved, setIdToBeRemoved] = useState<number | null>(null);
 
    const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest();
-
-   useEffect(() => {
-      (async () => {
-         const bookings: TimeSlotDTO[] = await requestHandler.query(USER_BOOKINGS_URL);
-
-         setbookings(bookings);
-      })();
-   }, []);
 
    const columns: TableColumn[] = [
       {title: 'id', field: 'id', hidden: true},
@@ -32,8 +24,7 @@ export const UserBookingView: React.FC = () => {
          icon: 'delete',
          tooltip: 'Delete Booking',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
-            const _bookings = bookings.filter((b) => b.id !== rowData.id);
-            setbookings(_bookings);
+            setIdToBeRemoved(rowData.id);
 
             await requestHandler.mutation(URL.getDeleteBookingURL(rowData.id), 'DELETE');
          },
@@ -43,8 +34,8 @@ export const UserBookingView: React.FC = () => {
       <TableContainer
          actions={actions}
          columns={columns}
-         data={bookings}
-         loading={requestHandler.working}
+         fetchTableData={async () => await requestHandler.query(USER_BOOKINGS_URL)}
+         removeEntryId={idToBeRemoved}
          badgeTitle="Your Bookings"
          tableTitle="Bookings"
          emptyMessage="No Bookings Yet"

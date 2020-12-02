@@ -59,6 +59,7 @@ export const CreateBusinessView: React.FC = () => {
    const history = useHistory();
 
    const initialValues: CreateBusinessDTO = {
+      id: 0,
       name: '',
       zip: '',
       capacity: '',

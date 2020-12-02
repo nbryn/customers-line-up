@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useHistory} from 'react-router';
 
 import {ALL_BUSINESSES_URL} from '../../api/URL';
@@ -10,17 +10,7 @@ import {TableContainer} from '../../containers/TableContainer';
 
 export const AllBusinessesView: React.FC = () => {
    const history = useHistory();
-
-   const [businesses, setBusinesses] = useState<BusinessDTO[]>([]);
    const requestHandler: RequestHandler<BusinessDTO[]> = useRequest();
-
-   useEffect(() => {
-      (async () => {
-         const businesses: BusinessDTO[] = await requestHandler.query(ALL_BUSINESSES_URL);
-
-         setBusinesses(businesses);
-      })();
-   }, []);
 
    const columns: TableColumn[] = [
       {title: 'id', field: 'id', hidden: true},
@@ -45,8 +35,7 @@ export const AllBusinessesView: React.FC = () => {
       <TableContainer
          actions={actions}
          columns={columns}
-         data={businesses}
-         loading={requestHandler.working}
+         fetchTableData={async () => await requestHandler.query(ALL_BUSINESSES_URL)}
          badgeTitle="Available Businesses"
          tableTitle="Businesses"
       />
