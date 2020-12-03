@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Text;
+using System.Net.Http;
 
 using Data;
 using Logic.Businesses;
@@ -107,7 +108,7 @@ namespace CLup
         {
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();

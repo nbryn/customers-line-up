@@ -1,15 +1,25 @@
+import {Col, Container, Row} from 'react-bootstrap';
+import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
 import {useHistory} from 'react-router';
 
 import {ALL_BUSINESSES_URL} from '../../api/URL';
 import {BusinessDTO} from '../../models/dto/Business';
+import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
 
+const useStyles = makeStyles((theme) => ({
+   row: {
+      justifyContent: 'center',
+   },
+}));
 
 export const AllBusinessesView: React.FC = () => {
+   const styles = useStyles();
    const history = useHistory();
+
    const requestHandler: RequestHandler<BusinessDTO[]> = useRequest();
 
    const columns: TableColumn[] = [
@@ -32,12 +42,20 @@ export const AllBusinessesView: React.FC = () => {
    ];
 
    return (
-      <TableContainer
-         actions={actions}
-         columns={columns}
-         fetchTableData={async () => await requestHandler.query(ALL_BUSINESSES_URL)}
-         badgeTitle="Available Businesses"
-         tableTitle="Businesses"
-      />
+      <Container>
+         <Row className={styles.row}>
+            <Header text="Available Businesses" />
+         </Row>
+         <Row className={styles.row}>
+            <Col sm={6} md={8} lg={6} xl={10}>
+               <TableContainer
+                  actions={actions}
+                  columns={columns}
+                  fetchTableData={async () => await requestHandler.query(ALL_BUSINESSES_URL)}
+                  tableTitle="Businesses"
+               />
+            </Col>
+         </Row>
+      </Container>
    );
 };

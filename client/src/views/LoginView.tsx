@@ -1,8 +1,9 @@
-import {Alert, Button, Badge, Col, Container, Form, Row} from 'react-bootstrap';
-import Card from '@material-ui/core/Card';
+import {Col, Container, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
+import {Card} from '../components/Card';
+import {Form} from '../components/Form';
 import {SignupView} from './SignupView';
 import {TextField} from '../components/TextField';
 import {UserDTO} from '../models/dto/User';
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: 60,
       borderRadius: 15,
       height: 450,
-      boxShadow: '0px 0px 0px 8px rgba(12, 12, 242, 0.1)',
+      //boxShadow: '0px 0px 0px 8px rgba(12, 12, 242, 0.1)',
       textAlign: 'center',
    },
    helperText: {
@@ -57,19 +58,22 @@ export const LoginView: React.FC = () => {
 
    const [email, setEmail] = useState('');
    const [password, setPassword] = useState('');
+   const [working, setWorking] = useState(false);
    const [errorMessage, setErrorMessage] = useState('');
 
    const handleSubmit = async (event: React.FormEvent) => {
-      event.preventDefault();
+      try {
+         event.preventDefault();
+         setWorking(true);
+         setErrorMessage('');
 
-      const user: UserDTO = await UserService.login(email, password)
+         const user: UserDTO = await UserService.login(email, password);
 
-      console.log(user);
-
-      if (user) {
-          setUser(user);
-      } else {
-         setErrorMessage('Wrong Email/Password')
+         setUser(user);
+      } catch (err) {
+         setErrorMessage('Wrong Email/Password');
+      } finally {
+         setWorking(false);
       }
    };
 
@@ -80,20 +84,23 @@ export const LoginView: React.FC = () => {
          ) : (
             <Row className={styles.wrapper}>
                <Col sm={10} lg={6}>
-                  <Card className={styles.card}>
-                     <h1>
-                        <Badge className={styles.badge} variant="primary">
-                           Login
-                        </Badge>
-                     </h1>
-
-                     <Form onSubmit={handleSubmit}>
-                        {errorMessage && (
-                           <Alert className={styles.alert} variant="danger">
-                              {errorMessage}
-                           </Alert>
-                        )}
-                        <Form.Group>
+                  <Card
+                     className={styles.card}
+                     title="Login"
+                     buttonAction={() => setRenderSignUp(true)}
+                     buttonColor="secondary"
+                     buttonText="Signup"
+                     buttonSize="medium"
+                     variant="outlined"
+                  >
+                     <Form
+                        onSubmit={handleSubmit}
+                        buttonText="Login"
+                        working={working}
+                        errorMessage={errorMessage}
+                        valid={Boolean(email && password)}
+                     >
+                        <FormGroup>
                            <TextField
                               className={styles.textField}
                               id="email"
@@ -101,9 +108,9 @@ export const LoginView: React.FC = () => {
                               onChange={(e) => setEmail(e.target.value)}
                               value={email}
                            />
-                        </Form.Group>
+                        </FormGroup>
 
-                        <Form.Group>
+                        <FormGroup>
                            <TextField
                               className={styles.textField}
                               id="password"
@@ -112,25 +119,7 @@ export const LoginView: React.FC = () => {
                               onChange={(e) => setPassword(e.target.value)}
                               value={password}
                            />
-                        </Form.Group>
-                        <div className={styles.buttonGroup}>
-                           <Button
-                              className={styles.button}
-                              variant="primary"
-                              type="submit"
-                              disabled={!(email && password)}
-                           >
-                              Login
-                           </Button>
-                           <br />
-                           <Button
-                              onClick={() => setRenderSignUp(true)}
-                              className={styles.button}
-                              variant="secondary"
-                           >
-                              Signup
-                           </Button>
-                        </div>
+                        </FormGroup>
                      </Form>
                   </Card>
                </Col>

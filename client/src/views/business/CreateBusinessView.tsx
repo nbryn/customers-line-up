@@ -1,11 +1,12 @@
-import {Button, Badge, Col, Container, Form, Row} from 'react-bootstrap';
-import Card from '@material-ui/core/Card';
+import {Col, Container, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 
+import {Card} from '../../components/Card';
 import {CreateBusinessDTO} from '../../models/dto/Business';
 import {createBusinessValidationSchema} from '../../validation/BusinessValidation';
+import {Form} from '../../components/Form';
 import {Modal} from '../../components/Modal';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TextField} from '../../components/TextField';
@@ -38,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
       marginTop: 60,
       borderRadius: 15,
       height: 700,
-      boxShadow: '0px 0px 0px 8px rgba(12, 12, 242, 0.1)',
       textAlign: 'center',
    },
    helperText: {
@@ -96,15 +96,14 @@ export const CreateBusinessView: React.FC = () => {
                   primaryActionText="My Businesses"
                   secondaryAction={() => requestHandler.setRequestInfo('')}
                />
-               <Card className={styles.card}>
-                  <h1>
-                     <Badge className={styles.badge} variant="primary">
-                        Create Business
-                     </Badge>
-                  </h1>
-
-                  <Form onSubmit={formik.handleSubmit}>
-                     <Form.Group>
+               <Card className={styles.card} title="Create Business" variant="outlined">
+                  <Form
+                     onSubmit={formik.handleSubmit}
+                     buttonText="Create"
+                     working={requestHandler.working}
+                     valid={formik.isValid}
+                  >
+                     <FormGroup>
                         <TextField
                            className={styles.textField}
                            id="name"
@@ -116,9 +115,9 @@ export const CreateBusinessView: React.FC = () => {
                            error={formik.touched.name && Boolean(formik.errors.name)}
                            helperText={formik.touched.name && formik.errors.name}
                         />
-                     </Form.Group>
+                     </FormGroup>
 
-                     <Form.Group>
+                     <FormGroup>
                         <TextField
                            className={styles.textField}
                            id="zip"
@@ -130,8 +129,8 @@ export const CreateBusinessView: React.FC = () => {
                            error={formik.touched.zip && Boolean(formik.errors.zip)}
                            helperText={formik.touched.zip && formik.errors.zip}
                         />
-                     </Form.Group>
-                     <Form.Group>
+                     </FormGroup>
+                     <FormGroup>
                         <TextField
                            className={styles.textField}
                            id="capacity"
@@ -143,8 +142,8 @@ export const CreateBusinessView: React.FC = () => {
                            error={formik.touched.capacity && Boolean(formik.errors.capacity)}
                            helperText={formik.touched.capacity && formik.errors.capacity}
                         />
-                     </Form.Group>
-                     <Form.Group>
+                     </FormGroup>
+                     <FormGroup>
                         <TextField
                            className={styles.textField}
                            id="type"
@@ -156,8 +155,8 @@ export const CreateBusinessView: React.FC = () => {
                            error={formik.touched.type && Boolean(formik.errors.type)}
                            helperText={formik.touched.type && formik.errors.type}
                         />
-                     </Form.Group>
-                     <Form.Group>
+                     </FormGroup>
+                     <FormGroup>
                         <TextField
                            className={styles.textField}
                            id="opens"
@@ -176,8 +175,8 @@ export const CreateBusinessView: React.FC = () => {
                               step: 1800,
                            }}
                         />
-                     </Form.Group>
-                     <Form.Group>
+                     </FormGroup>
+                     <FormGroup>
                         <TextField
                            className={styles.textField}
                            id="closes"
@@ -196,17 +195,7 @@ export const CreateBusinessView: React.FC = () => {
                               step: 1800,
                            }}
                         />
-                     </Form.Group>
-                     <div className={styles.buttonGroup}>
-                        <Button
-                           className={styles.button}
-                           variant="primary"
-                           type="submit"
-                           disabled={!formik.isValid}
-                        >
-                           Create
-                        </Button>
-                     </div>
+                     </FormGroup>
                   </Form>
                </Card>
             </Col>

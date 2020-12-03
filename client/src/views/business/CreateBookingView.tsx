@@ -1,12 +1,21 @@
+import {Col, Container, Row} from 'react-bootstrap';
+import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import {BusinessDTO, TimeSlotDTO} from '../../models/dto/Business';
+import {Header} from '../../components/Texts';
 import {Modal} from '../../components/Modal';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
 import URL from '../../api/URL';
+
+const useStyles = makeStyles((theme) => ({
+   row: {
+      justifyContent: 'center',
+   },
+}));
 
 interface LocationState {
    data: BusinessDTO;
@@ -15,8 +24,9 @@ interface LocationState {
 const SUCCESS_MESSAGE = 'Booking Made - Go to my bookings to see your bookings';
 
 export const CreateBookingView: React.FC = () => {
-   const location = useLocation<LocationState>();
+   const styles = useStyles();
    const history = useHistory();
+   const location = useLocation<LocationState>();
 
    const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest(SUCCESS_MESSAGE);
 
@@ -34,31 +44,37 @@ export const CreateBookingView: React.FC = () => {
          icon: 'book',
          tooltip: 'Book Time',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
-            console.log(rowData.id);
-
             requestHandler.mutation(URL.getCreateBookingURL(rowData.id), 'POST');
          },
       },
    ];
    return (
-      <>
-         <TableContainer
-            actions={actions}
-            columns={columns}
-            fetchTableData={async () => await requestHandler.query(URL.getTimeSlotURL(business.id!))}
-            badgeTitle={`Available Time Slots For ${business.name}`}
-            tableTitle="Time Slots"
-            emptyMessage="No Time Slots Available"
-         />
+      <Container>
+         <Row className={styles.row}>
+            <Header text={`Available Time Slots For ${business.name}`} />
+         </Row>
+         <Row className={styles.row}>
+            <Col sm={6} md={8} lg={6} xl={10}>
+               <TableContainer
+                  actions={actions}
+                  columns={columns}
+                  fetchTableData={async () =>
+                     await requestHandler.query(URL.getTimeSlotURL(business.id!))
+                  }
+                  tableTitle="Time Slots"
+                  emptyMessage="No Time Slots Available"
+               />
 
-         <Modal
-            show={requestHandler.requestInfo ? true : false}
-            title="Booking Info"
-            text={requestHandler.requestInfo}
-            secondaryAction={() => requestHandler.setRequestInfo('')}
-            primaryAction={() => history.push('/mybookings')}
-            primaryActionText="My Bookings"
-         />
-      </>
+               <Modal
+                  show={requestHandler.requestInfo ? true : false}
+                  title="Booking Info"
+                  text={requestHandler.requestInfo}
+                  secondaryAction={() => requestHandler.setRequestInfo('')}
+                  primaryAction={() => history.push('/mybookings')}
+                  primaryActionText="My Bookings"
+               />
+            </Col>
+         </Row>
+      </Container>
    );
 };

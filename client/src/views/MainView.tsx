@@ -12,6 +12,7 @@ const marginTop = 10;
 const marginBottom = 4;
 
 const useStyles = makeStyles((theme) => ({
+   root: {},
    content: {
       marginTop: theme.spacing(marginTop),
       marginBottom: theme.spacing(marginBottom),
@@ -28,17 +29,18 @@ export const MainView: React.FC = () => {
    };
 
    return (
-      <>
+      <div className={styles.root}>
          <CssBaseline />
          {!userLoggedIn ? (
             <LoginView />
          ) : (
             <>
                <MainMenu mobileOpen={mobileOpen} onClose={handleMenuClose} />
-
-               <Routes />
+               <Container className={styles.root}>
+                  <Routes />
+               </Container>
             </>
          )}
-      </>
+      </div>
    );
 };

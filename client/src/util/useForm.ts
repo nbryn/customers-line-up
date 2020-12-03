@@ -17,6 +17,7 @@ export const useForm = <T>(
     const formik = useFormik<T>({
         initialValues,
         validationSchema,
+        isInitialValid: false,
         onSubmit: async (values) => {
             if (formatter) values = formatter(values);
 

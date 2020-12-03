@@ -36,7 +36,7 @@ namespace Logic.Users
 
             if (response.isError)
             {
-                return Conflict(new { message = $"An existing record with the email '{user.Email}' was already found." });
+                return Conflict(new { message = $"An existing user with the email '{user.Email}' was found." });
             }
 
             return Ok(response);
