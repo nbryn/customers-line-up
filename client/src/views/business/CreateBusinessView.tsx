@@ -14,27 +14,6 @@ import {CREATE_BUSINESS_URL} from '../../api/URL';
 import {useForm} from '../../util/useForm';
 
 const useStyles = makeStyles((theme) => ({
-   alert: {
-      display: 'inline-block',
-      marginTop: -20,
-      marginBottom: 40,
-      maxWidth: 380,
-   },
-   badge: {
-      marginBottom: 40,
-      marginTop: 25,
-      width: '50%',
-   },
-   button: {
-      marginTop: 25,
-      marginBottom: -15,
-      width: '45%',
-   },
-   buttonGroup: {
-      marginTop: 35,
-      marginBottom: -15,
-      width: '100%',
-   },
    card: {
       marginTop: 60,
       borderRadius: 15,

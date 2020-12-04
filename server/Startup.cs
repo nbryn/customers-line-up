@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
 using System;
 using System.Text;
-using System.Net.Http;
 
 using Data;
 using Logic.Businesses;
@@ -92,18 +90,16 @@ namespace CLup
             services.AddScoped<IUserService, UserService>();
             services.AddControllers();
 
-            var connectionString = "DataSource=myshareddb;mode=memory;cache=shared";
-            var keepAliveConnection = new SqliteConnection(connectionString);
-            keepAliveConnection.Open();
+            //var connectionString = "DataSource=myshareddb;mode=memory;cache=shared";
+            
+            var connectionString = _config.GetConnectionString("development");
 
             services.AddDbContext<CLupContext>(options =>
             {
-                options.UseSqlite(connectionString);
+                options.UseSqlServer(connectionString);
             });
 
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
