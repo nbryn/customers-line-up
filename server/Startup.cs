@@ -94,8 +94,6 @@ namespace CLup
 
             var connectionString = _config.GetConnectionString("azure");
 
-            //services.AddTransient<CLupContext>();
-
             services.AddDbContext<CLupContext>(options =>
                               options.UseSqlServer(connectionString),
                    ServiceLifetime.Transient);
