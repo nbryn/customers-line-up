@@ -1,12 +1,31 @@
 version: '3.4'
 
 services:
- db:
-   image: mcr.microsoft.com/mssql/server:2019-latest
-   environment:
-     - "ACCEPT_EULA=Y"
-     - "SA_PASSWORD=Secret_paSS123"
-   container_name: mssql
-   ports:
-   - "1433:1433"
+# For running DB in container instead of using prod Azure Database
+#  db:
+#    image: mcr.microsoft.com/mssql/server:2019-latest
+#    environment:
+#      - "ACCEPT_EULA=Y"
+#      - "SA_PASSWORD=Secret_paSS123"
+#    container_name: mssql
+#    ports:
+#    - "1433:1433"
+  client:
+    build:
+      context: client 
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" # Map the exposed port 80 on the container to port 3000 on the host machine
+    restart: always
+    # depends_on:
+    #  - server
+    networks:
+      - client
+ 
+networks:
+  server:
+  client:
+
+
+# docker-compose build --no-cache server client
   

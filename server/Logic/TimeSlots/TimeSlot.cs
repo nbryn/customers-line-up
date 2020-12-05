@@ -13,6 +13,8 @@ namespace Logic.TimeSlots
         [Required]
         public int BusinessId { get; set; }
 
+        public string BusinessName { get; set; }
+
         [Required]
         public int Capacity { get; set; }
 

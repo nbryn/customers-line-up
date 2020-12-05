@@ -32,7 +32,7 @@ namespace Data
                 Type = business.Type,
             };
 
-            _context.Businesses.Add(newBusiness);
+            await _context.Businesses.AddAsync(newBusiness);
 
             await _context.SaveChangesAsync();
 

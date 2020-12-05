@@ -50,6 +50,7 @@ namespace Logic.TimeSlots
                 TimeSlot timeSlot = new TimeSlot
                 {
                     BusinessId = business.Id,
+                    BusinessName = business.Name,
                     Start = date,
                     End = date.AddHours(request.TimeInterval),
                     Capacity = business.Capacity,
@@ -57,7 +58,7 @@ namespace Logic.TimeSlots
 
                 timeSlot.Id = await _timeSlotRepository.CreateTimeSlot(timeSlot);
 
-                TimeSlotDTO dto = await _dtoMapper.ConvertTimeSlotToDTO(timeSlot);
+                TimeSlotDTO dto = _dtoMapper.ConvertTimeSlotToDTO(timeSlot);
 
                 TimeSlots.Add(dto);
             }
@@ -66,11 +67,9 @@ namespace Logic.TimeSlots
         }
         public async Task<ICollection<TimeSlotDTO>> GetAllTimeSlotsForBusiness(int businessId)
         {
-            IList<TimeSlot> TimeSlots = await _timeSlotRepository.FindTimeSlotsByBusiness(businessId);
+            IList<TimeSlot> timeSlots = await _timeSlotRepository.FindTimeSlotsByBusiness(businessId);
 
-            var dtos = TimeSlots.Select(async x => await _dtoMapper.ConvertTimeSlotToDTO(x));
-
-            return await Task.WhenAll(dtos.ToList());
+            return timeSlots.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x)).ToList();
         }
     }
 }

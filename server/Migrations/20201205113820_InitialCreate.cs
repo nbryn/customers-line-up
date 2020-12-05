@@ -127,22 +127,37 @@ namespace CLup.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "Name", "Password", "Zip" },
-                values: new object[] { 1, "h@h.com", "Jens", "$2a$11$KNeyx2FaZXxX4UimudKxMOCIgvmlNm63W1bOoYZamDPpsXyB1kxXW", "3520" });
+                values: new object[] { 1, "h@h.com", "Jens", "$2a$11$aP6dsg5W1pDJIEbP6re9rOxq56SJcs9x85WMyeNqHPuPNDz1P6jCq", "3520" });
 
             migrationBuilder.InsertData(
                 table: "TimeSlots",
                 columns: new[] { "Id", "BusinessId", "Capacity", "End", "Start" },
-                values: new object[] { 1, 1, 50, new DateTime(2020, 12, 5, 2, 22, 36, 21, DateTimeKind.Local).AddTicks(4086), new DateTime(2020, 12, 5, 1, 22, 36, 18, DateTimeKind.Local).AddTicks(8440) });
+                values: new object[] { 1, 1, 50, new DateTime(2020, 12, 5, 16, 38, 20, 26, DateTimeKind.Local).AddTicks(5957), new DateTime(2020, 12, 5, 15, 38, 20, 24, DateTimeKind.Local).AddTicks(1374) });
 
             migrationBuilder.InsertData(
                 table: "TimeSlots",
                 columns: new[] { "Id", "BusinessId", "Capacity", "End", "Start" },
-                values: new object[] { 2, 1, 40, new DateTime(2020, 12, 5, 3, 22, 36, 21, DateTimeKind.Local).AddTicks(4419), new DateTime(2020, 12, 5, 2, 22, 36, 21, DateTimeKind.Local).AddTicks(4413) });
+                values: new object[] { 2, 1, 40, new DateTime(2020, 12, 5, 17, 38, 20, 26, DateTimeKind.Local).AddTicks(6289), new DateTime(2020, 12, 5, 16, 38, 20, 26, DateTimeKind.Local).AddTicks(6283) });
 
             migrationBuilder.InsertData(
                 table: "TimeSlots",
                 columns: new[] { "Id", "BusinessId", "Capacity", "End", "Start" },
-                values: new object[] { 3, 1, 30, new DateTime(2020, 12, 5, 4, 22, 36, 21, DateTimeKind.Local).AddTicks(4422), new DateTime(2020, 12, 5, 3, 22, 36, 21, DateTimeKind.Local).AddTicks(4421) });
+                values: new object[] { 3, 1, 30, new DateTime(2020, 12, 5, 18, 38, 20, 26, DateTimeKind.Local).AddTicks(6292), new DateTime(2020, 12, 5, 17, 38, 20, 26, DateTimeKind.Local).AddTicks(6291) });
+
+            migrationBuilder.InsertData(
+                table: "Bookings",
+                columns: new[] { "UserEmail", "TimeSlotId", "UserId" },
+                values: new object[] { "h@h.com", 1, null });
+
+            migrationBuilder.InsertData(
+                table: "Bookings",
+                columns: new[] { "UserEmail", "TimeSlotId", "UserId" },
+                values: new object[] { "h@h.com", 2, null });
+
+            migrationBuilder.InsertData(
+                table: "Bookings",
+                columns: new[] { "UserEmail", "TimeSlotId", "UserId" },
+                values: new object[] { "h@h.com", 3, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_TimeSlotId",

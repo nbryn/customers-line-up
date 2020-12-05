@@ -23,7 +23,7 @@ namespace CLup
     public class Startup
     {
 
-        internal static IConfiguration _config { get; private set; }
+        internal IConfiguration _config { get; private set; }
 
         readonly string CorsApi = "CorsApi";
         public Startup(IConfiguration config)
@@ -91,15 +91,17 @@ namespace CLup
             services.AddControllers();
 
             //var connectionString = "DataSource=myshareddb;mode=memory;cache=shared";
-            
-            var connectionString = _config.GetConnectionString("development");
+
+            var connectionString = _config.GetConnectionString("azure");
+
+            //services.AddTransient<CLupContext>();
 
             services.AddDbContext<CLupContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            });
+                              options.UseSqlServer(connectionString),
+                   ServiceLifetime.Transient);
 
         }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

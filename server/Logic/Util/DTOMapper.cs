@@ -19,14 +19,13 @@ namespace Logic.Util
         {
             _businessRepository = businessRepository;
         }
-        public async Task<TimeSlotDTO> ConvertTimeSlotToDTO(TimeSlot timeSlot)
+        public TimeSlotDTO ConvertTimeSlotToDTO(TimeSlot timeSlot)
         {
-            Business business = await _businessRepository.FindBusinessById(timeSlot.BusinessId);
             return new TimeSlotDTO
             {
                 Id = timeSlot.Id,
                 BusinessId = timeSlot.BusinessId,
-                Business = business.Name,
+                Business = timeSlot.BusinessName,
                 Date = timeSlot.Start.ToString("dd/MM/yyyy"),
                 Start = timeSlot.Start.TimeOfDay.ToString().Substring(0, 5),
                 End = timeSlot.End.TimeOfDay.ToString().Substring(0, 5),

@@ -4,14 +4,16 @@ using Logic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CLup.Migrations
 {
     [DbContext(typeof(CLupContext))]
-    partial class CLupContextModelSnapshot : ModelSnapshot
+    [Migration("20201205113820_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,9 +28,6 @@ namespace CLup.Migrations
 
                     b.Property<int>("TimeSlotId")
                         .HasColumnType("int");
-
-                    b.Property<string>("BusinessId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
@@ -171,9 +170,6 @@ namespace CLup.Migrations
                     b.Property<int>("BusinessId")
                         .HasColumnType("int");
 
-                    b.Property<string>("BusinessName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
 
@@ -194,28 +190,25 @@ namespace CLup.Migrations
                         {
                             Id = 1,
                             BusinessId = 1,
-                            BusinessName = "Cool",
                             Capacity = 50,
-                            End = new DateTime(2020, 12, 5, 18, 32, 52, 288, DateTimeKind.Local).AddTicks(9608),
-                            Start = new DateTime(2020, 12, 5, 17, 32, 52, 286, DateTimeKind.Local).AddTicks(5326)
+                            End = new DateTime(2020, 12, 5, 16, 38, 20, 26, DateTimeKind.Local).AddTicks(5957),
+                            Start = new DateTime(2020, 12, 5, 15, 38, 20, 24, DateTimeKind.Local).AddTicks(1374)
                         },
                         new
                         {
                             Id = 2,
                             BusinessId = 1,
-                            BusinessName = "Cool",
                             Capacity = 40,
-                            End = new DateTime(2020, 12, 5, 19, 32, 52, 288, DateTimeKind.Local).AddTicks(9931),
-                            Start = new DateTime(2020, 12, 5, 18, 32, 52, 288, DateTimeKind.Local).AddTicks(9926)
+                            End = new DateTime(2020, 12, 5, 17, 38, 20, 26, DateTimeKind.Local).AddTicks(6289),
+                            Start = new DateTime(2020, 12, 5, 16, 38, 20, 26, DateTimeKind.Local).AddTicks(6283)
                         },
                         new
                         {
                             Id = 3,
                             BusinessId = 1,
-                            BusinessName = "Cool",
                             Capacity = 30,
-                            End = new DateTime(2020, 12, 5, 20, 32, 52, 288, DateTimeKind.Local).AddTicks(9934),
-                            Start = new DateTime(2020, 12, 5, 19, 32, 52, 288, DateTimeKind.Local).AddTicks(9933)
+                            End = new DateTime(2020, 12, 5, 18, 38, 20, 26, DateTimeKind.Local).AddTicks(6292),
+                            Start = new DateTime(2020, 12, 5, 17, 38, 20, 26, DateTimeKind.Local).AddTicks(6291)
                         });
                 });
 
@@ -256,7 +249,7 @@ namespace CLup.Migrations
                             Id = 1,
                             Email = "h@h.com",
                             Name = "Jens",
-                            Password = "$2a$11$Re7Ux29ld8L.aiBoQW4U6eH4fhTQfgOmhk5W3ENx70mbNf2GPcgsm",
+                            Password = "$2a$11$aP6dsg5W1pDJIEbP6re9rOxq56SJcs9x85WMyeNqHPuPNDz1P6jCq",
                             Zip = "3520"
                         });
                 });

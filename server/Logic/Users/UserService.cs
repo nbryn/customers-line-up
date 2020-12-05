@@ -64,7 +64,7 @@ namespace Logic.Users
 
             string token = _authService.GenerateJWTToken(loginRequest);
 
-            bool isOwner = _ownerRepository.FindOwnerByEmail(loginRequest.Email) == null ? false : true;
+            bool isOwner = await _ownerRepository.FindOwnerByEmail(loginRequest.Email) == null ? false : true;
 
             LoginResponseDTO response = new LoginResponseDTO
             {

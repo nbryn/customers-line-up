@@ -13,5 +13,7 @@ namespace Logic.Bookings
 
         public TimeSlot TimeSlot { get; set; }
 
+        public string BusinessId { get; set; }
+
     }
 }

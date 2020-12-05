@@ -18,7 +18,7 @@ namespace Data
         }
         public async Task<int> CreateTimeSlot(TimeSlot timeSlot)
         {
-            _context.TimeSlots.Add(timeSlot);
+            await _context.TimeSlots.AddAsync(timeSlot);
 
             await _context.SaveChangesAsync();
 

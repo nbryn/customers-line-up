@@ -11,7 +11,7 @@ namespace Logic.Util
 {
     public interface IDTOMapper
     {
-       Task<TimeSlotDTO> ConvertTimeSlotToDTO(TimeSlot timeSlot);
+       TimeSlotDTO ConvertTimeSlotToDTO(TimeSlot timeSlot);
 
        UserDTO ConvertUserToDTO(User user); 
 

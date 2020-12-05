@@ -22,7 +22,7 @@ namespace Logic.Bookings
         private readonly IBookingService _service;
         private readonly IDTOMapper _dtoMapper;
 
-        public BookingController(IBookingRepository repository, 
+        public BookingController(IBookingRepository repository,
         IBookingService service, IDTOMapper dtoMapper)
         {
             _repository = repository;
@@ -38,7 +38,7 @@ namespace Logic.Bookings
 
             (Response response, string message) = await _service.CreateBooking(userMail, timeSlotId);
 
-            return new ObjectResult(message) {StatusCode = (int)response};
+            return new ObjectResult(message) { StatusCode = (int)response };
         }
 
         [HttpDelete]
@@ -59,9 +59,7 @@ namespace Logic.Bookings
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             IList<Booking> bookings = await _repository.FindBookingsByUser(userMail);
 
-            var dtos = bookings.Select(async x => await _dtoMapper.ConvertTimeSlotToDTO(x.TimeSlot));
-
-            return await Task.WhenAll(dtos.ToList());
+            return bookings.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x.TimeSlot)).ToList();
         }
     }
 }

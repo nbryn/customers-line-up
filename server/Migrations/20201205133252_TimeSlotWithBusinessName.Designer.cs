@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CLup.Migrations
 {
     [DbContext(typeof(CLupContext))]
-    [Migration("20201204212236_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201205133252_TimeSlotWithBusinessName")]
+    partial class TimeSlotWithBusinessName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace CLup.Migrations
                     b.Property<int>("TimeSlotId")
                         .HasColumnType("int");
 
+                    b.Property<string>("BusinessId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
@@ -39,6 +42,23 @@ namespace CLup.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
+
+                    b.HasData(
+                        new
+                        {
+                            UserEmail = "h@h.com",
+                            TimeSlotId = 1
+                        },
+                        new
+                        {
+                            UserEmail = "h@h.com",
+                            TimeSlotId = 2
+                        },
+                        new
+                        {
+                            UserEmail = "h@h.com",
+                            TimeSlotId = 3
+                        });
                 });
 
             modelBuilder.Entity("Logic.BusinessOwners.BusinessOwner", b =>
@@ -153,6 +173,9 @@ namespace CLup.Migrations
                     b.Property<int>("BusinessId")
                         .HasColumnType("int");
 
+                    b.Property<string>("BusinessName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
 
@@ -173,25 +196,28 @@ namespace CLup.Migrations
                         {
                             Id = 1,
                             BusinessId = 1,
+                            BusinessName = "Cool",
                             Capacity = 50,
-                            End = new DateTime(2020, 12, 5, 2, 22, 36, 21, DateTimeKind.Local).AddTicks(4086),
-                            Start = new DateTime(2020, 12, 5, 1, 22, 36, 18, DateTimeKind.Local).AddTicks(8440)
+                            End = new DateTime(2020, 12, 5, 18, 32, 52, 288, DateTimeKind.Local).AddTicks(9608),
+                            Start = new DateTime(2020, 12, 5, 17, 32, 52, 286, DateTimeKind.Local).AddTicks(5326)
                         },
                         new
                         {
                             Id = 2,
                             BusinessId = 1,
+                            BusinessName = "Cool",
                             Capacity = 40,
-                            End = new DateTime(2020, 12, 5, 3, 22, 36, 21, DateTimeKind.Local).AddTicks(4419),
-                            Start = new DateTime(2020, 12, 5, 2, 22, 36, 21, DateTimeKind.Local).AddTicks(4413)
+                            End = new DateTime(2020, 12, 5, 19, 32, 52, 288, DateTimeKind.Local).AddTicks(9931),
+                            Start = new DateTime(2020, 12, 5, 18, 32, 52, 288, DateTimeKind.Local).AddTicks(9926)
                         },
                         new
                         {
                             Id = 3,
                             BusinessId = 1,
+                            BusinessName = "Cool",
                             Capacity = 30,
-                            End = new DateTime(2020, 12, 5, 4, 22, 36, 21, DateTimeKind.Local).AddTicks(4422),
-                            Start = new DateTime(2020, 12, 5, 3, 22, 36, 21, DateTimeKind.Local).AddTicks(4421)
+                            End = new DateTime(2020, 12, 5, 20, 32, 52, 288, DateTimeKind.Local).AddTicks(9934),
+                            Start = new DateTime(2020, 12, 5, 19, 32, 52, 288, DateTimeKind.Local).AddTicks(9933)
                         });
                 });
 
@@ -232,7 +258,7 @@ namespace CLup.Migrations
                             Id = 1,
                             Email = "h@h.com",
                             Name = "Jens",
-                            Password = "$2a$11$KNeyx2FaZXxX4UimudKxMOCIgvmlNm63W1bOoYZamDPpsXyB1kxXW",
+                            Password = "$2a$11$Re7Ux29ld8L.aiBoQW4U6eH4fhTQfgOmhk5W3ENx70mbNf2GPcgsm",
                             Zip = "3520"
                         });
                 });

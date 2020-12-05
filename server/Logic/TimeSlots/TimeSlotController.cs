@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 using System.Linq;
 
 using Logic.Auth;
@@ -47,9 +46,7 @@ namespace Logic.TimeSlots
         {
             IList<TimeSlot> timeSlots = await _repository.FindTimeSlotsByBusiness(id);
 
-            var dtos = timeSlots.Select(async x => await _dtoMapper.ConvertTimeSlotToDTO(x));
-
-            return await Task.WhenAll(dtos.ToList());
+            return timeSlots.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x)).ToList();
         }
 
         [HttpGet]
@@ -58,9 +55,7 @@ namespace Logic.TimeSlots
         {
             IList<TimeSlot> timeSlots = await _repository.FindAvailableTimeSlotsByBusiness(request);
 
-            var dtos = timeSlots.Select(async x => await _dtoMapper.ConvertTimeSlotToDTO(x));
-
-            return await Task.WhenAll(dtos.ToList());
+            return timeSlots.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x)).ToList();
         }
     }
 }

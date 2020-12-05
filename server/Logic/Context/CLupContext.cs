@@ -89,15 +89,15 @@ namespace Logic.Context
 
             var queues = new[]
             {
-                new TimeSlot {Id = 1, BusinessId = 1, Capacity = 50,
+                new TimeSlot {Id = 1, BusinessId = 1, BusinessName = "Cool", Capacity = 50,
                                     Start = DateTime.Now.AddHours(3), End = DateTime.Now.AddHours(4),
                                     },
 
-                new TimeSlot {Id = 2, BusinessId = 1, Capacity = 40,
+                new TimeSlot {Id = 2, BusinessId = 1, BusinessName = "Cool", Capacity = 40,
                                     Start = DateTime.Now.AddHours(4), End = DateTime.Now.AddHours(5),
                                     },
 
-                new TimeSlot {Id = 3, BusinessId = 1, Capacity = 30,
+                new TimeSlot {Id = 3, BusinessId = 1, BusinessName = "Cool", Capacity = 30,
                                     Start = DateTime.Now.AddHours(5), End = DateTime.Now.AddHours(6),
                                     },
             };
