@@ -7,13 +7,11 @@ import {UserContextProvider} from '../src/context/UserContext';
 import {MainView} from './views/MainView';
 
 ReactDOM.render(
-   <React.StrictMode>
       <UserContextProvider>
          <Router>
             <MainView />
          </Router>
-      </UserContextProvider>
-   </React.StrictMode>,
+      </UserContextProvider>,
    document.getElementById('root')
 );
 
