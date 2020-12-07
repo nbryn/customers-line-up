@@ -1,4 +1,4 @@
-export const BASE_URL = "https://localhost:5001/";
+export const BASE_URL = process.env.REACT_APP_API_URI;
 
 const getTimeSlotURL = (businessId: number): string => {
     const today = new Date();

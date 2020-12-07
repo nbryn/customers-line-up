@@ -65,7 +65,7 @@ namespace CLup
                         ClockSkew = TimeSpan.Zero
                     };
                 });
-
+                
             services.AddAuthorization(config =>
             {
                 config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
