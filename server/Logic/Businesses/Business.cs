@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-using Logic.BusinessOwners;
 using Logic.TimeSlots;
 
 namespace Logic.Businesses
@@ -20,14 +19,16 @@ namespace Logic.Businesses
         [Required]
         public int Zip { get; set; }
 
-        public string Type { get; set; }
+        public BusinessType Type { get; set; }
 
         public int Capacity { get; set; }
 
-        public double OpeningTime { get; set; }
+        public double Opens { get; set; }
 
-        public double ClosingTime { get; set; }
+        public double Closes { get; set; }
 
-        public IEnumerable<TimeSlot> Queues { get; set; }
+        public int TimeSlotLength { get; set; }
+
+        public IEnumerable<TimeSlot> TimeSlots { get; set; }
     }
 }

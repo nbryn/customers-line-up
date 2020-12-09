@@ -2,14 +2,12 @@ import { Method } from "axios";
 import { ObjectSchema } from 'yup';
 import { useFormik, FormikComputedProps, FormikHandlers, FormikState } from 'formik';
 
-import { RequestHandler } from '../api/RequestHandler';
-
 export type Form<T> = FormikState<T> & FormikComputedProps<T> & FormikHandlers;
 
 export const useForm = <T>(
     initialValues: T, 
     validationSchema: ObjectSchema,
-    requestHandler: RequestHandler<void>,
+    mutation: (url: string, method: Method, request: any) => Promise<void>,
     url: string,
     method: Method,
     formatter?: (dto: T) => T): Form<T> => {
@@ -21,7 +19,7 @@ export const useForm = <T>(
         onSubmit: async (values) => {
             if (formatter) values = formatter(values);
 
-            await requestHandler.mutation(url, method, values);
+            await mutation(url, method, values);
         },
     });
 

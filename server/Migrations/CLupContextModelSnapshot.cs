@@ -98,7 +98,7 @@ namespace CLup.Migrations
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
 
-                    b.Property<double>("ClosingTime")
+                    b.Property<double>("Closes")
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
@@ -106,14 +106,18 @@ namespace CLup.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<double>("OpeningTime")
+                    b.Property<double>("Opens")
                         .HasColumnType("float");
 
                     b.Property<string>("OwnerEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TimeSlotLength")
+                        .HasColumnType("int");
+
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Zip")
@@ -130,10 +134,11 @@ namespace CLup.Migrations
                         {
                             Id = 1,
                             Capacity = 50,
-                            ClosingTime = 16.0,
+                            Closes = 16.0,
                             Name = "Cool",
-                            OpeningTime = 10.0,
+                            Opens = 10.0,
                             OwnerEmail = "h@h.com",
+                            TimeSlotLength = 0,
                             Type = "Supermarket",
                             Zip = 3520
                         },
@@ -141,10 +146,11 @@ namespace CLup.Migrations
                         {
                             Id = 2,
                             Capacity = 40,
-                            ClosingTime = 14.0,
+                            Closes = 14.0,
                             Name = "Shop",
-                            OpeningTime = 9.0,
+                            Opens = 9.0,
                             OwnerEmail = "h@h.com",
+                            TimeSlotLength = 0,
                             Type = "Museum",
                             Zip = 3520
                         },
@@ -152,10 +158,11 @@ namespace CLup.Migrations
                         {
                             Id = 3,
                             Capacity = 30,
-                            ClosingTime = 15.300000000000001,
+                            Closes = 15.300000000000001,
                             Name = "1337",
-                            OpeningTime = 8.3000000000000007,
+                            Opens = 8.3000000000000007,
                             OwnerEmail = "h@h.com",
+                            TimeSlotLength = 0,
                             Type = "Kiosk",
                             Zip = 4720
                         });
@@ -196,8 +203,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 50,
-                            End = new DateTime(2020, 12, 5, 18, 32, 52, 288, DateTimeKind.Local).AddTicks(9608),
-                            Start = new DateTime(2020, 12, 5, 17, 32, 52, 286, DateTimeKind.Local).AddTicks(5326)
+                            End = new DateTime(2020, 12, 10, 0, 3, 3, 642, DateTimeKind.Local).AddTicks(5598),
+                            Start = new DateTime(2020, 12, 9, 23, 3, 3, 640, DateTimeKind.Local).AddTicks(365)
                         },
                         new
                         {
@@ -205,8 +212,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 40,
-                            End = new DateTime(2020, 12, 5, 19, 32, 52, 288, DateTimeKind.Local).AddTicks(9931),
-                            Start = new DateTime(2020, 12, 5, 18, 32, 52, 288, DateTimeKind.Local).AddTicks(9926)
+                            End = new DateTime(2020, 12, 10, 1, 3, 3, 642, DateTimeKind.Local).AddTicks(6013),
+                            Start = new DateTime(2020, 12, 10, 0, 3, 3, 642, DateTimeKind.Local).AddTicks(6006)
                         },
                         new
                         {
@@ -214,8 +221,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 30,
-                            End = new DateTime(2020, 12, 5, 20, 32, 52, 288, DateTimeKind.Local).AddTicks(9934),
-                            Start = new DateTime(2020, 12, 5, 19, 32, 52, 288, DateTimeKind.Local).AddTicks(9933)
+                            End = new DateTime(2020, 12, 10, 2, 3, 3, 642, DateTimeKind.Local).AddTicks(6016),
+                            Start = new DateTime(2020, 12, 10, 1, 3, 3, 642, DateTimeKind.Local).AddTicks(6015)
                         });
                 });
 
@@ -256,7 +263,7 @@ namespace CLup.Migrations
                             Id = 1,
                             Email = "h@h.com",
                             Name = "Jens",
-                            Password = "$2a$11$Re7Ux29ld8L.aiBoQW4U6eH4fhTQfgOmhk5W3ENx70mbNf2GPcgsm",
+                            Password = "$2a$11$1HZOnMyQp02yz7NE4.usRuWIYIbq/FT/dG8kd0Y58wFGXadBq1HKq",
                             Zip = "3520"
                         });
                 });
@@ -284,7 +291,7 @@ namespace CLup.Migrations
             modelBuilder.Entity("Logic.TimeSlots.TimeSlot", b =>
                 {
                     b.HasOne("Logic.Businesses.Business", null)
-                        .WithMany("Queues")
+                        .WithMany("TimeSlots")
                         .HasForeignKey("BusinessId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

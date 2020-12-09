@@ -21,15 +21,17 @@ namespace Data
 
         public async Task<Business> CreateBusiness(CreateBusinessDTO business)
         {
+            BusinessType.TryParse(business.Type, out BusinessType type);
+
             Business newBusiness = new Business
             {
                 Name = business.Name,
                 OwnerEmail = business.OwnerEmail,
                 Capacity = business.Capacity,
-                OpeningTime = business.Opens,
-                ClosingTime = business.Closes,
+                Opens = business.Opens,
+                Closes = business.Closes,
                 Zip = business.Zip,
-                Type = business.Type,
+                Type = type
             };
 
             await _context.Businesses.AddAsync(newBusiness);

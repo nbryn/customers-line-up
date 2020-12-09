@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
-import {TextField} from '../components/TextField';
+import {TextField} from '../../components/TextField';
 
 const useStyles = makeStyles((theme) => ({
    alert: {

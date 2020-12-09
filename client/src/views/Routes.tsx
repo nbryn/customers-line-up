@@ -1,8 +1,8 @@
 import {Route, Switch} from 'react-router-dom';
 import React from 'react';
 
-import {AllBusinessesView} from './business/AllBusinessesView';
-import {CreateBookingView} from './business/CreateBookingView';
+import {AllBusinessesView} from './user/AllBusinessesView';
+import {CreateBookingView} from './user/CreateBookingView';
 import {CreateBusinessView} from './business/CreateBusinessView';
 import {HomeView} from './HomeView';
 import {OwnerBusinessesView} from './business/OwnerBusinessesView';

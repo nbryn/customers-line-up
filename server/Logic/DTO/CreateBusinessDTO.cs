@@ -24,6 +24,8 @@ namespace Logic.DTO
         [Required]
         public int Capacity { get; set; }
 
+        public int timeSlotLength { get; set; }
+
         [Required]
         public string Type { get; set; }
 

@@ -2,13 +2,13 @@ import {Col, Container, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
-import {Card} from '../components/Card';
-import {Form} from '../components/Form';
+import {Card} from '../../components/Card';
+import {Form} from '../../components/Form';
 import {SignupView} from './SignupView';
-import {TextField} from '../components/TextField';
-import {UserDTO} from '../models/dto/User';
-import UserService from '../services/UserService';
-import {useUserContext} from '../context/UserContext';
+import {TextField} from '../../components/TextField';
+import {UserDTO} from '../../models/dto/User';
+import UserService from '../../services/UserService';
+import {useUserContext} from '../../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({
    alert: {

@@ -69,16 +69,22 @@ namespace Logic.Context
             modelBuilder.Entity<BusinessOwner>().HasData(owners);
 
             modelBuilder.Entity<Business>()
-                        .HasMany(x => x.Queues);
+                        .HasMany(x => x.TimeSlots);
+
+            modelBuilder.Entity<Business>()
+                        .Property(b => b.Type)
+                        .HasConversion(b => b.ToString("G"),
+                        b => Enum.Parse<BusinessType>(b));
+
 
             var businesses = new[]
             {
                 new Business {Id = 1, Name = "Cool", OwnerEmail = "h@h.com", Zip = 3520,
-                             OpeningTime = 10.00, ClosingTime = 16.00, Capacity = 50, Type = "Supermarket"},
+                             Opens = 10.00, Closes = 16.00, Capacity = 50, Type = BusinessType.Supermarket},
                 new Business {Id = 2, Name = "Shop", OwnerEmail = "h@h.com", Zip = 3520,
-                             OpeningTime = 09.00, ClosingTime = 14.00, Capacity = 40, Type = "Museum"},
+                             Opens = 09.00, Closes = 14.00, Capacity = 40, Type = BusinessType.Museum},
                 new Business {Id = 3, Name = "1337", OwnerEmail = "h@h.com", Zip = 4720,
-                             OpeningTime = 08.30, ClosingTime = 15.30, Capacity = 30, Type = "Kiosk"}
+                             Opens = 08.30, Closes = 15.30, Capacity = 30, Type = BusinessType.Kiosk}
             };
 
             modelBuilder.Entity<Business>().HasData(businesses);

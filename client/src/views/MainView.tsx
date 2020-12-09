@@ -3,7 +3,7 @@ import {Container} from 'react-bootstrap';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {LoginView} from './LoginView';
+import {LoginView} from './user/LoginView';
 import {MainMenu} from '../components/MainMenu';
 import {Routes} from './Routes';
 import {useUserContext} from '../context/UserContext';

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 using Data;
 using Logic.TimeSlots;
@@ -49,10 +50,23 @@ namespace Logic.Util
                 Id = business.Id,
                 Name = business.Name,
                 Zip = business.Zip,
-                Opens = business.OpeningTime,
-                Closes = business.ClosingTime,
-                Type = business.Type
+                Opens = business.Opens,
+                Closes = business.Closes,
+                Type = business.Type.ToString("G")
             };
+        }
+
+        public IEnumerable<string> GetBusinessTypes()
+        {
+            List<string> values = new List<string>();
+            var types = EnumUtil.GetValues<BusinessType>();
+
+            foreach (BusinessType type in types)
+            {
+                values.Add(type.ToString("G"));
+            }
+
+            return values;
         }
     }
 }

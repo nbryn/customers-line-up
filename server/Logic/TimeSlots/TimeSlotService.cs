@@ -31,9 +31,9 @@ namespace Logic.TimeSlots
 
             Business business = await _businessRepository.FindBusinessById(request.BusinessId);
 
-            DateTime start = request.Start.AddHours(business.OpeningTime);
+            DateTime start = request.Start.AddHours(business.Opens);
 
-            DateTime closingTime = request.Start.AddHours(business.ClosingTime);
+            DateTime closingTime = request.Start.AddHours(business.Closes);
 
             for (DateTime date = start; date.Date <= request.End.Date; date = date.AddHours(request.TimeInterval))
             {
@@ -42,7 +42,7 @@ namespace Logic.TimeSlots
                 {
                     closingTime = closingTime.AddHours(24);
 
-                    date = date.AddHours((23 - date.Hour) + business.OpeningTime);
+                    date = date.AddHours((23 - date.Hour) + business.Opens);
 
                     continue;
                 }

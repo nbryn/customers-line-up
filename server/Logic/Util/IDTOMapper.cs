@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 using Logic.TimeSlots;
 using Logic.Businesses;
@@ -16,5 +17,7 @@ namespace Logic.Util
        UserDTO ConvertUserToDTO(User user); 
 
        BusinessDTO ConvertBusinessToDTO(Business business);
+
+       IEnumerable<string> GetBusinessTypes();
     }
 }

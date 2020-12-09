@@ -1,6 +1,7 @@
 import {Col, Container, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React from 'react';
+import {MenuItem} from '@material-ui/core';
+import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import {Card} from '../../components/Card';
@@ -10,7 +11,7 @@ import {Form} from '../../components/Form';
 import {Modal} from '../../components/Modal';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TextField} from '../../components/TextField';
-import {CREATE_BUSINESS_URL} from '../../api/URL';
+import {BUSINESS_TYPES, CREATE_BUSINESS_URL} from '../../api/URL';
 import {useForm} from '../../util/useForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,22 +38,35 @@ export const CreateBusinessView: React.FC = () => {
    const styles = useStyles();
    const history = useHistory();
 
+   const [businessTypes, setBusinessTypes] = useState<string[]>([]);
+
+   const requestHandler: RequestHandler<string[]> = useRequest(SUCCESS_MESSAGE);
+
+   useEffect(() => {
+      (async () => {
+         const types = await requestHandler.query(BUSINESS_TYPES);
+
+         console.log(types);
+
+         setBusinessTypes(types);
+      })();
+   }, []);
+
    const initialValues: CreateBusinessDTO = {
       id: 0,
       name: '',
       zip: '',
       capacity: '',
       type: '',
+      timeSlotLength: '',
       opens: '',
       closes: '',
    };
 
-   const requestHandler: RequestHandler<void> = useRequest(SUCCESS_MESSAGE);
-
    const formik = useForm<CreateBusinessDTO>(
       initialValues,
       createBusinessValidationSchema,
-      requestHandler,
+      requestHandler.mutation,
       CREATE_BUSINESS_URL,
       'POST',
       (business) => {
@@ -128,11 +142,35 @@ export const CreateBusinessView: React.FC = () => {
                            id="type"
                            label="Type"
                            type="text"
+                           select
                            value={formik.values.type}
-                           onChange={formik.handleChange}
+                           onChange={formik.handleChange('type')}
                            onBlur={formik.handleBlur}
                            error={formik.touched.type && Boolean(formik.errors.type)}
                            helperText={formik.touched.type && formik.errors.type}
+                        >
+                           {businessTypes.map((type) => (
+                              <MenuItem key={type} value={type}>
+                                 {type}
+                              </MenuItem>
+                           ))}
+                        </TextField>
+                     </FormGroup>
+                     <FormGroup>
+                        <TextField
+                           className={styles.textField}
+                           id="timeSlotLength"
+                           label="Visit Length"
+                           type="number"
+                           value={formik.values.timeSlotLength}
+                           onChange={formik.handleChange}
+                           onBlur={formik.handleBlur}
+                           error={
+                              formik.touched.timeSlotLength && Boolean(formik.errors.timeSlotLength)
+                           }
+                           helperText={
+                              formik.touched.timeSlotLength && formik.errors.timeSlotLength
+                           }
                         />
                      </FormGroup>
                      <FormGroup>

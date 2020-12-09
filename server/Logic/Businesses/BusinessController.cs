@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 using Logic.Auth;
-using Logic.Businesses;
 using Logic.DTO;
 using Logic.Util;
 using Data;
@@ -64,6 +61,13 @@ namespace Logic.Businesses
             var all = await _repository.GetAll();
 
             return all.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
+        }
+
+        [HttpGet]
+        [Route("types")]
+        public IEnumerable<string> FetchBusinessTypes()
+        {
+            return _dtoMapper.GetBusinessTypes();
         }
     }
 }

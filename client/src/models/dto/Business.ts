@@ -6,6 +6,7 @@ export interface BusinessDTO extends DTO {
     name: string;
     zip: number | string;
     type: string;
+    timeSlotLength: number | string;
     opens: string;
     closes: string;  
 }
