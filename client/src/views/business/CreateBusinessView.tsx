@@ -46,8 +46,6 @@ export const CreateBusinessView: React.FC = () => {
       (async () => {
          const types = await requestHandler.query(BUSINESS_TYPES);
 
-         console.log(types);
-
          setBusinessTypes(types);
       })();
    }, []);

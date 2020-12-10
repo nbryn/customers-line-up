@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using Data;
 using Logic.TimeSlots;
+using Logic.Bookings;
 using Logic.Businesses;
 using Logic.DTO.User;
 using Logic.Users;
@@ -52,7 +53,21 @@ namespace Logic.Util
                 Zip = business.Zip,
                 Opens = business.Opens,
                 Closes = business.Closes,
+                TimeSlotLength = business.TimeSlotLength,
                 Type = business.Type.ToString("G")
+            };
+        }
+
+        public BookingDTO ConvertBookingToDTO(Booking booking)
+        {
+            return new BookingDTO
+            {
+                TimeSlotId = booking.TimeSlotId,
+                BusinessId = booking.BusinessId,
+                UserMail = booking.UserEmail,
+                StartTime = booking.TimeSlot.Start.TimeOfDay.ToString().Substring(0, 5),
+                EndTime = booking.TimeSlot.End.TimeOfDay.ToString().Substring(0, 5),
+                NumberOfUsersWithSameBooking = booking.TimeSlot.Bookings.Count(),
             };
         }
 

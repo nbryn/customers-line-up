@@ -80,11 +80,11 @@ namespace Logic.Context
             var businesses = new[]
             {
                 new Business {Id = 1, Name = "Cool", OwnerEmail = "h@h.com", Zip = 3520,
-                             Opens = 10.00, Closes = 16.00, Capacity = 50, Type = BusinessType.Supermarket},
+                             Opens = 10.00, Closes = 16.00, TimeSlotLength = 50, Capacity = 50, Type = BusinessType.Supermarket},
                 new Business {Id = 2, Name = "Shop", OwnerEmail = "h@h.com", Zip = 3520,
-                             Opens = 09.00, Closes = 14.00, Capacity = 40, Type = BusinessType.Museum},
+                             Opens = 09.00, Closes = 14.00, TimeSlotLength = 20, Capacity = 40, Type = BusinessType.Museum},
                 new Business {Id = 3, Name = "1337", OwnerEmail = "h@h.com", Zip = 4720,
-                             Opens = 08.30, Closes = 15.30, Capacity = 30, Type = BusinessType.Kiosk}
+                             Opens = 08.30, Closes = 15.30, TimeSlotLength = 10, Capacity = 30, Type = BusinessType.Kiosk}
             };
 
             modelBuilder.Entity<Business>().HasData(businesses);

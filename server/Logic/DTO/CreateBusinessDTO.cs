@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 
-using Logic.BusinessOwners;
-
 namespace Logic.DTO
 {
     public class CreateBusinessDTO
@@ -24,6 +22,7 @@ namespace Logic.DTO
         [Required]
         public int Capacity { get; set; }
 
+        [Required]
         public int timeSlotLength { get; set; }
 
         [Required]

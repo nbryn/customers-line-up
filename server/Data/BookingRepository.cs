@@ -37,6 +37,12 @@ namespace Data
                                             .Where(x => x.UserEmail.Equals(userEmail)).ToListAsync();
         }
 
+          public async Task<IList<Booking>> FindBookingsByBusiness(int businessId)
+        {
+            return await _context.Bookings.Include(x => x.TimeSlot)
+                                            .Where(x => x.BusinessId == businessId).ToListAsync();
+        }
+
         public async Task<Response> DeleteBooking(string userEmail, int timeSlotId)
         {
             Booking booking = await _context.Bookings.FirstOrDefaultAsync(b => b.UserEmail.Equals(userEmail)

@@ -30,6 +30,7 @@ namespace Data
                 Capacity = business.Capacity,
                 Opens = business.Opens,
                 Closes = business.Closes,
+                TimeSlotLength = business.timeSlotLength,
                 Zip = business.Zip,
                 Type = type
             };

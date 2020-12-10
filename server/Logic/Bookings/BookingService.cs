@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
-using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Logic.Businesses;
 using Data;
@@ -7,6 +8,7 @@ using Logic.TimeSlots;
 
 
 using Logic.Context;
+using Logic.DTO;
 
 namespace Logic.Bookings
 {
@@ -16,7 +18,7 @@ namespace Logic.Bookings
         private readonly ITimeSlotRepository _timeSlotRepository;
         private readonly IBookingRepository _bookingRepository;
 
-        public BookingService(IBusinessRepository businessRepository, ITimeSlotRepository timeSlotRepository, 
+        public BookingService(IBusinessRepository businessRepository, ITimeSlotRepository timeSlotRepository,
         IBookingRepository bookingRepository)
         {
             _businessRepository = businessRepository;
@@ -41,7 +43,7 @@ namespace Logic.Bookings
 
             Business business = await _businessRepository.FindBusinessById(timeSlot.BusinessId);
 
-            if (business == null) 
+            if (business == null)
             {
                 //Handle business does not exists - Gather null checks on one place?
             }

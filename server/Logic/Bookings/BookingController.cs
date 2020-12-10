@@ -61,5 +61,14 @@ namespace Logic.Bookings
 
             return bookings.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x.TimeSlot)).ToList();
         }
+
+        [Route("business")]
+        [HttpGet]
+        public async Task<ICollection<BookingDTO>> FetchBusinessBookings([FromQuery] int businessId)
+        {       
+            IList<Booking> bookings = await _repository.FindBookingsByBusiness(businessId);
+
+            return bookings.Select(x => _dtoMapper.ConvertBookingToDTO(x)).ToList();
+        }
     }
 }

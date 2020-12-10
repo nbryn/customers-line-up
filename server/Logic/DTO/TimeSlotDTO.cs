@@ -8,5 +8,6 @@ namespace Logic.DTO
         public string Date { get; set; }
         public string Start { get; set; }
         public string End { get; set; }
+        public int NumberOfUsers {get; set;}
     }
 }

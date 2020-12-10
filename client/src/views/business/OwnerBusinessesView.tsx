@@ -20,10 +20,12 @@ export const OwnerBusinessesView: React.FC = () => {
    const requestHandler: RequestHandler<BusinessDTO[]> = useRequest();
 
    const columns: TableColumn[] = [
+      {title: "Id", field: 'id', hidden: true},
       {title: 'Name', field: 'name'},
       {title: 'Zip', field: 'zip'},
       {title: 'Opens', field: 'opens'},
       {title: 'Closes', field: 'closes'},
+      {title: 'TimeSlotLength', field: 'timeSlotLength'},
       {title: 'Type', field: 'type'},
    ];
 
@@ -31,6 +33,13 @@ export const OwnerBusinessesView: React.FC = () => {
       {
          icon: 'edit',
          tooltip: 'Edit Business',
+         onClick: (event: any, rowData: any) => {
+            console.log(rowData);
+         },
+      },
+      {
+         icon: 'edit',
+         tooltip: 'Manage Bookings',
          onClick: (event: any, rowData: any) => {
             console.log(rowData);
          },
