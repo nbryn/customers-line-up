@@ -10,6 +10,7 @@ export type Props = {
    columns: TableColumn[];
    tableTitle: string;
    fetchTableData: () => Promise<DTO[]>;
+   tableData?: DTO[];
    removeEntryId?: number | null;
    emptyMessage?: string;
 };
@@ -28,6 +29,8 @@ export const TableContainer: React.FC<Props> = ({
    useEffect(() => {
       (async () => {
          const tableData = await fetchTableData();
+
+         console.log(tableData);
 
          setTableData(tableData);
          setLoading(false);

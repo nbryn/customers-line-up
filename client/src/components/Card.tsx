@@ -6,13 +6,13 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 
+
 const useStyles = makeStyles({
    root: {
       minWidth: 275,
    },
    button: {
       justifyContent: 'center',
-      marginTop: 5,
    },
 });
 

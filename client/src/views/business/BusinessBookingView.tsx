@@ -1,15 +1,14 @@
 import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React, {useEffect, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import React from 'react';
+import {useLocation} from 'react-router-dom';
 
-import {BusinessDTO} from '../../models/dto/Business';
+import URL from '../../api/URL';
+import {BookingDTO} from '../../models/dto/Booking';
 import {Header} from '../../components/Texts';
-import {List, ListItem} from '../../components/List';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
-import URL, {USER_BOOKINGS_URL, BUSINESSES_OWNER_URL} from '../../api/URL';
 
 const useStyles = makeStyles((theme) => ({
    row: {
@@ -17,70 +16,64 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
+type BusinessInfo = {
+   id: number;
+   name: string;
+};
+
+interface LocationState {
+   data: BusinessInfo;
+}
+
 export const BusinessBookingView: React.FC = () => {
    const styles = useStyles();
-   const history = useHistory();
-   const [businessNames, setBusinessNames] = useState<ListItem[]>([]);
+   const location = useLocation<LocationState>();
 
-   const requestHandler: RequestHandler<BusinessDTO[]> = useRequest();
+   const requestHandler: RequestHandler<BookingDTO[]> = useRequest();
 
-   // TODO: Show list first - When chosen Show Bookings
+   const {id, name} = location.state.data;
 
-   useEffect(() => {
-      (async () => {
-         const businesses = await requestHandler.query(BUSINESSES_OWNER_URL);
+   const columns: TableColumn[] = [
+      {title: 'businessId', field: 'businessId', hidden: true},
+      {title: 'timeSlotId', field: 'timeSlotId', hidden: true},
+      {title: 'UserMail', field: 'userMail'},
+      {title: 'Capacity', field: 'capacity'},
+      {title: 'Interval', field: 'interval'},
+   ];
 
-         setBusinessNames(
-            businesses.map((x) => ({
-               id: x.id,
-               name: x.name,
-            }))
-         );
-      })();
-   }, []);
-
-   // const columns: TableColumn[] = [
-   //    {title: 'businessId', field: 'businessId', hidden: true},
-   //    {title: 'TimeSlotId', field: 'timeSlotId', hidden: true},
-   //    {title: 'UserMail', field: 'UserMail'},
-   //    {title: 'Capacity', field: 'capacity'},
-   //    {title: 'Start', field: 'start'},
-   //    {title: 'End', field: 'end'},
-   // ];
-
-   // const actions = [
-   //    {
-   //       icon: 'delete',
-   //       tooltip: 'Delete Booking',
-   //       onClick: async (event: any, rowData: BookingDTO) => {
-   //          // setIdToBeRemoved(rowData.id);
-
-   //          // await requestHandler.mutation(URL.getDeleteBookingURL(rowData.id), 'DELETE');
-   //       },
-   //    },
-   // ];
+   const actions = [
+      {
+         icon: 'Delete',
+         tooltip: 'Remove Booking',
+         onClick: (event: any, rowData: any) => {
+            console.log(rowData);
+         },
+      },
+      {
+         icon: 'Contact',
+         tooltip: 'Contact User',
+         onClick: (event: any, rowData: any) => {
+            console.log(rowData);
+         },
+      },
+   ];
 
    return (
       <Container>
          <Row className={styles.row}>
-            <Header text="Choose Business" />
-         </Row>
-         <Row>
-            <List
-               listItems={businessNames}
-               onClick={(businessId) => history.push('/businessbooking', {data: businessId})}
-            />
+            <Header text={`Bookings For ${name}`} />
          </Row>
          <Row className={styles.row}>
             <Col sm={6} md={8} lg={6} xl={10}>
-               {/* <TableContainer
+               <TableContainer
                   actions={actions}
                   columns={columns}
-                  fetchTableData={async () => await requestHandler.query(USER_BOOKINGS_URL)}
-                  removeEntryId={idToBeRemoved}
+                  fetchTableData={async () =>
+                     await requestHandler.query(URL.getBusinessBookingsURL(id))
+                  }
                   tableTitle="Bookings"
                   emptyMessage="No Bookings Yet"
-               /> */}
+               />
             </Col>
          </Row>
       </Container>

@@ -92,7 +92,7 @@ namespace CLup
 
             //var connectionString = "DataSource=myshareddb;mode=memory;cache=shared";
 
-            var connectionString = _config.GetConnectionString("azure");
+            var connectionString = _config.GetConnectionString("development");
 
             services.AddDbContext<CLupContext>(options =>
                               options.UseSqlServer(connectionString),

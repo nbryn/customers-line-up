@@ -25,7 +25,7 @@ namespace Logic.Context
         public CLupContext(DbContextOptions<CLupContext> options)
             : base(options)
         {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -113,9 +113,9 @@ namespace Logic.Context
 
             var bookings = new[]
             {
-                new Booking {UserEmail = users[0].Email, TimeSlotId = queues[0].Id},
-                new Booking {UserEmail = users[0].Email, TimeSlotId = queues[1].Id},
-                new Booking {UserEmail = users[0].Email, TimeSlotId = queues[2].Id}
+                new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = queues[0].Id},
+                new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = queues[1].Id},
+                new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = queues[2].Id}
             };
 
             modelBuilder.Entity<Booking>().HasData(bookings);

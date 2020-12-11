@@ -51,9 +51,9 @@ namespace Logic.Util
                 Id = business.Id,
                 Name = business.Name,
                 Zip = business.Zip,
-                Opens = business.Opens,
-                Closes = business.Closes,
+                BusinessHours = business.Opens + " - " + business.Closes,
                 TimeSlotLength = business.TimeSlotLength,
+                Capacity = business.Capacity,
                 Type = business.Type.ToString("G")
             };
         }
@@ -65,9 +65,9 @@ namespace Logic.Util
                 TimeSlotId = booking.TimeSlotId,
                 BusinessId = booking.BusinessId,
                 UserMail = booking.UserEmail,
-                StartTime = booking.TimeSlot.Start.TimeOfDay.ToString().Substring(0, 5),
-                EndTime = booking.TimeSlot.End.TimeOfDay.ToString().Substring(0, 5),
-                NumberOfUsersWithSameBooking = booking.TimeSlot.Bookings.Count(),
+                Interval = booking.TimeSlot.Start.TimeOfDay.ToString().Substring(0, 5) + " - " + 
+                           booking.TimeSlot.End.TimeOfDay.ToString().Substring(0, 5),
+                Capacity = booking.TimeSlot.Bookings.Count().ToString() + "/" + booking.TimeSlot.Capacity
             };
         }
 

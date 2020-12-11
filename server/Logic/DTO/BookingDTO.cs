@@ -8,11 +8,9 @@ namespace Logic.DTO
 
         public string UserMail { get; set; }
 
-        public string StartTime { get; set; }
+        public string Interval { get; set; }
 
-        public string EndTime { get; set; }
-
-        public int NumberOfUsersWithSameBooking { get; set; }
+        public string Capacity { get; set; }
 
     }
 }

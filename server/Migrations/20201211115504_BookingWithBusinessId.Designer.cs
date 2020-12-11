@@ -4,14 +4,16 @@ using Logic.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CLup.Migrations
 {
     [DbContext(typeof(CLupContext))]
-    partial class CLupContextModelSnapshot : ModelSnapshot
+    [Migration("20201211115504_BookingWithBusinessId")]
+    partial class BookingWithBusinessId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
