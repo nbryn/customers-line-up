@@ -1,5 +1,3 @@
-import { number } from "yup"
-
 export interface DTO {
     id: number;
  }
@@ -16,6 +14,11 @@ export interface BusinessDTO extends DTO {
 export interface CreateBusinessDTO extends BusinessDTO {
     opens: string;
     closes: string;
+}
+
+export type BusinessDataDTO = {
+    numberOfBookings: number;
+    numberOfEmployees?: number;
 }
 
 export interface TimeSlotDTO extends DTO {

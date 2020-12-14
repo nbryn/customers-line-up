@@ -30,45 +30,28 @@ type BusinessInfo = {
 
 type Props = {
    data: BusinessInfo;
-   primaryButtonAction: (id: number, name: string) => void;
-   secondaryButtonAction: (id: number, name: string) => void;
-   secondaryButtonText?: string;
-   primaryButtonText?: string;
+   buttonAction: (id: number, name: string) => void;
+   buttonText?: string;
 };
 
-export const BusinessCard: React.FC<Props> = ({
-   primaryButtonAction,
-   primaryButtonText,
-   data,
-   secondaryButtonAction,
-   secondaryButtonText,
-}: Props) => {
+export const SimpleBusinessCard: React.FC<Props> = ({buttonAction, buttonText, data}: Props) => {
    const styles = useStyles();
 
    return (
       <Card
          className={styles.card}
-         buttonAction={() => secondaryButtonAction(data.id, data.name)}
+         buttonAction={() => buttonAction(data.id, data.name)}
          buttonColor="secondary"
-         buttonText={secondaryButtonText}
+         buttonText={buttonText}
          buttonSize="medium"
          title={data.name}
          subTitle={data.type}
          variant="outlined"
       >
          <div className={styles.card}>
-         <Typography>Zip: {data.zip} </Typography>
+            <Typography>Zip: {data.zip} </Typography>
             <Typography>Capacity: {data.capacity} </Typography>
             <Typography>Business Hours: {data.businessHours} </Typography>
-            <Button
-               className={styles.primaryButton}
-               variant="contained"
-               color="primary"
-               onClick={() => primaryButtonAction(data.id, data.name)}
-               size="medium"
-            >
-               {primaryButtonText}
-            </Button>
          </div>
       </Card>
    );

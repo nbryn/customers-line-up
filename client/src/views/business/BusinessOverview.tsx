@@ -6,7 +6,7 @@ import {useHistory} from 'react-router-dom';
 
 import {BUSINESSES_OWNER_URL} from '../../api/URL';
 import {BusinessDTO} from '../../models/dto/Business';
-import {BusinessCard} from '../../components/BusinessCard';
+import {SimpleBusinessCard} from '../../components/SimpleBusinessCard';
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 
@@ -43,7 +43,7 @@ export const BusinessOverview: React.FC = () => {
                {businessData.map((x) => {
                   return (
                      <Col key={x.id} sm={6} md={8} lg={4}>
-                        <BusinessCard
+                        <SimpleBusinessCard
                            data={{
                               id: x.id,
                               name: x.name,
@@ -52,14 +52,12 @@ export const BusinessOverview: React.FC = () => {
                               capacity: x.capacity as number,
                               businessHours: x.businessHours as string,
                            }}
-                           primaryButtonText="Manage Bookings"
-                           primaryButtonAction={(businessId) =>
-                              history.push('/business/bookings', {
-                                 data: {name: x.name, id: businessId},
+                           buttonText="Manage Business"
+                           buttonAction={(businessId) =>
+                              history.push('/business/manage', {
+                                 business: x,
                               })
                            }
-                           secondaryButtonText="Edit Business Info"
-                           secondaryButtonAction={() => console.log()}
                         />
                      </Col>
                   );
