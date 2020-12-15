@@ -7,6 +7,7 @@ import {useHistory} from 'react-router-dom';
 
 import {BusinessDTO, BusinessDataDTO} from '../models/dto/Business';
 import {Card} from './Card';
+import {CardRow} from './CardRow';
 
 const useStyles = makeStyles({
    root: {
@@ -65,46 +66,67 @@ export const ExtendedBusinessCard: React.FC<Props> = ({
          buttonColor="secondary"
          buttonText={secondaryButtonText}
          buttonSize="medium"
-         title={business.name}
-         subTitle={business.type}
+         title="Business Data"
          variant="outlined"
       >
          <div className={styles.card}>
-            <div className={styles.typography}>
-               <Divider />
-               <Typography className={styles.mix}>Zip: {business.zip} </Typography>
+            <CardRow
+               text="Name"
+               data={business.name}
+               buttonText="Edit"
+               buttonAction={() => console.log}
+            />
+            <CardRow
+               text="Type"
+               data={business.type}
+               buttonText="Edit"
+               buttonAction={() => console.log}
+            />
+            <CardRow
+               text="Zip"
+               data={business.zip}
+               buttonText="Edit"
+               buttonAction={() => console.log}
+            />
 
-               <Divider />
-            </div>
-            <Typography className={styles.typography}>Capacity: {business.capacity} </Typography>
-            <Divider />
-            <Typography className={styles.typography}>
-               Business Hours: {business.businessHours}{' '}
-            </Typography>
-            <Divider />
-            <Typography className={styles.typography}>
-               Visit Length: {business.timeSlotLength} minutes{' '}
-            </Typography>
-            <Divider />
-            <Typography className={styles.typography}>Employees </Typography>
-            <Divider />
-            <Typography className={styles.typography}>
-               Bookings:
-               <div className={styles.center}>{0}</div>
-               <div className={styles.button}>
-                  <Button
-                     size="small"
-                     variant="contained"
-                     onClick={() =>
-                        history.push('/business/bookings', {
-                           data: {id: business.id, name: business.name},
-                        })
-                     }
-                  >
-                     Manage Bookings
-                  </Button>
-               </div>
-            </Typography>
+            <CardRow
+               text="Capacity"
+               data={business.capacity}
+               buttonText="Edit"
+               buttonAction={() => console.log}
+            />
+
+            <CardRow
+               text="Business Hours"
+               data={business.businessHours!}
+               buttonText="Edit"
+               buttonAction={() => console.log}
+            />
+
+            <CardRow
+               text="Visit Length"
+               data={business.timeSlotLength}
+               buttonText="Edit"
+               buttonAction={() => console.log}
+            />
+            <CardRow
+               text="Employees"
+               data={0}
+               buttonText="Manage"
+               buttonAction={() => console.log}
+            />
+
+            <CardRow
+               text="Bookings"
+               data={0}
+               buttonText="Manage"
+               buttonAction={() =>
+                  history.push('/business/bookings', {
+                     data: {id: business.id, name: business.name},
+                  })
+               }
+            />
+
             {/* <Button
                className={styles.primaryButton}
                variant="contained"

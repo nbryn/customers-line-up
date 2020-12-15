@@ -34,7 +34,7 @@ export const ManageBusinessView: React.FC = () => {
             <Header text={`Manage ${business.name}`} />
          </Row>
          <Row className={styles.row}>
-            <Col sm={12} md={8} lg={6}>
+            <Col sm={12} md={6} lg={10}>
                <ExtendedBusinessCard business={business} />
             </Col>
          </Row>

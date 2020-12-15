@@ -14,6 +14,9 @@ const useStyles = makeStyles({
    button: {
       justifyContent: 'center',
    },
+   header: {
+      textAlign: 'center',
+   }
 });
 
 type Props = {
@@ -43,7 +46,7 @@ export const Card: React.FC<Props> = ({
 
    return (
       <MUICard className={className} variant={variant}>
-         <CardHeader title={title} subheader={subTitle} />
+         <CardHeader className={styles.header} title={title} subheader={subTitle} />
          <CardContent>{children}</CardContent>
          <CardActions className={styles.button}>
             {buttonText && (
