@@ -24,6 +24,10 @@ const getBusinessBookingsURL = (businessId: number): string => {
     return BASE_URL + `booking/business?businessId=${businessId}`;
 }
 
+const getUpdateBusinessDataURL = (businessId: number): string => {
+    return BASE_URL + `business/update/${businessId}`;
+}
+
 // Server will get user info from JWT
 export const LOGIN_URL = BASE_URL + 'user/login';
 
@@ -43,4 +47,5 @@ export default {
     getCreateBookingURL,
     getDeleteBookingURL,
     getTimeSlotURL,
+    getUpdateBusinessDataURL,
 };

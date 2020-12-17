@@ -1,4 +1,5 @@
 import {Col, Container, FormGroup, Row} from 'react-bootstrap';
+import Divider from '@material-ui/core/Divider';
 import {makeStyles} from '@material-ui/core/styles';
 import {MenuItem} from '@material-ui/core';
 import React, {useEffect, useState} from 'react';
@@ -18,14 +19,17 @@ const useStyles = makeStyles((theme) => ({
    card: {
       marginTop: 60,
       borderRadius: 15,
-      height: 700,
+      height: 600,
       textAlign: 'center',
+   },
+   formGroup: {
+      marginBottom: 30,
    },
    helperText: {
       color: 'red',
    },
    textField: {
-      width: '35%',
+      width: '50%',
    },
    wrapper: {
       justifyContent: 'center',
@@ -78,7 +82,7 @@ export const CreateBusinessView: React.FC = () => {
    return (
       <Container>
          <Row className={styles.wrapper}>
-            <Col sm={10} lg={6}>
+            <Col sm={6} lg={6}>
                <Modal
                   show={requestHandler.requestInfo ? true : false}
                   title="Business Info"
@@ -94,123 +98,130 @@ export const CreateBusinessView: React.FC = () => {
                      working={requestHandler.working}
                      valid={formik.isValid}
                   >
-                     <FormGroup>
-                        <TextField
-                           className={styles.textField}
-                           id="name"
-                           label="Name"
-                           type="text"
-                           value={formik.values.name}
-                           onChange={formik.handleChange}
-                           onBlur={formik.handleBlur}
-                           error={formik.touched.name && Boolean(formik.errors.name)}
-                           helperText={formik.touched.name && formik.errors.name}
-                        />
-                     </FormGroup>
+                     <Row>
+                        <Col sm={6} lg={6}>
+                           <FormGroup className={styles.formGroup}>
+                              <TextField
+                                 className={styles.textField}
+                                 id="name"
+                                 label="Name"
+                                 type="text"
+                                 value={formik.values.name}
+                                 onChange={formik.handleChange}
+                                 onBlur={formik.handleBlur}
+                                 error={formik.touched.name && Boolean(formik.errors.name)}
+                                 helperText={formik.touched.name && formik.errors.name}
+                              />
+                           </FormGroup>
 
-                     <FormGroup>
-                        <TextField
-                           className={styles.textField}
-                           id="zip"
-                           label="Zip"
-                           type="number"
-                           value={formik.values.zip}
-                           onChange={formik.handleChange}
-                           onBlur={formik.handleBlur}
-                           error={formik.touched.zip && Boolean(formik.errors.zip)}
-                           helperText={formik.touched.zip && formik.errors.zip}
-                        />
-                     </FormGroup>
-                     <FormGroup>
-                        <TextField
-                           className={styles.textField}
-                           id="capacity"
-                           label="Capacity"
-                           type="number"
-                           value={formik.values.capacity}
-                           onChange={formik.handleChange}
-                           onBlur={formik.handleBlur}
-                           error={formik.touched.capacity && Boolean(formik.errors.capacity)}
-                           helperText={formik.touched.capacity && formik.errors.capacity}
-                        />
-                     </FormGroup>
-                     <FormGroup>
-                        <TextField
-                           className={styles.textField}
-                           id="type"
-                           label="Type"
-                           type="text"
-                           select
-                           value={formik.values.type}
-                           onChange={formik.handleChange('type')}
-                           onBlur={formik.handleBlur}
-                           error={formik.touched.type && Boolean(formik.errors.type)}
-                           helperText={formik.touched.type && formik.errors.type}
-                        >
-                           {businessTypes.map((type) => (
-                              <MenuItem key={type} value={type}>
-                                 {type}
-                              </MenuItem>
-                           ))}
-                        </TextField>
-                     </FormGroup>
-                     <FormGroup>
-                        <TextField
-                           className={styles.textField}
-                           id="timeSlotLength"
-                           label="Visit Length"
-                           type="number"
-                           value={formik.values.timeSlotLength}
-                           onChange={formik.handleChange}
-                           onBlur={formik.handleBlur}
-                           error={
-                              formik.touched.timeSlotLength && Boolean(formik.errors.timeSlotLength)
-                           }
-                           helperText={
-                              formik.touched.timeSlotLength && formik.errors.timeSlotLength
-                           }
-                        />
-                     </FormGroup>
-                     <FormGroup>
-                        <TextField
-                           className={styles.textField}
-                           id="opens"
-                           label="Opens"
-                           type="time"
-                           defaultValue="08:00"
-                           value={formik.values.opens}
-                           onChange={formik.handleChange}
-                           onBlur={formik.handleBlur}
-                           error={formik.touched.opens && Boolean(formik.errors.opens)}
-                           helperText={formik.touched.opens && formik.errors.opens}
-                           inputLabelProps={{
-                              shrink: true,
-                           }}
-                           inputProps={{
-                              step: 1800,
-                           }}
-                        />
-                     </FormGroup>
-                     <FormGroup>
-                        <TextField
-                           className={styles.textField}
-                           id="closes"
-                           label="Closes"
-                           type="time"
-                           defaultValue="04:00"
-                           value={formik.values.closes}
-                           onChange={formik.handleChange}
-                           onBlur={formik.handleBlur}
-                           error={formik.touched.closes && Boolean(formik.errors.closes)}
-                           helperText={formik.touched.closes && formik.errors.closes}
-                           inputLabelProps={{
-                              shrink: true,
-                           }}
-                           inputProps={{
-                              step: 1800,
-                           }}
-                        />
-                     </FormGroup>
+                           <FormGroup className={styles.formGroup}>
+                              <TextField
+                                 className={styles.textField}
+                                 id="zip"
+                                 label="Zip"
+                                 type="number"
+                                 value={formik.values.zip}
+                                 onChange={formik.handleChange}
+                                 onBlur={formik.handleBlur}
+                                 error={formik.touched.zip && Boolean(formik.errors.zip)}
+                                 helperText={formik.touched.zip && formik.errors.zip}
+                              />
+                           </FormGroup>
+                           <FormGroup className={styles.formGroup}>
+                              <TextField
+                                 className={styles.textField}
+                                 id="capacity"
+                                 label="Capacity"
+                                 type="number"
+                                 value={formik.values.capacity}
+                                 onChange={formik.handleChange}
+                                 onBlur={formik.handleBlur}
+                                 error={formik.touched.capacity && Boolean(formik.errors.capacity)}
+                                 helperText={formik.touched.capacity && formik.errors.capacity}
+                              />
+                           </FormGroup>
+                           <FormGroup className={styles.formGroup}>
+                              <TextField
+                                 className={styles.textField}
+                                 id="type"
+                                 label="Type"
+                                 type="text"
+                                 select
+                                 value={formik.values.type}
+                                 onChange={formik.handleChange('type')}
+                                 onBlur={formik.handleBlur}
+                                 error={formik.touched.type && Boolean(formik.errors.type)}
+                                 helperText={formik.touched.type && formik.errors.type}
+                              >
+                                 {businessTypes.map((type) => (
+                                    <MenuItem key={type} value={type}>
+                                       {type}
+                                    </MenuItem>
+                                 ))}
+                              </TextField>
+                           </FormGroup>
+                        </Col>
+                        <Col sm={6} lg={6}>
+                           <FormGroup className={styles.formGroup}>
+                              <TextField
+                                 className={styles.textField}
+                                 id="timeSlotLength"
+                                 label="Visit Length"
+                                 type="number"
+                                 value={formik.values.timeSlotLength}
+                                 onChange={formik.handleChange}
+                                 onBlur={formik.handleBlur}
+                                 error={
+                                    formik.touched.timeSlotLength &&
+                                    Boolean(formik.errors.timeSlotLength)
+                                 }
+                                 helperText={
+                                    formik.touched.timeSlotLength && formik.errors.timeSlotLength
+                                 }
+                              />
+                           </FormGroup>
+                           <FormGroup className={styles.formGroup}>
+                              <TextField
+                                 className={styles.textField}
+                                 id="opens"
+                                 label="Opens"
+                                 type="time"
+                                 defaultValue="08:00"
+                                 value={formik.values.opens}
+                                 onChange={formik.handleChange}
+                                 onBlur={formik.handleBlur}
+                                 error={formik.touched.opens && Boolean(formik.errors.opens)}
+                                 helperText={formik.touched.opens && formik.errors.opens}
+                                 inputLabelProps={{
+                                    shrink: true,
+                                 }}
+                                 inputProps={{
+                                    step: 1800,
+                                 }}
+                              />
+                           </FormGroup>
+                           <FormGroup className={styles.formGroup}>
+                              <TextField
+                                 className={styles.textField}
+                                 id="closes"
+                                 label="Closes"
+                                 type="time"
+                                 defaultValue="04:00"
+                                 value={formik.values.closes}
+                                 onChange={formik.handleChange}
+                                 onBlur={formik.handleBlur}
+                                 error={formik.touched.closes && Boolean(formik.errors.closes)}
+                                 helperText={formik.touched.closes && formik.errors.closes}
+                                 inputLabelProps={{
+                                    shrink: true,
+                                 }}
+                                 inputProps={{
+                                    step: 1800,
+                                 }}
+                              />
+                           </FormGroup>
+                        </Col>
+                     </Row>
                   </Form>
                </Card>
             </Col>

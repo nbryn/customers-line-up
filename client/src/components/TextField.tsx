@@ -24,7 +24,7 @@ type Props = {
    select?: boolean;
    className?: any;
    variant?: 'filled' | 'outlined';
-   defaultValue?: string;
+   defaultValue?: string | number;
    inputLabelProps?: any;
    error?: boolean;
    children?: React.ReactNode;

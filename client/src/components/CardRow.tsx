@@ -23,11 +23,15 @@ const useStyles = makeStyles({
    dataCol: {
       textAlign: 'center',
    },
+   divider: {
+      marginLeft: -5,
+      marginRight: -5,
+   },
 });
 
 type Props = {
    text: string;
-   data: string | number;
+   data: string | number | undefined;
    buttonText: string;
    color?: 'primary' | 'secondary';
    variant?: 'outlined';
@@ -46,7 +50,7 @@ export const CardRow: React.FC<Props> = ({
 
    return (
       <>
-         <Divider />
+         <Divider className={styles.divider} />
          <Row className={styles.row}>
             <Col>
                <Badge>
@@ -66,7 +70,7 @@ export const CardRow: React.FC<Props> = ({
                   label={buttonText}
                   clickable
                   color={color || 'primary'}
-                  onClick={buttonAction}
+                  onClick={() => buttonAction()}
                   deleteIcon={<DoneIcon />}
                   variant={variant || 'default'}
                />

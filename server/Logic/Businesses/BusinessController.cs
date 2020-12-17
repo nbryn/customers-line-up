@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System;
 
 using Logic.Auth;
+using Logic.Context;
 using Logic.DTO;
 using Logic.Util;
 using Data;
@@ -52,6 +54,15 @@ namespace Logic.Businesses
             var all = await _repository.FindBusinessesByOwner(ownerEmail);
 
             return all.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
+        }
+
+        [HttpPut]
+        [Route("update/{id}")]
+        public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] CreateBusinessDTO dto)
+        {
+            Response response = await _repository.UpdateBusiness(id, dto);
+
+            return new StatusCodeResult((int)response);
         }
 
         [HttpGet]

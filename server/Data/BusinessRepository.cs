@@ -32,7 +32,7 @@ namespace Data
                 Closes = business.Closes,
                 TimeSlotLength = business.timeSlotLength,
                 Zip = business.Zip,
-                Type = type
+                Type = type,
             };
 
             await _context.Businesses.AddAsync(newBusiness);
@@ -41,6 +41,30 @@ namespace Data
 
             return newBusiness;
 
+        }
+
+        public async Task<Response> UpdateBusiness(int businessId, CreateBusinessDTO dto)
+        {
+            Business business = await FindBusinessById(businessId);
+
+            if (business == null)
+            {
+                return Response.NotFound;
+            }
+
+            BusinessType.TryParse(dto.Type, out BusinessType type);
+
+            business.Capacity = dto.Capacity;
+            business.Closes = dto.Closes;
+            business.Opens = dto.Opens;
+            business.Name = dto.Name;
+            business.Zip = dto.Zip;
+            business.Type = type;
+            business.TimeSlotLength = dto.timeSlotLength;
+
+            await _context.SaveChangesAsync();
+
+            return Response.Updated;
         }
 
         public async Task<Business> FindBusinessById(int businessId)

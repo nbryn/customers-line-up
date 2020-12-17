@@ -14,6 +14,9 @@ const useStyles = makeStyles({
    button: {
       justifyContent: 'center',
    },
+   content: {
+      padding: 5,
+   },
    header: {
       textAlign: 'center',
    }
@@ -47,7 +50,7 @@ export const Card: React.FC<Props> = ({
    return (
       <MUICard className={className} variant={variant}>
          <CardHeader className={styles.header} title={title} subheader={subTitle} />
-         <CardContent>{children}</CardContent>
+         <CardContent className={styles.content}>{children}</CardContent>
          <CardActions className={styles.button}>
             {buttonText && (
                <Button
