@@ -16,18 +16,35 @@ namespace Data
         {
             _context = context;
         }
-        public async Task<int> CreateTimeSlot(TimeSlot timeSlot)
+        public async Task<(int, Response)> CreateTimeSlot(TimeSlot timeSlot)
         {
             await _context.TimeSlots.AddAsync(timeSlot);
 
             await _context.SaveChangesAsync();
 
-            return timeSlot.Id;
+            return (timeSlot.Id, Response.Created);
+        }
+
+        public async Task<Response> DeleteTimeSlot(int timeSlotId)
+        {
+            TimeSlot timeSlot = await FindTimeSlotById(timeSlotId);
+
+            if (timeSlot == null)
+            {
+                return Response.NotFound;
+            }
+
+            _context.TimeSlots.Remove(timeSlot);
+
+            await _context.SaveChangesAsync();
+
+            return (Response.Deleted);
         }
 
         public async Task<TimeSlot> FindTimeSlotById(int timeSlotId)
         {
             TimeSlot timeSlot = await _context.TimeSlots.Include(x => x.Bookings)
+                                                               .Include(x => x.Business)
                                                                .FirstOrDefaultAsync(x => x.Id == timeSlotId);
 
             return timeSlot;
@@ -36,6 +53,7 @@ namespace Data
         public async Task<IList<TimeSlot>> FindTimeSlotsByBusiness(int businessId)
         {
             IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
+                                                                       .Include(x => x.Business)
                                                                        .Where(x => x.BusinessId == businessId)
                                                                        .ToListAsync();
             return timeSlots;
@@ -44,6 +62,7 @@ namespace Data
         public async Task<IList<TimeSlot>> FindAvailableTimeSlotsByBusiness(AvailableTimeSlotsRequest request)
         {
             IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
+                                                                        .Include(x => x.Business)
                                                                         .Where(x => x.BusinessId == request.BusinessId &&
                                                                                (x.Start > request.Start && x.End < request.End))
                                                                         .ToListAsync();
@@ -51,11 +70,25 @@ namespace Data
             return timeSlots;
         }
 
-        public async Task<int> UpdateTimeSlot(TimeSlot timeSlot)
+        public async Task<Response> UpdateTimeSlot(TimeSlot timeSlot)
         {
-            _context.TimeSlots.Update(timeSlot);
+            TimeSlot ts = await FindTimeSlotById(timeSlot.Id);
 
-            return await _context.SaveChangesAsync();
+            if (ts == null)
+            {
+                return Response.NotFound;
+            }
+
+            ts.Bookings = timeSlot.Bookings;
+            ts.BusinessId = timeSlot.BusinessId;
+            ts.BusinessName = timeSlot.BusinessName;
+            ts.Capacity = timeSlot.Capacity;
+            ts.Start = timeSlot.Start;
+            ts.End = timeSlot.End;
+
+            await _context.SaveChangesAsync();
+
+            return Response.Updated;
         }
     }
 }

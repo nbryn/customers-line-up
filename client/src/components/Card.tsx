@@ -50,7 +50,9 @@ export const Card: React.FC<Props> = ({
    return (
       <MUICard className={className} variant={variant}>
          <CardHeader className={styles.header} title={title} subheader={subTitle} />
-         <CardContent className={styles.content}>{children}</CardContent>
+         <CardContent className={styles.content}>
+            
+            {children}</CardContent>
          <CardActions className={styles.button}>
             {buttonText && (
                <Button

@@ -1,18 +1,17 @@
 import {Col, Container, FormGroup, Row} from 'react-bootstrap';
-import Divider from '@material-ui/core/Divider';
 import {makeStyles} from '@material-ui/core/styles';
 import {MenuItem} from '@material-ui/core';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import {Card} from '../../components/Card';
-import {CreateBusinessDTO} from '../../models/dto/Business';
-import {createBusinessValidationSchema} from '../../validation/BusinessValidation';
+import {BusinessDTO} from '../../dto/Business';
+import {businessValidationSchema} from '../../validation/BusinessValidation';
 import {Form} from '../../components/Form';
 import {Modal} from '../../components/Modal';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TextField} from '../../components/TextField';
-import {BUSINESS_TYPES, CREATE_BUSINESS_URL} from '../../api/URL';
+import {BUSINESS_TYPES_URL, CREATE_BUSINESS_URL} from '../../api/URL';
 import {useForm} from '../../util/useForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,13 +47,13 @@ export const CreateBusinessView: React.FC = () => {
 
    useEffect(() => {
       (async () => {
-         const types = await requestHandler.query(BUSINESS_TYPES);
+         const types = await requestHandler.query(BUSINESS_TYPES_URL);
 
          setBusinessTypes(types);
       })();
    }, []);
 
-   const initialValues: CreateBusinessDTO = {
+   const initialValues: BusinessDTO = {
       id: 0,
       name: '',
       zip: '',
@@ -65,9 +64,9 @@ export const CreateBusinessView: React.FC = () => {
       closes: '',
    };
 
-   const formik = useForm<CreateBusinessDTO>(
+   const formik = useForm<BusinessDTO>(
       initialValues,
-      createBusinessValidationSchema,
+      businessValidationSchema,
       requestHandler.mutation,
       CREATE_BUSINESS_URL,
       'POST',
@@ -80,7 +79,7 @@ export const CreateBusinessView: React.FC = () => {
    );
 
    return (
-      <Container>
+      <>
          <Row className={styles.wrapper}>
             <Col sm={6} lg={6}>
                <Modal
@@ -226,6 +225,6 @@ export const CreateBusinessView: React.FC = () => {
                </Card>
             </Col>
          </Row>
-      </Container>
+      </>
    );
 };

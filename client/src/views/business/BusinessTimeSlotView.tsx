@@ -1,15 +1,15 @@
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React from 'react';
+import React, {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
 import URL from '../../api/URL';
-import {BusinessDTO} from '../../dto/Business';
-import {BookingDTO} from '../../dto/Booking';
+import {TimeSlotDTO} from '../../dto/TimeSlot';
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
+import {BusinessDTO} from '../../dto/Business';
 
 const useStyles = makeStyles((theme) => ({
    row: {
@@ -21,35 +21,30 @@ interface LocationState {
    business: BusinessDTO;
 }
 
-export const BusinessBookingView: React.FC = () => {
+export const BusinessTimeSlotView: React.FC = () => {
    const styles = useStyles();
    const location = useLocation<LocationState>();
+   const [removeTimeSlot, setRemoveTimeSlot] = useState<number | null>(null);
 
-   const requestHandler: RequestHandler<BookingDTO[]> = useRequest();
+   const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest();
 
    const {business} = location.state;
 
    const columns: TableColumn[] = [
-      {title: 'businessId', field: 'businessId', hidden: true},
       {title: 'timeSlotId', field: 'timeSlotId', hidden: true},
-      {title: 'UserMail', field: 'userMail'},
-      {title: 'Capacity', field: 'capacity'},
+      {title: 'Date', field: 'date'},
       {title: 'Interval', field: 'interval'},
+      {title: 'Capacity', field: 'capacity'},
    ];
 
    const actions = [
       {
          icon: 'Delete',
-         tooltip: 'Remove Booking',
-         onClick: (event: any, rowData: any) => {
-            console.log(rowData);
-         },
-      },
-      {
-         icon: 'Contact',
-         tooltip: 'Contact User',
-         onClick: (event: any, rowData: any) => {
-            console.log(rowData);
+         tooltip: 'Remove Time Slot',
+         onClick: async (event: any, rowData: TimeSlotDTO) => {
+            setRemoveTimeSlot(rowData.id);
+
+            await requestHandler.mutation(URL.getDeleteTimeSlotURL(rowData.id), 'DELETE');
          },
       },
    ];
@@ -57,18 +52,26 @@ export const BusinessBookingView: React.FC = () => {
    return (
       <>
          <Row className={styles.row}>
-            <Header text={`Bookings For ${business.name}`} />
+            <Header text={business.name} />
          </Row>
          <Row className={styles.row}>
             <Col sm={6} md={8} lg={6} xl={10}>
                <TableContainer
                   actions={actions}
                   columns={columns}
-                  fetchTableData={async () =>
-                     await requestHandler.query(URL.getBusinessBookingsURL(business.id))
-                  }
-                  tableTitle="Bookings"
-                  emptyMessage="No Bookings Yet"
+                  fetchTableData={async () => {
+                     const timeSlots = await requestHandler.query(
+                        URL.getAllTimeSlotsForBusinessURL(business.id)
+                     );
+
+                     return timeSlots.map((x) => ({
+                        ...x,
+                        interval: x.start + ' - ' + x.end,
+                     }));
+                  }}
+                  tableTitle="Time Slots"
+                  emptyMessage="No Time Slots Yet"
+                  removeEntryId={removeTimeSlot}
                />
             </Col>
          </Row>

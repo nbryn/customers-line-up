@@ -1,16 +1,18 @@
 import {Col, Row} from 'react-bootstrap';
 
 import {makeStyles} from '@material-ui/core/styles';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 
-import URL from '../../api/URL';
-import {BusinessDTO} from '../../models/dto/Business';
+import {BusinessDTO} from '../../dto/Business';
+import {businessValidationSchema} from '../../validation/BusinessValidation';
 import {ExtendedCard, ExtendedCardData} from '../../components/ExtendedCard';
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import StringUtil from '../../util/StringUtil';
 import {TextFieldModal, TextFieldType} from '../../components/TextFieldModal';
+import URL, {BUSINESS_TYPES_URL} from '../../api/URL';
+import {useForm} from '../../util/useForm';
 
 const useStyles = makeStyles((theme) => ({
    col: {
@@ -25,42 +27,51 @@ interface LocationState {
    business: BusinessDTO;
 }
 
-const SUCCESS_MESSAGE = 'Data Updated';
-
 export const ManageBusinessView: React.FC = () => {
    const styles = useStyles();
    const history = useHistory();
    const location = useLocation<LocationState>();
 
    const [modalTitle, setModalTitle] = useState('');
-   const [modalValue, setModalValue] = useState<string | number>('');
-   const [textFieldType, setTextFieldType] = useState<TextFieldType>()
+   const [textFieldType, setTextFieldType] = useState<TextFieldType>();
+   const [businessTypeOptions, setBusinessTypeOptions] = useState<string[]>([]);
 
-   const requestHandler: RequestHandler<BusinessDTO[]> = useRequest(SUCCESS_MESSAGE);
+   const requestHandler: RequestHandler<string[]> = useRequest();
 
    const business = location.state.business;
 
-   const updateBusinessData = async () => {
-      const dtoKey = StringUtil.mapLabelToDTOKey(modalTitle);
+   useEffect(() => {
+      (async () => {
+         const types = await requestHandler.query(BUSINESS_TYPES_URL);
 
-      business[dtoKey] = modalValue;
+         setBusinessTypeOptions(types);
+      })();
+   }, []);
 
-      await requestHandler.mutation(URL.getUpdateBusinessDataURL(business.id), 'PUT', business);
+   const form = useForm<BusinessDTO>(
+      business,
+      businessValidationSchema,
+      requestHandler.mutation,
+      URL.getUpdateBusinessDataURL(business.id),
+      'PUT',
+      (business) => {
+         business.opens = business.opens.replace(':', '.');
+         business.closes = business.closes.replace(':', '.');
 
-      setModalTitle('');
-   };
+         return business;
+      }
+   );
 
-   const coreInfo: ExtendedCardData[] = Object.keys(business)
+   const businessData: ExtendedCardData[] = Object.keys(business)
       .filter((x) => x !== 'id')
       .map((x) => {
          const text = StringUtil.mapDTOKeyToLabel(x);
          return {
-            text,
-            data: business[x],
+            text: StringUtil.mapDTOKeyToLabel(x),
+            data: form.values[x],
             buttonText: 'Edit',
             buttonAction: () => {
                setModalTitle(text);
-               setModalValue(business[x] as string);
                setTextFieldType(StringUtil.getTextFieldTypeFromKey(x));
             },
          };
@@ -68,21 +79,31 @@ export const ManageBusinessView: React.FC = () => {
 
    const manageInfo: ExtendedCardData[] = [
       {
-         text: 'Employees',
+         text: 'Bookings',
          data: 0,
          buttonText: 'Manage',
          buttonAction: () => {
-            history.push('/business/employees', {
+            history.push('/business/bookings/manage', {
                data: {id: business.id, name: business.name},
             });
          },
       },
       {
-         text: 'Bookings',
+         text: 'Time Slots',
          data: 0,
          buttonText: 'Manage',
          buttonAction: () => {
-            history.push('/business/bookings', {
+            history.push('/business/timeslots/manage', {
+               data: {id: business.id, name: business.name},
+            });
+         },
+      },
+      {
+         text: 'Employees',
+         data: 0,
+         buttonText: 'Manage',
+         buttonAction: () => {
+            history.push('/business/employees/manage', {
                data: {id: business.id, name: business.name},
             });
          },
@@ -99,21 +120,22 @@ export const ManageBusinessView: React.FC = () => {
                show={modalTitle ? true : false}
                title={`Edit ${modalTitle}`}
                valueLabel={modalTitle}
-               value={modalValue}
+               id={StringUtil.unCapitalizeFirstLetter(modalTitle)}
                textFieldType={textFieldType}
-               setValue={setModalValue}
-               primaryAction={() => updateBusinessData()}
-               primaryActionText="Save Changes"
-               secondaryAction={() => {
+               primaryAction={async () => {
+                  await form.handleSubmit();
                   setModalTitle('');
-                  setModalValue('');
                }}
+               form={form}
+               selectOptions={businessTypeOptions}
+               primaryActionText="Save Changes"
+               secondaryAction={() => setModalTitle('')}
             />
             <Col sm={12} md={6} lg={6} className={styles.col}>
                <ExtendedCard title="Manage" data={manageInfo} />
             </Col>
             <Col sm={12} md={6} lg={6} className={styles.col}>
-               <ExtendedCard title="Business Data" data={coreInfo} />
+               <ExtendedCard title="Business Data" data={businessData} />
             </Col>
          </Row>
       </>

@@ -6,7 +6,7 @@ import {Card} from '../../components/Card';
 import {Form} from '../../components/Form';
 import {SignupView} from './SignupView';
 import {TextField} from '../../components/TextField';
-import {UserDTO} from '../../models/dto/User';
+import {UserDTO} from '../../dto/User';
 import UserService from '../../services/UserService';
 import {useUserContext} from '../../context/UserContext';
 

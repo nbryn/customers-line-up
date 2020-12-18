@@ -23,16 +23,21 @@ function mapLabelToDTOKey(key: string): string {
 }
 
 function getTextFieldTypeFromKey(key: string): TextFieldType {
-    if (key === 'businessHours') return 'time';
+    if (key === 'opens' || key === 'closes') return 'time';
     if (key === 'capacity' || key === 'timeSlotLength') return 'number';
 
 
     return 'text';
 }
 
+// function getBusinessHours(opens: string, closes: string): string {
+//     return op
+// }
+
 export default {
     capitalizeFirstLetter,
     getTextFieldTypeFromKey,
     mapLabelToDTOKey,
     mapDTOKeyToLabel,
+    unCapitalizeFirstLetter,
 }

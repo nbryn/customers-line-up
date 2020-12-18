@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 using Logic.Auth;
+using Logic.Context;
 using Logic.DTO;
 using Data;
 using Logic.Util;
@@ -39,10 +40,19 @@ namespace Logic.TimeSlots
             return Ok(timeSlots);
         }
 
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<IActionResult> DeleteTimeSlot(int id)
+        {
+            Response response = await _repository.DeleteTimeSlot(id);
 
-        [HttpGet("{id}")]
-        [Route("business")]
-        public async Task<ICollection<TimeSlotDTO>> FetchAllTimeSlotsForBusiness([FromQuery] int id)
+            return new StatusCodeResult((int)response);
+        }
+
+
+        [HttpGet]
+        [Route("business/{id}")]
+        public async Task<ICollection<TimeSlotDTO>> FetchAllTimeSlotsForBusiness(int id)
         {
             IList<TimeSlot> timeSlots = await _repository.FindTimeSlotsByBusiness(id);
 

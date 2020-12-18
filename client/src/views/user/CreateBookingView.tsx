@@ -3,7 +3,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 
-import {BusinessDTO, TimeSlotDTO} from '../../models/dto/Business';
+import {BusinessDTO, TimeSlotDTO} from '../../dto/Business';
 import {Header} from '../../components/Texts';
 import {Modal} from '../../components/Modal';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';

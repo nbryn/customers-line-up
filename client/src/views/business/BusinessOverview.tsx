@@ -1,12 +1,13 @@
-import {Col, Container, Row} from 'react-bootstrap';
+import {Col, Row} from 'react-bootstrap';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import {BUSINESSES_OWNER_URL} from '../../api/URL';
-import {BusinessDTO} from '../../models/dto/Business';
-import {SimpleBusinessCard} from '../../components/SimpleBusinessCard';
+import {BusinessCard} from '../../components/BusinessCard';
+import {BusinessDTO} from '../../dto/Business';
+import BusinessService, {PathInfo} from '../../services/BusinessService';
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 
@@ -22,20 +23,22 @@ export const BusinessOverview: React.FC = () => {
 
    const [businessData, setBusinessData] = useState<BusinessDTO[]>([]);
 
+   const pathInfo: PathInfo = BusinessService.getPathAndTextFromURL(window.location.pathname);
+
    const requestHandler: RequestHandler<BusinessDTO[]> = useRequest();
 
    useEffect(() => {
       (async () => {
-         const data: BusinessDTO[] = await requestHandler.query(BUSINESSES_OWNER_URL);
+         const businesses: BusinessDTO[] = await requestHandler.query(BUSINESSES_OWNER_URL);
 
-         setBusinessData(data);
+         setBusinessData(businesses);
       })();
    }, []);
 
    return (
-      <Container>
+      <>
          <Row className={styles.row}>
-            <Header text="Your Businesses" />
+            <Header text="Choose Business" />
          </Row>
          <Row className={styles.row}>
             {requestHandler.working && <CircularProgress />}
@@ -43,18 +46,11 @@ export const BusinessOverview: React.FC = () => {
                {businessData.map((x) => {
                   return (
                      <Col key={x.id} sm={6} md={8} lg={4}>
-                        <SimpleBusinessCard
-                           data={{
-                              id: x.id,
-                              name: x.name,
-                              type: x.type,
-                              zip: x.zip as string,
-                              capacity: x.capacity as number,
-                              businessHours: x.businessHours as string,
-                           }}
-                           buttonText="Manage Business"
-                           buttonAction={(businessId) =>
-                              history.push('/business/manage', {
+                        <BusinessCard
+                           business={x}
+                           buttonText={`Manage ${pathInfo.buttonText}`}
+                           buttonAction={() =>
+                              history.push(`/business/${pathInfo.path}`, {
                                  business: x,
                               })
                            }
@@ -64,6 +60,6 @@ export const BusinessOverview: React.FC = () => {
                })}
             </>
          </Row>
-      </Container>
+      </>
    );
 };

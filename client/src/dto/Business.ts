@@ -9,16 +9,13 @@ export interface BusinessDTO extends DTO {
     type: string;
     timeSlotLength: number | string;  
     capacity: number | string;  
-    businessHours?: string;
-}
-
-export interface CreateBusinessDTO extends BusinessDTO {
     opens: string;
     closes: string;
 }
 
 export type BusinessDataDTO = {
     numberOfBookings: number;
+    numberOfTimeSlots: number;
     numberOfEmployees?: number;
 }
 

@@ -45,8 +45,7 @@ namespace Data
 
         public async Task<Response> DeleteBooking(string userEmail, int timeSlotId)
         {
-            Booking booking = await _context.Bookings.FirstOrDefaultAsync(b => b.UserEmail.Equals(userEmail)
-                                                                          && b.TimeSlotId == timeSlotId);
+            Booking booking = await FindBookingById(userEmail, timeSlotId);
             if (booking == null)
             {
                 return Response.NotFound;

@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import React, {useContext, useEffect, useState} from 'react';
 
-import {UserDTO} from '../models/dto/User';
+import {UserDTO} from '../dto/User';
 
 export type ContextValue = {
    user: UserDTO;

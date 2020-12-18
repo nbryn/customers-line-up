@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 using Logic.Bookings;
+using Logic.Businesses;
 
 namespace Logic.TimeSlots
 {
@@ -12,6 +13,8 @@ namespace Logic.TimeSlots
 
         [Required]
         public int BusinessId { get; set; }
+
+        public Business Business { get; set; }
 
         public string BusinessName { get; set; }
 

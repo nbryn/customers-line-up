@@ -47,8 +47,8 @@ namespace CLup.Migrations
                     Zip = table.Column<int>(nullable: false),
                     Type = table.Column<string>(nullable: false),
                     Capacity = table.Column<int>(nullable: false),
-                    Opens = table.Column<double>(nullable: false),
-                    Closes = table.Column<double>(nullable: false),
+                    Opens = table.Column<string>(nullable: true),
+                    Closes = table.Column<string>(nullable: true),
                     TimeSlotLength = table.Column<int>(nullable: false),
                     BusinessOwnerId = table.Column<int>(nullable: true)
                 },
@@ -93,7 +93,7 @@ namespace CLup.Migrations
                     UserEmail = table.Column<string>(nullable: false),
                     TimeSlotId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: true),
-                    BusinessId = table.Column<string>(nullable: true)
+                    BusinessId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,45 +122,45 @@ namespace CLup.Migrations
                 columns: new[] { "Id", "BusinessOwnerId", "Capacity", "Closes", "Name", "Opens", "OwnerEmail", "TimeSlotLength", "Type", "Zip" },
                 values: new object[,]
                 {
-                    { 1, null, 50, 16.0, "Cool", 10.0, "h@h.com", 0, "Supermarket", 3520 },
-                    { 2, null, 40, 14.0, "Shop", 9.0, "h@h.com", 0, "Museum", 3520 },
-                    { 3, null, 30, 15.300000000000001, "1337", 8.3000000000000007, "h@h.com", 0, "Kiosk", 4720 }
+                    { 1, null, 50, "16.00", "Cool", "10.00", "h@h.com", 50, "Supermarket", 3520 },
+                    { 2, null, 40, "14.00", "Shop", "09.00", "h@h.com", 20, "Museum", 3520 },
+                    { 3, null, 30, "15.30", "1337", "08.30", "h@h.com", 10, "Kiosk", 4720 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "Name", "Password", "Zip" },
-                values: new object[] { 1, "h@h.com", "Jens", "$2a$11$1HZOnMyQp02yz7NE4.usRuWIYIbq/FT/dG8kd0Y58wFGXadBq1HKq", "3520" });
+                values: new object[] { 1, "h@h.com", "Jens", "$2a$11$hmjdI8HyeeEecBEw.WRY/edqND.KvgbRKMIMqZy8soyw5dLAgT6c2", "3520" });
 
             migrationBuilder.InsertData(
                 table: "TimeSlots",
                 columns: new[] { "Id", "BusinessId", "BusinessName", "Capacity", "End", "Start" },
-                values: new object[] { 1, 1, "Cool", 50, new DateTime(2020, 12, 10, 0, 3, 3, 642, DateTimeKind.Local).AddTicks(5598), new DateTime(2020, 12, 9, 23, 3, 3, 640, DateTimeKind.Local).AddTicks(365) });
+                values: new object[] { 1, 1, "Cool", 50, new DateTime(2020, 12, 18, 14, 33, 38, 61, DateTimeKind.Local).AddTicks(6830), new DateTime(2020, 12, 18, 13, 33, 38, 59, DateTimeKind.Local).AddTicks(1596) });
 
             migrationBuilder.InsertData(
                 table: "TimeSlots",
                 columns: new[] { "Id", "BusinessId", "BusinessName", "Capacity", "End", "Start" },
-                values: new object[] { 2, 1, "Cool", 40, new DateTime(2020, 12, 10, 1, 3, 3, 642, DateTimeKind.Local).AddTicks(6013), new DateTime(2020, 12, 10, 0, 3, 3, 642, DateTimeKind.Local).AddTicks(6006) });
+                values: new object[] { 2, 1, "Cool", 40, new DateTime(2020, 12, 18, 15, 33, 38, 61, DateTimeKind.Local).AddTicks(7152), new DateTime(2020, 12, 18, 14, 33, 38, 61, DateTimeKind.Local).AddTicks(7145) });
 
             migrationBuilder.InsertData(
                 table: "TimeSlots",
                 columns: new[] { "Id", "BusinessId", "BusinessName", "Capacity", "End", "Start" },
-                values: new object[] { 3, 1, "Cool", 30, new DateTime(2020, 12, 10, 2, 3, 3, 642, DateTimeKind.Local).AddTicks(6016), new DateTime(2020, 12, 10, 1, 3, 3, 642, DateTimeKind.Local).AddTicks(6015) });
+                values: new object[] { 3, 1, "Cool", 30, new DateTime(2020, 12, 18, 16, 33, 38, 61, DateTimeKind.Local).AddTicks(7155), new DateTime(2020, 12, 18, 15, 33, 38, 61, DateTimeKind.Local).AddTicks(7154) });
 
             migrationBuilder.InsertData(
                 table: "Bookings",
                 columns: new[] { "UserEmail", "TimeSlotId", "BusinessId", "UserId" },
-                values: new object[] { "h@h.com", 1, null, null });
+                values: new object[] { "h@h.com", 1, 1, null });
 
             migrationBuilder.InsertData(
                 table: "Bookings",
                 columns: new[] { "UserEmail", "TimeSlotId", "BusinessId", "UserId" },
-                values: new object[] { "h@h.com", 2, null, null });
+                values: new object[] { "h@h.com", 2, 1, null });
 
             migrationBuilder.InsertData(
                 table: "Bookings",
                 columns: new[] { "UserEmail", "TimeSlotId", "BusinessId", "UserId" },
-                values: new object[] { "h@h.com", 3, null, null });
+                values: new object[] { "h@h.com", 3, 1, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_TimeSlotId",

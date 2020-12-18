@@ -74,14 +74,6 @@ export const CardRow: React.FC<Props> = ({
                   deleteIcon={<DoneIcon />}
                   variant={variant || 'default'}
                />
-               {/* <Button
-                  className={styles.button}
-                  size="small"
-                  variant="contained"
-                  onClick={buttonAction}
-               >
-                  {buttonText}
-               </Button> */}
             </Col>
          </Row>
       </>

@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
    },
    listItem: {
       marginTop: 25,
-      marginBottom: 35,
+      marginBottom: 25,
    },
    listItemIcon: {
       marginRight: -10,
@@ -72,25 +72,40 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
       {
          label: 'All Businesses',
          icon: <DashboardIcon />,
-         path: '/businesses',
+         path: '/user/business',
       },
       {
          label: 'My Bookings',
          icon: <DashboardIcon />,
-         path: '/mybookings',
+         path: '/user/bookings',
       },
       {
          label: 'Create Business',
          icon: <DashboardIcon />,
-         path: '/create',
+         path: '/new/business',
       },
    ];
 
    const ownerItems: MenuItem[] = [
       {
-         label: 'My Businesses',
+         label: 'Businesses',
          icon: <DashboardIcon />,
-         path: '/mybusinesses',
+         path: '/business',
+      },
+      {
+         label: 'Bookings',
+         icon: <DashboardIcon />,
+         path: '/business/bookings',
+      },
+      {
+         label: 'Time Slots',
+         icon: <DashboardIcon />,
+         path: '/business/timeslots',
+      },
+      {
+         label: 'Employees',
+         icon: <DashboardIcon />,
+         path: '/business/employees',
       },
    ];
 
@@ -123,18 +138,20 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
             ))}
          </List>
          <Divider />
-         {user.isOwner &&
-            ownerItems.map((menuItem) => (
-               <ListItem
-                  className={styles.listItem}
-                  button
-                  key={menuItem.label}
-                  onClick={() => handleMenuItemClick(menuItem)}
-               >
-                  <ListItemIcon className={styles.listItemIcon}>{menuItem.icon}</ListItemIcon>
-                  <ListItemText primary={menuItem.label} />
-               </ListItem>
-            ))}
+         <List>
+            {user.isOwner &&
+               ownerItems.map((menuItem) => (
+                  <ListItem
+                     className={styles.listItem}
+                     button
+                     key={menuItem.label}
+                     onClick={() => handleMenuItemClick(menuItem)}
+                  >
+                     <ListItemIcon className={styles.listItemIcon}>{menuItem.icon}</ListItemIcon>
+                     <ListItemText primary={menuItem.label} />
+                  </ListItem>
+               ))}
+         </List>
          <Divider />
       </>
    );

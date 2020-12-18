@@ -1,6 +1,6 @@
 import {makeStyles} from '@material-ui/core/styles';
 import MaterialUITextField from '@material-ui/core/TextField';
-import React from 'react';
+import React, {ReactText} from 'react';
 
 const useStyles = makeStyles((theme) => ({
    helperText: {
@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
    id: string;
    label: string | undefined;
-   value: string | number;
+   value: ReactText | undefined;
    onBlur?: (event: React.FocusEvent) => void;
    helperText?: string | boolean;
    formHelperTextProps?: any;
@@ -24,7 +24,7 @@ type Props = {
    select?: boolean;
    className?: any;
    variant?: 'filled' | 'outlined';
-   defaultValue?: string | number;
+   defaultValue?: ReactText;
    inputLabelProps?: any;
    error?: boolean;
    children?: React.ReactNode;

@@ -2,7 +2,7 @@ import {Badge, Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
 
-import {useUserContext} from '../context/UserContext';
+import {useUserContext} from '../../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({
    headline: {

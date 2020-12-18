@@ -14,10 +14,10 @@ namespace Logic.DTO
         public string OwnerEmail { get; set; }
 
         [Required]
-        public double Opens { get; set; }
+        public string Opens { get; set; }
 
         [Required]
-        public double Closes { get; set; }
+        public string Closes { get; set; }
 
         [Required]
         public int Capacity { get; set; }

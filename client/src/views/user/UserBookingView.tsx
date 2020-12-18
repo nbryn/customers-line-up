@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
-import {TimeSlotDTO} from '../../models/dto/Business';
+import {TimeSlotDTO} from '../../dto/Business';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
 import URL, {USER_BOOKINGS_URL} from '../../api/URL';
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const UserBookingView: React.FC = () => {
    const styles = useStyles();
-   const [idToBeRemoved, setIdToBeRemoved] = useState<number | null>(null);
+   const [removeBooking, setRemoveBooking] = useState<number | null>(null);
 
    const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest();
 
@@ -34,7 +34,7 @@ export const UserBookingView: React.FC = () => {
          icon: 'delete',
          tooltip: 'Delete Booking',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
-            setIdToBeRemoved(rowData.id);
+            setRemoveBooking(rowData.id);
 
             await requestHandler.mutation(URL.getDeleteBookingURL(rowData.id), 'DELETE');
          },
@@ -52,7 +52,7 @@ export const UserBookingView: React.FC = () => {
                   actions={actions}
                   columns={columns}
                   fetchTableData={async () => await requestHandler.query(USER_BOOKINGS_URL)}
-                  removeEntryId={idToBeRemoved}
+                  removeEntryId={removeBooking}
                   tableTitle="Bookings"
                   emptyMessage="No Bookings Yet"
                />

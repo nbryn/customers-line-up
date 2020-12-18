@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CLup.Migrations
 {
     [DbContext(typeof(CLupContext))]
-    [Migration("20201211115504_BookingWithBusinessId")]
-    partial class BookingWithBusinessId
+    [Migration("20201218093338_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,16 +103,16 @@ namespace CLup.Migrations
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
 
-                    b.Property<double>("Closes")
-                        .HasColumnType("float");
+                    b.Property<string>("Closes")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<double>("Opens")
-                        .HasColumnType("float");
+                    b.Property<string>("Opens")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerEmail")
                         .IsRequired()
@@ -139,9 +139,9 @@ namespace CLup.Migrations
                         {
                             Id = 1,
                             Capacity = 50,
-                            Closes = 16.0,
+                            Closes = "16.00",
                             Name = "Cool",
-                            Opens = 10.0,
+                            Opens = "10.00",
                             OwnerEmail = "h@h.com",
                             TimeSlotLength = 50,
                             Type = "Supermarket",
@@ -151,9 +151,9 @@ namespace CLup.Migrations
                         {
                             Id = 2,
                             Capacity = 40,
-                            Closes = 14.0,
+                            Closes = "14.00",
                             Name = "Shop",
-                            Opens = 9.0,
+                            Opens = "09.00",
                             OwnerEmail = "h@h.com",
                             TimeSlotLength = 20,
                             Type = "Museum",
@@ -163,9 +163,9 @@ namespace CLup.Migrations
                         {
                             Id = 3,
                             Capacity = 30,
-                            Closes = 15.300000000000001,
+                            Closes = "15.30",
                             Name = "1337",
-                            Opens = 8.3000000000000007,
+                            Opens = "08.30",
                             OwnerEmail = "h@h.com",
                             TimeSlotLength = 10,
                             Type = "Kiosk",
@@ -208,8 +208,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 50,
-                            End = new DateTime(2020, 12, 11, 16, 55, 3, 743, DateTimeKind.Local).AddTicks(7467),
-                            Start = new DateTime(2020, 12, 11, 15, 55, 3, 741, DateTimeKind.Local).AddTicks(2828)
+                            End = new DateTime(2020, 12, 18, 14, 33, 38, 61, DateTimeKind.Local).AddTicks(6830),
+                            Start = new DateTime(2020, 12, 18, 13, 33, 38, 59, DateTimeKind.Local).AddTicks(1596)
                         },
                         new
                         {
@@ -217,8 +217,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 40,
-                            End = new DateTime(2020, 12, 11, 17, 55, 3, 743, DateTimeKind.Local).AddTicks(7795),
-                            Start = new DateTime(2020, 12, 11, 16, 55, 3, 743, DateTimeKind.Local).AddTicks(7789)
+                            End = new DateTime(2020, 12, 18, 15, 33, 38, 61, DateTimeKind.Local).AddTicks(7152),
+                            Start = new DateTime(2020, 12, 18, 14, 33, 38, 61, DateTimeKind.Local).AddTicks(7145)
                         },
                         new
                         {
@@ -226,8 +226,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 30,
-                            End = new DateTime(2020, 12, 11, 18, 55, 3, 743, DateTimeKind.Local).AddTicks(7798),
-                            Start = new DateTime(2020, 12, 11, 17, 55, 3, 743, DateTimeKind.Local).AddTicks(7797)
+                            End = new DateTime(2020, 12, 18, 16, 33, 38, 61, DateTimeKind.Local).AddTicks(7155),
+                            Start = new DateTime(2020, 12, 18, 15, 33, 38, 61, DateTimeKind.Local).AddTicks(7154)
                         });
                 });
 
@@ -268,7 +268,7 @@ namespace CLup.Migrations
                             Id = 1,
                             Email = "h@h.com",
                             Name = "Jens",
-                            Password = "$2a$11$c.y.o2s.KGYj5uv9cldeZu2FZ1axUY97f47Gkq5HALb1W4mu/O05O",
+                            Password = "$2a$11$hmjdI8HyeeEecBEw.WRY/edqND.KvgbRKMIMqZy8soyw5dLAgT6c2",
                             Zip = "3520"
                         });
                 });

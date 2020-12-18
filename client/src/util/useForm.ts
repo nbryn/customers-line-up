@@ -12,7 +12,7 @@ export const useForm = <T>(
     method: Method,
     formatter?: (dto: T) => T): Form<T> => {
 
-    const formik = useFormik<T>({
+    const form = useFormik<T>({
         initialValues,
         validationSchema,
         isInitialValid: false,
@@ -23,5 +23,5 @@ export const useForm = <T>(
         },
     });
 
-  return formik;
+  return form;
 }

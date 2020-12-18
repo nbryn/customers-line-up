@@ -31,6 +31,7 @@ namespace Logic.Util
                 Date = timeSlot.Start.ToString("dd/MM/yyyy"),
                 Start = timeSlot.Start.TimeOfDay.ToString().Substring(0, 5),
                 End = timeSlot.End.TimeOfDay.ToString().Substring(0, 5),
+                Capacity = timeSlot.Bookings.Count() + "/" + timeSlot.Capacity.ToString(), 
             };
         }
 
@@ -51,7 +52,8 @@ namespace Logic.Util
                 Id = business.Id,
                 Name = business.Name,
                 Zip = business.Zip,
-                BusinessHours = business.Opens + " - " + business.Closes,
+                Opens = business.Opens,
+                Closes = business.Closes,
                 TimeSlotLength = business.TimeSlotLength,
                 Capacity = business.Capacity,
                 Type = business.Type.ToString("G")

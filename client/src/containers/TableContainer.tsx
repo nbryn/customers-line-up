@@ -1,7 +1,7 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
 
-import {DTO} from '../models/dto/Business';
+import {DTO} from '../dto/Business';
 import {Table, TableColumn} from '../components/Table';
 
 
@@ -29,8 +29,6 @@ export const TableContainer: React.FC<Props> = ({
    useEffect(() => {
       (async () => {
          const tableData = await fetchTableData();
-
-         console.log(tableData);
 
          setTableData(tableData);
          setLoading(false);

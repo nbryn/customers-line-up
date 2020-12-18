@@ -1,6 +1,6 @@
 import {LOGIN_URL} from '../api/URL';
 import { fetch} from '../api/RequestHandler';
-import { UserDTO } from '../models/dto/User';
+import { UserDTO } from '../dto/User';
 
 async function login(email: string, password: string): Promise<UserDTO> {
    const user: UserDTO = await fetch(LOGIN_URL, 'post', {email, password});

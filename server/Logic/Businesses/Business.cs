@@ -23,9 +23,9 @@ namespace Logic.Businesses
 
         public int Capacity { get; set; }
 
-        public double Opens { get; set; }
+        public string Opens { get; set; }
 
-        public double Closes { get; set; }
+        public string Closes { get; set; }
 
         public int TimeSlotLength { get; set; }
 
