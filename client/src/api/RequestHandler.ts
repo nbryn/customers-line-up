@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { Error } from "./Error";
 
 export interface RequestHandler<T> {
-  mutation: (url: string, method: Method, request?: any) => Promise<void>;
+  mutation: <T>(url: string, method: Method, request?: any) => Promise<T>;
   query: (url: string) => Promise<T>
   setRequestInfo: (info: string) => void;
   requestInfo: string;
@@ -16,10 +16,11 @@ export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
   const [working, setWorking] = useState<boolean>(false);
   const [requestInfo, setRequestInfo] = useState<string>('');
 
-  const mutation = async (url: string, method: Method, request?: any): Promise<void> => {
+  const mutation = async <T>(url: string, method: Method, request?: any): Promise<T> => {
+    let response: T;
     try {
       setWorking(true);
-      await fetch(url, method, request);
+      response = await fetch(url, method, request);
       if (succesMessage) setRequestInfo(succesMessage);
 
     } catch (err) {
@@ -28,13 +29,15 @@ export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
     } finally {
       setWorking(false);
     }
+
+    return response!;
   }
 
   const query = async (url: string): Promise<T> => {
     let response: T;
     try {
       setWorking(true);
-      response = await fetch<T>(url, 'GET',);
+      response = await fetch<T>(url, 'GET');
 
     } catch (err) {
       setRequestInfo(err.getErrorMessage());
@@ -44,6 +47,7 @@ export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
 
     return response!;
   }
+
 
   return {
     query,

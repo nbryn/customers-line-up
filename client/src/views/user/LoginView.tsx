@@ -4,43 +4,24 @@ import React, {useState} from 'react';
 
 import {Card} from '../../components/Card';
 import {Form} from '../../components/Form';
+import {LOGIN_URL} from '../../api/URL';
+import {loginValidationSchema} from '../../validation/UserValidation';
+import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {SignupView} from './SignupView';
+import StringUtil from '../../util/StringUtil';
 import {TextField} from '../../components/TextField';
+import TextFieldUtil from '../../util/TextFieldUtil';
+import {useForm} from '../../validation/useForm';
 import {UserDTO} from '../../dto/User';
-import UserService from '../../services/UserService';
 import {useUserContext} from '../../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({
-   alert: {
-      display: 'inline-block',
-      marginTop: -20,
-      marginBottom: 40,
-      maxWidth: 380,
-   },
-   badge: {
-      marginBottom: 40,
-      marginTop: 25,
-      width: '50%',
-   },
-   button: {
-      marginTop: 25,
-      marginBottom: -15,
-      width: '45%',
-   },
-   buttonGroup: {
-      marginTop: 35,
-      marginBottom: -15,
-      width: '100%',
-   },
    card: {
       marginTop: 60,
       borderRadius: 15,
       height: 450,
       //boxShadow: '0px 0px 0px 8px rgba(12, 12, 242, 0.1)',
       textAlign: 'center',
-   },
-   helperText: {
-      color: 'red',
    },
    textField: {
       width: '35%',
@@ -56,26 +37,22 @@ export const LoginView: React.FC = () => {
 
    const [renderSignUp, setRenderSignUp] = useState(false);
 
-   const [email, setEmail] = useState('');
-   const [password, setPassword] = useState('');
-   const [working, setWorking] = useState(false);
-   const [errorMessage, setErrorMessage] = useState('');
+   const requestHandler: RequestHandler<UserDTO> = useRequest();
 
-   const handleSubmit = async (event: React.FormEvent) => {
-      try {
-         event.preventDefault();
-         setWorking(true);
-         setErrorMessage('');
-
-         const user: UserDTO = await UserService.login(email, password);
-
-         setUser(user);
-      } catch (err) {
-         setErrorMessage('Wrong Email/Password');
-      } finally {
-         setWorking(false);
-      }
+   const formValues: UserDTO = {
+      email: '',
+      password: '',
    };
+
+   const form = useForm<UserDTO>(
+      formValues,
+      loginValidationSchema,
+      LOGIN_URL,
+      'POST',
+      requestHandler.mutation,
+      undefined,
+      setUser
+   );
 
    return (
       <Container>
@@ -94,32 +71,27 @@ export const LoginView: React.FC = () => {
                      variant="outlined"
                   >
                      <Form
-                        onSubmit={handleSubmit}
+                        onSubmit={form.handleSubmit}
                         buttonText="Login"
-                        working={working}
-                        errorMessage={errorMessage}
-                        valid={Boolean(email && password)}
+                        working={requestHandler.working}
+                        valid={form.isValid}
+                        errorMessage={requestHandler.requestInfo ? 'Wrong Email/Password' : ''}
                      >
-                        <FormGroup>
-                           <TextField
-                              className={styles.textField}
-                              id="email"
-                              label="Email"
-                              onChange={(e) => setEmail(e.target.value)}
-                              value={email}
-                           />
-                        </FormGroup>
-
-                        <FormGroup>
-                           <TextField
-                              className={styles.textField}
-                              id="password"
-                              label="Password"
-                              type="password"
-                              onChange={(e) => setPassword(e.target.value)}
-                              value={password}
-                           />
-                        </FormGroup>
+                        {Object.keys(formValues).map((key) => (
+                           <FormGroup key={key}>
+                              <TextField
+                                 className={styles.textField}
+                                 id={key}
+                                 label={StringUtil.capitalizeFirstLetter(key)}
+                                 type={TextFieldUtil.getTextFieldTypeFromKey(key)}
+                                 value={form.values[key] as string}
+                                 onChange={form.handleChange}
+                                 onBlur={form.handleBlur}
+                                 error={form.touched[key] && Boolean(form.errors[key])}
+                                 helperText={form.touched[key] && form.errors[key]}
+                              />
+                           </FormGroup>
+                        ))}
                      </Form>
                   </Card>
                </Col>

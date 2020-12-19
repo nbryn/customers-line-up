@@ -1,3 +1,4 @@
+import Chip from '@material-ui/core/Chip';
 import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
@@ -41,8 +42,7 @@ export const CreateBookingView: React.FC = () => {
 
    const actions = [
       {
-         icon: 'book',
-         tooltip: 'Book Time',
+         icon: () => <Chip size="small" label="Book Time" clickable color="primary" />,
          onClick: async (event: any, rowData: TimeSlotDTO) => {
             requestHandler.mutation(URL.getCreateBookingURL(rowData.id), 'POST');
          },

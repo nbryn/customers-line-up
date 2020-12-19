@@ -1,4 +1,4 @@
-import {Col, Container, FormGroup, Row} from 'react-bootstrap';
+import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {MenuItem} from '@material-ui/core';
 import React, {useEffect, useState} from 'react';
@@ -12,7 +12,7 @@ import {Modal} from '../../components/Modal';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TextField} from '../../components/TextField';
 import {BUSINESS_TYPES_URL, CREATE_BUSINESS_URL} from '../../api/URL';
-import {useForm} from '../../util/useForm';
+import {useForm} from '../../validation/useForm';
 
 const useStyles = makeStyles((theme) => ({
    card: {
@@ -64,12 +64,12 @@ export const CreateBusinessView: React.FC = () => {
       closes: '',
    };
 
-   const formik = useForm<BusinessDTO>(
+   const form = useForm<BusinessDTO>(
       initialValues,
       businessValidationSchema,
-      requestHandler.mutation,
       CREATE_BUSINESS_URL,
       'POST',
+      requestHandler.mutation,   
       (business) => {
          business.opens = business.opens.replace(':', '.');
          business.closes = business.closes.replace(':', '.');
@@ -92,10 +92,10 @@ export const CreateBusinessView: React.FC = () => {
                />
                <Card className={styles.card} title="Create Business" variant="outlined">
                   <Form
-                     onSubmit={formik.handleSubmit}
+                     onSubmit={form.handleSubmit}
                      buttonText="Create"
                      working={requestHandler.working}
-                     valid={formik.isValid}
+                     valid={form.isValid}
                   >
                      <Row>
                         <Col sm={6} lg={6}>
@@ -105,11 +105,11 @@ export const CreateBusinessView: React.FC = () => {
                                  id="name"
                                  label="Name"
                                  type="text"
-                                 value={formik.values.name}
-                                 onChange={formik.handleChange}
-                                 onBlur={formik.handleBlur}
-                                 error={formik.touched.name && Boolean(formik.errors.name)}
-                                 helperText={formik.touched.name && formik.errors.name}
+                                 value={form.values.name}
+                                 onChange={form.handleChange}
+                                 onBlur={form.handleBlur}
+                                 error={form.touched.name && Boolean(form.errors.name)}
+                                 helperText={form.touched.name && form.errors.name}
                               />
                            </FormGroup>
 
@@ -119,11 +119,11 @@ export const CreateBusinessView: React.FC = () => {
                                  id="zip"
                                  label="Zip"
                                  type="number"
-                                 value={formik.values.zip}
-                                 onChange={formik.handleChange}
-                                 onBlur={formik.handleBlur}
-                                 error={formik.touched.zip && Boolean(formik.errors.zip)}
-                                 helperText={formik.touched.zip && formik.errors.zip}
+                                 value={form.values.zip}
+                                 onChange={form.handleChange}
+                                 onBlur={form.handleBlur}
+                                 error={form.touched.zip && Boolean(form.errors.zip)}
+                                 helperText={form.touched.zip && form.errors.zip}
                               />
                            </FormGroup>
                            <FormGroup className={styles.formGroup}>
@@ -132,11 +132,11 @@ export const CreateBusinessView: React.FC = () => {
                                  id="capacity"
                                  label="Capacity"
                                  type="number"
-                                 value={formik.values.capacity}
-                                 onChange={formik.handleChange}
-                                 onBlur={formik.handleBlur}
-                                 error={formik.touched.capacity && Boolean(formik.errors.capacity)}
-                                 helperText={formik.touched.capacity && formik.errors.capacity}
+                                 value={form.values.capacity}
+                                 onChange={form.handleChange}
+                                 onBlur={form.handleBlur}
+                                 error={form.touched.capacity && Boolean(form.errors.capacity)}
+                                 helperText={form.touched.capacity && form.errors.capacity}
                               />
                            </FormGroup>
                            <FormGroup className={styles.formGroup}>
@@ -146,11 +146,11 @@ export const CreateBusinessView: React.FC = () => {
                                  label="Type"
                                  type="text"
                                  select
-                                 value={formik.values.type}
-                                 onChange={formik.handleChange('type')}
-                                 onBlur={formik.handleBlur}
-                                 error={formik.touched.type && Boolean(formik.errors.type)}
-                                 helperText={formik.touched.type && formik.errors.type}
+                                 value={form.values.type}
+                                 onChange={form.handleChange('type')}
+                                 onBlur={form.handleBlur}
+                                 error={form.touched.type && Boolean(form.errors.type)}
+                                 helperText={form.touched.type && form.errors.type}
                               >
                                  {businessTypes.map((type) => (
                                     <MenuItem key={type} value={type}>
@@ -167,15 +167,15 @@ export const CreateBusinessView: React.FC = () => {
                                  id="timeSlotLength"
                                  label="Visit Length"
                                  type="number"
-                                 value={formik.values.timeSlotLength}
-                                 onChange={formik.handleChange}
-                                 onBlur={formik.handleBlur}
+                                 value={form.values.timeSlotLength}
+                                 onChange={form.handleChange}
+                                 onBlur={form.handleBlur}
                                  error={
-                                    formik.touched.timeSlotLength &&
-                                    Boolean(formik.errors.timeSlotLength)
+                                    form.touched.timeSlotLength &&
+                                    Boolean(form.errors.timeSlotLength)
                                  }
                                  helperText={
-                                    formik.touched.timeSlotLength && formik.errors.timeSlotLength
+                                    form.touched.timeSlotLength && form.errors.timeSlotLength
                                  }
                               />
                            </FormGroup>
@@ -186,11 +186,11 @@ export const CreateBusinessView: React.FC = () => {
                                  label="Opens"
                                  type="time"
                                  defaultValue="08:00"
-                                 value={formik.values.opens}
-                                 onChange={formik.handleChange}
-                                 onBlur={formik.handleBlur}
-                                 error={formik.touched.opens && Boolean(formik.errors.opens)}
-                                 helperText={formik.touched.opens && formik.errors.opens}
+                                 value={form.values.opens}
+                                 onChange={form.handleChange}
+                                 onBlur={form.handleBlur}
+                                 error={form.touched.opens && Boolean(form.errors.opens)}
+                                 helperText={form.touched.opens && form.errors.opens}
                                  inputLabelProps={{
                                     shrink: true,
                                  }}
@@ -206,11 +206,11 @@ export const CreateBusinessView: React.FC = () => {
                                  label="Closes"
                                  type="time"
                                  defaultValue="04:00"
-                                 value={formik.values.closes}
-                                 onChange={formik.handleChange}
-                                 onBlur={formik.handleBlur}
-                                 error={formik.touched.closes && Boolean(formik.errors.closes)}
-                                 helperText={formik.touched.closes && formik.errors.closes}
+                                 value={form.values.closes}
+                                 onChange={form.handleChange}
+                                 onBlur={form.handleBlur}
+                                 error={form.touched.closes && Boolean(form.errors.closes)}
+                                 helperText={form.touched.closes && form.errors.closes}
                                  inputLabelProps={{
                                     shrink: true,
                                  }}

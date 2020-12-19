@@ -47,7 +47,7 @@ namespace Logic.Context
 
             var users = new[]
             {
-                new User {Id = 1, Name = "Jens", Email = "h@h.com", Password = BC.HashPassword("1234"), Zip = "3520"}
+                new User {Id = 1, Name = "Jens", Email = "h@h.com", Password = BC.HashPassword("1234"), Zip = 3520}
             };
 
             modelBuilder.Entity<User>().HasData(users);

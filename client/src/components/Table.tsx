@@ -34,16 +34,16 @@ export const Table: React.FC<Props> = ({actions, columns, data, title, emptyMess
          title={title}
          localization={{
             body: {
-                emptyDataSourceMessage: (
+               emptyDataSourceMessage: (
                   <h4>
-                  <Badge style={{marginBottom: 50}} variant="primary">
-                     {emptyMessage}
-                  </Badge>
-               </h4>
-                ),
+                     <Badge style={{marginBottom: 50}} variant="primary">
+                        {emptyMessage}
+                     </Badge>
+                  </h4>
+               ),
             },
-        }}
-         
-      ></MaterialTable>
+         }}
+         options={{actionsColumnIndex: -1}}
+      />
    );
 };

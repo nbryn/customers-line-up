@@ -10,7 +10,6 @@ export type ContextValue = {
    userLoggedIn: boolean;
 };
 
-
 export const UserContext = React.createContext<ContextValue>({
    user: (Cookies.get('user') as unknown) as UserDTO,
    setUser: () => null,
@@ -30,7 +29,7 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
       setUserLoggedIn(true);
       setCurrentUser(user);
 
-      Cookies.set('token', user.token);
+      Cookies.set('token', user.token!);
       Cookies.set('user', user);
    };
 
@@ -61,6 +60,6 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
 
 export const useUserContext = (): ContextValue => {
    const context = useContext(UserContext);
-   
+
    return context;
 };

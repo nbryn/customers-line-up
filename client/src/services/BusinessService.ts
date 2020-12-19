@@ -16,17 +16,17 @@ function getPathAndTextFromURL(path: string): PathInfo {
     }
 }
 
-function getButtonText(path: string): string {
 
+function getButtonText(path: string): string {
     switch (path) {
         case 'business':
-            return '';
+            return 'Edit Info';
         case 'bookings':
-            return 'Bookings';
+            return 'Manage Bookings';
         case 'timeslots':
-            return 'Time Slots';
+            return 'Manage Time Slots';
         case 'employees':
-            return 'Employees';
+            return 'Manage Employees';
         default:
             return '';
     }

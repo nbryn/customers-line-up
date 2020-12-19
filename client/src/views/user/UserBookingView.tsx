@@ -1,3 +1,4 @@
+import Chip from '@material-ui/core/Chip';
 import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
@@ -31,7 +32,7 @@ export const UserBookingView: React.FC = () => {
 
    const actions = [
       {
-         icon: 'delete',
+         icon: () => <Chip size="small" label="Delete" clickable color="primary" />,
          tooltip: 'Delete Booking',
          onClick: async (event: any, rowData: TimeSlotDTO) => {
             setRemoveBooking(rowData.id);

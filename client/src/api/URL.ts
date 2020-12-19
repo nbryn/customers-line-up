@@ -39,6 +39,8 @@ const getDeleteTimeSlotURL = (timeSlotId: number): string => {
 // Server will get user info from JWT
 export const LOGIN_URL = BASE_URL + 'user/login';
 
+export const REGISTER_URL = BASE_URL + 'user/register';
+
 export const ALL_BUSINESSES_URL = BASE_URL + 'business/all';
 
 export const BUSINESSES_OWNER_URL = BASE_URL + 'business/owner';

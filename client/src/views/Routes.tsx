@@ -8,7 +8,7 @@ import {BusinessTimeSlotView} from './business/BusinessTimeSlotView';
 import {CreateBookingView} from './user/CreateBookingView';
 import {CreateBusinessView} from './business/CreateBusinessView';
 import {HomeView} from './user/HomeView';
-import {ManageBusinessView} from './business/ManageBusinessView';
+import {BusinessProfileView} from './business/BusinessProfileView';
 import {UserBookingView} from './user/UserBookingView';
 
 export const Routes: React.FC = () => {
@@ -27,7 +27,7 @@ export const Routes: React.FC = () => {
          <Route exact path="/business" component={BusinessOverview} />
          <Route exact path="/business/bookings/manage" component={BusinessBookingView} />
          <Route exact path="/business/timeslots/manage" component={BusinessTimeSlotView} />
-         <Route exact path="/business/manage" component={ManageBusinessView} />
+         <Route exact path="/business/manage" component={BusinessProfileView} />
       </Switch>
    );
 };

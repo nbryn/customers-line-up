@@ -20,7 +20,7 @@ namespace Logic.Users
         public string Password { get; set; }
 
         [Required]
-        public string Zip { get; set; }
+        public int Zip { get; set; }
 
         public IList<Booking> Bookings { get; set; }
 

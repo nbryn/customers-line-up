@@ -9,7 +9,7 @@ namespace Logic.DTO.User
         public string Name { get; set; }
 
         [Required]
-        public string Zip { get; set; }
+        public int Zip { get; set; }
 
     }
 }

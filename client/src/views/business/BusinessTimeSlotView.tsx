@@ -1,3 +1,4 @@
+import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
@@ -39,8 +40,7 @@ export const BusinessTimeSlotView: React.FC = () => {
 
    const actions = [
       {
-         icon: 'Delete',
-         tooltip: 'Remove Time Slot',
+         icon: () => <Chip size="small" label="Delete Time Slot" clickable color="primary" />,
          onClick: async (event: any, rowData: TimeSlotDTO) => {
             setRemoveTimeSlot(rowData.id);
 

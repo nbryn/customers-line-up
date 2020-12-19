@@ -54,7 +54,7 @@ export const CardRow: React.FC<Props> = ({
          <Row className={styles.row}>
             <Col>
                <Badge>
-                  <h5>{text}</h5>
+                  <h6>{text}</h6>
                </Badge>
             </Col>
             <Col className={styles.dataCol}>

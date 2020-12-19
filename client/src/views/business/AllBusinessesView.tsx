@@ -1,4 +1,5 @@
-import {Col, Container, Row} from 'react-bootstrap';
+import Chip from '@material-ui/core/Chip';
+import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
 import {useHistory} from 'react-router';
@@ -26,14 +27,13 @@ export const AllBusinessesView: React.FC = () => {
       {title: 'id', field: 'id', hidden: true},
       {title: 'Name', field: 'name'},
       {title: 'Zip', field: 'zip'},
-      {title: 'Opens', field: 'opens'},
-      {title: 'Closes', field: 'closes'},
+      {title: 'Business Hours', field: 'businessHours'},
       {title: 'Type', field: 'type'},
    ];
 
    const actions = [
       {
-         icon: 'info',
+         icon: () => <Chip size="small" label="Go to business" clickable color="primary" />,
          tooltip: 'See available time slots',
          onClick: (event: any, rowData: BusinessDTO) => {
             history.push('/new/booking', {data: rowData});
@@ -42,7 +42,7 @@ export const AllBusinessesView: React.FC = () => {
    ];
 
    return (
-      <Container>
+      <>
          <Row className={styles.row}>
             <Header text="Available Businesses" />
          </Row>
@@ -51,11 +51,18 @@ export const AllBusinessesView: React.FC = () => {
                <TableContainer
                   actions={actions}
                   columns={columns}
-                  fetchTableData={async () => await requestHandler.query(ALL_BUSINESSES_URL)}
+                  fetchTableData={async () => {
+                     const businesses = await requestHandler.query(ALL_BUSINESSES_URL);
+
+                     return businesses.map((business) => ({
+                        ...business,
+                        businessHours: business.opens + ' - ' + business.closes,
+                     }));
+                  }}
                   tableTitle="Businesses"
                />
             </Col>
          </Row>
-      </Container>
+      </>
    );
 };

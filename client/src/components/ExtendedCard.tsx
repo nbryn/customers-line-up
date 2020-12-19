@@ -11,26 +11,9 @@ const useStyles = makeStyles({
    card: {
       textAlign: 'left',
    },
-   typography: {
-      marginTop: 30,
-   },
-   mix: {
-      marginTop: 15,
-      marginBottom: 15,
-   },
-   center: {
-      textAlign: 'center',
-      marginTop: -25,
-   },
-   button: {
-      textAlign: 'right',
-      marginTop: -25,
-   },
-   primaryButton: {
-      justifyContent: 'center',
-      marginTop: 50,
-      marginBottom: -10,
-   },
+   end: {
+      marginTop: -20,
+   }
 });
 
 export type ExtendedCardData = {
@@ -68,17 +51,7 @@ export const ExtendedCard: React.FC<Props> = ({buttonAction, buttonText, title, 
                buttonAction={x.buttonAction}
             />
          ))}
-         <div className={styles.card}>
-            {/* <Button
-               className={styles.primaryButton}
-               variant="contained"
-               color="primary"
-               onClick={() => primaryButtonAction(business.id, business.name)}
-               size="medium"
-            >
-               {primaryButtonText}
-            </Button> */}
-         </div>
+         <div className={styles.end}></div>
       </Card>
    );
 };

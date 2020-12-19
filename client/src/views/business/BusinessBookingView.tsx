@@ -1,3 +1,4 @@
+import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
@@ -39,8 +40,7 @@ export const BusinessBookingView: React.FC = () => {
 
    const actions = [
       {
-         icon: 'Delete',
-         tooltip: 'Remove Booking',
+         icon: () => <Chip size="small" label="Delete Booking" clickable color="primary" />,
          onClick: (event: any, rowData: any) => {
             console.log(rowData);
          },

@@ -5,65 +5,68 @@ import {MenuItem} from '@material-ui/core';
 import React, {useState} from 'react';
 
 import {BusinessDTO} from '../dto/Business';
-import {Form} from '../util/useForm';
+import {Form} from '../validation/useForm';
 import {TextField} from './TextField';
+import TextFieldUtil from '../util/TextFieldUtil';
 
-export type TextFieldType = 'text' | 'number' | 'time' | undefined;
+export type TextFieldType = 'text' | 'number' | 'time' | 'password' | undefined;
 
 type Props = {
    show: boolean;
-   title: string;
-   id: string;
-   valueLabel: string;
+   textFieldKey: string;
    form: Form<BusinessDTO>;
    textFieldType: TextFieldType;
    primaryActionText?: string;
    selectOptions?: string[];
    primaryAction?: () => Promise<void>;
    secondaryAction: () => void;
+   showModal: (value: string) => void;
 };
 
 export const TextFieldModal: React.FC<Props> = ({
    show,
-   title,
-   valueLabel,
-   id,
+   textFieldKey,
    primaryAction,
    primaryActionText,
    secondaryAction,
    textFieldType,
    form,
    selectOptions,
+   showModal,
 }: Props) => {
    const [updating, setUpdating] = useState(false);
 
+   console.log(textFieldKey);
+
    return (
       <>
-         <BsModal show={show}>
+         <BsModal show={show} onHide={() => showModal('')}>
             <BsModal.Dialog>
                <BsModal.Header>
-                  <BsModal.Title>{title}</BsModal.Title>
+                  <BsModal.Title>{`Edit ${TextFieldUtil.getLabelFromDTOKey(
+                     textFieldKey
+                  )}`}</BsModal.Title>
                </BsModal.Header>
 
                <BsModal.Body>
                   {updating && <CircularProgress />}
                   <TextField
-                     id={id}
-                     label={valueLabel}
+                     id={textFieldKey}
+                     label={TextFieldUtil.getLabelFromDTOKey(textFieldKey)}
                      type={textFieldType}
-                     value={form.values[id]}
-                     onChange={form.handleChange(id)}
+                     value={form.values[textFieldKey]}
+                     onChange={form.handleChange(textFieldKey)}
                      onBlur={form.handleBlur}
-                     error={form.touched[id] && Boolean(form.errors[id])}
-                     helperText={form.touched[id] && form.errors[id]}
-                     select={id === 'type' ? true : false}
+                     error={form.touched[textFieldKey] && Boolean(form.errors[textFieldKey])}
+                     helperText={form.touched[textFieldKey] && form.errors[textFieldKey]}
+                     select={textFieldKey === 'type' ? true : false}
                      inputProps={{
                         step: 1800,
                      }}
                   >
-                     {id === 'type' &&
-                        selectOptions!.map((x) => (
-                           <MenuItem key={x} value={x}>
+                     {textFieldKey === 'type' &&
+                        selectOptions!.map((x, index) => (
+                           <MenuItem key={index} value={x}>
                               {x}
                            </MenuItem>
                         ))}
