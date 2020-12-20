@@ -10,5 +10,6 @@ namespace Logic.Bookings
     {
         Task<(Response, string?)> CreateBooking(string userEmail, int timeSlotId);
 
+        Task<Response> VerifyDeleteBookingRequest(string ownerEmail, string userEmail, int timeSlotId);
     }
 }

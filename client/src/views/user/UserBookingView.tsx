@@ -5,7 +5,7 @@ import React, {useState} from 'react';
 
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
-import {TimeSlotDTO} from '../../dto/Business';
+import {BookingDTO} from '../../dto/Booking';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
 import URL, {USER_BOOKINGS_URL} from '../../api/URL';
@@ -20,24 +20,24 @@ export const UserBookingView: React.FC = () => {
    const styles = useStyles();
    const [removeBooking, setRemoveBooking] = useState<number | null>(null);
 
-   const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest();
+   const requestHandler: RequestHandler<BookingDTO[]> = useRequest();
 
    const columns: TableColumn[] = [
       {title: 'id', field: 'id', hidden: true},
+      {title: 'timeSlotid', field: 'timeSlotId', hidden: true},
       {title: 'Business', field: 'business'},
       {title: 'Date', field: 'date'},
-      {title: 'Start', field: 'start'},
-      {title: 'End', field: 'end'},
+      {title: 'Interval', field: 'interval'},
    ];
 
    const actions = [
       {
          icon: () => <Chip size="small" label="Delete" clickable color="primary" />,
          tooltip: 'Delete Booking',
-         onClick: async (event: any, rowData: TimeSlotDTO) => {
+         onClick: async (event: any, rowData: BookingDTO) => {
+            await requestHandler.mutation(URL.getDeleteBookingForUserURL(rowData.timeSlotId), 'DELETE');
+            
             setRemoveBooking(rowData.id);
-
-            await requestHandler.mutation(URL.getDeleteBookingURL(rowData.id), 'DELETE');
          },
       },
    ];

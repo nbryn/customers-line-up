@@ -1,3 +1,4 @@
+using Logic.Businesses;
 using Logic.TimeSlots;
 using Logic.Users;
 
@@ -14,6 +15,6 @@ namespace Logic.Bookings
         public TimeSlot TimeSlot { get; set; }
 
         public int BusinessId { get; set; }
-
+    
     }
 }

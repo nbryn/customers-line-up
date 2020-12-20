@@ -45,6 +45,9 @@ namespace Logic.Context
                         .HasIndex(c => c.Email)
                         .IsUnique();
 
+            modelBuilder.Entity<User>()
+                        .HasKey(u => u.Email);
+
             var users = new[]
             {
                 new User {Id = 1, Name = "Jens", Email = "h@h.com", Password = BC.HashPassword("1234"), Zip = 3520}
@@ -63,7 +66,6 @@ namespace Logic.Context
             var owners = new[]
            {
                 new BusinessOwner {Id = 1, UserEmail = "h@h.com"}
-
            };
 
             modelBuilder.Entity<BusinessOwner>().HasData(owners);
@@ -75,7 +77,6 @@ namespace Logic.Context
                         .Property(b => b.Type)
                         .HasConversion(b => b.ToString("G"),
                         b => Enum.Parse<BusinessType>(b));
-
 
             var businesses = new[]
             {
@@ -93,7 +94,7 @@ namespace Logic.Context
                         .HasMany(b => b.Bookings);
 
 
-            var queues = new[]
+            var timeSlots = new[]
             {
                 new TimeSlot {Id = 1, BusinessId = 1, BusinessName = "Cool", Capacity = 50,
                                     Start = DateTime.Now.AddHours(3), End = DateTime.Now.AddHours(4),
@@ -108,14 +109,14 @@ namespace Logic.Context
                                     },
             };
 
-            modelBuilder.Entity<TimeSlot>().HasData(queues);
+            modelBuilder.Entity<TimeSlot>().HasData(timeSlots);
 
 
             var bookings = new[]
             {
-                new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = queues[0].Id},
-                new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = queues[1].Id},
-                new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = queues[2].Id}
+                new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = timeSlots[0].Id},
+                new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = timeSlots[1].Id},
+                new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = timeSlots[2].Id}
             };
 
             modelBuilder.Entity<Booking>().HasData(bookings);

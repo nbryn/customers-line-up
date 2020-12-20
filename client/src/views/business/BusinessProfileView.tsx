@@ -63,12 +63,12 @@ export const BusinessProfileView: React.FC = () => {
    const businessData: ExtendedCardData[] = Object.keys(business)
       .filter((x) => x !== 'id')
       .map((x) => ({
-         text: TextFieldUtil.getLabelFromDTOKey(x),
+         text: TextFieldUtil.mapKeyToLabel(x),
          data: form.values[x],
          buttonText: 'Edit',
          buttonAction: () => {
             setModalKey(x);
-            setTextFieldType(TextFieldUtil.getTextFieldTypeFromKey(x));
+            setTextFieldType(TextFieldUtil.mapKeyToType(x));
          },
       }));
 

@@ -11,7 +11,7 @@ namespace Data
         Task<Response> DeleteBooking(string userEmail, int timeSlotId);
         Task<IList<Booking>> FindBookingsByUser(string userEmail);
         Task<(string, int)> SaveBooking(Booking booking);
-        Task<Booking> FindBookingById(string email, int timeSlotId);
+        Task<Booking> FindBookingByUser(string userEmail, int timeSlotId);
         Task<IList<Booking>> FindBookingsByBusiness(int businessId);
 
     }

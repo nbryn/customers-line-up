@@ -13,19 +13,23 @@ const getTimeSlotURL = (businessId: number): string => {
 }
 
 const getCreateBookingURL = (timeSlotId: number): string => {
-    return BASE_URL + `booking/new?timeSlotId=${timeSlotId}`;
+    return BASE_URL + `booking/${timeSlotId}`;
 }
 
-const getDeleteBookingURL = (timeSlotId: number): string => {
-    return BASE_URL + `booking/delete?timeSlotId=${timeSlotId}`;
+const getDeleteBookingForBusinessURL = (timeSlotId: number, userEmail: string): string => {
+    return BASE_URL + `booking/business/${timeSlotId}?userEmail=${userEmail}`;
+}
+
+const getDeleteBookingForUserURL = (timeSlotId: number): string => {
+    return BASE_URL + `booking/user/${timeSlotId}`;
 }
 
 const getBusinessBookingsURL = (businessId: number): string => {
-    return BASE_URL + `booking/business?businessId=${businessId}`;
+    return BASE_URL + `booking/business/${businessId}`;
 }
 
 const getUpdateBusinessDataURL = (businessId: number): string => {
-    return BASE_URL + `business/update/${businessId}`;
+    return BASE_URL + `business/${businessId}`;
 }
 
 const getAllTimeSlotsForBusinessURL = (businessId: number): string => {
@@ -47,7 +51,7 @@ export const BUSINESSES_OWNER_URL = BASE_URL + 'business/owner';
 
 export const BUSINESS_TYPES_URL = BASE_URL + 'business/types';
 
-export const CREATE_BUSINESS_URL = BASE_URL + 'business/create';
+export const CREATE_BUSINESS_URL = BASE_URL + 'business';
 
 export const USER_BOOKINGS_URL = BASE_URL + 'booking/user';
 
@@ -56,7 +60,8 @@ export default {
     getAllTimeSlotsForBusinessURL,
     getBusinessBookingsURL,
     getCreateBookingURL,
-    getDeleteBookingURL,
+    getDeleteBookingForBusinessURL,
+    getDeleteBookingForUserURL,
     getDeleteTimeSlotURL,
     getTimeSlotURL,
     getUpdateBusinessDataURL,

@@ -76,7 +76,7 @@ export const SignupView: React.FC = () => {
                               className={styles.textField}
                               id={key}
                               label={StringUtil.capitalizeFirstLetter(key)}
-                              type={TextFieldUtil.getTextFieldTypeFromKey(key)}
+                              type={TextFieldUtil.mapKeyToType(key)}
                               value={form.values[key] as string}
                               onChange={form.handleChange}
                               onBlur={form.handleBlur}

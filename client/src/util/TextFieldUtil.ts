@@ -1,13 +1,13 @@
 import StringUtil from './StringUtil';
 import { TextFieldType } from '../components/TextFieldModal';
 
-function getLabelFromDTOKey(key: string): string {
+function mapKeyToLabel(key: string): string {
     if (key === 'timeSlotLength') return 'Visit Length';
 
     return StringUtil.capitalizeFirstLetter(key);
 }
 
-function getTextFieldTypeFromKey(key: string): TextFieldType {
+function mapKeyToType(key: string): TextFieldType {
     if (key === 'opens' || key === 'closes') return 'time';
     if (key === 'capacity' || key === 'timeSlotLength' || key === 'zip') return 'number';
     if (key === 'password') return 'password';
@@ -16,6 +16,6 @@ function getTextFieldTypeFromKey(key: string): TextFieldType {
 }
 
 export default {
-    getLabelFromDTOKey,
-    getTextFieldTypeFromKey,
+    mapKeyToLabel,
+    mapKeyToType,
 };

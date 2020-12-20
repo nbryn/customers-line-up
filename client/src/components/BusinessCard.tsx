@@ -34,7 +34,7 @@ export const BusinessCard: React.FC<Props> = ({buttonAction, buttonText, busines
       <Card
          className={styles.card}
          buttonAction={() => buttonAction()}
-         buttonColor="secondary"
+         buttonColor="primary"
          buttonText={buttonText}
          buttonSize="medium"
          title={business.name}

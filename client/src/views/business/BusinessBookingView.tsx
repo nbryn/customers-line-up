@@ -1,7 +1,7 @@
 import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React from 'react';
+import React, {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
 import URL from '../../api/URL';
@@ -26,30 +26,37 @@ export const BusinessBookingView: React.FC = () => {
    const styles = useStyles();
    const location = useLocation<LocationState>();
 
+   const [removeBooking, setRemoveBooking] = useState<number | null>(null);
+
    const requestHandler: RequestHandler<BookingDTO[]> = useRequest();
 
    const {business} = location.state;
 
    const columns: TableColumn[] = [
-      {title: 'businessId', field: 'businessId', hidden: true},
-      {title: 'timeSlotId', field: 'timeSlotId', hidden: true},
+      {title: 'id', field: 'id', hidden: true},
+      {title: 'timeSlotId', field: 'timeSlotId', hidden: true}, 
       {title: 'UserMail', field: 'userMail'},
+      {title: 'Interval', field: 'interval'}, 
+      {title: 'Date', field: 'date'},   
       {title: 'Capacity', field: 'capacity'},
-      {title: 'Interval', field: 'interval'},
+      
    ];
 
    const actions = [
       {
-         icon: () => <Chip size="small" label="Delete Booking" clickable color="primary" />,
-         onClick: (event: any, rowData: any) => {
+         icon: () => <Chip size="small" label="Contact User" clickable color="primary" />,
+         onClick: (event: React.ChangeEvent, rowData: BookingDTO) => {
             console.log(rowData);
          },
       },
       {
-         icon: 'Contact',
-         tooltip: 'Contact User',
-         onClick: (event: any, rowData: any) => {
-            console.log(rowData);
+         icon: () => <Chip size="small" label="Delete Booking" clickable color="secondary" />,
+         onClick: async (event: React.ChangeEvent, rowData: BookingDTO) => {
+            const url = URL.getDeleteBookingForBusinessURL(rowData.timeSlotId, rowData.userMail);
+
+            await requestHandler.mutation(url, "DELETE");
+
+            setRemoveBooking(rowData.id);
          },
       },
    ];
@@ -67,6 +74,7 @@ export const BusinessBookingView: React.FC = () => {
                   fetchTableData={async () =>
                      await requestHandler.query(URL.getBusinessBookingsURL(business.id))
                   }
+                  removeEntryId={removeBooking}
                   tableTitle="Bookings"
                   emptyMessage="No Bookings Yet"
                />

@@ -43,7 +43,7 @@ export const TextFieldModal: React.FC<Props> = ({
          <BsModal show={show} onHide={() => showModal('')}>
             <BsModal.Dialog>
                <BsModal.Header>
-                  <BsModal.Title>{`Edit ${TextFieldUtil.getLabelFromDTOKey(
+                  <BsModal.Title>{`Edit ${TextFieldUtil.mapKeyToLabel(
                      textFieldKey
                   )}`}</BsModal.Title>
                </BsModal.Header>
@@ -52,7 +52,7 @@ export const TextFieldModal: React.FC<Props> = ({
                   {updating && <CircularProgress />}
                   <TextField
                      id={textFieldKey}
-                     label={TextFieldUtil.getLabelFromDTOKey(textFieldKey)}
+                     label={TextFieldUtil.mapKeyToLabel(textFieldKey)}
                      type={textFieldType}
                      value={form.values[textFieldKey]}
                      onChange={form.handleChange(textFieldKey)}

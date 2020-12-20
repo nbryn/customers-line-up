@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CLup.Migrations
 {
     [DbContext(typeof(CLupContext))]
-    [Migration("20201218093338_InitialCreate")]
+    [Migration("20201220225847_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,14 +32,9 @@ namespace CLup.Migrations
                     b.Property<int>("BusinessId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("UserEmail", "TimeSlotId");
 
                     b.HasIndex("TimeSlotId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
 
@@ -208,8 +203,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 50,
-                            End = new DateTime(2020, 12, 18, 14, 33, 38, 61, DateTimeKind.Local).AddTicks(6830),
-                            Start = new DateTime(2020, 12, 18, 13, 33, 38, 59, DateTimeKind.Local).AddTicks(1596)
+                            End = new DateTime(2020, 12, 21, 3, 58, 46, 766, DateTimeKind.Local).AddTicks(5581),
+                            Start = new DateTime(2020, 12, 21, 2, 58, 46, 764, DateTimeKind.Local).AddTicks(805)
                         },
                         new
                         {
@@ -217,8 +212,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 40,
-                            End = new DateTime(2020, 12, 18, 15, 33, 38, 61, DateTimeKind.Local).AddTicks(7152),
-                            Start = new DateTime(2020, 12, 18, 14, 33, 38, 61, DateTimeKind.Local).AddTicks(7145)
+                            End = new DateTime(2020, 12, 21, 4, 58, 46, 766, DateTimeKind.Local).AddTicks(5933),
+                            Start = new DateTime(2020, 12, 21, 3, 58, 46, 766, DateTimeKind.Local).AddTicks(5926)
                         },
                         new
                         {
@@ -226,21 +221,18 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 30,
-                            End = new DateTime(2020, 12, 18, 16, 33, 38, 61, DateTimeKind.Local).AddTicks(7155),
-                            Start = new DateTime(2020, 12, 18, 15, 33, 38, 61, DateTimeKind.Local).AddTicks(7154)
+                            End = new DateTime(2020, 12, 21, 5, 58, 46, 766, DateTimeKind.Local).AddTicks(5936),
+                            Start = new DateTime(2020, 12, 21, 4, 58, 46, 766, DateTimeKind.Local).AddTicks(5935)
                         });
                 });
 
             modelBuilder.Entity("Logic.Users.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -251,11 +243,10 @@ namespace CLup.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Zip")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Zip")
+                        .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("Email");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -265,11 +256,11 @@ namespace CLup.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1,
                             Email = "h@h.com",
+                            Id = 1,
                             Name = "Jens",
-                            Password = "$2a$11$hmjdI8HyeeEecBEw.WRY/edqND.KvgbRKMIMqZy8soyw5dLAgT6c2",
-                            Zip = "3520"
+                            Password = "$2a$11$69zw5P1IKdOTGFWpMidtuukPhIpIuAGop4w9KIomdA7/f2NVJQwR2",
+                            Zip = 3520
                         });
                 });
 
@@ -283,7 +274,9 @@ namespace CLup.Migrations
 
                     b.HasOne("Logic.Users.User", "User")
                         .WithMany("Bookings")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserEmail")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Logic.Businesses.Business", b =>
@@ -295,7 +288,7 @@ namespace CLup.Migrations
 
             modelBuilder.Entity("Logic.TimeSlots.TimeSlot", b =>
                 {
-                    b.HasOne("Logic.Businesses.Business", null)
+                    b.HasOne("Logic.Businesses.Business", "Business")
                         .WithMany("TimeSlots")
                         .HasForeignKey("BusinessId")
                         .OnDelete(DeleteBehavior.Cascade)

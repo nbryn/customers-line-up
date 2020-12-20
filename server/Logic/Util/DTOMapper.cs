@@ -31,7 +31,7 @@ namespace Logic.Util
                 Date = timeSlot.Start.ToString("dd/MM/yyyy"),
                 Start = timeSlot.Start.TimeOfDay.ToString().Substring(0, 5),
                 End = timeSlot.End.TimeOfDay.ToString().Substring(0, 5),
-                Capacity = timeSlot.Bookings.Count() + "/" + timeSlot.Capacity.ToString(), 
+                Capacity = timeSlot.Bookings.Count() + "/" + timeSlot.Capacity.ToString(),
             };
         }
 
@@ -64,10 +64,12 @@ namespace Logic.Util
         {
             return new BookingDTO
             {
+                Id = booking.TimeSlotId,
                 TimeSlotId = booking.TimeSlotId,
-                BusinessId = booking.BusinessId,
+                Business = booking.TimeSlot.BusinessName,
                 UserMail = booking.UserEmail,
-                Interval = booking.TimeSlot.Start.TimeOfDay.ToString().Substring(0, 5) + " - " + 
+                Date = booking.TimeSlot.Start.ToString("dd/MM/yyyy"),
+                Interval = booking.TimeSlot.Start.TimeOfDay.ToString().Substring(0, 5) + " - " +
                            booking.TimeSlot.End.TimeOfDay.ToString().Substring(0, 5),
                 Capacity = booking.TimeSlot.Bookings.Count().ToString() + "/" + booking.TimeSlot.Capacity
             };

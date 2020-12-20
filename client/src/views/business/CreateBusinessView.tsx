@@ -11,6 +11,7 @@ import {Form} from '../../components/Form';
 import {Modal} from '../../components/Modal';
 import {RequestHandler, useRequest} from '../../api/RequestHandler';
 import {TextField} from '../../components/TextField';
+import TextFieldUtil from '../../util/TextFieldUtil';
 import {BUSINESS_TYPES_URL, CREATE_BUSINESS_URL} from '../../api/URL';
 import {useForm} from '../../validation/useForm';
 
@@ -53,7 +54,7 @@ export const CreateBusinessView: React.FC = () => {
       })();
    }, []);
 
-   const initialValues: BusinessDTO = {
+   const formValues: BusinessDTO = {
       id: 0,
       name: '',
       zip: '',
@@ -65,11 +66,11 @@ export const CreateBusinessView: React.FC = () => {
    };
 
    const form = useForm<BusinessDTO>(
-      initialValues,
+      formValues,
       businessValidationSchema,
       CREATE_BUSINESS_URL,
       'POST',
-      requestHandler.mutation,   
+      requestHandler.mutation,
       (business) => {
          business.opens = business.opens.replace(':', '.');
          business.closes = business.closes.replace(':', '.');
@@ -99,126 +100,55 @@ export const CreateBusinessView: React.FC = () => {
                   >
                      <Row>
                         <Col sm={6} lg={6}>
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="name"
-                                 label="Name"
-                                 type="text"
-                                 value={form.values.name}
-                                 onChange={form.handleChange}
-                                 onBlur={form.handleBlur}
-                                 error={form.touched.name && Boolean(form.errors.name)}
-                                 helperText={form.touched.name && form.errors.name}
-                              />
-                           </FormGroup>
-
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="zip"
-                                 label="Zip"
-                                 type="number"
-                                 value={form.values.zip}
-                                 onChange={form.handleChange}
-                                 onBlur={form.handleBlur}
-                                 error={form.touched.zip && Boolean(form.errors.zip)}
-                                 helperText={form.touched.zip && form.errors.zip}
-                              />
-                           </FormGroup>
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="capacity"
-                                 label="Capacity"
-                                 type="number"
-                                 value={form.values.capacity}
-                                 onChange={form.handleChange}
-                                 onBlur={form.handleBlur}
-                                 error={form.touched.capacity && Boolean(form.errors.capacity)}
-                                 helperText={form.touched.capacity && form.errors.capacity}
-                              />
-                           </FormGroup>
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="type"
-                                 label="Type"
-                                 type="text"
-                                 select
-                                 value={form.values.type}
-                                 onChange={form.handleChange('type')}
-                                 onBlur={form.handleBlur}
-                                 error={form.touched.type && Boolean(form.errors.type)}
-                                 helperText={form.touched.type && form.errors.type}
-                              >
-                                 {businessTypes.map((type) => (
-                                    <MenuItem key={type} value={type}>
-                                       {type}
-                                    </MenuItem>
-                                 ))}
-                              </TextField>
-                           </FormGroup>
+                           {Object.keys(formValues)
+                              .slice(1, 5)
+                              .map((x) => (
+                                 <FormGroup className={styles.formGroup}>
+                                    <TextField
+                                       className={styles.textField}
+                                       id={x}
+                                       label={TextFieldUtil.mapKeyToLabel(x)}
+                                       type={TextFieldUtil.mapKeyToType(x)}
+                                       value={form.values[x]}
+                                       onChange={form.handleChange}
+                                       onBlur={form.handleBlur}
+                                       error={form.touched[x] && Boolean(form.errors[x])}
+                                       helperText={form.touched[x] && form.errors[x]}
+                                    >
+                                       {x === 'type' &&
+                                          businessTypes.map((type) => (
+                                             <MenuItem key={type} value={type}>
+                                                {type}
+                                             </MenuItem>
+                                          ))}
+                                    </TextField>
+                                 </FormGroup>
+                              ))}
                         </Col>
                         <Col sm={6} lg={6}>
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="timeSlotLength"
-                                 label="Visit Length"
-                                 type="number"
-                                 value={form.values.timeSlotLength}
-                                 onChange={form.handleChange}
-                                 onBlur={form.handleBlur}
-                                 error={
-                                    form.touched.timeSlotLength &&
-                                    Boolean(form.errors.timeSlotLength)
-                                 }
-                                 helperText={
-                                    form.touched.timeSlotLength && form.errors.timeSlotLength
-                                 }
-                              />
-                           </FormGroup>
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="opens"
-                                 label="Opens"
-                                 type="time"
-                                 defaultValue="08:00"
-                                 value={form.values.opens}
-                                 onChange={form.handleChange}
-                                 onBlur={form.handleBlur}
-                                 error={form.touched.opens && Boolean(form.errors.opens)}
-                                 helperText={form.touched.opens && form.errors.opens}
-                                 inputLabelProps={{
-                                    shrink: true,
-                                 }}
-                                 inputProps={{
-                                    step: 1800,
-                                 }}
-                              />
-                           </FormGroup>
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="closes"
-                                 label="Closes"
-                                 type="time"
-                                 defaultValue="04:00"
-                                 value={form.values.closes}
-                                 onChange={form.handleChange}
-                                 onBlur={form.handleBlur}
-                                 error={form.touched.closes && Boolean(form.errors.closes)}
-                                 helperText={form.touched.closes && form.errors.closes}
-                                 inputLabelProps={{
-                                    shrink: true,
-                                 }}
-                                 inputProps={{
-                                    step: 1800,
-                                 }}
-                              />
-                           </FormGroup>
+                           {Object.keys(formValues)
+                              .slice(5)
+                              .map((x) => (
+                                 <FormGroup className={styles.formGroup}>
+                                    <TextField
+                                       className={styles.textField}
+                                       id={x}
+                                       label={TextFieldUtil.mapKeyToLabel(x)}
+                                       type={TextFieldUtil.mapKeyToType(x)}
+                                       value={form.values[x]}
+                                       onChange={form.handleChange}
+                                       onBlur={form.handleBlur}
+                                       error={form.touched[x] && Boolean(form.errors[x])}
+                                       helperText={form.touched[x] && form.errors[x]}
+                                       inputLabelProps={
+                                          x === 'timeSlotLength' ? {shrink: false} : {shrink: true}
+                                       }
+                                       inputProps={{
+                                          step: 1800,
+                                       }}
+                                    />
+                                 </FormGroup>
+                              ))}
                         </Col>
                      </Row>
                   </Form>

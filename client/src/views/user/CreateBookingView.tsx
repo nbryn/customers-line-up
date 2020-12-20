@@ -70,7 +70,7 @@ export const CreateBookingView: React.FC = () => {
                   title="Booking Info"
                   text={requestHandler.requestInfo}
                   secondaryAction={() => requestHandler.setRequestInfo('')}
-                  primaryAction={() => history.push('/mybookings')}
+                  primaryAction={() => history.push('/user/bookings')}
                   primaryActionText="My Bookings"
                />
             </Col>

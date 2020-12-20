@@ -27,7 +27,7 @@ namespace Logic.Bookings
         }
         public async Task<(Response, string)> CreateBooking(string userEmail, int timeSlotId)
         {
-            Booking bookingExists = await _bookingRepository.FindBookingById(userEmail, timeSlotId);
+            Booking bookingExists = await _bookingRepository.FindBookingByUser(userEmail, timeSlotId);
 
             if (bookingExists != null)
             {
@@ -48,11 +48,32 @@ namespace Logic.Bookings
                 //Handle business does not exists - Gather null checks on one place?
             }
 
-            Booking booking = new Booking { UserEmail = userEmail, TimeSlotId = timeSlotId };
+            Booking booking = new Booking { UserEmail = userEmail, TimeSlotId = timeSlotId, BusinessId = business.Id };
 
             await _bookingRepository.SaveBooking(booking);
 
             return (Response.Created, "Booking successfull");
+        }
+
+        public async Task<Response> VerifyDeleteBookingRequest(string ownerEmail, string userEmail, int timeSlotId)
+        {
+            Booking booking = await _bookingRepository.FindBookingByUser(userEmail, timeSlotId);
+
+            if (booking == null)
+            {
+                return Response.NotFound;
+            }
+
+            Business business = await _businessRepository.FindBusinessById(booking.TimeSlot.BusinessId);
+
+            if (business.OwnerEmail != ownerEmail)
+            {
+                return Response.Forbidden;
+            }
+
+            Response response = await _bookingRepository.DeleteBooking(userEmail, timeSlotId);
+
+            return response;
         }
     }
 }

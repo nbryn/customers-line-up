@@ -25,27 +25,28 @@ namespace Data
             return (booking.UserEmail, booking.TimeSlotId);
         }
 
-        public async Task<Booking> FindBookingById(string email, int timeSlotId)
+        public async Task<Booking> FindBookingByUser(string userEmail, int timeSlotId)
         {
-            return await _context.Bookings.FirstOrDefaultAsync(x => x.UserEmail.Equals(email) && 
-                                                              x.TimeSlotId == timeSlotId);
+            return await _context.Bookings.Include(x => x.TimeSlot)
+                                          .FirstOrDefaultAsync(x => x.TimeSlotId == timeSlotId
+                                                                  && x.UserEmail == userEmail);
         }
 
         public async Task<IList<Booking>> FindBookingsByUser(string userEmail)
         {
             return await _context.Bookings.Include(x => x.TimeSlot)
-                                            .Where(x => x.UserEmail.Equals(userEmail)).ToListAsync();
+                                          .Where(x => x.UserEmail.Equals(userEmail)).ToListAsync();
         }
 
-          public async Task<IList<Booking>> FindBookingsByBusiness(int businessId)
+        public async Task<IList<Booking>> FindBookingsByBusiness(int businessId)
         {
             return await _context.Bookings.Include(x => x.TimeSlot)
-                                            .Where(x => x.BusinessId == businessId).ToListAsync();
+                                          .Where(x => x.BusinessId == businessId).ToListAsync();
         }
 
         public async Task<Response> DeleteBooking(string userEmail, int timeSlotId)
         {
-            Booking booking = await FindBookingById(userEmail, timeSlotId);
+            Booking booking = await FindBookingByUser(userEmail, timeSlotId);
             if (booking == null)
             {
                 return Response.NotFound;

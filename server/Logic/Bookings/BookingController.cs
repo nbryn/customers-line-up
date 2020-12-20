@@ -12,6 +12,7 @@ using Logic.DTO;
 using Logic.Util;
 using Logic.Context;
 
+
 namespace Logic.Bookings
 {
     [Authorize(Policy = Policies.User)]
@@ -32,8 +33,8 @@ namespace Logic.Bookings
         }
 
         [HttpPost]
-        [Route("new")]
-        public async Task<IActionResult> NewBooking([FromQuery] int timeSlotId)
+        [Route("{timeSlotId}")]
+        public async Task<IActionResult> NewBooking(int timeSlotId)
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -43,30 +44,42 @@ namespace Logic.Bookings
         }
 
         [HttpDelete]
-        [Route("delete")]
-        public async Task<IActionResult> RemoveBooking([FromQuery] int timeSlotId)
+        [Route("user/{timeSlotId}")]
+        public async Task<IActionResult> RemoveBookingForUser(int timeSlotId)
         {
-            string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            Response response = await _repository.DeleteBooking(userMail, timeSlotId);
+            Response response = await _repository.DeleteBooking(userEmail, timeSlotId);
 
             return new StatusCodeResult((int)response);
         }
 
-        [Route("user")]
+        [HttpDelete]
+        [Route("business/{timeSlotId}")]
+        public async Task<IActionResult> RemoveBookingBusiness(int timeSlotId, [FromQuery] string userEmail)
+        {
+            string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            Response response = await _service.VerifyDeleteBookingRequest(ownerEmail, userEmail, timeSlotId);
+
+            return new StatusCodeResult((int)response);
+        }
+
+
         [HttpGet]
-        public async Task<ICollection<TimeSlotDTO>> FetchUserBookings()
+        [Route("user")]
+        public async Task<ICollection<BookingDTO>> FetchUserBookings()
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             IList<Booking> bookings = await _repository.FindBookingsByUser(userMail);
 
-            return bookings.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x.TimeSlot)).ToList();
+            return bookings.Select(x => _dtoMapper.ConvertBookingToDTO(x)).ToList();
         }
 
-        [Route("business")]
         [HttpGet]
-        public async Task<ICollection<BookingDTO>> FetchBusinessBookings([FromQuery] int businessId)
-        {       
+        [Route("business/{businessId}")]
+        public async Task<ICollection<BookingDTO>> FetchBusinessBookings(int businessId)
+        {
             IList<Booking> bookings = await _repository.FindBookingsByBusiness(businessId);
 
             return bookings.Select(x => _dtoMapper.ConvertBookingToDTO(x)).ToList();
