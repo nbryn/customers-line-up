@@ -4,16 +4,16 @@ import {MenuItem} from '@material-ui/core';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
-import {Card} from '../../components/Card';
-import {BusinessDTO} from '../../dto/Business';
+import {Card} from '../../components/card/Card';
+import {BusinessDTO} from '../../models/Business';
 import {businessValidationSchema} from '../../validation/BusinessValidation';
-import {Form} from '../../components/Form';
-import {Modal} from '../../components/Modal';
-import {RequestHandler, useRequest} from '../../api/RequestHandler';
-import {TextField} from '../../components/TextField';
+import {Form} from '../../components/form/Form';
+import {Modal} from '../../components/modal/Modal';
+import {RequestHandler, useRequest} from '../../hooks/useRequest';
+import {TextField} from '../../components/form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
 import {BUSINESS_TYPES_URL, CREATE_BUSINESS_URL} from '../../api/URL';
-import {useForm} from '../../validation/useForm';
+import {useForm} from '../../hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
    card: {

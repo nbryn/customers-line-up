@@ -10,13 +10,15 @@ using System;
 using System.Text;
 
 using Data;
-using Logic.Businesses;
-using Logic.TimeSlots;
-using Logic.Context;
-using Logic.Users;
 using Logic.Auth;
-using Logic.Util;
 using Logic.Bookings;
+using Logic.Businesses;
+using Logic.Context;
+using Logic.Employees;
+using Logic.TimeSlots;
+using Logic.Users;
+using Logic.Util;
+
 
 namespace CLup
 {
@@ -75,6 +77,9 @@ namespace CLup
             services.AddScoped<ICLupContext, CLupContext>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IDTOMapper, DTOMapper>();
+
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            
 
             services.AddScoped<ITimeSlotService, TimeSlotService>();
             services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();

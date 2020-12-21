@@ -5,7 +5,7 @@ import React, {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
 import URL from '../../api/URL';
-import {TimeSlotDTO} from '../../models/TimeSlot';
+import {EmployeeDTO} from '../../models/Employee';
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import {TableColumn} from '../../components/Table';
@@ -22,29 +22,30 @@ interface LocationState {
    business: BusinessDTO;
 }
 
-export const BusinessTimeSlotView: React.FC = () => {
+export const BusinessEmployeeView: React.FC = () => {
    const styles = useStyles();
    const location = useLocation<LocationState>();
-   const [removeTimeSlot, setRemoveTimeSlot] = useState<number | null>(null);
+   const [removeEmployee, setRemoveEmployee] = useState<number | null>(null);
 
-   const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest();
+   const requestHandler: RequestHandler<EmployeeDTO[]> = useRequest();
 
    const {business} = location.state;
 
    const columns: TableColumn[] = [
-      {title: 'timeSlotId', field: 'timeSlotId', hidden: true},
-      {title: 'Date', field: 'date'},
-      {title: 'Interval', field: 'interval'},
-      {title: 'Capacity', field: 'capacity'},
+      {title: 'BusinessId', field: 'businessId', hidden: true},
+      {title: 'Name', field: 'name'},
+      {title: 'Private Email', field: 'privateEmail'},
+      {title: 'Company Email', field: 'companyEmail'},
+      {title: 'Employed Since', field: 'employmentSince'},
    ];
 
    const actions = [
       {
-         icon: () => <Chip size="small" label="Delete Time Slot" clickable color="primary" />,
-         onClick: async (event: any, rowData: TimeSlotDTO) => {
+         icon: () => <Chip size="small" label="Remove Employee" clickable color="primary" />,
+         onClick: async (event: any, rowData: EmployeeDTO) => {
             await requestHandler.mutation(URL.getDeleteTimeSlotURL(rowData.id), 'DELETE');
 
-            setRemoveTimeSlot(rowData.id);
+            setRemoveEmployee(rowData.id);
          },
       },
    ];
@@ -59,19 +60,12 @@ export const BusinessTimeSlotView: React.FC = () => {
                <TableContainer
                   actions={actions}
                   columns={columns}
-                  fetchTableData={async () => {
-                     const timeSlots = await requestHandler.query(
-                        URL.getAllTimeSlotsForBusinessURL(business.id)
-                     );
-
-                     return timeSlots.map((x) => ({
-                        ...x,
-                        interval: x.start + ' - ' + x.end,
-                     }));
-                  }}
-                  tableTitle="Time Slots"
-                  emptyMessage="No Time Slots Yet"
-                  removeEntryId={removeTimeSlot}
+                  fetchTableData={async () =>
+                     await requestHandler.query(URL.getBusinessEmployeesURL(business.id))
+                  }
+                  tableTitle="Employees"
+                  emptyMessage="No Employees Yet"
+                  removeEntryId={removeEmployee}
                />
             </Col>
          </Row>

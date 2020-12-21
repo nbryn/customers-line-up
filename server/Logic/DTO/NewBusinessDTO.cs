@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Logic.DTO
 {
-    public class CreateBusinessDTO
+    public class NewBusinessDTO
     {
         [Required]
         [StringLength(50)]

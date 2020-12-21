@@ -5,9 +5,9 @@ import React from 'react';
 import {useHistory} from 'react-router';
 
 import {ALL_BUSINESSES_URL} from '../../api/URL';
-import {BusinessDTO} from '../../dto/Business';
+import {BusinessDTO} from '../../models/Business';
 import {Header} from '../../components/Texts';
-import {RequestHandler, useRequest} from '../../api/RequestHandler';
+import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
 

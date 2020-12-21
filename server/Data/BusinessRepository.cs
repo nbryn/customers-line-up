@@ -11,15 +11,13 @@ namespace Data
 {
     public class BusinessRepository : IBusinessRepository
     {
-
         private readonly ICLupContext _context;
-
         public BusinessRepository(ICLupContext context)
         {
             _context = context;
         }
 
-        public async Task<Business> CreateBusiness(CreateBusinessDTO business)
+        public async Task<Business> CreateBusiness(NewBusinessDTO business)
         {
             BusinessType.TryParse(business.Type, out BusinessType type);
 
@@ -43,7 +41,7 @@ namespace Data
 
         }
 
-        public async Task<Response> UpdateBusiness(int businessId, CreateBusinessDTO dto)
+        public async Task<Response> UpdateBusiness(int businessId, NewBusinessDTO dto)
         {
             Business business = await FindBusinessById(businessId);
 

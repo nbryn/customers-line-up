@@ -39,19 +39,19 @@ namespace CLup.Migrations
                     b.HasData(
                         new
                         {
-                            UserEmail = "h@h.com",
+                            UserEmail = "test@test.com",
                             TimeSlotId = 1,
                             BusinessId = 1
                         },
                         new
                         {
-                            UserEmail = "h@h.com",
+                            UserEmail = "test@test.com",
                             TimeSlotId = 2,
                             BusinessId = 1
                         },
                         new
                         {
-                            UserEmail = "h@h.com",
+                            UserEmail = "test@test.com",
                             TimeSlotId = 3,
                             BusinessId = 1
                         });
@@ -79,7 +79,7 @@ namespace CLup.Migrations
                         new
                         {
                             Id = 1,
-                            UserEmail = "h@h.com"
+                            UserEmail = "test@test.com"
                         });
                 });
 
@@ -135,7 +135,7 @@ namespace CLup.Migrations
                             Closes = "16.00",
                             Name = "Cool",
                             Opens = "10.00",
-                            OwnerEmail = "h@h.com",
+                            OwnerEmail = "test@test.com",
                             TimeSlotLength = 50,
                             Type = "Supermarket",
                             Zip = 3520
@@ -147,7 +147,7 @@ namespace CLup.Migrations
                             Closes = "14.00",
                             Name = "Shop",
                             Opens = "09.00",
-                            OwnerEmail = "h@h.com",
+                            OwnerEmail = "test@test.com",
                             TimeSlotLength = 20,
                             Type = "Museum",
                             Zip = 3520
@@ -159,10 +159,50 @@ namespace CLup.Migrations
                             Closes = "15.30",
                             Name = "1337",
                             Opens = "08.30",
-                            OwnerEmail = "h@h.com",
+                            OwnerEmail = "test@test.com",
                             TimeSlotLength = 10,
                             Type = "Kiosk",
                             Zip = 4720
+                        });
+                });
+
+            modelBuilder.Entity("Logic.Employees.Employee", b =>
+                {
+                    b.Property<string>("UserEmail")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("BusinessId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CompanyEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserEmail", "BusinessId");
+
+                    b.HasIndex("BusinessId");
+
+                    b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            UserEmail = "h@h.com",
+                            BusinessId = 1,
+                            CreatedAt = new DateTime(2020, 12, 21, 15, 36, 36, 10, DateTimeKind.Local).AddTicks(6818),
+                            Id = 1
+                        },
+                        new
+                        {
+                            UserEmail = "mads@hotmail.com",
+                            BusinessId = 1,
+                            CreatedAt = new DateTime(2020, 12, 21, 15, 36, 36, 10, DateTimeKind.Local).AddTicks(7728),
+                            Id = 2
                         });
                 });
 
@@ -201,8 +241,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 50,
-                            End = new DateTime(2020, 12, 21, 4, 16, 57, 582, DateTimeKind.Local).AddTicks(2778),
-                            Start = new DateTime(2020, 12, 21, 3, 16, 57, 579, DateTimeKind.Local).AddTicks(5364)
+                            End = new DateTime(2020, 12, 21, 19, 36, 36, 10, DateTimeKind.Local).AddTicks(4007),
+                            Start = new DateTime(2020, 12, 21, 18, 36, 36, 7, DateTimeKind.Local).AddTicks(9091)
                         },
                         new
                         {
@@ -210,8 +250,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 40,
-                            End = new DateTime(2020, 12, 21, 5, 16, 57, 582, DateTimeKind.Local).AddTicks(3128),
-                            Start = new DateTime(2020, 12, 21, 4, 16, 57, 582, DateTimeKind.Local).AddTicks(3122)
+                            End = new DateTime(2020, 12, 21, 20, 36, 36, 10, DateTimeKind.Local).AddTicks(4362),
+                            Start = new DateTime(2020, 12, 21, 19, 36, 36, 10, DateTimeKind.Local).AddTicks(4355)
                         },
                         new
                         {
@@ -219,8 +259,8 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 30,
-                            End = new DateTime(2020, 12, 21, 6, 16, 57, 582, DateTimeKind.Local).AddTicks(3178),
-                            Start = new DateTime(2020, 12, 21, 5, 16, 57, 582, DateTimeKind.Local).AddTicks(3177)
+                            End = new DateTime(2020, 12, 21, 21, 36, 36, 10, DateTimeKind.Local).AddTicks(4365),
+                            Start = new DateTime(2020, 12, 21, 20, 36, 36, 10, DateTimeKind.Local).AddTicks(4364)
                         });
                 });
 
@@ -254,11 +294,27 @@ namespace CLup.Migrations
                     b.HasData(
                         new
                         {
-                            Email = "h@h.com",
+                            Email = "test@test.com",
                             Id = 1,
-                            Name = "Jens",
-                            Password = "$2a$11$8RsSUEKNfLG9jZSEyWniueh3AtZ1VtIMHVt3jZOBqLGt9wi.XPm4e",
+                            Name = "Peter",
+                            Password = "$2a$11$6IrGtqz4hlA.WUruI40oFemQgvDYCqkJY2hA13MiA3VzjJ4Jh2rWK",
                             Zip = 3520
+                        },
+                        new
+                        {
+                            Email = "h@h.com",
+                            Id = 2,
+                            Name = "Jens",
+                            Password = "$2a$11$oyuipSd8ivJJFtkLJUO3aO3sNCg/W.lREsQKV3TZEKGvLveL8B5ZG",
+                            Zip = 2300
+                        },
+                        new
+                        {
+                            Email = "mads@hotmail.com",
+                            Id = 3,
+                            Name = "Mads",
+                            Password = "$2a$11$ajaWGNX8Bq6qBxSCihX4o.YFwhfRYnqtNqGKZ/KAsqOTAJBQACqIW",
+                            Zip = 2700
                         });
                 });
 
@@ -282,6 +338,21 @@ namespace CLup.Migrations
                     b.HasOne("Logic.BusinessOwners.BusinessOwner", null)
                         .WithMany("Businesses")
                         .HasForeignKey("BusinessOwnerId");
+                });
+
+            modelBuilder.Entity("Logic.Employees.Employee", b =>
+                {
+                    b.HasOne("Logic.Businesses.Business", "Business")
+                        .WithMany("Employees")
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Logic.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserEmail")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Logic.TimeSlots.TimeSlot", b =>

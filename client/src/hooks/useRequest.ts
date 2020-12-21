@@ -2,7 +2,7 @@ import axios, { AxiosResponse, Method } from "axios";
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 
-import { Error } from "./Error";
+import { Error } from "../api/Error";
 
 export interface RequestHandler<T> {
   mutation: <T>(url: string, method: Method, request?: any) => Promise<T>;

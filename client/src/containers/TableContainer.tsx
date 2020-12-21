@@ -1,7 +1,7 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
 import React, {useEffect, useState} from 'react';
 
-import {DTO} from '../dto/Business';
+import {DTO} from '../models/General';
 import {Table, TableColumn} from '../components/Table';
 
 

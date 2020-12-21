@@ -23,7 +23,7 @@ namespace Logic.Businesses
             _dtoMapper = dtoMapper;
 
         }
-        public async Task<BusinessDTO> RegisterBusiness(CreateBusinessDTO business)
+        public async Task<BusinessDTO> RegisterBusiness(NewBusinessDTO business)
         {
             BusinessOwner owner = await _businessOwnerRepository.FindOwnerByEmail(business.OwnerEmail);
 

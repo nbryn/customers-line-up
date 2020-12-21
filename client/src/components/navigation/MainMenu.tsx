@@ -12,7 +12,7 @@ import React from 'react';
 import {useHistory} from 'react-router-dom';
 
 //import Logo
-import {useUserContext} from '../context/UserContext';
+import {useUserContext} from '../../context/UserContext';
 
 const drawerWidth = 210;
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-using Logic.Bookings;
+using Logic.Employees;
 using Logic.TimeSlots;
 
 namespace Logic.Businesses
@@ -31,6 +31,8 @@ namespace Logic.Businesses
         public int TimeSlotLength { get; set; }
 
         public IEnumerable<TimeSlot> TimeSlots { get; set; }
+
+        public IEnumerable<Employee> Employees { get; set; }
 
     }
 }

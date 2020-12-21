@@ -2,17 +2,17 @@ import {Col, Container, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
-import {Card} from '../../components/Card';
-import {Form} from '../../components/Form';
+import {Card} from '../../components/card/Card';
+import {Form} from '../../components/form/Form';
 import {LOGIN_URL} from '../../api/URL';
 import {loginValidationSchema} from '../../validation/UserValidation';
-import {RequestHandler, useRequest} from '../../api/RequestHandler';
+import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import {SignupView} from './SignupView';
 import StringUtil from '../../util/StringUtil';
-import {TextField} from '../../components/TextField';
+import {TextField} from '../../components/form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
-import {useForm} from '../../validation/useForm';
-import {UserDTO} from '../../dto/User';
+import {useForm} from '../../hooks/useForm';
+import {UserDTO} from '../../models/User';
 import {useUserContext} from '../../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({

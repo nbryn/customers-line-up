@@ -1,5 +1,5 @@
 import StringUtil from './StringUtil';
-import { TextFieldType } from '../components/TextFieldModal';
+import { TextFieldType } from '../components/modal/TextFieldModal';
 
 function mapKeyToLabel(key: string): string {
     if (key === 'timeSlotLength') return 'Visit Length';

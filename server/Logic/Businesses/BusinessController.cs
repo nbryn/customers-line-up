@@ -33,7 +33,7 @@ namespace Logic.Businesses
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> NewBusiness([FromBody] CreateBusinessDTO dto)
+        public async Task<IActionResult> NewBusiness([FromBody] NewBusinessDTO dto)
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -57,7 +57,7 @@ namespace Logic.Businesses
 
         [HttpPut]
         [Route("/{id}")]
-        public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] CreateBusinessDTO dto)
+        public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] NewBusinessDTO dto)
         {
             Response response = await _repository.UpdateBusiness(id, dto);
 

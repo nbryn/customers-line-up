@@ -1,7 +1,5 @@
-export interface DTO {
-    id: number;
- }
- 
+import {DTO} from './General';
+
 export interface BusinessDTO extends DTO {
     [key: string]: string | number | undefined;
     name: string;

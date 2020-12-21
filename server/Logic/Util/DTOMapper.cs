@@ -3,12 +3,15 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Data;
-using Logic.TimeSlots;
+
 using Logic.Bookings;
 using Logic.Businesses;
-using Logic.DTO.User;
-using Logic.Users;
 using Logic.DTO;
+using Logic.DTO.User;
+using Logic.Employees;
+using Logic.TimeSlots;
+using Logic.Users;
+
 
 
 namespace Logic.Util
@@ -72,6 +75,19 @@ namespace Logic.Util
                 Interval = booking.TimeSlot.Start.TimeOfDay.ToString().Substring(0, 5) + " - " +
                            booking.TimeSlot.End.TimeOfDay.ToString().Substring(0, 5),
                 Capacity = booking.TimeSlot.Bookings.Count().ToString() + "/" + booking.TimeSlot.Capacity
+            };
+        }
+
+        public EmployeeDTO ConvertEmployeeToDTO(Employee employee)
+        {
+            return new EmployeeDTO
+            {
+                Name = employee.User.Name,
+                PrivateEmail = employee.UserEmail,
+                CompanyEmail = employee.CompanyEmail,
+                Business = employee.Business.Name,
+                BusinessId = employee.BusinessId,
+                EmployedSince = employee.CreatedAt.ToString("dd/MM/yyyy")
             };
         }
 

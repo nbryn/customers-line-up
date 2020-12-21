@@ -1,9 +1,8 @@
 import React from 'react';
-import {Badge, Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-import {BusinessDTO} from '../dto/Business';
+import {BusinessDTO} from '../../models/Business';
 import {Card} from './Card';
 
 const useStyles = makeStyles({

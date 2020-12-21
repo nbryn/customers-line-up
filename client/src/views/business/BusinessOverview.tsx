@@ -5,11 +5,11 @@ import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import {BUSINESSES_OWNER_URL} from '../../api/URL';
-import {BusinessCard} from '../../components/BusinessCard';
-import {BusinessDTO} from '../../dto/Business';
+import {BusinessCard} from '../../components/card/BusinessCard';
+import {BusinessDTO} from '../../models/Business';
 import BusinessService, {PathInfo} from '../../services/BusinessService';
 import {Header} from '../../components/Texts';
-import {RequestHandler, useRequest} from '../../api/RequestHandler';
+import {RequestHandler, useRequest} from '../../hooks/useRequest';
 
 const useStyles = makeStyles((theme) => ({
    row: {

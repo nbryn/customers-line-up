@@ -1,4 +1,4 @@
-import { DTO } from './Business';
+import {DTO} from './General';
 
 export interface TimeSlotDTO extends DTO {
     date: string;

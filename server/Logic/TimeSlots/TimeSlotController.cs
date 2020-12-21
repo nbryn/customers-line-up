@@ -28,11 +28,10 @@ namespace Logic.TimeSlots
             _repository = repository;
             _dtoMapper = dtoMapper;
             _service = service;
-
         }
 
         [HttpPost]
-        [Route("create")]
+        [Route("")]
         public async Task<IActionResult> NewTimeSlot([FromBody] CreateTimeSlotRequest dto)
         {
             IEnumerable<TimeSlotDTO> timeSlots = await _service.GenerateTimeSlots(dto);
@@ -41,7 +40,7 @@ namespace Logic.TimeSlots
         }
 
         [HttpDelete]
-        [Route("delete/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteTimeSlot(int id)
         {
             Response response = await _repository.DeleteTimeSlot(id);

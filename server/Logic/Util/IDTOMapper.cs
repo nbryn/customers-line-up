@@ -1,13 +1,13 @@
-using System.Threading.Tasks;
-using System.Linq;
 using System.Collections.Generic;
 
-using Logic.TimeSlots;
 using Logic.Businesses;
 using Logic.Bookings;
-using Logic.DTO.User;
-using Logic.Users;
 using Logic.DTO;
+using Logic.DTO.User;
+using Logic.Employees;
+using Logic.TimeSlots;
+using Logic.Users;
+
 
 namespace Logic.Util
 {
@@ -20,6 +20,8 @@ namespace Logic.Util
        BusinessDTO ConvertBusinessToDTO(Business business);
 
        BookingDTO ConvertBookingToDTO(Booking booking);
+
+       EmployeeDTO ConvertEmployeeToDTO(Employee employee);
 
        IEnumerable<string> GetBusinessTypes();
     }

@@ -2,14 +2,15 @@ import {Route, Switch} from 'react-router-dom';
 import React from 'react';
 
 import {AllBusinessesView} from './business/AllBusinessesView';
-import {BusinessBookingView} from './business/BusinessBookingView';
+import {BusinessBookingView} from './booking/BusinessBookingView';
+import {BusinessEmployeeView} from './employee/BusinessEmployeeView';
 import {BusinessOverview} from './business/BusinessOverview';
 import {BusinessTimeSlotView} from './business/BusinessTimeSlotView';
-import {CreateBookingView} from './user/CreateBookingView';
+import {CreateBookingView} from './booking/CreateBookingView';
 import {CreateBusinessView} from './business/CreateBusinessView';
 import {HomeView} from './user/HomeView';
 import {BusinessProfileView} from './business/BusinessProfileView';
-import {UserBookingView} from './user/UserBookingView';
+import {UserBookingView} from './booking/UserBookingView';
 
 export const Routes: React.FC = () => {
    return (
@@ -24,6 +25,7 @@ export const Routes: React.FC = () => {
          <Route exact path="/business/bookings" component={BusinessOverview} />
          <Route exact path="/business/timeslots" component={BusinessOverview} />
          <Route exact path="/business/employees" component={BusinessOverview} />
+         <Route exact path="/business/employees/manage" component={BusinessEmployeeView} />
          <Route exact path="/business" component={BusinessOverview} />
          <Route exact path="/business/bookings/manage" component={BusinessBookingView} />
          <Route exact path="/business/timeslots/manage" component={BusinessTimeSlotView} />

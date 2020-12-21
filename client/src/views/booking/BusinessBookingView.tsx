@@ -5,10 +5,10 @@ import React, {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
 import URL from '../../api/URL';
-import {BusinessDTO} from '../../dto/Business';
-import {BookingDTO} from '../../dto/Booking';
+import {BusinessDTO} from '../../models/Business';
+import {BookingDTO} from '../../models/Booking';
 import {Header} from '../../components/Texts';
-import {RequestHandler, useRequest} from '../../api/RequestHandler';
+import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
 

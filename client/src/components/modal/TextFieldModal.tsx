@@ -4,10 +4,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {MenuItem} from '@material-ui/core';
 import React, {useState} from 'react';
 
-import {BusinessDTO} from '../dto/Business';
-import {Form} from '../validation/useForm';
-import {TextField} from './TextField';
-import TextFieldUtil from '../util/TextFieldUtil';
+import {BusinessDTO} from '../../models/Business';
+import {Form} from '../../hooks/useForm';
+import {TextField} from '../form/TextField';
+import TextFieldUtil from '../../util/TextFieldUtil';
 
 export type TextFieldType = 'text' | 'number' | 'time' | 'password' | undefined;
 
@@ -35,8 +35,6 @@ export const TextFieldModal: React.FC<Props> = ({
    showModal,
 }: Props) => {
    const [updating, setUpdating] = useState(false);
-
-   console.log(textFieldKey);
 
    return (
       <>

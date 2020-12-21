@@ -4,10 +4,10 @@ import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
 import {useLocation, useHistory} from 'react-router-dom';
 
-import {BusinessDTO, TimeSlotDTO} from '../../dto/Business';
+import {BusinessDTO, TimeSlotDTO} from '../../models/Business';
 import {Header} from '../../components/Texts';
-import {Modal} from '../../components/Modal';
-import {RequestHandler, useRequest} from '../../api/RequestHandler';
+import {Modal} from '../../components/modal/Modal';
+import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
 import URL from '../../api/URL';

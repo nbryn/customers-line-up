@@ -4,8 +4,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
 import {Header} from '../../components/Texts';
-import {RequestHandler, useRequest} from '../../api/RequestHandler';
-import {BookingDTO} from '../../dto/Booking';
+import {RequestHandler, useRequest} from '../../hooks/useRequest';
+import {BookingDTO} from '../../models/Booking';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
 import URL, {USER_BOOKINGS_URL} from '../../api/URL';

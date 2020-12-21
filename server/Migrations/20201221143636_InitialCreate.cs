@@ -63,6 +63,33 @@ namespace CLup.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Employees",
+                columns: table => new
+                {
+                    BusinessId = table.Column<int>(nullable: false),
+                    UserEmail = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    CompanyEmail = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employees", x => new { x.UserEmail, x.BusinessId });
+                    table.ForeignKey(
+                        name: "FK_Employees_Businesses_BusinessId",
+                        column: x => x.BusinessId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Employees_Users_UserEmail",
+                        column: x => x.UserEmail,
+                        principalTable: "Users",
+                        principalColumn: "Email",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TimeSlots",
                 columns: table => new
                 {
@@ -113,52 +140,61 @@ namespace CLup.Migrations
             migrationBuilder.InsertData(
                 table: "BusinessOwners",
                 columns: new[] { "Id", "UserEmail" },
-                values: new object[] { 1, "h@h.com" });
+                values: new object[] { 1, "test@test.com" });
 
             migrationBuilder.InsertData(
                 table: "Businesses",
                 columns: new[] { "Id", "BusinessOwnerId", "Capacity", "Closes", "Name", "Opens", "OwnerEmail", "TimeSlotLength", "Type", "Zip" },
                 values: new object[,]
                 {
-                    { 1, null, 50, "16.00", "Cool", "10.00", "h@h.com", 50, "Supermarket", 3520 },
-                    { 2, null, 40, "14.00", "Shop", "09.00", "h@h.com", 20, "Museum", 3520 },
-                    { 3, null, 30, "15.30", "1337", "08.30", "h@h.com", 10, "Kiosk", 4720 }
+                    { 1, null, 50, "16.00", "Cool", "10.00", "test@test.com", 50, "Supermarket", 3520 },
+                    { 2, null, 40, "14.00", "Shop", "09.00", "test@test.com", 20, "Museum", 3520 },
+                    { 3, null, 30, "15.30", "1337", "08.30", "test@test.com", 10, "Kiosk", 4720 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Email", "Id", "Name", "Password", "Zip" },
-                values: new object[] { "h@h.com", 1, "Jens", "$2a$11$69zw5P1IKdOTGFWpMidtuukPhIpIuAGop4w9KIomdA7/f2NVJQwR2", 3520 });
+                values: new object[,]
+                {
+                    { "test@test.com", 1, "Peter", "$2a$11$6IrGtqz4hlA.WUruI40oFemQgvDYCqkJY2hA13MiA3VzjJ4Jh2rWK", 3520 },
+                    { "h@h.com", 2, "Jens", "$2a$11$oyuipSd8ivJJFtkLJUO3aO3sNCg/W.lREsQKV3TZEKGvLveL8B5ZG", 2300 },
+                    { "mads@hotmail.com", 3, "Mads", "$2a$11$ajaWGNX8Bq6qBxSCihX4o.YFwhfRYnqtNqGKZ/KAsqOTAJBQACqIW", 2700 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "UserEmail", "BusinessId", "CompanyEmail", "CreatedAt", "Id" },
+                values: new object[,]
+                {
+                    { "h@h.com", 1, null, new DateTime(2020, 12, 21, 15, 36, 36, 10, DateTimeKind.Local).AddTicks(6818), 1 },
+                    { "mads@hotmail.com", 1, null, new DateTime(2020, 12, 21, 15, 36, 36, 10, DateTimeKind.Local).AddTicks(7728), 2 }
+                });
 
             migrationBuilder.InsertData(
                 table: "TimeSlots",
                 columns: new[] { "Id", "BusinessId", "BusinessName", "Capacity", "End", "Start" },
-                values: new object[] { 1, 1, "Cool", 50, new DateTime(2020, 12, 21, 3, 58, 46, 766, DateTimeKind.Local).AddTicks(5581), new DateTime(2020, 12, 21, 2, 58, 46, 764, DateTimeKind.Local).AddTicks(805) });
-
-            migrationBuilder.InsertData(
-                table: "TimeSlots",
-                columns: new[] { "Id", "BusinessId", "BusinessName", "Capacity", "End", "Start" },
-                values: new object[] { 2, 1, "Cool", 40, new DateTime(2020, 12, 21, 4, 58, 46, 766, DateTimeKind.Local).AddTicks(5933), new DateTime(2020, 12, 21, 3, 58, 46, 766, DateTimeKind.Local).AddTicks(5926) });
-
-            migrationBuilder.InsertData(
-                table: "TimeSlots",
-                columns: new[] { "Id", "BusinessId", "BusinessName", "Capacity", "End", "Start" },
-                values: new object[] { 3, 1, "Cool", 30, new DateTime(2020, 12, 21, 5, 58, 46, 766, DateTimeKind.Local).AddTicks(5936), new DateTime(2020, 12, 21, 4, 58, 46, 766, DateTimeKind.Local).AddTicks(5935) });
+                values: new object[,]
+                {
+                    { 1, 1, "Cool", 50, new DateTime(2020, 12, 21, 19, 36, 36, 10, DateTimeKind.Local).AddTicks(4007), new DateTime(2020, 12, 21, 18, 36, 36, 7, DateTimeKind.Local).AddTicks(9091) },
+                    { 2, 1, "Cool", 40, new DateTime(2020, 12, 21, 20, 36, 36, 10, DateTimeKind.Local).AddTicks(4362), new DateTime(2020, 12, 21, 19, 36, 36, 10, DateTimeKind.Local).AddTicks(4355) },
+                    { 3, 1, "Cool", 30, new DateTime(2020, 12, 21, 21, 36, 36, 10, DateTimeKind.Local).AddTicks(4365), new DateTime(2020, 12, 21, 20, 36, 36, 10, DateTimeKind.Local).AddTicks(4364) }
+                });
 
             migrationBuilder.InsertData(
                 table: "Bookings",
                 columns: new[] { "UserEmail", "TimeSlotId", "BusinessId" },
-                values: new object[] { "h@h.com", 1, 1 });
+                values: new object[] { "test@test.com", 1, 1 });
 
             migrationBuilder.InsertData(
                 table: "Bookings",
                 columns: new[] { "UserEmail", "TimeSlotId", "BusinessId" },
-                values: new object[] { "h@h.com", 2, 1 });
+                values: new object[] { "test@test.com", 2, 1 });
 
             migrationBuilder.InsertData(
                 table: "Bookings",
                 columns: new[] { "UserEmail", "TimeSlotId", "BusinessId" },
-                values: new object[] { "h@h.com", 3, 1 });
+                values: new object[] { "test@test.com", 3, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_TimeSlotId",
@@ -178,6 +214,11 @@ namespace CLup.Migrations
                 filter: "[UserEmail] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Employees_BusinessId",
+                table: "Employees",
+                column: "BusinessId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TimeSlots_BusinessId",
                 table: "TimeSlots",
                 column: "BusinessId");
@@ -193,6 +234,9 @@ namespace CLup.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Bookings");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "TimeSlots");

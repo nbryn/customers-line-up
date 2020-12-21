@@ -1,27 +1,24 @@
 using BC = BCrypt.Net.BCrypt;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System;
 
+using Logic.Bookings;
 using Logic.Businesses;
 using Logic.BusinessOwners;
+using Logic.Employees;
 using Logic.TimeSlots;
 using Logic.Users;
-using Logic.Bookings;
 
 namespace Logic.Context
 {
     public class CLupContext : DbContext, ICLupContext
     {
-        public DbSet<User> Users { get; set; }
-
-        public DbSet<BusinessOwner> BusinessOwners { get; set; }
-
-        public DbSet<Business> Businesses { get; set; }
-
-        public DbSet<TimeSlot> TimeSlots { get; set; }
-
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<BusinessOwner> BusinessOwners { get; set; }
+        public DbSet<Business> Businesses { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<TimeSlot> TimeSlots { get; set; }
+        public DbSet<User> Users { get; set; }
         public CLupContext(DbContextOptions<CLupContext> options)
             : base(options)
         {
@@ -41,6 +38,8 @@ namespace Logic.Context
 
             modelBuilder.Entity<Booking>().HasKey(c => new { c.UserEmail, c.TimeSlotId });
 
+            modelBuilder.Entity<Employee>().HasKey(e => new { e.UserEmail, e.BusinessId });
+
             modelBuilder.Entity<User>()
                         .HasIndex(c => c.Email)
                         .IsUnique();
@@ -50,7 +49,9 @@ namespace Logic.Context
 
             var users = new[]
             {
-                new User {Id = 1, Name = "Jens", Email = "h@h.com", Password = BC.HashPassword("1234"), Zip = 3520}
+                new User {Id = 1, Name = "Peter", Email = "test@test.com", Password = BC.HashPassword("1234"), Zip = 3520},
+                new User {Id = 2, Name = "Jens", Email = "h@h.com", Password = BC.HashPassword("1234"), Zip = 2300},
+                new User {Id = 3, Name = "Mads", Email = "mads@hotmail.com", Password = BC.HashPassword("1234"), Zip = 2700},
             };
 
             modelBuilder.Entity<User>().HasData(users);
@@ -65,7 +66,7 @@ namespace Logic.Context
 
             var owners = new[]
            {
-                new BusinessOwner {Id = 1, UserEmail = "h@h.com"}
+                new BusinessOwner {Id = 1, UserEmail = "test@test.com"}
            };
 
             modelBuilder.Entity<BusinessOwner>().HasData(owners);
@@ -74,17 +75,20 @@ namespace Logic.Context
                         .HasMany(x => x.TimeSlots);
 
             modelBuilder.Entity<Business>()
+                        .HasMany(x => x.Employees);
+
+            modelBuilder.Entity<Business>()
                         .Property(b => b.Type)
                         .HasConversion(b => b.ToString("G"),
                         b => Enum.Parse<BusinessType>(b));
 
             var businesses = new[]
             {
-                new Business {Id = 1, Name = "Cool", OwnerEmail = "h@h.com", Zip = 3520,
+                new Business {Id = 1, Name = "Cool", OwnerEmail = "test@test.com", Zip = 3520,
                              Opens = "10.00", Closes = "16.00", TimeSlotLength = 50, Capacity = 50, Type = BusinessType.Supermarket},
-                new Business {Id = 2, Name = "Shop", OwnerEmail = "h@h.com", Zip = 3520,
+                new Business {Id = 2, Name = "Shop", OwnerEmail = "test@test.com", Zip = 3520,
                              Opens = "09.00", Closes = "14.00", TimeSlotLength = 20, Capacity = 40, Type = BusinessType.Museum},
-                new Business {Id = 3, Name = "1337", OwnerEmail = "h@h.com", Zip = 4720,
+                new Business {Id = 3, Name = "1337", OwnerEmail = "test@test.com", Zip = 4720,
                              Opens = "08.30", Closes = "15.30", TimeSlotLength = 10, Capacity = 30, Type = BusinessType.Kiosk}
             };
 
@@ -111,7 +115,6 @@ namespace Logic.Context
 
             modelBuilder.Entity<TimeSlot>().HasData(timeSlots);
 
-
             var bookings = new[]
             {
                 new Booking {UserEmail = users[0].Email, BusinessId = 1, TimeSlotId = timeSlots[0].Id},
@@ -121,6 +124,16 @@ namespace Logic.Context
 
             modelBuilder.Entity<Booking>().HasData(bookings);
 
+            var employees = new[]
+            {
+                new Employee {Id = 1, CreatedAt = DateTime.Now, BusinessId = businesses[0].Id,
+                              UserEmail = users[1].Email},
+
+                new Employee {Id = 2, CreatedAt = DateTime.Now, BusinessId = businesses[0].Id,
+                              UserEmail = users[2].Email}
+            };
+
+            modelBuilder.Entity<Employee>().HasData(employees);
         }
     }
 }

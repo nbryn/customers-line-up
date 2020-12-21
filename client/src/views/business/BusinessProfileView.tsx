@@ -3,15 +3,15 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useEffect, useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
-import {BusinessDTO} from '../../dto/Business';
+import {BusinessDTO} from '../../models/Business';
 import {businessValidationSchema} from '../../validation/BusinessValidation';
-import {ExtendedCard, ExtendedCardData} from '../../components/ExtendedCard';
+import {ExtendedCard, ExtendedCardData} from '../../components/card/ExtendedCard';
 import {Header} from '../../components/Texts';
-import {RequestHandler, useRequest} from '../../api/RequestHandler';
+import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import TextFieldUtil from '../../util/TextFieldUtil';
-import {TextFieldModal, TextFieldType} from '../../components/TextFieldModal';
+import {TextFieldModal, TextFieldType} from '../../components/modal/TextFieldModal';
 import URL, {BUSINESS_TYPES_URL} from '../../api/URL';
-import {useForm} from '../../validation/useForm';
+import {useForm} from '../../hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
    col: {
