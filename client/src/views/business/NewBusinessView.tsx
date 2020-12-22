@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
       color: 'red',
    },
    textField: {
-      width: '50%',
+      width: '70%',
    },
    wrapper: {
       justifyContent: 'center',
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SUCCESS_MESSAGE = 'Business Created - Go to my businesses to see your businesses';
 
-export const CreateBusinessView: React.FC = () => {
+export const NewBusinessView: React.FC = () => {
    const styles = useStyles();
    const history = useHistory();
 

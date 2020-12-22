@@ -80,9 +80,14 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
          path: '/user/bookings',
       },
       {
+         label: 'Profile',
+         icon: <DashboardIcon />,
+         path: '/user/profile',
+      },
+      {
          label: 'Create Business',
          icon: <DashboardIcon />,
-         path: '/new/business',
+         path: '/business/new',
       },
    ];
 

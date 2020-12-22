@@ -36,7 +36,7 @@ export const AllBusinessesView: React.FC = () => {
          icon: () => <Chip size="small" label="Go to business" clickable color="primary" />,
          tooltip: 'See available time slots',
          onClick: (event: any, rowData: BusinessDTO) => {
-            history.push('/new/booking', {data: rowData});
+            history.push('/booking/new', {data: rowData});
          },
       },
    ];

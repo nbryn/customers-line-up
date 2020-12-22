@@ -1,11 +1,10 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import MUICard from '@material-ui/core/Card';
+import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import Button from '@material-ui/core/Button';
-
+import {makeStyles} from '@material-ui/core/styles';
+import MUICard from '@material-ui/core/Card';
 
 const useStyles = makeStyles({
    root: {
@@ -19,7 +18,7 @@ const useStyles = makeStyles({
    },
    header: {
       textAlign: 'center',
-   }
+   },
 });
 
 type Props = {
@@ -31,6 +30,7 @@ type Props = {
    buttonSize?: 'small' | 'medium' | 'large';
    variant?: 'outlined' | 'elevation';
    className?: any;
+   buttonStyles?: any;
    children: React.ReactNode;
 };
 
@@ -44,18 +44,18 @@ export const Card: React.FC<Props> = ({
    title,
    subTitle,
    variant,
+   buttonStyles
 }: Props) => {
    const styles = useStyles();
 
    return (
       <MUICard className={className} variant={variant}>
          <CardHeader className={styles.header} title={title} subheader={subTitle} />
-         <CardContent className={styles.content}>
-            
-            {children}</CardContent>
+         <CardContent className={styles.content}>{children}</CardContent>
          <CardActions className={styles.button}>
             {buttonText && (
                <Button
+                  className={buttonStyles}
                   variant="contained"
                   color={buttonColor}
                   onClick={buttonAction}

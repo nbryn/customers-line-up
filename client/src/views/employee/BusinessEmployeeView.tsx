@@ -34,9 +34,9 @@ export const BusinessEmployeeView: React.FC = () => {
    const columns: TableColumn[] = [
       {title: 'BusinessId', field: 'businessId', hidden: true},
       {title: 'Name', field: 'name'},
+      {title: 'Employed Since', field: 'employedSince'},
       {title: 'Private Email', field: 'privateEmail'},
       {title: 'Company Email', field: 'companyEmail'},
-      {title: 'Employed Since', field: 'employmentSince'},
    ];
 
    const actions = [
@@ -61,7 +61,7 @@ export const BusinessEmployeeView: React.FC = () => {
                   actions={actions}
                   columns={columns}
                   fetchTableData={async () =>
-                     await requestHandler.query(URL.getBusinessEmployeesURL(business.id))
+                     await requestHandler.query(URL.getEmployeesURL(business.id))
                   }
                   tableTitle="Employees"
                   emptyMessage="No Employees Yet"

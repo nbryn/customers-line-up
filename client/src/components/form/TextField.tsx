@@ -28,6 +28,8 @@ type Props = {
    inputLabelProps?: any;
    error?: boolean;
    children?: React.ReactNode;
+   required?: boolean;
+   disabled?: boolean;
 };
 
 export const TextField: React.FC<Props> = (props: Props) => {
@@ -36,7 +38,7 @@ export const TextField: React.FC<Props> = (props: Props) => {
    return (
       <MaterialUITextField
          className={props.className}
-         variant={props.variant}
+         variant={props.variant || 'outlined'}
          margin={props.margin}
          size={props.size}
          helperText={props.helperText}
@@ -54,6 +56,9 @@ export const TextField: React.FC<Props> = (props: Props) => {
          defaultValue={props.defaultValue}
          InputLabelProps={props.inputLabelProps}
          error={props.error}
+         required={props.required || true}
+         disabled={props.disabled || false}
+
       >
          {props.children}
       </MaterialUITextField>

@@ -60,7 +60,7 @@ namespace Logic.Users
         [Authorize(Policy = Policies.User)]
         [Route("all")]
         [HttpGet]
-        public async Task<IEnumerable<UserDTO>> FetchAll()
+        public async Task<IEnumerable<UserDTO>> FetchAllUsers()
         {
             var all = await _repository.GetAll();
 

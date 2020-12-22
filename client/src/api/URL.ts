@@ -12,7 +12,7 @@ const getTimeSlotURL = (businessId: number): string => {
     return BASE_URL + `timeslot/available?businessid=${businessId}&start=${start}&end=${end}`;
 }
 
-const getCreateBookingURL = (timeSlotId: number): string => {
+const getNewBookingURL = (timeSlotId: number): string => {
     return BASE_URL + `booking/${timeSlotId}`;
 }
 
@@ -44,6 +44,10 @@ const getEmployeesURL = (businessId: number): string => {
     return BASE_URL + `employee/business/${businessId}`
 }
 
+const getNewEmployeeURL = (businessId: number): string => {
+    return BASE_URL + `employee/business/${businessId}`
+}
+
 // Server will get user info from JWT
 export const LOGIN_URL = BASE_URL + 'user/login';
 
@@ -59,15 +63,18 @@ export const CREATE_BUSINESS_URL = BASE_URL + 'business';
 
 export const USER_BOOKINGS_URL = BASE_URL + 'booking/user';
 
+export const ALL_USERS_URL = BASE_URL + 'user/all';
+
 
 export default {
-    getAllTimeSlotsForBusinessURL: getTimeSlotsURL,
-    getBusinessBookingsURL,
-    getBusinessEmployeesURL: getEmployeesURL,
-    getCreateBookingURL,
+    getBusinessBookingsURL,    
     getDeleteBookingForBusinessURL,
     getDeleteBookingForUserURL,
     getDeleteTimeSlotURL,
+    getEmployeesURL, 
+    getNewBookingURL,
+    getNewEmployeeURL,
+    getTimeSlotsURL,
     getTimeSlotURL,
     getUpdateBusinessDataURL,
 };

@@ -24,7 +24,7 @@ interface LocationState {
 
 const SUCCESS_MESSAGE = 'Booking Made - Go to my bookings to see your bookings';
 
-export const CreateBookingView: React.FC = () => {
+export const NewBookingView: React.FC = () => {
    const styles = useStyles();
    const history = useHistory();
    const location = useLocation<LocationState>();
@@ -44,7 +44,7 @@ export const CreateBookingView: React.FC = () => {
       {
          icon: () => <Chip size="small" label="Book Time" clickable color="primary" />,
          onClick: async (event: any, rowData: TimeSlotDTO) => {
-            requestHandler.mutation(URL.getCreateBookingURL(rowData.id), 'POST');
+            requestHandler.mutation(URL.getNewBookingURL(rowData.id), 'POST');
          },
       },
    ];

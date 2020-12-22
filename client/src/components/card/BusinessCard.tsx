@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '@material-ui/core/Button';
 import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
@@ -14,37 +15,58 @@ const useStyles = makeStyles({
       marginBottom: 15,
    },
    primaryButton: {
-      justifyContent: 'center',
-      marginTop: 50,
-      marginBottom: -10,
+      width: '47%',
+      marginTop: 25,
+   },
+   secondaryButton: {
+      width: '47%',
+      marginBottom: 15,
    },
 });
 
 type Props = {
    business: BusinessDTO;
    buttonAction: () => void;
-   buttonText?: string;
+   buttonText: string;
+   secondaryAction?: () => void;
+   secondaryButtonText?: string;
 };
 
-export const BusinessCard: React.FC<Props> = ({buttonAction, buttonText, business}: Props) => {
+export const BusinessCard: React.FC<Props> = ({
+   buttonAction,
+   buttonText,
+   business,
+   secondaryAction,
+   secondaryButtonText,
+}: Props) => {
    const styles = useStyles();
 
    return (
       <Card
          className={styles.card}
-         buttonAction={() => buttonAction()}
-         buttonColor="primary"
-         buttonText={buttonText}
-         buttonSize="medium"
+         buttonAction={secondaryAction}
+         buttonColor="secondary"
+         buttonText={secondaryButtonText}
+         buttonSize="small"
          title={business.name}
          subTitle={business.type}
          variant="outlined"
+         buttonStyles={styles.secondaryButton}
       >
          <div className={styles.card}>
             <Typography>Zip: {business.zip} </Typography>
             <Typography>Capacity: {business.capacity} </Typography>
             <Typography>Business Hours: {business.opens + ' - ' + business.closes} </Typography>
          </div>
+         <Button
+            className={styles.primaryButton}
+            variant="contained"
+            color="primary"
+            onClick={buttonAction}
+            size="small"
+         >
+            {buttonText}
+         </Button>
       </Card>
    );
 };

@@ -61,7 +61,7 @@ export const BusinessTimeSlotView: React.FC = () => {
                   columns={columns}
                   fetchTableData={async () => {
                      const timeSlots = await requestHandler.query(
-                        URL.getAllTimeSlotsForBusinessURL(business.id)
+                        URL.getTimeSlotsURL(business.id)
                      );
 
                      return timeSlots.map((x) => ({

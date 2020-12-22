@@ -4,7 +4,6 @@ import React, {useEffect, useState} from 'react';
 import {DTO} from '../models/General';
 import {Table, TableColumn} from '../components/Table';
 
-
 export type Props = {
    actions: any;
    columns: TableColumn[];

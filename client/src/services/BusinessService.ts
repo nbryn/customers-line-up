@@ -1,23 +1,35 @@
 export type PathInfo = {
-    path: string;
-    buttonText: string;
+    primaryPath: string;
+    primaryButtonText: string;
+    secondaryPath?: string;
+    secondaryButtonText?: string;
 }
 
 function getPathAndTextFromURL(path: string): PathInfo {
     const endOfPath = path.substring(path.lastIndexOf('/') + 1);
+    const primaryPath = getPrimaryPath(endOfPath);
+    const primaryButtonText = getPrimaryButtonText(endOfPath);
 
-    const newPath = endOfPath === 'business' ? 'manage' : endOfPath + '/manage';
-
-    const buttonText = getButtonText(endOfPath);
+    const secondaryPath = getSecondaryPath(endOfPath);
+    const secondaryButtonText = getSecondaryButtonText(endOfPath);
 
     return {
-        path: newPath,
-        buttonText
+        primaryPath,
+        primaryButtonText,
+        secondaryPath,
+        secondaryButtonText
     }
 }
 
+function getPrimaryPath(path: string): string {
+    const newPath = path === 'business' ? 'manage' : path + '/manage';
 
-function getButtonText(path: string): string {
+    return newPath;
+
+}
+
+function getPrimaryButtonText(path: string): string {
+    console.log(path);
     switch (path) {
         case 'business':
             return 'Edit Info';
@@ -30,6 +42,20 @@ function getButtonText(path: string): string {
         default:
             return '';
     }
+}
+
+function getSecondaryPath(path: string): string {
+    if (path === 'timeslots' || path === 'employees') return path + '/new';
+
+    return '';
+
+}
+
+function getSecondaryButtonText(path: string): string {
+    if (path === 'timeslots') return 'New Time Slot';
+    if (path === 'employees') return 'New Employee';
+
+    return '';
 }
 
 export default {

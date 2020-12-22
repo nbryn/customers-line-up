@@ -14,3 +14,7 @@ export const businessValidationSchema: yup.ObjectSchema = yup.object({
     opens: yup.string().required('Opens is required'),
     closes: yup.string().required('Closes is required'),
 });
+
+export const employeeValidationSchema: yup.ObjectSchema = yup.object({
+    companyEmail: yup.string().email().required('Email is required')
+});

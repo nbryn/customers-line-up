@@ -89,6 +89,7 @@ export const LoginView: React.FC = () => {
                                  onBlur={form.handleBlur}
                                  error={form.touched[key] && Boolean(form.errors[key])}
                                  helperText={form.touched[key] && form.errors[key]}
+                                 variant="outlined"
                               />
                            </FormGroup>
                         ))}

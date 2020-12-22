@@ -23,7 +23,7 @@ export const BusinessOverview: React.FC = () => {
 
    const [businessData, setBusinessData] = useState<BusinessDTO[]>([]);
 
-   const {buttonText, path}: PathInfo = BusinessService.getPathAndTextFromURL(window.location.pathname);
+   const pathInfo: PathInfo = BusinessService.getPathAndTextFromURL(window.location.pathname);
 
    const requestHandler: RequestHandler<BusinessDTO[]> = useRequest();
 
@@ -48,9 +48,15 @@ export const BusinessOverview: React.FC = () => {
                      <Col key={x.id} sm={6} md={8} lg={4}>
                         <BusinessCard
                            business={x}
-                           buttonText={`${buttonText}`}
+                           buttonText={pathInfo.primaryButtonText}
                            buttonAction={() =>
-                              history.push(`/business/${path}`, {
+                              history.push(`/business/${pathInfo.primaryPath}`, {
+                                 business: x,
+                              })
+                           }
+                           secondaryButtonText={pathInfo.secondaryButtonText}
+                           secondaryAction={() =>
+                              history.push(`/business/${pathInfo.secondaryPath}`, {
                                  business: x,
                               })
                            }
