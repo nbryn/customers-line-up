@@ -44,6 +44,7 @@ export const BusinessOverview: React.FC = () => {
             {requestHandler.working && <CircularProgress />}
             <>
                {businessData.map((x) => {
+                  localStorage.setItem('business', JSON.stringify(x));
                   return (
                      <Col key={x.id} sm={6} md={8} lg={4}>
                         <BusinessCard

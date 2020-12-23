@@ -25,6 +25,8 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
    const [user, setCurrentUser] = useState<UserDTO>({name: '', email: '', zip: '', token: ''});
    const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
 
+   console.log(user);
+
    const setUser = (user: UserDTO) => {
       setUserLoggedIn(true);
       setCurrentUser(user);

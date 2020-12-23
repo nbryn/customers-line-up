@@ -49,11 +49,12 @@ export const NewEmployeeView: React.FC = () => {
    const location = useLocation<LocationState>();
 
    const [users, setUsers] = useState<UserDTO[]>([]);
-   const [business, setBusiness] = useState<BusinessDTO>();
    const [selectedUser, setSelectedUser] = useState<UserDTO>({email: ''});
    const [showComboBox, setShowComBox] = useState(true);
 
    const requestHandler: RequestHandler<UserDTO[]> = useRequest(SUCCESS_MESSAGE);
+
+   const business = JSON.parse(localStorage.getItem('business')!);
 
    const formValues: NewEmployeeDTO = {
       companyEmail: '',
@@ -69,9 +70,6 @@ export const NewEmployeeView: React.FC = () => {
 
    useEffect(() => {
       (async () => {
-         console.log("hej");
-         setBusiness(location.state.business);
-
          const users = await requestHandler.query(ALL_USERS_URL);
 
          setUsers(users);
@@ -108,7 +106,8 @@ export const NewEmployeeView: React.FC = () => {
                   {!showComboBox && (
                      <>
                         <Form
-                           onSubmit={() => {
+                           onSubmit={(e: React.FormEvent) => {
+                              e.preventDefault();
                               form.setRequest({
                                  businessId: business!.id,
                                  privateEmail: selectedUser.email,
