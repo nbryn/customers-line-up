@@ -82,6 +82,7 @@ namespace Logic.Util
         {
             return new EmployeeDTO
             {
+                Id = employee.Id,
                 Name = employee.User.Name,
                 PrivateEmail = employee.UserEmail,
                 CompanyEmail = employee.CompanyEmail,

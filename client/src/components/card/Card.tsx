@@ -30,7 +30,7 @@ type Props = {
    buttonSize?: 'small' | 'medium' | 'large';
    variant?: 'outlined' | 'elevation';
    className?: any;
-   buttonStyles?: any;
+   buttonStyle?: any;
    children: React.ReactNode;
 };
 
@@ -44,7 +44,7 @@ export const Card: React.FC<Props> = ({
    title,
    subTitle,
    variant,
-   buttonStyles
+   buttonStyle
 }: Props) => {
    const styles = useStyles();
 
@@ -55,7 +55,7 @@ export const Card: React.FC<Props> = ({
          <CardActions className={styles.button}>
             {buttonText && (
                <Button
-                  className={buttonStyles}
+                  className={buttonStyle}
                   variant="contained"
                   color={buttonColor}
                   onClick={buttonAction}

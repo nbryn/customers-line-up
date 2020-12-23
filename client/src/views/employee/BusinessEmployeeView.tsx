@@ -42,10 +42,10 @@ export const BusinessEmployeeView: React.FC = () => {
    const actions = [
       {
          icon: () => <Chip size="small" label="Remove Employee" clickable color="primary" />,
-         onClick: async (event: any, rowData: EmployeeDTO) => {
-            await requestHandler.mutation(URL.getDeleteTimeSlotURL(rowData.id), 'DELETE');
+         onClick: async (event: any, employee: EmployeeDTO) => {
+            await requestHandler.mutation(URL.getDeleteEmployeeURL(employee.privateEmail!, employee.businessId!), 'DELETE');
 
-            setRemoveEmployee(rowData.id);
+            setRemoveEmployee(employee.id);
          },
       },
    ];

@@ -79,8 +79,8 @@ namespace CLup
             services.AddScoped<IDTOMapper, DTOMapper>();
 
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
             
-
             services.AddScoped<ITimeSlotService, TimeSlotService>();
             services.AddScoped<ITimeSlotRepository, TimeSlotRepository>();
 

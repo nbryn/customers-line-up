@@ -23,12 +23,12 @@ export const Routes: React.FC = () => {
          <Route exact path="/booking/new" component={NewBookingView} />
          <Route exact path="/business/new" component={NewBusinessView} />
 
+         <Route exact path="/business" component={BusinessOverview} />
          <Route exact path="/business/bookings" component={BusinessOverview} />
          <Route exact path="/business/timeslots" component={BusinessOverview} />
          <Route exact path="/business/employees" component={BusinessOverview} />
          <Route exact path="/business/employees/new" component={NewEmployeeView} />
          <Route exact path="/business/employees/manage" component={BusinessEmployeeView} />
-         <Route exact path="/business" component={BusinessOverview} />
          <Route exact path="/business/bookings/manage" component={BusinessBookingView} />
          <Route exact path="/business/timeslots/manage" component={BusinessTimeSlotView} />
          <Route exact path="/business/manage" component={BusinessProfileView} />

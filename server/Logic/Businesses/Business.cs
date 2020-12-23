@@ -1,12 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+using Logic.Context;
 using Logic.Employees;
 using Logic.TimeSlots;
 
 namespace Logic.Businesses
 {
-    public class Business
+    public class Business : BaseEntity
     {
         public int Id { get; set; }
 

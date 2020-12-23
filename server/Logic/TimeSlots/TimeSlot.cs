@@ -4,10 +4,11 @@ using System.ComponentModel.DataAnnotations;
 
 using Logic.Bookings;
 using Logic.Businesses;
+using Logic.Context;
 
 namespace Logic.TimeSlots
 {
-    public class TimeSlot
+    public class TimeSlot : BaseEntity
     {
         public int Id { get; set; }
 

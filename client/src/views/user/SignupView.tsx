@@ -48,7 +48,7 @@ export const SignupView: React.FC = () => {
       password: '',
    };
 
-   const form = useForm<UserDTO>(
+   const {formHandler} = useForm<UserDTO>(
       formValues,
       signupValidationSchema,
       REGISTER_URL,
@@ -64,10 +64,10 @@ export const SignupView: React.FC = () => {
             <Col sm={10} lg={6}>
                <Card className={styles.card} title="Signup">
                   <Form
-                     onSubmit={form.handleSubmit}
+                     onSubmit={formHandler.handleSubmit}
                      buttonText="Signup"
                      working={requestHandler.working}
-                     valid={form.isValid}
+                     valid={formHandler.isValid}
                      errorMessage={requestHandler.requestInfo}
                   >
                      {Object.keys(formValues).map((key) => (
@@ -77,11 +77,11 @@ export const SignupView: React.FC = () => {
                               id={key}
                               label={StringUtil.capitalizeFirstLetter(key)}
                               type={TextFieldUtil.mapKeyToType(key)}
-                              value={form.values[key] as string}
-                              onChange={form.handleChange}
-                              onBlur={form.handleBlur}
-                              error={form.touched[key] && Boolean(form.errors[key])}
-                              helperText={form.touched[key] && form.errors[key]}
+                              value={formHandler.values[key] as string}
+                              onChange={formHandler.handleChange}
+                              onBlur={formHandler.handleBlur}
+                              error={formHandler.touched[key] && Boolean(formHandler.errors[key])}
+                              helperText={formHandler.touched[key] && formHandler.errors[key]}
                            />
                         </FormGroup>
                      ))}

@@ -13,7 +13,7 @@ const useStyles = makeStyles({
    },
    end: {
       marginTop: -20,
-   }
+   },
 });
 
 export type ExtendedCardData = {
@@ -45,6 +45,7 @@ export const ExtendedCard: React.FC<Props> = ({buttonAction, buttonText, title, 
       >
          {data.map((x) => (
             <CardRow
+               key={x.text}
                text={x.text}
                data={x.data}
                buttonText={x.buttonText}

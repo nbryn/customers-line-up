@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
    },
    button: {
-      marginTop: 40,
+      marginTop: 30,
+      width: '38%'
    },
    working: {
       transform: 'translateX(90%)',

@@ -7,3 +7,9 @@ export interface EmployeeDTO extends DTO {
     companyEmail?: string,
     employedSince?: string,
 }
+
+export type NewEmployeeDTO = {
+    businessId?: number,
+    privateEmail?: string,
+    companyEmail?: string,
+}

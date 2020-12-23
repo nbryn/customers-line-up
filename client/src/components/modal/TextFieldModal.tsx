@@ -5,7 +5,7 @@ import {MenuItem} from '@material-ui/core';
 import React, {useState} from 'react';
 
 import {BusinessDTO} from '../../models/Business';
-import {Form} from '../../hooks/useForm';
+import {FormHandler} from '../../hooks/useForm';
 import {TextField} from '../form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
 
@@ -14,7 +14,7 @@ export type TextFieldType = 'text' | 'number' | 'time' | 'password' | undefined;
 type Props = {
    show: boolean;
    textFieldKey: string;
-   form: Form<BusinessDTO>;
+   formHandler: FormHandler<BusinessDTO>;
    textFieldType: TextFieldType;
    primaryActionText?: string;
    selectOptions?: string[];
@@ -30,7 +30,7 @@ export const TextFieldModal: React.FC<Props> = ({
    primaryActionText,
    secondaryAction,
    textFieldType,
-   form,
+   formHandler,
    selectOptions,
    showModal,
 }: Props) => {
@@ -52,11 +52,11 @@ export const TextFieldModal: React.FC<Props> = ({
                      id={textFieldKey}
                      label={TextFieldUtil.mapKeyToLabel(textFieldKey)}
                      type={textFieldType}
-                     value={form.values[textFieldKey]}
-                     onChange={form.handleChange(textFieldKey)}
-                     onBlur={form.handleBlur}
-                     error={form.touched[textFieldKey] && Boolean(form.errors[textFieldKey])}
-                     helperText={form.touched[textFieldKey] && form.errors[textFieldKey]}
+                     value={formHandler.values[textFieldKey]}
+                     onChange={formHandler.handleChange(textFieldKey)}
+                     onBlur={formHandler.handleBlur}
+                     error={formHandler.touched[textFieldKey] && Boolean(formHandler.errors[textFieldKey])}
+                     helperText={formHandler.touched[textFieldKey] && formHandler.errors[textFieldKey]}
                      select={textFieldKey === 'type' ? true : false}
                      inputProps={{
                         step: 1800,
@@ -77,7 +77,7 @@ export const TextFieldModal: React.FC<Props> = ({
                   </Button>
                   {primaryAction && (
                      <Button
-                        disabled={!form.isValid}
+                        disabled={!formHandler.isValid}
                         variant="primary"
                         onClick={async () => {
                            setUpdating(true);

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,44 @@ namespace Data
         }
         public async Task<Response> CreateEmployee(NewEmployeeDTO request)
         {
-            return Response.BadRequest;
+            Employee newEmployee = new Employee
+            {
+                BusinessId = request.BusinessId,
+                UserEmail = request.PrivateEmail,
+                CompanyEmail = request.CompanyEmail,
+            };
+
+            _context.Employees.Add(newEmployee);
+
+            await _context.SaveChangesAsync();
+
+            return Response.Created;
+        }
+
+        public async Task<Response> DeleteEmployee(string email, int businessId)
+        {
+            Employee employee = await FindEmployeeByEmailAndBusiness(email, businessId);
+
+            if (employee == null)
+            {
+                return Response.NotFound;
+            }
+
+            _context.Employees.Remove(employee);
+
+            await _context.SaveChangesAsync();
+
+            return Response.Deleted;
+        }
+
+        public async Task<Employee> FindEmployeeByEmailAndBusiness(string email, int businessId)
+        {
+            Employee employee = await _context.Employees.Include(e => e.Business)
+                                                        .Include(e => e.User)
+                                                        .FirstOrDefaultAsync(e => e.UserEmail == email &&
+                                                                            e.BusinessId == businessId);
+
+            return employee;
         }
 
         public async Task<IList<Employee>> FindEmployeesByBusiness(int businessId)

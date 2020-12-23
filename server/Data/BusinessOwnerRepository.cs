@@ -23,7 +23,7 @@ namespace Data
                 UserEmail = ownerEmail,
             };
 
-            await _context.BusinessOwners.AddAsync(newOwner);
+            _context.BusinessOwners.Add(newOwner);
 
             await _context.SaveChangesAsync();
 

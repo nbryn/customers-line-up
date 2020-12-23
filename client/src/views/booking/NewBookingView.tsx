@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface LocationState {
-   data: BusinessDTO;
+   business: BusinessDTO;
 }
 
 const SUCCESS_MESSAGE = 'Booking Made - Go to my bookings to see your bookings';
@@ -31,7 +31,7 @@ export const NewBookingView: React.FC = () => {
 
    const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest(SUCCESS_MESSAGE);
 
-   const business: BusinessDTO = location.state.data;
+   const {business} = location.state;
 
    const columns: TableColumn[] = [
       {title: 'id', field: 'id', hidden: true},

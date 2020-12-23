@@ -13,6 +13,8 @@ namespace CLup.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
                     UserEmail = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -25,6 +27,8 @@ namespace CLup.Migrations
                 columns: table => new
                 {
                     Email = table.Column<string>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
                     Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(nullable: false),
@@ -41,6 +45,8 @@ namespace CLup.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     OwnerEmail = table.Column<string>(nullable: false),
                     Zip = table.Column<int>(nullable: false),
@@ -68,8 +74,9 @@ namespace CLup.Migrations
                 {
                     BusinessId = table.Column<int>(nullable: false),
                     UserEmail = table.Column<string>(nullable: false),
-                    Id = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    Id = table.Column<int>(nullable: false),
                     CompanyEmail = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -95,6 +102,8 @@ namespace CLup.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
                     BusinessId = table.Column<int>(nullable: false),
                     BusinessName = table.Column<string>(nullable: true),
                     Capacity = table.Column<int>(nullable: false),
@@ -118,6 +127,8 @@ namespace CLup.Migrations
                 {
                     UserEmail = table.Column<string>(nullable: false),
                     TimeSlotId = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
                     BusinessId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -139,62 +150,62 @@ namespace CLup.Migrations
 
             migrationBuilder.InsertData(
                 table: "BusinessOwners",
-                columns: new[] { "Id", "UserEmail" },
-                values: new object[] { 1, "test@test.com" });
+                columns: new[] { "Id", "CreatedAt", "UpdatedAt", "UserEmail" },
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "test@test.com" });
 
             migrationBuilder.InsertData(
                 table: "Businesses",
-                columns: new[] { "Id", "BusinessOwnerId", "Capacity", "Closes", "Name", "Opens", "OwnerEmail", "TimeSlotLength", "Type", "Zip" },
+                columns: new[] { "Id", "BusinessOwnerId", "Capacity", "Closes", "CreatedAt", "Name", "Opens", "OwnerEmail", "TimeSlotLength", "Type", "UpdatedAt", "Zip" },
                 values: new object[,]
                 {
-                    { 1, null, 50, "16.00", "Cool", "10.00", "test@test.com", 50, "Supermarket", 3520 },
-                    { 2, null, 40, "14.00", "Shop", "09.00", "test@test.com", 20, "Museum", 3520 },
-                    { 3, null, 30, "15.30", "1337", "08.30", "test@test.com", 10, "Kiosk", 4720 }
+                    { 1, null, 50, "16.00", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cool", "10.00", "test@test.com", 50, "Supermarket", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3520 },
+                    { 2, null, 40, "14.00", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Shop", "09.00", "test@test.com", 20, "Museum", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3520 },
+                    { 3, null, 30, "15.30", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1337", "08.30", "test@test.com", 10, "Kiosk", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 4720 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Email", "Id", "Name", "Password", "Zip" },
+                columns: new[] { "Email", "CreatedAt", "Id", "Name", "Password", "UpdatedAt", "Zip" },
                 values: new object[,]
                 {
-                    { "test@test.com", 1, "Peter", "$2a$11$6IrGtqz4hlA.WUruI40oFemQgvDYCqkJY2hA13MiA3VzjJ4Jh2rWK", 3520 },
-                    { "h@h.com", 2, "Jens", "$2a$11$oyuipSd8ivJJFtkLJUO3aO3sNCg/W.lREsQKV3TZEKGvLveL8B5ZG", 2300 },
-                    { "mads@hotmail.com", 3, "Mads", "$2a$11$ajaWGNX8Bq6qBxSCihX4o.YFwhfRYnqtNqGKZ/KAsqOTAJBQACqIW", 2700 }
+                    { "test@test.com", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Peter", "$2a$11$vYP9R79B60omJPiIEsY02.Uid0sUfRy1FicmAQ.9SwbjvYps05VQO", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3520 },
+                    { "h@h.com", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Jens", "$2a$11$A6j3YG/yP85TBK9CS.zg6OPLZByNpeXnDtYd6mMA0p7gCADrStcGi", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2300 },
+                    { "mads@hotmail.com", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, "Mads", "$2a$11$te/fo6sZzH6V1Wj9DvHMauLpjnsYEYcIytJUQbc86RApzb02oQn1C", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2700 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Employees",
-                columns: new[] { "UserEmail", "BusinessId", "CompanyEmail", "CreatedAt", "Id" },
+                columns: new[] { "UserEmail", "BusinessId", "CompanyEmail", "CreatedAt", "Id", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "h@h.com", 1, null, new DateTime(2020, 12, 21, 15, 36, 36, 10, DateTimeKind.Local).AddTicks(6818), 1 },
-                    { "mads@hotmail.com", 1, null, new DateTime(2020, 12, 21, 15, 36, 36, 10, DateTimeKind.Local).AddTicks(7728), 2 }
+                    { "h@h.com", 1, null, new DateTime(2020, 12, 23, 16, 46, 6, 427, DateTimeKind.Local).AddTicks(5409), 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { "mads@hotmail.com", 1, null, new DateTime(2020, 12, 23, 16, 46, 6, 427, DateTimeKind.Local).AddTicks(6860), 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
                 table: "TimeSlots",
-                columns: new[] { "Id", "BusinessId", "BusinessName", "Capacity", "End", "Start" },
+                columns: new[] { "Id", "BusinessId", "BusinessName", "Capacity", "CreatedAt", "End", "Start", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, 1, "Cool", 50, new DateTime(2020, 12, 21, 19, 36, 36, 10, DateTimeKind.Local).AddTicks(4007), new DateTime(2020, 12, 21, 18, 36, 36, 7, DateTimeKind.Local).AddTicks(9091) },
-                    { 2, 1, "Cool", 40, new DateTime(2020, 12, 21, 20, 36, 36, 10, DateTimeKind.Local).AddTicks(4362), new DateTime(2020, 12, 21, 19, 36, 36, 10, DateTimeKind.Local).AddTicks(4355) },
-                    { 3, 1, "Cool", 30, new DateTime(2020, 12, 21, 21, 36, 36, 10, DateTimeKind.Local).AddTicks(4365), new DateTime(2020, 12, 21, 20, 36, 36, 10, DateTimeKind.Local).AddTicks(4364) }
+                    { 1, 1, "Cool", 50, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 12, 23, 20, 46, 6, 427, DateTimeKind.Local).AddTicks(1166), new DateTime(2020, 12, 23, 19, 46, 6, 423, DateTimeKind.Local).AddTicks(1333), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 1, "Cool", 40, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 12, 23, 21, 46, 6, 427, DateTimeKind.Local).AddTicks(1604), new DateTime(2020, 12, 23, 20, 46, 6, 427, DateTimeKind.Local).AddTicks(1596), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, 1, "Cool", 30, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 12, 23, 22, 46, 6, 427, DateTimeKind.Local).AddTicks(1609), new DateTime(2020, 12, 23, 21, 46, 6, 427, DateTimeKind.Local).AddTicks(1607), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
                 table: "Bookings",
-                columns: new[] { "UserEmail", "TimeSlotId", "BusinessId" },
-                values: new object[] { "test@test.com", 1, 1 });
+                columns: new[] { "UserEmail", "TimeSlotId", "BusinessId", "CreatedAt", "UpdatedAt" },
+                values: new object[] { "test@test.com", 1, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
 
             migrationBuilder.InsertData(
                 table: "Bookings",
-                columns: new[] { "UserEmail", "TimeSlotId", "BusinessId" },
-                values: new object[] { "test@test.com", 2, 1 });
+                columns: new[] { "UserEmail", "TimeSlotId", "BusinessId", "CreatedAt", "UpdatedAt" },
+                values: new object[] { "test@test.com", 2, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
 
             migrationBuilder.InsertData(
                 table: "Bookings",
-                columns: new[] { "UserEmail", "TimeSlotId", "BusinessId" },
-                values: new object[] { "test@test.com", 3, 1 });
+                columns: new[] { "UserEmail", "TimeSlotId", "BusinessId", "CreatedAt", "UpdatedAt" },
+                values: new object[] { "test@test.com", 3, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_TimeSlotId",
@@ -228,7 +239,7 @@ namespace CLup.Migrations
                 table: "Users",
                 column: "Email",
                 unique: true);
-        }
+         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {

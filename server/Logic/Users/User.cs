@@ -1,11 +1,13 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
 using Logic.Bookings;
+using Logic.Context;
 
 namespace Logic.Users
 {
-    public class User
+    public class User : BaseEntity
     {
         public int Id { get; set; }
 

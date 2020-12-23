@@ -16,6 +16,9 @@ import {UserDTO} from '../../models/User';
 import {useUserContext} from '../../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({
+   button: {
+      width: '38%',
+   },
    card: {
       marginTop: 60,
       borderRadius: 15,
@@ -24,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
    },
    textField: {
-      width: '35%',
+      width: '42%',
    },
    wrapper: {
       justifyContent: 'center',
@@ -44,7 +47,7 @@ export const LoginView: React.FC = () => {
       password: '',
    };
 
-   const form = useForm<UserDTO>(
+   const {formHandler} = useForm<UserDTO>(
       formValues,
       loginValidationSchema,
       LOGIN_URL,
@@ -68,13 +71,14 @@ export const LoginView: React.FC = () => {
                      buttonColor="secondary"
                      buttonText="Signup"
                      buttonSize="medium"
+                     buttonStyle={styles.button}
                      variant="outlined"
                   >
                      <Form
-                        onSubmit={form.handleSubmit}
+                        onSubmit={formHandler.handleSubmit}
                         buttonText="Login"
                         working={requestHandler.working}
-                        valid={form.isValid}
+                        valid={formHandler.isValid}
                         errorMessage={requestHandler.requestInfo ? 'Wrong Email/Password' : ''}
                      >
                         {Object.keys(formValues).map((key) => (
@@ -84,11 +88,13 @@ export const LoginView: React.FC = () => {
                                  id={key}
                                  label={StringUtil.capitalizeFirstLetter(key)}
                                  type={TextFieldUtil.mapKeyToType(key)}
-                                 value={form.values[key] as string}
-                                 onChange={form.handleChange}
-                                 onBlur={form.handleBlur}
-                                 error={form.touched[key] && Boolean(form.errors[key])}
-                                 helperText={form.touched[key] && form.errors[key]}
+                                 value={formHandler.values[key] as string}
+                                 onChange={formHandler.handleChange}
+                                 onBlur={formHandler.handleBlur}
+                                 error={
+                                    formHandler.touched[key] && Boolean(formHandler.errors[key])
+                                 }
+                                 helperText={formHandler.touched[key] && formHandler.errors[key]}
                                  variant="outlined"
                               />
                            </FormGroup>

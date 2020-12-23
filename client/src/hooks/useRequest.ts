@@ -63,8 +63,6 @@ export async function fetch<T>(url: string, method: Method, request?: any): Prom
 
   setTokenInHeader();
 
-  console.log(url);
-
   try {
     response = await axios({
       url,

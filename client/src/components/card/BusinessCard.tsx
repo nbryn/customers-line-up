@@ -51,7 +51,7 @@ export const BusinessCard: React.FC<Props> = ({
          title={business.name}
          subTitle={business.type}
          variant="outlined"
-         buttonStyles={styles.secondaryButton}
+         buttonStyle={styles.secondaryButton}
       >
          <div className={styles.card}>
             <Typography>Zip: {business.zip} </Typography>

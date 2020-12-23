@@ -1,6 +1,9 @@
 using BC = BCrypt.Net.BCrypt;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Logic.Bookings;
 using Logic.Businesses;
@@ -31,6 +34,30 @@ namespace Logic.Context
             {
             }
         }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
+                                                   CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var AddedEntities = ChangeTracker.Entries()
+                .Where(E => E.State == EntityState.Added)
+                .ToList();
+
+            AddedEntities.ForEach(E =>
+            {
+                E.Property("CreatedAt").CurrentValue = DateTime.Now;
+            });
+
+            var EditedEntities = ChangeTracker.Entries()
+                .Where(E => E.State == EntityState.Modified)
+                .ToList();
+
+            EditedEntities.ForEach(E =>
+            {
+                E.Property("UpdatedAt").CurrentValue = DateTime.Now;
+            });
+
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
@@ -52,6 +79,7 @@ namespace Logic.Context
                 new User {Id = 1, Name = "Peter", Email = "test@test.com", Password = BC.HashPassword("1234"), Zip = 3520},
                 new User {Id = 2, Name = "Jens", Email = "h@h.com", Password = BC.HashPassword("1234"), Zip = 2300},
                 new User {Id = 3, Name = "Mads", Email = "mads@hotmail.com", Password = BC.HashPassword("1234"), Zip = 2700},
+                new User {Id = 4, Name = "Emil", Email = "emil@live.com", Password = BC.HashPassword("1234"), Zip = 2500}
             };
 
             modelBuilder.Entity<User>().HasData(users);

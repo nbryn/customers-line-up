@@ -44,8 +44,8 @@ const getEmployeesURL = (businessId: number): string => {
     return BASE_URL + `employee/business/${businessId}`
 }
 
-const getNewEmployeeURL = (businessId: number): string => {
-    return BASE_URL + `employee/business/${businessId}`
+const getDeleteEmployeeURL = (email: string, businessId: number): string => {
+    return BASE_URL + `employee/${email}?businessId=${businessId}`
 }
 
 // Server will get user info from JWT
@@ -65,15 +65,17 @@ export const USER_BOOKINGS_URL = BASE_URL + 'booking/user';
 
 export const ALL_USERS_URL = BASE_URL + 'user/all';
 
+export const NEW_EMPLOYEE_URL = BASE_URL + 'employee';
+
 
 export default {
     getBusinessBookingsURL,    
     getDeleteBookingForBusinessURL,
     getDeleteBookingForUserURL,
+    getDeleteEmployeeURL,
     getDeleteTimeSlotURL,
     getEmployeesURL, 
     getNewBookingURL,
-    getNewEmployeeURL,
     getTimeSlotsURL,
     getTimeSlotURL,
     getUpdateBusinessDataURL,

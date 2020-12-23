@@ -1,7 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+
+const useStyles = makeStyles((theme) => ({ 
+   wrapper: {
+      marginLeft: 110,
+   },
+}));
 
 export type Props = {
    label: string;
@@ -10,22 +17,16 @@ export type Props = {
 };
 
 export const ComboBox: React.FC<Props> = ({label, options, setChosenValue}: Props) => {
-   const [value, setValue] = useState<string[]>();
-
+   const styles = useStyles();
    return (
       <>
          {options.length === 0 ? (
             <CircularProgress />
          ) : (
             <Autocomplete
+            className={styles.wrapper}
                id="combo-box"
-               value={value}
-               onChange={(event: any, newValue: any | null) => {
-                  console.log(newValue);
-                  setValue(newValue);
-
-                  setChosenValue(newValue);
-                }}
+               onChange={(event: any, newValue: any | null) => setChosenValue(newValue)}
                options={options}
                getOptionLabel={(option: any) => option.email}
                style={{width: 300}}

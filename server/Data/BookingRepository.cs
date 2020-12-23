@@ -18,7 +18,7 @@ namespace Data
         }
         public async Task<(string, int)> SaveBooking(Booking booking)
         {
-            await _context.Bookings.AddAsync(booking);
+            _context.Bookings.Add(booking);
 
             await _context.SaveChangesAsync();
 

@@ -1,26 +1,22 @@
+import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React, {useEffect, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 
-import {ALL_USERS_URL} from '../../api/URL';
+import {ALL_USERS_URL, NEW_EMPLOYEE_URL} from '../../api/URL';
 import {BusinessDTO} from '../../models/Business';
 import {Card} from '../../components/card/Card';
 import {ComboBox} from '../../components/form/ComboBox';
-import {EmployeeDTO} from '../../models/Employee';
+import {NewEmployeeDTO} from '../../models/Employee';
 import {employeeValidationSchema} from '../../validation/BusinessValidation';
 import {Form} from '../../components/form/Form';
 import {Modal} from '../../components/modal/Modal';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import {TextField} from '../../components/form/TextField';
-import URL from '../../api/URL';
 import {UserDTO} from '../../models/User';
 import {useForm} from '../../hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
-   box: {
-      textAlign: 'center',
-   },
    card: {
       marginTop: 60,
       borderRadius: 15,
@@ -53,15 +49,29 @@ export const NewEmployeeView: React.FC = () => {
    const location = useLocation<LocationState>();
 
    const [users, setUsers] = useState<UserDTO[]>([]);
+   const [business, setBusiness] = useState<BusinessDTO>();
    const [selectedUser, setSelectedUser] = useState<UserDTO>({email: ''});
    const [showComboBox, setShowComBox] = useState(true);
 
    const requestHandler: RequestHandler<UserDTO[]> = useRequest(SUCCESS_MESSAGE);
 
-   const business = location.state.business;
+   const formValues: NewEmployeeDTO = {
+      companyEmail: '',
+   };
+
+   const {formHandler, ...form} = useForm<NewEmployeeDTO>(
+      formValues,
+      employeeValidationSchema,
+      NEW_EMPLOYEE_URL,
+      'POST',
+      requestHandler.mutation
+   );
 
    useEffect(() => {
       (async () => {
+         console.log("hej");
+         setBusiness(location.state.business);
+
          const users = await requestHandler.query(ALL_USERS_URL);
 
          setUsers(users);
@@ -74,19 +84,6 @@ export const NewEmployeeView: React.FC = () => {
       }
    }, [selectedUser]);
 
-   const formValues: EmployeeDTO = {
-      id: 1,
-      companyEmail: '',
-   };
-
-   const form = useForm<EmployeeDTO>(
-      formValues,
-      employeeValidationSchema,
-      URL.getNewEmployeeURL(business.id),
-      'POST',
-      requestHandler.mutation
-   );
-
    return (
       <>
          <Row className={styles.wrapper}>
@@ -95,7 +92,7 @@ export const NewEmployeeView: React.FC = () => {
                   show={requestHandler.requestInfo ? true : false}
                   title="Employee Info"
                   text={requestHandler.requestInfo}
-                  primaryAction={() => history.push('/business/employees')}
+                  primaryAction={() => history.push('/business/employees/manage')}
                   primaryActionText="My Employees"
                   secondaryAction={() => requestHandler.setRequestInfo('')}
                />
@@ -108,14 +105,22 @@ export const NewEmployeeView: React.FC = () => {
                   {showComboBox && (
                      <ComboBox label="Email" options={users} setChosenValue={setSelectedUser} />
                   )}
-                  <Form
-                     onSubmit={form.handleSubmit}
-                     buttonText="Create"
-                     working={requestHandler.working}
-                     valid={form.isValid}
-                  >
-                     {!showComboBox && (
-                        <>
+                  {!showComboBox && (
+                     <>
+                        <Form
+                           onSubmit={() => {
+                              form.setRequest({
+                                 businessId: business!.id,
+                                 privateEmail: selectedUser.email,
+                                 companyEmail: formHandler.values.companyEmail,
+                              });
+
+                              formHandler.handleSubmit();
+                           }}
+                           buttonText="Create"
+                           working={requestHandler.working}
+                           valid={formHandler.isValid}
+                        >
                            <FormGroup className={styles.formGroup}>
                               <TextField
                                  className={styles.textField}
@@ -142,18 +147,22 @@ export const NewEmployeeView: React.FC = () => {
                                  id="companyEmail"
                                  label="Company Email"
                                  type="Email"
-                                 value={form.values.companyEmail}
-                                 onChange={form.handleChange}
-                                 onBlur={form.handleBlur}
+                                 value={formHandler.values.companyEmail}
+                                 onChange={formHandler.handleChange}
+                                 onBlur={formHandler.handleBlur}
                                  error={
-                                    form.touched.companyEmail && Boolean(form.errors.companyEmail)
+                                    formHandler.touched.companyEmail &&
+                                    Boolean(formHandler.errors.companyEmail)
                                  }
-                                 helperText={form.touched.companyEmail && form.errors.companyEmail}
+                                 helperText={
+                                    formHandler.touched.companyEmail &&
+                                    formHandler.errors.companyEmail
+                                 }
                               />
                            </FormGroup>
-                        </>
-                     )}
-                  </Form>
+                        </Form>
+                     </>
+                  )}
                </Card>
             </Col>
          </Row>

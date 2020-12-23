@@ -1,10 +1,10 @@
-using Logic.Businesses;
+using Logic.Context;
 using Logic.TimeSlots;
 using Logic.Users;
 
 namespace Logic.Bookings
 {
-    public class Booking
+    public class Booking : BaseEntity
     {
         public string UserEmail { get; set; }
 

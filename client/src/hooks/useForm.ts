@@ -1,8 +1,14 @@
+import { useState } from 'react';
 import { Method } from "axios";
 import { ObjectSchema } from 'yup';
 import { useFormik, FormikComputedProps, FormikHandlers, FormikState } from 'formik';
 
-export type Form<T> = FormikState<T> & FormikComputedProps<T> & FormikHandlers;
+export type FormHandler<T> = FormikState<T> & FormikComputedProps<T> & FormikHandlers;
+
+export type Form<T> = {
+    formHandler: FormHandler<T>;
+    setRequest: (values: T) => void;
+}
 
 export const useForm = <T>(
     initialValues: T,
@@ -13,20 +19,24 @@ export const useForm = <T>(
     formatter?: (dto: T) => T,
     setUser?: (user: T) => void,
 ): Form<T> => {
+    const [request, setRequest] = useState<T | null>(null);
 
-    const form = useFormik<T>({
+    const formHandler = useFormik<T>({
         initialValues,
         validationSchema,
         isInitialValid: false,
         onSubmit: async (values) => {
             if (formatter) values = formatter(values);
 
-            const response = await mutation(url, method, values);
+            const response = await mutation(url, method, request || values);
 
-            if (setUser && response) setUser(response!)
+            if (setUser && response) setUser(response);
         },
     });
 
-    return form;
-    
+    return {
+        formHandler,
+        setRequest,
+    }
+
 }

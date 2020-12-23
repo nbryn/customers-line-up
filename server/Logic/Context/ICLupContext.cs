@@ -20,7 +20,6 @@ namespace Logic.Context
         DbSet<Employee> Employees { get; set; }
         DbSet<TimeSlot> TimeSlots { get; set; }
         DbSet<User> Users { get; set; }
-
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

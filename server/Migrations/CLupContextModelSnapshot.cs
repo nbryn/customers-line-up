@@ -30,6 +30,12 @@ namespace CLup.Migrations
                     b.Property<int>("BusinessId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("UserEmail", "TimeSlotId");
 
                     b.HasIndex("TimeSlotId");
@@ -41,19 +47,25 @@ namespace CLup.Migrations
                         {
                             UserEmail = "test@test.com",
                             TimeSlotId = 1,
-                            BusinessId = 1
+                            BusinessId = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             UserEmail = "test@test.com",
                             TimeSlotId = 2,
-                            BusinessId = 1
+                            BusinessId = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             UserEmail = "test@test.com",
                             TimeSlotId = 3,
-                            BusinessId = 1
+                            BusinessId = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -63,6 +75,12 @@ namespace CLup.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserEmail")
                         .HasColumnType("nvarchar(450)");
@@ -79,6 +97,8 @@ namespace CLup.Migrations
                         new
                         {
                             Id = 1,
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             UserEmail = "test@test.com"
                         });
                 });
@@ -99,6 +119,9 @@ namespace CLup.Migrations
                     b.Property<string>("Closes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
@@ -118,6 +141,9 @@ namespace CLup.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("Zip")
                         .HasColumnType("int");
 
@@ -133,11 +159,13 @@ namespace CLup.Migrations
                             Id = 1,
                             Capacity = 50,
                             Closes = "16.00",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Cool",
                             Opens = "10.00",
                             OwnerEmail = "test@test.com",
                             TimeSlotLength = 50,
                             Type = "Supermarket",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = 3520
                         },
                         new
@@ -145,11 +173,13 @@ namespace CLup.Migrations
                             Id = 2,
                             Capacity = 40,
                             Closes = "14.00",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Shop",
                             Opens = "09.00",
                             OwnerEmail = "test@test.com",
                             TimeSlotLength = 20,
                             Type = "Museum",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = 3520
                         },
                         new
@@ -157,11 +187,13 @@ namespace CLup.Migrations
                             Id = 3,
                             Capacity = 30,
                             Closes = "15.30",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "1337",
                             Opens = "08.30",
                             OwnerEmail = "test@test.com",
                             TimeSlotLength = 10,
                             Type = "Kiosk",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = 4720
                         });
                 });
@@ -183,6 +215,9 @@ namespace CLup.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("UserEmail", "BusinessId");
 
                     b.HasIndex("BusinessId");
@@ -194,15 +229,17 @@ namespace CLup.Migrations
                         {
                             UserEmail = "h@h.com",
                             BusinessId = 1,
-                            CreatedAt = new DateTime(2020, 12, 21, 15, 36, 36, 10, DateTimeKind.Local).AddTicks(6818),
-                            Id = 1
+                            CreatedAt = new DateTime(2020, 12, 23, 16, 46, 6, 427, DateTimeKind.Local).AddTicks(5409),
+                            Id = 1,
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             UserEmail = "mads@hotmail.com",
                             BusinessId = 1,
-                            CreatedAt = new DateTime(2020, 12, 21, 15, 36, 36, 10, DateTimeKind.Local).AddTicks(7728),
-                            Id = 2
+                            CreatedAt = new DateTime(2020, 12, 23, 16, 46, 6, 427, DateTimeKind.Local).AddTicks(6860),
+                            Id = 2,
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -222,10 +259,16 @@ namespace CLup.Migrations
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("End")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -241,8 +284,10 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 50,
-                            End = new DateTime(2020, 12, 21, 19, 36, 36, 10, DateTimeKind.Local).AddTicks(4007),
-                            Start = new DateTime(2020, 12, 21, 18, 36, 36, 7, DateTimeKind.Local).AddTicks(9091)
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            End = new DateTime(2020, 12, 23, 20, 46, 6, 427, DateTimeKind.Local).AddTicks(1166),
+                            Start = new DateTime(2020, 12, 23, 19, 46, 6, 423, DateTimeKind.Local).AddTicks(1333),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -250,8 +295,10 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 40,
-                            End = new DateTime(2020, 12, 21, 20, 36, 36, 10, DateTimeKind.Local).AddTicks(4362),
-                            Start = new DateTime(2020, 12, 21, 19, 36, 36, 10, DateTimeKind.Local).AddTicks(4355)
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            End = new DateTime(2020, 12, 23, 21, 46, 6, 427, DateTimeKind.Local).AddTicks(1604),
+                            Start = new DateTime(2020, 12, 23, 20, 46, 6, 427, DateTimeKind.Local).AddTicks(1596),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -259,8 +306,10 @@ namespace CLup.Migrations
                             BusinessId = 1,
                             BusinessName = "Cool",
                             Capacity = 30,
-                            End = new DateTime(2020, 12, 21, 21, 36, 36, 10, DateTimeKind.Local).AddTicks(4365),
-                            Start = new DateTime(2020, 12, 21, 20, 36, 36, 10, DateTimeKind.Local).AddTicks(4364)
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            End = new DateTime(2020, 12, 23, 22, 46, 6, 427, DateTimeKind.Local).AddTicks(1609),
+                            Start = new DateTime(2020, 12, 23, 21, 46, 6, 427, DateTimeKind.Local).AddTicks(1607),
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -268,6 +317,9 @@ namespace CLup.Migrations
                 {
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -280,6 +332,9 @@ namespace CLup.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Zip")
                         .HasColumnType("int");
@@ -295,25 +350,31 @@ namespace CLup.Migrations
                         new
                         {
                             Email = "test@test.com",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 1,
                             Name = "Peter",
-                            Password = "$2a$11$6IrGtqz4hlA.WUruI40oFemQgvDYCqkJY2hA13MiA3VzjJ4Jh2rWK",
+                            Password = "$2a$11$vYP9R79B60omJPiIEsY02.Uid0sUfRy1FicmAQ.9SwbjvYps05VQO",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = 3520
                         },
                         new
                         {
                             Email = "h@h.com",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 2,
                             Name = "Jens",
-                            Password = "$2a$11$oyuipSd8ivJJFtkLJUO3aO3sNCg/W.lREsQKV3TZEKGvLveL8B5ZG",
+                            Password = "$2a$11$A6j3YG/yP85TBK9CS.zg6OPLZByNpeXnDtYd6mMA0p7gCADrStcGi",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = 2300
                         },
                         new
                         {
                             Email = "mads@hotmail.com",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 3,
                             Name = "Mads",
-                            Password = "$2a$11$ajaWGNX8Bq6qBxSCihX4o.YFwhfRYnqtNqGKZ/KAsqOTAJBQACqIW",
+                            Password = "$2a$11$te/fo6sZzH6V1Wj9DvHMauLpjnsYEYcIytJUQbc86RApzb02oQn1C",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = 2700
                         });
                 });

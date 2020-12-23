@@ -65,7 +65,7 @@ export const NewBusinessView: React.FC = () => {
       closes: '',
    };
 
-   const form = useForm<BusinessDTO>(
+   const {formHandler} = useForm<BusinessDTO>(
       formValues,
       businessValidationSchema,
       CREATE_BUSINESS_URL,
@@ -87,33 +87,36 @@ export const NewBusinessView: React.FC = () => {
                   show={requestHandler.requestInfo ? true : false}
                   title="Business Info"
                   text={requestHandler.requestInfo}
-                  primaryAction={() => history.push('/mybusinesses')}
+                  primaryAction={() => history.push('/business')}
                   primaryActionText="My Businesses"
                   secondaryAction={() => requestHandler.setRequestInfo('')}
                />
                <Card className={styles.card} title="Create Business" variant="outlined">
                   <Form
-                     onSubmit={form.handleSubmit}
+                     onSubmit={formHandler.handleSubmit}
                      buttonText="Create"
                      working={requestHandler.working}
-                     valid={form.isValid}
+                     valid={formHandler.isValid}
                   >
                      <Row>
                         <Col sm={6} lg={6}>
                            {Object.keys(formValues)
                               .slice(1, 5)
                               .map((x) => (
-                                 <FormGroup className={styles.formGroup}>
+                                 <FormGroup key={x} className={styles.formGroup}>
                                     <TextField
                                        className={styles.textField}
                                        id={x}
                                        label={TextFieldUtil.mapKeyToLabel(x)}
                                        type={TextFieldUtil.mapKeyToType(x)}
-                                       value={form.values[x]}
-                                       onChange={form.handleChange}
-                                       onBlur={form.handleBlur}
-                                       error={form.touched[x] && Boolean(form.errors[x])}
-                                       helperText={form.touched[x] && form.errors[x]}
+                                       value={formHandler.values[x]}
+                                       onChange={formHandler.handleChange(x)}
+                                       onBlur={formHandler.handleBlur}
+                                       select={x === 'type' ? true : false}
+                                       error={
+                                          formHandler.touched[x] && Boolean(formHandler.errors[x])
+                                       }
+                                       helperText={formHandler.touched[x] && formHandler.errors[x]}
                                     >
                                        {x === 'type' &&
                                           businessTypes.map((type) => (
@@ -129,17 +132,19 @@ export const NewBusinessView: React.FC = () => {
                            {Object.keys(formValues)
                               .slice(5)
                               .map((x) => (
-                                 <FormGroup className={styles.formGroup}>
+                                 <FormGroup key={x} className={styles.formGroup}>
                                     <TextField
                                        className={styles.textField}
                                        id={x}
                                        label={TextFieldUtil.mapKeyToLabel(x)}
                                        type={TextFieldUtil.mapKeyToType(x)}
-                                       value={form.values[x]}
-                                       onChange={form.handleChange}
-                                       onBlur={form.handleBlur}
-                                       error={form.touched[x] && Boolean(form.errors[x])}
-                                       helperText={form.touched[x] && form.errors[x]}
+                                       value={formHandler.values[x]}
+                                       onChange={formHandler.handleChange}
+                                       onBlur={formHandler.handleBlur}
+                                       error={
+                                          formHandler.touched[x] && Boolean(formHandler.errors[x])
+                                       }
+                                       helperText={formHandler.touched[x] && formHandler.errors[x]}
                                        inputLabelProps={
                                           x === 'timeSlotLength' ? {shrink: false} : {shrink: true}
                                        }

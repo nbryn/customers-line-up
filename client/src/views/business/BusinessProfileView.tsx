@@ -46,7 +46,7 @@ export const BusinessProfileView: React.FC = () => {
       })();
    }, []);
 
-   const form = useForm<BusinessDTO>(
+   const {formHandler} = useForm<BusinessDTO>(
       business,
       businessValidationSchema,
       URL.getUpdateBusinessDataURL(business.id),
@@ -64,7 +64,7 @@ export const BusinessProfileView: React.FC = () => {
       .filter((x) => x !== 'id')
       .map((x) => ({
          text: TextFieldUtil.mapKeyToLabel(x),
-         data: form.values[x],
+         data: formHandler.values[x],
          buttonText: 'Edit',
          buttonAction: () => {
             setModalKey(x);
@@ -84,10 +84,10 @@ export const BusinessProfileView: React.FC = () => {
                textFieldKey={modalKey}
                textFieldType={textFieldType}
                primaryAction={async () => {
-                  await form.handleSubmit();
+                  await formHandler.handleSubmit();
                   setModalKey('');
                }}
-               form={form}
+               formHandler={formHandler}
                selectOptions={businessTypeOptions}
                primaryActionText="Save Changes"
                secondaryAction={() => setModalKey('')}

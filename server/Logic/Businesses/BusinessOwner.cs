@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
 using Logic.Businesses;
-
+using Logic.Context;
 namespace Logic.BusinessOwners
 {
-    public class BusinessOwner
+    public class BusinessOwner : BaseEntity
     {
         public int Id { get; set; }
 

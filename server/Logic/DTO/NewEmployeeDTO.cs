@@ -6,9 +6,9 @@ namespace Logic.DTO
     {
         [Required]
         public int BusinessId { get; set; }
-     
+
         [Required]
-        public int PrivateEmail { get; set; }
-        public int CompanyEmail { get; set; }
+        public string PrivateEmail { get; set; }
+        public string? CompanyEmail { get; set; }
     }
 }
