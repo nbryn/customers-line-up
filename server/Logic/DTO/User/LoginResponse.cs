@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Logic.DTO.User
 {
-    public class LoginResponseDTO
+    public class LoginResponse
     {
         public int Id { get; set; }
         public string Email { get; set; }
@@ -11,7 +11,7 @@ namespace Logic.DTO.User
 
         public string Token { get; set; }
 
-        public bool isOwner { get; set; }
+        public string Role { get; set; }
 
         public bool isError { get; set; }
     }

@@ -2,6 +2,8 @@ import Cookies from 'js-cookie';
 import React, {useContext, useEffect, useState} from 'react';
 
 import {UserDTO} from '../models/User';
+import {USER_INFO_URL} from '../api/URL';
+import {useRequest, RequestHandler} from '../hooks/useRequest';
 
 export type ContextValue = {
    user: UserDTO;
@@ -22,33 +24,34 @@ type Props = {
 };
 
 export const UserContextProvider: React.FC<Props> = (props: Props) => {
-   const [user, setCurrentUser] = useState<UserDTO>({name: '', email: '', zip: '', token: ''});
+   const [user, setCurrentUser] = useState<UserDTO>({email: ''});
    const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
 
-   console.log(user);
+   const requestHandler: RequestHandler<UserDTO> = useRequest();
 
    const setUser = (user: UserDTO) => {
+      console.log(user);
       setUserLoggedIn(true);
       setCurrentUser(user);
 
       Cookies.set('token', user.token!);
-      Cookies.set('user', user);
    };
 
    const logout = () => {
-      Cookies.remove('user');
       Cookies.remove('token');
-      
+
       setUserLoggedIn(false);
    };
 
    useEffect(() => {
-      if (Cookies.get('user')) {
-         const user = (Cookies.get('user') as unknown) as UserDTO;
+      (async () => {
+         if (Cookies.get('token')) {
+            const user = await requestHandler.query(USER_INFO_URL);
 
-         setCurrentUser(user);
-         setUserLoggedIn(true);
-      }
+            setCurrentUser(user);
+            setUserLoggedIn(true);
+         }
+      })();
    }, []);
 
    const contextValue: ContextValue = {

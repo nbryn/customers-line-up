@@ -40,6 +40,10 @@ const getDeleteTimeSlotURL = (timeSlotId: number): string => {
     return BASE_URL + `timeslot/${timeSlotId}`;
 }
 
+const getAllUsersNotAlreadyEmployedURL = (businessId: number): string => {
+    return BASE_URL + `user/all/${businessId}`
+}
+
 const getEmployeesURL = (businessId: number): string => {
     return BASE_URL + `employee/business/${businessId}`
 }
@@ -63,12 +67,13 @@ export const CREATE_BUSINESS_URL = BASE_URL + 'business';
 
 export const USER_BOOKINGS_URL = BASE_URL + 'booking/user';
 
-export const ALL_USERS_URL = BASE_URL + 'user/all';
+export const USER_INFO_URL = BASE_URL + 'user';
 
 export const NEW_EMPLOYEE_URL = BASE_URL + 'employee';
 
 
 export default {
+    getAllUsersNotAlreadyEmployedURL,
     getBusinessBookingsURL,    
     getDeleteBookingForBusinessURL,
     getDeleteBookingForUserURL,

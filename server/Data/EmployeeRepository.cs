@@ -60,6 +60,15 @@ namespace Data
             return employee;
         }
 
+          public async Task<Employee> FindEmployeeByEmail(string email)
+        {
+            Employee employee = await _context.Employees.Include(e => e.Business)
+                                                        .Include(e => e.User)
+                                                        .FirstOrDefaultAsync(e => e.UserEmail == email);
+
+            return employee;
+        }
+
         public async Task<IList<Employee>> FindEmployeesByBusiness(int businessId)
         {
             IList<Employee> employees = await _context.Employees.Include(e => e.Business)

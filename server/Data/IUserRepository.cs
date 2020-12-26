@@ -9,7 +9,7 @@ namespace Data
     public interface IUserRepository
     {
         Task<User> FindUserByEmail(string email);
-        Task<int> CreateUser(RegisterDTO user);
+        Task<int> CreateUser(RegisterRequest user);
         Task<User> FindUserById(int userId);
         Task<IList<User>> GetAll();
 

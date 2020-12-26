@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Logic.DTO.User
 {
-    public class LoginDTO
+    public class LoginRequest
     {
         [Required]
         public string Email { get; set; }

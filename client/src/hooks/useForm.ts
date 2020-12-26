@@ -28,7 +28,11 @@ export const useForm = <T>(
         onSubmit: async (values) => {
             if (formatter) values = formatter(values);
 
+            console.log("useForm");
+
             const response = await mutation(url, method, request || values);
+
+            console.log(response);
 
             if (setUser && response) setUser(response);
         },

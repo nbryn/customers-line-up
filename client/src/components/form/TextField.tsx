@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
    id: string;
    label: string | undefined;
-   value: ReactText | undefined;
+   value?: ReactText | undefined;
    onBlur?: (event: React.FocusEvent) => void;
    helperText?: string | boolean;
    formHelperTextProps?: any;

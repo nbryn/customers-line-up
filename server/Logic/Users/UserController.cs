@@ -1,8 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 using Logic.Util;
 using Logic.DTO.User;
@@ -30,9 +31,9 @@ namespace Logic.Users
         [AllowAnonymous]
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterDTO user)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest user)
         {
-            LoginResponseDTO response = await _service.RegisterUser(user);
+            LoginResponse response = await _service.RegisterUser(user);
 
             if (response.isError)
             {
@@ -45,9 +46,9 @@ namespace Logic.Users
         [AllowAnonymous]
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
-            LoginResponseDTO user = await _service.AuthenticateUser(loginRequest);
+            LoginResponse user = await _service.AuthenticateUser(loginRequest);
 
             if (user.isError)
             {
@@ -55,6 +56,34 @@ namespace Logic.Users
             }
 
             return Ok(user);
+        }
+
+        [Authorize(Policy = Policies.User)]
+        [Route("")]
+        [HttpGet]
+        public async Task<UserDTO> FetchUserInfo()
+        {
+            string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            User user = await _repository.FindUserByEmail(userEmail);
+
+            Role role = await _service.DetermineRole(user);
+
+            UserDTO dto = _dtoMapper.ConvertUserToDTO(user);
+
+            dto.Role = nameof(role);
+
+            return dto;
+        }
+
+        [Authorize(Policy = Policies.User)]
+        [Route("all/{businessId}")]
+        [HttpGet]
+        public async Task<IEnumerable<UserDTO>> FetchAllUsersNotAlreadyEmployedByBusiness(int businessId)
+        {
+            IEnumerable<User> notAlreadyEmployedByBusiness = await _service.FilterUsersByBusiness(businessId);
+
+            return notAlreadyEmployedByBusiness.Select(x => _dtoMapper.ConvertUserToDTO(x));
         }
 
         [Authorize(Policy = Policies.User)]

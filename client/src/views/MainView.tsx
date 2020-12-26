@@ -24,8 +24,6 @@ export const MainView: React.FC = () => {
    const [mobileOpen, setMobileOpen] = useState(false);
    const {userLoggedIn} = useUserContext();
 
-   console.log(userLoggedIn);
-
    const handleMenuClose = () => {
       setMobileOpen(false);
    };

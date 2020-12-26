@@ -20,6 +20,7 @@ export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
     let response: T;
     try {
       setWorking(true);
+      console.log("useRequest");
       response = await fetch(url, method, request);
       if (succesMessage) setRequestInfo(succesMessage);
 

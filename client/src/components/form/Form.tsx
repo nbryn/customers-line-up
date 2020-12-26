@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
    },
    form: {
       marginTop: theme.spacing(1),
-      width: '100%',
    },
    button: {
       marginTop: 30,
@@ -39,6 +38,7 @@ type Props = {
    errorMessage?: string;
    valid: boolean;
    working: boolean;
+   style?: any;
    onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 };
 
@@ -48,12 +48,13 @@ export const Form: React.FC<Props> = ({
    valid,
    working,
    errorMessage,
+   style,
    onSubmit,
 }) => {
    const styles = useStyles();
    return (
       <>
-         <form className={styles.form} noValidate onSubmit={onSubmit}>
+         <form style={style} noValidate onSubmit={onSubmit}>
             {errorMessage && (
                <Alert className={styles.alert} variant="danger">
                   {errorMessage}

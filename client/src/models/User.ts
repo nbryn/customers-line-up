@@ -5,5 +5,5 @@ export type UserDTO = {
     zip?: string;
     password?: string;
     token?: string;
-    isOwner?: boolean;
+    role?: 'User' | 'Employee' | 'Owner' | 'Admin';
 };

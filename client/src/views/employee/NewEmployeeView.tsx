@@ -3,7 +3,6 @@ import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory, useLocation} from 'react-router-dom';
 
-import {ALL_USERS_URL, NEW_EMPLOYEE_URL} from '../../api/URL';
 import {BusinessDTO} from '../../models/Business';
 import {Card} from '../../components/card/Card';
 import {ComboBox} from '../../components/form/ComboBox';
@@ -13,6 +12,7 @@ import {Form} from '../../components/form/Form';
 import {Modal} from '../../components/modal/Modal';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import {TextField} from '../../components/form/TextField';
+import URL, {NEW_EMPLOYEE_URL} from '../../api/URL';
 import {UserDTO} from '../../models/User';
 import {useForm} from '../../hooks/useForm';
 
@@ -22,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: 15,
       height: 600,
       textAlign: 'center',
+   },
+   comboBox: {
+      marginTop: 10,
+      marginLeft: 110,
    },
    formGroup: {
       marginBottom: 30,
@@ -54,7 +58,7 @@ export const NewEmployeeView: React.FC = () => {
 
    const requestHandler: RequestHandler<UserDTO[]> = useRequest(SUCCESS_MESSAGE);
 
-   const business = JSON.parse(localStorage.getItem('business')!);
+   const {business} = location.state;
 
    const formValues: NewEmployeeDTO = {
       companyEmail: '',
@@ -70,7 +74,9 @@ export const NewEmployeeView: React.FC = () => {
 
    useEffect(() => {
       (async () => {
-         const users = await requestHandler.query(ALL_USERS_URL);
+         const users = await requestHandler.query(
+            URL.getAllUsersNotAlreadyEmployedURL(business.id)
+         );
 
          setUsers(users);
       })();
@@ -101,15 +107,21 @@ export const NewEmployeeView: React.FC = () => {
                   variant="outlined"
                >
                   {showComboBox && (
-                     <ComboBox label="Email" options={users} setChosenValue={setSelectedUser} />
+                     <ComboBox
+                        style={styles.comboBox}
+                        label="Email"
+                        options={users}
+                        setChosenValue={setSelectedUser}
+                     />
                   )}
                   {!showComboBox && (
                      <>
                         <Form
+                           style={{marginTop: 20}}
                            onSubmit={(e: React.FormEvent) => {
                               e.preventDefault();
                               form.setRequest({
-                                 businessId: business!.id,
+                                 businessId: business.id,
                                  privateEmail: selectedUser.email,
                                  companyEmail: formHandler.values.companyEmail,
                               });

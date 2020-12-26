@@ -1,10 +1,9 @@
 using BC = BCrypt.Net.BCrypt;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Data;
 using Logic.Auth;
-using Logic.Users;
-using Logic.Errors;
 using Logic.DTO.User;
 
 namespace Logic.Users
@@ -12,25 +11,27 @@ namespace Logic.Users
     public class UserService : IUserService
     {
         private readonly IBusinessOwnerRepository _ownerRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
 
-        public UserService(IBusinessOwnerRepository ownerRepository,
+        public UserService(IBusinessOwnerRepository ownerRepository, IEmployeeRepository employeeRepository,
             IUserRepository userRepository, IAuthService authService)
         {
+            _employeeRepository = employeeRepository;
             _ownerRepository = ownerRepository;
             _userRepository = userRepository;
             _authService = authService;
 
         }
 
-        public async Task<LoginResponseDTO> RegisterUser(RegisterDTO user)
+        public async Task<LoginResponse> RegisterUser(RegisterRequest user)
         {
             User userExists = await _userRepository.FindUserByEmail(user.Email);
 
             if (userExists != null)
             {
-                return new LoginResponseDTO
+                return new LoginResponse
                 {
                     isError = true,
                 };
@@ -41,7 +42,7 @@ namespace Logic.Users
 
             int userId = await _userRepository.CreateUser(user);
 
-            LoginResponseDTO response = new LoginResponseDTO
+            LoginResponse response = new LoginResponse
             {
                 Id = userId,
                 Email = user.Email,
@@ -50,13 +51,13 @@ namespace Logic.Users
 
             return response;
         }
-        public async Task<LoginResponseDTO> AuthenticateUser(LoginDTO loginRequest)
+        public async Task<LoginResponse> AuthenticateUser(LoginRequest loginRequest)
         {
             User user = await _userRepository.FindUserByEmail(loginRequest.Email);
 
             if (user == null || !BC.Verify(loginRequest.Password, user.Password))
             {
-                return new LoginResponseDTO
+                return new LoginResponse
                 {
                     isError = true,
                 };
@@ -64,18 +65,49 @@ namespace Logic.Users
 
             string token = _authService.GenerateJWTToken(loginRequest);
 
-            bool isOwner = await _ownerRepository.FindOwnerByEmail(loginRequest.Email) == null ? false : true;
+            Role role = await DetermineRole(user);
 
-            LoginResponseDTO response = new LoginResponseDTO
+            LoginResponse response = new LoginResponse
             {
                 Id = user.Id,
                 Email = user.Email,
                 Name = user.Name,
                 Token = token,
-                isOwner = isOwner
+                Role = role.ToString(),
             };
 
             return response;
+        }
+
+        public async Task<IList<User>> FilterUsersByBusiness(int businessId)
+        {
+            IList<User> notAlreadyEmployedByBusiness = new List<User>();
+
+            IList<User> allUsers = await _userRepository.GetAll();
+
+            foreach (User user in allUsers)
+            {
+                if (await _employeeRepository.FindEmployeeByEmailAndBusiness(user.Email, businessId) == null)
+                {
+                    notAlreadyEmployedByBusiness.Add(user);
+                }
+            }
+
+            return notAlreadyEmployedByBusiness;
+        }
+
+        public async Task<Role> DetermineRole(User user)
+        {
+            if (await _ownerRepository.FindOwnerByEmail(user.Email) != null)
+            {
+                return Role.Owner;
+            }
+            if (await _employeeRepository.FindEmployeeByEmail(user.Email) != null)
+            {
+                return Role.Employee;
+            }
+
+            return Role.User;
         }
     }
 }

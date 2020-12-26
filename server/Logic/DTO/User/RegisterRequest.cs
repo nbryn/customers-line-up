@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Logic.DTO.User
 {
-    public class RegisterDTO : LoginDTO
+    public class RegisterRequest : LoginRequest
     {
         [Required]
         [StringLength(50)]

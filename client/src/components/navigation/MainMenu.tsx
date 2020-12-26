@@ -114,6 +114,19 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
       },
    ];
 
+   const employeeItems: MenuItem[] = [
+      {
+         label: 'Bookings',
+         icon: <DashboardIcon />,
+         path: '/business/bookings',
+      },
+      {
+         label: 'Time Slots',
+         icon: <DashboardIcon />,
+         path: '/business/timeslots',
+      },
+   ];
+
    const {mobileOpen} = props;
 
    const handleMenuItemClick = (menuItem: MenuItem) => {
@@ -144,7 +157,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
          </List>
          <Divider />
          <List>
-            {user.isOwner &&
+            {user.role === 'Owner' &&
                ownerItems.map((menuItem) => (
                   <ListItem
                      className={styles.listItem}
@@ -156,7 +169,20 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
                      <ListItemText primary={menuItem.label} />
                   </ListItem>
                ))}
+            {user.role === 'Employee' &&
+               employeeItems.map((menuItem) => (
+                  <ListItem
+                     className={styles.listItem}
+                     button
+                     key={menuItem.label}
+                     onClick={() => handleMenuItemClick(menuItem)}
+                  >
+                     <ListItemIcon className={styles.listItemIcon}>{menuItem.icon}</ListItemIcon>
+                     <ListItemText primary={menuItem.label} />
+                  </ListItem>
+               ))}
          </List>
+
          <Divider />
       </>
    );
