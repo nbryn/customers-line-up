@@ -1,10 +1,7 @@
 import axios, { AxiosResponse, Method } from "axios";
-import Cookies from 'js-cookie';
 
 export async function fetch<T>(url: string, method: Method, request?: any): Promise<T> {
     let response: AxiosResponse<T>;
-  
-    setTokenInHeader();
   
     try {
       response = await axios({
@@ -36,12 +33,4 @@ export async function fetch<T>(url: string, method: Method, request?: any): Prom
     }
   
     return response.data;
-  }
-  
-  export function setTokenInHeader(): void {
-    if (Cookies.get('token')) {
-      const token = Cookies.get('token');
-  
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    }
   }

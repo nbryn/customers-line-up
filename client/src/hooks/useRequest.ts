@@ -1,4 +1,5 @@
-import { Method } from "axios";
+import axios, { Method } from "axios";
+import Cookies from 'js-cookie';
 import { useState } from 'react';
 
 import {fetch} from '../api/Fetch';
@@ -14,6 +15,8 @@ export interface RequestHandler<T> {
 export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
   const [working, setWorking] = useState<boolean>(false);
   const [requestInfo, setRequestInfo] = useState<string>('');
+
+  setTokenInHeader();
 
   const mutation = async <T>(url: string, method: Method, request?: any): Promise<T> => {
     let response: T;
@@ -57,5 +60,13 @@ export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
   }
 }
 
+
+function setTokenInHeader(): void {
+  if (Cookies.get('token')) {
+    const token = Cookies.get('token');
+
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  }
+}
 
 
