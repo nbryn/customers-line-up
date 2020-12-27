@@ -20,7 +20,7 @@ import {useUserContext} from '../../context/UserContext';
 const useStyles = makeStyles((theme) => ({
    card: {
       marginTop: 60,
-      height: 650,
+      height: 675,
       borderRadius: 15,
       //boxShadow: '0px 0px 0px 8px rgba(12, 12, 242, 0.1)',
       textAlign: 'center',
@@ -95,13 +95,14 @@ export const SignupView: React.FC = () => {
                               <FormGroup key={key}>
                                  <ComboBox
                                     id={key}
-                                    style={{width: '85%', marginLeft: 40, marginTop: 10}}
+                                    style={{width: '51.5%', marginLeft: 129, marginTop: 25}}
                                     label={StringUtil.capitalizeFirstLetter(key)}
                                     type={TextFieldUtil.mapKeyToType(key)}
                                     options={key === 'zip' ? zips : addresses}
                                     value={formHandler.values[key] as string}
                                     onBlur={formHandler.handleBlur}
                                     setFieldValue={formHandler.setFieldValue}
+                                    defaultLabel={key === 'address' ? 'Pick Zip First' : ''}
                                     error={
                                        formHandler.touched[key] && Boolean(formHandler.errors[key])
                                     }

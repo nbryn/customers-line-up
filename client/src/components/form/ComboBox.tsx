@@ -30,6 +30,7 @@ export type Props = {
    helperText?: string | boolean;
    style?: any;
    partOfForm?: boolean;
+   defaultLabel?: string;
 };
 
 export const ComboBox: React.FC<Props> = ({
@@ -41,6 +42,7 @@ export const ComboBox: React.FC<Props> = ({
    error,
    helperText,
    type,
+   defaultLabel,
    partOfForm = true,
    onBlur,
    setFieldValue,
@@ -67,11 +69,10 @@ export const ComboBox: React.FC<Props> = ({
                   else setFieldValue(newValue || '');
                }}
                options={options}
-               getOptionLabel={(option: any) => option || ''}
+               getOptionLabel={(option: any) =>  option || defaultLabel}
                style={style}
                renderInput={(params) => (
-                  <TextField
-                     className={styles.textField}
+                  <TextField                    
                      {...params}
                      value={value}
                      error={error}
