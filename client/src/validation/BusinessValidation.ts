@@ -8,6 +8,9 @@ export const businessValidationSchema: yup.ObjectSchema = yup.object({
         .min(4, 'Zip should be 4 characters')
         .max(4, 'Zip should be 4 characters')
         .required('Zip is required'),
+    address: yup.string()
+        .min(4, 'Address should be 4 characters')
+        .required('Address is required'),
     type: yup.string().required('Type is required'),
     capacity: yup.number().min(1, 'Capacity should be over 0').required('Capacity is required'),
     timeSlotLength: yup.number().min(1, 'Visit length should be over 0').required('Visit length is required'),

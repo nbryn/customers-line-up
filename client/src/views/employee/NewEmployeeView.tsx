@@ -52,9 +52,9 @@ export const NewEmployeeView: React.FC = () => {
    const history = useHistory();
    const location = useLocation<LocationState>();
 
-   const [users, setUsers] = useState<UserDTO[]>([]);
-   const [selectedUser, setSelectedUser] = useState<UserDTO>({email: ''});
-   const [showComboBox, setShowComBox] = useState(true);
+   const [users, setUsers] = useState<string[]>([]);
+   const [selectedUser, setSelectedUser] = useState<string>('');
+   const [showComboBox, setShowComBox] = useState<boolean>(true);
 
    const requestHandler: RequestHandler<UserDTO[]> = useRequest(SUCCESS_MESSAGE);
 
@@ -78,12 +78,12 @@ export const NewEmployeeView: React.FC = () => {
             URL.getAllUsersNotAlreadyEmployedURL(business.id)
          );
 
-         setUsers(users);
+         setUsers(users.map((user) => user.email));
       })();
    }, []);
 
    useEffect(() => {
-      if (users.find((user) => user.email === selectedUser.email)) {
+      if (users.find((email) => email === selectedUser)) {
          setShowComBox(false);
       }
    }, [selectedUser]);
@@ -110,8 +110,11 @@ export const NewEmployeeView: React.FC = () => {
                      <ComboBox
                         style={styles.comboBox}
                         label="Email"
+                        id="email"
+                        type="text"
                         options={users}
-                        setChosenValue={setSelectedUser}
+                        setFieldValue={setSelectedUser}
+                        partOfForm={false}
                      />
                   )}
                   {!showComboBox && (
@@ -122,7 +125,7 @@ export const NewEmployeeView: React.FC = () => {
                               e.preventDefault();
                               form.setRequest({
                                  businessId: business.id,
-                                 privateEmail: selectedUser.email,
+                                 privateEmail: selectedUser,
                                  companyEmail: formHandler.values.companyEmail,
                               });
 
@@ -132,7 +135,7 @@ export const NewEmployeeView: React.FC = () => {
                            working={requestHandler.working}
                            valid={formHandler.isValid}
                         >
-                           <FormGroup className={styles.formGroup}>
+                           {/* <FormGroup className={styles.formGroup}>
                               <TextField
                                  className={styles.textField}
                                  id="name"
@@ -141,14 +144,14 @@ export const NewEmployeeView: React.FC = () => {
                                  value={selectedUser.name}
                                  disabled={true}
                               />
-                           </FormGroup>
+                           </FormGroup> */}
                            <FormGroup className={styles.formGroup}>
                               <TextField
                                  className={styles.textField}
                                  id="privateEmail"
                                  label="Private Email"
                                  type="email"
-                                 value={selectedUser.email}
+                                 value={selectedUser}
                                  disabled={true}
                               />
                            </FormGroup>

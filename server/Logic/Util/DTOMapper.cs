@@ -55,6 +55,7 @@ namespace Logic.Util
                 Id = business.Id,
                 Name = business.Name,
                 Zip = business.Zip,
+                
                 Opens = business.Opens,
                 Closes = business.Closes,
                 TimeSlotLength = business.TimeSlotLength,

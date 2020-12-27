@@ -71,7 +71,6 @@ export const USER_INFO_URL = BASE_URL + 'user';
 
 export const NEW_EMPLOYEE_URL = BASE_URL + 'employee';
 
-
 export default {
     getAllUsersNotAlreadyEmployedURL,
     getBusinessBookingsURL,    

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
@@ -24,8 +23,10 @@ namespace Logic.Users
         [Required]
         public int Zip { get; set; }
 
-        public IList<Booking> Bookings { get; set; }
+        [Required]
+        public string Address { get; set; }
 
+        public IList<Booking> Bookings { get; set; }
 
     }
 }

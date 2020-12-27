@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,14 +21,22 @@ namespace Logic.Businesses
         [Required]
         public int Zip { get; set; }
 
+        [Required]
+        public string Address { get; set; }
+
+        [Required]
         public BusinessType Type { get; set; }
 
+        [Required]
         public int Capacity { get; set; }
 
+        [Required]
         public string Opens { get; set; }
 
+        [Required]
         public string Closes { get; set; }
 
+        [Required]
         public int TimeSlotLength { get; set; }
 
         public IEnumerable<TimeSlot> TimeSlots { get; set; }

@@ -76,10 +76,14 @@ namespace Logic.Context
 
             var users = new[]
             {
-                new User {Id = 1, Name = "Peter", Email = "test@test.com", Password = BC.HashPassword("1234"), Zip = 3520},
-                new User {Id = 2, Name = "Jens", Email = "h@h.com", Password = BC.HashPassword("1234"), Zip = 2300},
-                new User {Id = 3, Name = "Mads", Email = "mads@hotmail.com", Password = BC.HashPassword("1234"), Zip = 2700},
-                new User {Id = 4, Name = "Emil", Email = "emil@live.com", Password = BC.HashPassword("1234"), Zip = 2500}
+                new User {Id = 1, Name = "Peter", Email = "test@test.com", Password = BC.HashPassword("1234"), Zip = 3520,
+                          Address = "Farum Hovedgade 10"},
+                new User {Id = 2, Name = "Jens", Email = "h@h.com", Password = BC.HashPassword("1234"), Zip = 3520,
+                          Address = "Farum Hovedgade 15"},
+                new User {Id = 3, Name = "Mads", Email = "mads@hotmail.com", Password = BC.HashPassword("1234"), Zip = 3520,
+                          Address = "Farum Hovedgade 15"},
+                new User {Id = 4, Name = "Emil", Email = "emil@live.com", Password = BC.HashPassword("1234"), Zip = 2500,
+                          Address = "Farum Hovedgade 15"}
             };
 
             modelBuilder.Entity<User>().HasData(users);
@@ -112,11 +116,11 @@ namespace Logic.Context
 
             var businesses = new[]
             {
-                new Business {Id = 1, Name = "Cool", OwnerEmail = "test@test.com", Zip = 3520,
+                new Business {Id = 1, Name = "Cool", OwnerEmail = "test@test.com", Zip = 3520, Address = "Farum Hovedgade 30",
                              Opens = "10.00", Closes = "16.00", TimeSlotLength = 50, Capacity = 50, Type = BusinessType.Supermarket},
-                new Business {Id = 2, Name = "Shop", OwnerEmail = "test@test.com", Zip = 3520,
+                new Business {Id = 2, Name = "Shop", OwnerEmail = "test@test.com", Zip = 3520, Address = "Farum Hovedgade 50",
                              Opens = "09.00", Closes = "14.00", TimeSlotLength = 20, Capacity = 40, Type = BusinessType.Museum},
-                new Business {Id = 3, Name = "1337", OwnerEmail = "test@test.com", Zip = 4720,
+                new Business {Id = 3, Name = "1337", OwnerEmail = "test@test.com", Zip = 2300, Address = "Vermlandsgade 30",
                              Opens = "08.30", Closes = "15.30", TimeSlotLength = 10, Capacity = 30, Type = BusinessType.Kiosk}
             };
 

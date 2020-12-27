@@ -11,5 +11,8 @@ namespace Logic.DTO.User
         [Required]
         public int Zip { get; set; }
 
+        [Required]
+        public string Address { get; set; }
+
     }
 }

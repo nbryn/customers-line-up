@@ -102,23 +102,23 @@ export const NewBusinessView: React.FC = () => {
                         <Col sm={6} lg={6}>
                            {Object.keys(formValues)
                               .slice(1, 5)
-                              .map((x) => (
-                                 <FormGroup key={x} className={styles.formGroup}>
+                              .map((key) => (
+                                 <FormGroup key={key} className={styles.formGroup}>
                                     <TextField
                                        className={styles.textField}
-                                       id={x}
-                                       label={TextFieldUtil.mapKeyToLabel(x)}
-                                       type={TextFieldUtil.mapKeyToType(x)}
-                                       value={formHandler.values[x]}
-                                       onChange={formHandler.handleChange(x)}
+                                       id={key}
+                                       label={TextFieldUtil.mapKeyToLabel(key)}
+                                       type={TextFieldUtil.mapKeyToType(key)}
+                                       value={formHandler.values[key]}
+                                       onChange={formHandler.handleChange(key)}
                                        onBlur={formHandler.handleBlur}
-                                       select={x === 'type' ? true : false}
+                                       select={key === 'type' ? true : false}
                                        error={
-                                          formHandler.touched[x] && Boolean(formHandler.errors[x])
+                                          formHandler.touched[key] && Boolean(formHandler.errors[key])
                                        }
-                                       helperText={formHandler.touched[x] && formHandler.errors[x]}
+                                       helperText={formHandler.touched[key] && formHandler.errors[key]}
                                     >
-                                       {x === 'type' &&
+                                       {key === 'type' &&
                                           businessTypes.map((type) => (
                                              <MenuItem key={type} value={type}>
                                                 {type}

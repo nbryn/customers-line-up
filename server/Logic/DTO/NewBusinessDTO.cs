@@ -11,6 +11,9 @@ namespace Logic.DTO
         [Required]
         public int Zip { get; set; }
 
+        [Required]
+        public string Address { get; set; }
+
         public string OwnerEmail { get; set; }
 
         [Required]
