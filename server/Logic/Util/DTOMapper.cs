@@ -55,7 +55,7 @@ namespace Logic.Util
                 Id = business.Id,
                 Name = business.Name,
                 Zip = business.Zip,
-                
+                Address = business.Address,
                 Opens = business.Opens,
                 Closes = business.Closes,
                 TimeSlotLength = business.TimeSlotLength,
@@ -66,16 +66,19 @@ namespace Logic.Util
 
         public BookingDTO ConvertBookingToDTO(Booking booking)
         {
+            TimeSlot timeSlot = booking.TimeSlot;
+            Business business = booking.TimeSlot.Business;
             return new BookingDTO
             {
                 Id = booking.TimeSlotId,
                 TimeSlotId = booking.TimeSlotId,
-                Business = booking.TimeSlot.BusinessName,
+                Business = $"{timeSlot.BusinessName} - {business.Zip.Substring(0, business.Zip.IndexOf(" "))}",
+                Address = business.Address,
                 UserMail = booking.UserEmail,
-                Date = booking.TimeSlot.Start.ToString("dd/MM/yyyy"),
-                Interval = booking.TimeSlot.Start.TimeOfDay.ToString().Substring(0, 5) + " - " +
-                           booking.TimeSlot.End.TimeOfDay.ToString().Substring(0, 5),
-                Capacity = booking.TimeSlot.Bookings.Count().ToString() + "/" + booking.TimeSlot.Capacity
+                Date = timeSlot.Start.ToString("dd/MM/yyyy"),
+                Interval = timeSlot.Start.TimeOfDay.ToString().Substring(0, 5) + " - " +
+                           timeSlot.End.TimeOfDay.ToString().Substring(0, 5),
+                Capacity = timeSlot.Bookings.Count().ToString() + "/" + timeSlot.Capacity
             };
         }
 

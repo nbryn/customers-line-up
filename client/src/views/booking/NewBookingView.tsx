@@ -36,8 +36,7 @@ export const NewBookingView: React.FC = () => {
    const columns: TableColumn[] = [
       {title: 'id', field: 'id', hidden: true},
       {title: 'Date', field: 'date'},
-      {title: 'Start', field: 'start'},
-      {title: 'End', field: 'end'},
+      {title: 'Interval', field: 'interval'},
    ];
 
    const actions = [
@@ -58,10 +57,15 @@ export const NewBookingView: React.FC = () => {
                <TableContainer
                   actions={actions}
                   columns={columns}
-                  fetchTableData={async () =>
-                     await requestHandler.query(URL.getTimeSlotURL(business.id!))
-                  }
-                  tableTitle="Time Slots"
+                  fetchTableData={async () => {
+                     const timeSlots = await requestHandler.query(URL.getTimeSlotURL(business.id!));
+
+                     return timeSlots.map((x) => ({
+                        ...x,
+                        interval: x.start + ' - ' + x.end,
+                     }));
+                  }}
+                  tableTitle={`Time Slots - ${business.address}`}
                   emptyMessage="No Time Slots Available"
                />
 

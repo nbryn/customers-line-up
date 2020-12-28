@@ -1,12 +1,21 @@
 import { useState } from 'react';
 import { Method } from "axios";
 import { ObjectSchema } from 'yup';
-import { useFormik, FormikComputedProps, FormikHandlers, FormikHelpers, FormikState } from 'formik';
+import { useFormik, FormikComputedProps, FormikHandlers, FormikHelpers, FormikState } from 'formik'
+
+import AddressService from '../services/AddressService';
+import { ComboBoxOption } from '../components/form/ComboBox';
 
 export type FormHandler<T> = FormikState<T> & FormikComputedProps<T> & FormikHelpers<T> & FormikHandlers;
 
+export type FormAddressHandler = {
+    fetchAddresses: (zip: string | undefined) => Promise<ComboBoxOption[]>;
+    fetchZips: () => Promise<ComboBoxOption[]>;
+}
+
 export type Form<T> = {
     formHandler: FormHandler<T>;
+    addressHandler: FormAddressHandler;
     setRequest: (values: T) => void;
 }
 
@@ -34,8 +43,25 @@ export const useForm = <T>(
         },
     });
 
+    const fetchZips = async (): Promise<ComboBoxOption[]> => {
+        const zips = await AddressService.fetchZips();
+
+        return zips.map((zip) => ({ label: zip }));
+    }
+
+    const fetchAddresses = async (zip: string | undefined): Promise<ComboBoxOption[]> => {
+        if (zip != undefined) {
+            const addresses = await AddressService.fetchAddresses(zip);
+
+            return addresses.map((address) => ({ label: address }));
+        }
+
+        return [];
+    }
+
     return {
         formHandler,
+        addressHandler: { fetchAddresses, fetchZips },
         setRequest,
     }
 

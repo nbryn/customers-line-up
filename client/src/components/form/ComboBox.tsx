@@ -1,4 +1,4 @@
-import React, {ReactText} from 'react';
+import React, {useState} from 'react';
 import Autocomplete, {createFilterOptions} from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {makeStyles} from '@material-ui/core/styles';
@@ -18,14 +18,18 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
+export type ComboBoxOption = {
+   label: string;
+   value?: string;
+};
+
 export type Props = {
    id: string;
    label: string;
-   options: ReactText[];
+   options: ComboBoxOption[];
    type?: string;
-   setFieldValue: (id: string, value?: string) => void;
+   setFieldValue: (option: ComboBoxOption, formFieldId: string) => void;
    onBlur?: (event: React.FocusEvent) => void;
-   value?: ReactText;
    error?: boolean;
    helperText?: string | boolean;
    style?: any;
@@ -38,7 +42,6 @@ export const ComboBox: React.FC<Props> = ({
    label,
    options,
    style,
-   value,
    error,
    helperText,
    type,
@@ -49,7 +52,7 @@ export const ComboBox: React.FC<Props> = ({
 }: Props) => {
    const styles = useStyles();
 
-   const filterOptions = createFilterOptions({
+   const filterOptions = createFilterOptions<ComboBoxOption>({
       limit: 10,
       matchFrom: 'start',
    });
@@ -63,25 +66,21 @@ export const ComboBox: React.FC<Props> = ({
                id={id}
                filterOptions={filterOptions}
                onBlur={onBlur}
-               value={value}
-               onChange={(event: any, newValue: any | null) => {
-                  if (partOfForm) setFieldValue(id, newValue || '');
-                  else setFieldValue(newValue || '');
+               onChange={(event: any, newValue: ComboBoxOption | null) => {
+                  setFieldValue(newValue || {label: ''}, id);
                }}
                options={options}
-               getOptionLabel={(option: any) =>  option || defaultLabel}
+               getOptionLabel={(option: ComboBoxOption) => option.label}
                style={style}
                renderInput={(params) => (
-                  <TextField                    
+                  <TextField
                      {...params}
-                     value={value}
                      error={error}
                      helperText={helperText}
-                     label={label}
+                     label={options.length === 0 ? defaultLabel : label}
                      type={type}
                      required
                      variant="outlined"
-                     fullWidth
                   />
                )}
             />

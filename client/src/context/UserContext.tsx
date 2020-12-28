@@ -30,7 +30,6 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
    const requestHandler: RequestHandler<UserDTO> = useRequest();
 
    const setUser = (user: UserDTO) => {
-      console.log(user);
       setUserLoggedIn(true);
       setCurrentUser(user);
 

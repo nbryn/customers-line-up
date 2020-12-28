@@ -4,7 +4,7 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import AddressService from '../../services/AddressService';
 import {Card} from '../../components/card/Card';
-import {ComboBox} from '../../components/form/ComboBox';
+import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {Form} from '../../components/form/Form';
 import {REGISTER_URL} from '../../api/URL';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
@@ -14,7 +14,6 @@ import {TextField} from '../../components/form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
 import {useForm} from '../../hooks/useForm';
 import {UserDTO} from '../../models/User';
-
 import {useUserContext} from '../../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,8 +40,8 @@ export const SignupView: React.FC = () => {
    const styles = useStyles();
    const {setUser} = useUserContext();
 
-   const [addresses, setAddresses] = useState<string[]>([]);
-   const [zips, setZips] = useState<string[]>([]);
+   const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
+   const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
    const requestHandler: RequestHandler<UserDTO> = useRequest();
 
@@ -54,7 +53,7 @@ export const SignupView: React.FC = () => {
       password: '',
    };
 
-   const {formHandler} = useForm<UserDTO>(
+   const {addressHandler, formHandler} = useForm<UserDTO>(
       formValues,
       signupValidationSchema,
       REGISTER_URL,
@@ -66,14 +65,14 @@ export const SignupView: React.FC = () => {
 
    useEffect(() => {
       (async () => {
-         setZips(await AddressService.fetchZips());
+         setZips(await addressHandler.fetchZips());
       })();
    }, []);
 
    useEffect(() => {
       (async () => {
-         setAddresses(await AddressService.fetchAddresses(formHandler.values.zip || ''));
-
+         const {zip} = formHandler.values;
+         setAddresses(await addressHandler.fetchAddresses(zip?.substring(0, 4)));
       })();
    }, [formHandler.values.zip]);
 
@@ -97,16 +96,17 @@ export const SignupView: React.FC = () => {
                                     id={key}
                                     style={{width: '51.5%', marginLeft: 129, marginTop: 25}}
                                     label={StringUtil.capitalizeFirstLetter(key)}
-                                    type={TextFieldUtil.mapKeyToType(key)}
+                                    type="text"
                                     options={key === 'zip' ? zips : addresses}
-                                    value={formHandler.values[key] as string}
                                     onBlur={formHandler.handleBlur}
-                                    setFieldValue={formHandler.setFieldValue}
-                                    defaultLabel={key === 'address' ? 'Pick Zip First' : ''}
+                                    setFieldValue={(option: ComboBoxOption, formFieldId) =>
+                                       formHandler.setFieldValue(formFieldId, option.label)
+                                    }
                                     error={
                                        formHandler.touched[key] && Boolean(formHandler.errors[key])
                                     }
                                     helperText={formHandler.touched[key] && formHandler.errors[key]}
+                                    defaultLabel={key === 'address' ? 'Address - After Zip' : ''}
                                  />
                               </FormGroup>
                            );

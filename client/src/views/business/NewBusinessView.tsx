@@ -1,15 +1,17 @@
+import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {MenuItem} from '@material-ui/core';
-import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
-import {Card} from '../../components/card/Card';
 import {BusinessDTO} from '../../models/Business';
 import {businessValidationSchema} from '../../validation/BusinessValidation';
+import {Card} from '../../components/card/Card';
+import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {Form} from '../../components/form/Form';
 import {Modal} from '../../components/modal/Modal';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
+import StringUtil from '../../util/StringUtil';
 import {TextField} from '../../components/form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
 import {BUSINESS_TYPES_URL, CREATE_BUSINESS_URL} from '../../api/URL';
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
       color: 'red',
    },
    textField: {
-      width: '70%',
+      width: '75%',
    },
    wrapper: {
       justifyContent: 'center',
@@ -43,21 +45,16 @@ export const NewBusinessView: React.FC = () => {
    const history = useHistory();
 
    const [businessTypes, setBusinessTypes] = useState<string[]>([]);
+   const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
+   const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
    const requestHandler: RequestHandler<string[]> = useRequest(SUCCESS_MESSAGE);
-
-   useEffect(() => {
-      (async () => {
-         const types = await requestHandler.query(BUSINESS_TYPES_URL);
-
-         setBusinessTypes(types);
-      })();
-   }, []);
 
    const formValues: BusinessDTO = {
       id: 0,
       name: '',
       zip: '',
+      address: '',
       capacity: '',
       type: '',
       timeSlotLength: '',
@@ -65,7 +62,7 @@ export const NewBusinessView: React.FC = () => {
       closes: '',
    };
 
-   const {formHandler} = useForm<BusinessDTO>(
+   const {addressHandler, formHandler} = useForm<BusinessDTO>(
       formValues,
       businessValidationSchema,
       CREATE_BUSINESS_URL,
@@ -79,10 +76,27 @@ export const NewBusinessView: React.FC = () => {
       }
    );
 
+   useEffect(() => {
+      (async () => {
+         const types = await requestHandler.query(BUSINESS_TYPES_URL);
+
+         setBusinessTypes(types);
+
+         setZips(await addressHandler.fetchZips());
+      })();
+   }, []);
+
+   useEffect(() => {
+      (async () => {
+         const {zip} = formHandler.values;
+         setAddresses(await addressHandler.fetchAddresses(zip?.substring(0, 4)));
+      })();
+   }, [formHandler.values.zip]);
+
    return (
       <>
          <Row className={styles.wrapper}>
-            <Col sm={6} lg={6}>
+            <Col sm={6} lg={8}>
                <Modal
                   show={requestHandler.requestInfo ? true : false}
                   title="Business Info"
@@ -102,6 +116,61 @@ export const NewBusinessView: React.FC = () => {
                         <Col sm={6} lg={6}>
                            {Object.keys(formValues)
                               .slice(1, 5)
+                              .map((key) => {
+                                 if (key === 'zip' || key === 'address') {
+                                    return (
+                                       <FormGroup key={key} className={styles.formGroup}>
+                                          <ComboBox
+                                             id={key}
+                                             style={{
+                                                width: '75%',
+                                                marginLeft: 43,
+                                                marginTop: 25,
+                                             }}
+                                             label={StringUtil.capitalizeFirstLetter(key)}
+                                             type="text"
+                                             options={key === 'zip' ? zips : addresses}
+                                             onBlur={formHandler.handleBlur}
+                                             setFieldValue={(option: ComboBoxOption, formFieldId) =>
+                                                formHandler.setFieldValue(formFieldId, option.label)
+                                             }
+                                             error={
+                                                formHandler.touched[key] &&
+                                                Boolean(formHandler.errors[key])
+                                             }
+                                             helperText={
+                                                formHandler.touched[key] && formHandler.errors[key]
+                                             }
+                                             defaultLabel={key === 'address' ? 'Address - After Zip' : ''}
+                                          />
+                                       </FormGroup>
+                                    );
+                                 }
+                                 return (
+                                    <FormGroup key={key} className={styles.formGroup}>
+                                       <TextField
+                                          className={styles.textField}
+                                          id={key}
+                                          label={TextFieldUtil.mapKeyToLabel(key)}
+                                          type={TextFieldUtil.mapKeyToType(key)}
+                                          value={formHandler.values[key]}
+                                          onChange={formHandler.handleChange(key)}
+                                          onBlur={formHandler.handleBlur}
+                                          error={
+                                             formHandler.touched[key] &&
+                                             Boolean(formHandler.errors[key])
+                                          }
+                                          helperText={
+                                             formHandler.touched[key] && formHandler.errors[key]
+                                          }
+                                       />
+                                    </FormGroup>
+                                 );
+                              })}
+                        </Col>
+                        <Col sm={6} lg={6}>
+                           {Object.keys(formValues)
+                              .slice(5)
                               .map((key) => (
                                  <FormGroup key={key} className={styles.formGroup}>
                                     <TextField
@@ -110,13 +179,20 @@ export const NewBusinessView: React.FC = () => {
                                        label={TextFieldUtil.mapKeyToLabel(key)}
                                        type={TextFieldUtil.mapKeyToType(key)}
                                        value={formHandler.values[key]}
-                                       onChange={formHandler.handleChange(key)}
+                                       onChange={formHandler.handleChange}
                                        onBlur={formHandler.handleBlur}
                                        select={key === 'type' ? true : false}
                                        error={
-                                          formHandler.touched[key] && Boolean(formHandler.errors[key])
+                                          formHandler.touched[key] &&
+                                          Boolean(formHandler.errors[key])
                                        }
-                                       helperText={formHandler.touched[key] && formHandler.errors[key]}
+                                       helperText={
+                                          formHandler.touched[key] && formHandler.errors[key]
+                                       }
+                                       inputLabelProps={{shrink: true}}
+                                       inputProps={{
+                                          step: 1800,
+                                       }}
                                     >
                                        {key === 'type' &&
                                           businessTypes.map((type) => (
@@ -125,33 +201,6 @@ export const NewBusinessView: React.FC = () => {
                                              </MenuItem>
                                           ))}
                                     </TextField>
-                                 </FormGroup>
-                              ))}
-                        </Col>
-                        <Col sm={6} lg={6}>
-                           {Object.keys(formValues)
-                              .slice(5)
-                              .map((x) => (
-                                 <FormGroup key={x} className={styles.formGroup}>
-                                    <TextField
-                                       className={styles.textField}
-                                       id={x}
-                                       label={TextFieldUtil.mapKeyToLabel(x)}
-                                       type={TextFieldUtil.mapKeyToType(x)}
-                                       value={formHandler.values[x]}
-                                       onChange={formHandler.handleChange}
-                                       onBlur={formHandler.handleBlur}
-                                       error={
-                                          formHandler.touched[x] && Boolean(formHandler.errors[x])
-                                       }
-                                       helperText={formHandler.touched[x] && formHandler.errors[x]}
-                                       inputLabelProps={
-                                          x === 'timeSlotLength' ? {shrink: false} : {shrink: true}
-                                       }
-                                       inputProps={{
-                                          step: 1800,
-                                       }}
-                                    />
                                  </FormGroup>
                               ))}
                         </Col>

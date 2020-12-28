@@ -26,7 +26,8 @@ export const AllBusinessesView: React.FC = () => {
    const columns: TableColumn[] = [
       {title: 'id', field: 'id', hidden: true},
       {title: 'Name', field: 'name'},
-      {title: 'Zip', field: 'zip'},
+      {title: 'City', field: 'city'},
+      {title: 'Address', field: 'address'},
       {title: 'Business Hours', field: 'businessHours'},
       {title: 'Type', field: 'type'},
    ];
@@ -36,7 +37,8 @@ export const AllBusinessesView: React.FC = () => {
          icon: () => <Chip size="small" label="Go to business" clickable color="primary" />,
          tooltip: 'See available time slots',
          onClick: (event: any, business: BusinessDTO) => {
-            history.push('/booking/new', {business: business});
+            console.log(business);
+            history.push('/booking/new', {business});
          },
       },
    ];
@@ -54,10 +56,17 @@ export const AllBusinessesView: React.FC = () => {
                   fetchTableData={async () => {
                      const businesses = await requestHandler.query(ALL_BUSINESSES_URL);
 
-                     return businesses.map((business) => ({
-                        ...business,
-                        businessHours: business.opens + ' - ' + business.closes,
-                     }));
+                     return businesses.map((business) => {
+                        const zipSplit: string[] = business.zip.split(' ');
+                        const city =
+                           zipSplit.length === 3 ? zipSplit[2] : `${zipSplit[2]} ${zipSplit[3]}`;
+
+                        return {
+                           ...business,
+                           city,
+                           businessHours: business.opens + ' - ' + business.closes,
+                        };
+                     });
                   }}
                   tableTitle="Businesses"
                />

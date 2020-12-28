@@ -25,8 +25,9 @@ export const UserBookingView: React.FC = () => {
    const columns: TableColumn[] = [
       {title: 'id', field: 'id', hidden: true},
       {title: 'timeSlotid', field: 'timeSlotId', hidden: true},
-      {title: 'Business', field: 'business'},
       {title: 'Date', field: 'date'},
+      {title: 'Business & Zip', field: 'business'},
+      {title: 'Address', field: 'address'},
       {title: 'Interval', field: 'interval'},
    ];
 

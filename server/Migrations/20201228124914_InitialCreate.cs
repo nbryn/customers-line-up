@@ -32,7 +32,7 @@ namespace CLup.Migrations
                     Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(nullable: false),
-                    Zip = table.Column<int>(nullable: false),
+                    Zip = table.Column<string>(nullable: false),
                     Address = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -50,7 +50,7 @@ namespace CLup.Migrations
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     OwnerEmail = table.Column<string>(nullable: false),
-                    Zip = table.Column<int>(nullable: false),
+                    Zip = table.Column<string>(nullable: false),
                     Address = table.Column<string>(nullable: false),
                     Type = table.Column<string>(nullable: false),
                     Capacity = table.Column<int>(nullable: false),
@@ -160,9 +160,9 @@ namespace CLup.Migrations
                 columns: new[] { "Id", "Address", "BusinessOwnerId", "Capacity", "Closes", "CreatedAt", "Name", "Opens", "OwnerEmail", "TimeSlotLength", "Type", "UpdatedAt", "Zip" },
                 values: new object[,]
                 {
-                    { 1, "Farum Hovedgade 30", null, 50, "16.00", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cool", "10.00", "test@test.com", 50, "Supermarket", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3520 },
-                    { 2, "Farum Hovedgade 50", null, 40, "14.00", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Shop", "09.00", "test@test.com", 20, "Museum", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3520 },
-                    { 3, "Vermlandsgade 30", null, 30, "15.30", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1337", "08.30", "test@test.com", 10, "Kiosk", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2300 }
+                    { 1, "Farum Hovedgade 30", null, 50, "16.00", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cool", "10.00", "test@test.com", 50, "Supermarket", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3520 - Farum" },
+                    { 2, "Farum Hovedgade 50", null, 40, "14.00", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Shop", "09.00", "test@test.com", 20, "Museum", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3520 - Farum" },
+                    { 3, "Vermlandsgade 30", null, 30, "15.30", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "1337", "08.30", "test@test.com", 10, "Kiosk", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "2300 - Købehavn S" }
                 });
 
             migrationBuilder.InsertData(
@@ -170,10 +170,10 @@ namespace CLup.Migrations
                 columns: new[] { "Email", "Address", "CreatedAt", "Id", "Name", "Password", "UpdatedAt", "Zip" },
                 values: new object[,]
                 {
-                    { "test@test.com", "Farum Hovedgade 10", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Peter", "$2a$11$qiccLYw/lbAf7GhxZ3p.FO9xEMZt5/jnDs07j1soMMpBfjRrY90rq", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3520 },
-                    { "h@h.com", "Farum Hovedgade 15", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Jens", "$2a$11$OKOIQMuxTizVD9ZljxSG0uaA.yInRvwxSOf5SDm9o4Z1ME3D9fUMG", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3520 },
-                    { "mads@hotmail.com", "Farum Hovedgade 15", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, "Mads", "$2a$11$10B1gMjtTU/5O.zKEUDoVekUAK/Yb8AWttBps10r4X9xzZEwye/J2", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3520 },
-                    { "emil@live.com", "Farum Hovedgade 15", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, "Emil", "$2a$11$85gZPCYHj03I6foybf6Oc.9lOxAjW22FAutze.Iy5/o1BAG62oLa2", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2500 }
+                    { "test@test.com", "Farum Hovedgade 10", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Peter", "$2a$11$QRegsi/m4Qcrj/J9mFFe5eO1D1u0.0046156RwuTCFPZ5qcbWAnCW", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3520 - Farum" },
+                    { "h@h.com", "Farum Hovedgade 15", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, "Jens", "$2a$11$ZOohoS8BfVrTB/I/aHpgC./kzFBBVJ3FhUwq/4LRMAeqESFTkd4yq", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3520 - Farum" },
+                    { "mads@hotmail.com", "Farum Hovedgade 15", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, "Mads", "$2a$11$EKaLo43d4ff70FRR5e6.CutOlesDbyhmz1TzTPXXPgi8IUcwfREmi", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3520 - Farum" },
+                    { "emil@live.com", "Farum Hovedgade 15", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, "Emil", "$2a$11$peI.wJykQ/693/Bv8McdFe7u/UioiPLkv2iEHb9CCBn6De3vaAnV.", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "3520 - Farum" }
                 });
 
             migrationBuilder.InsertData(
@@ -181,8 +181,8 @@ namespace CLup.Migrations
                 columns: new[] { "UserEmail", "BusinessId", "CompanyEmail", "CreatedAt", "Id", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { "h@h.com", 1, null, new DateTime(2020, 12, 27, 16, 42, 21, 677, DateTimeKind.Local).AddTicks(6510), 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { "mads@hotmail.com", 1, null, new DateTime(2020, 12, 27, 16, 42, 21, 677, DateTimeKind.Local).AddTicks(7401), 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { "h@h.com", 1, null, new DateTime(2020, 12, 28, 13, 49, 13, 645, DateTimeKind.Local).AddTicks(5331), 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { "mads@hotmail.com", 1, null, new DateTime(2020, 12, 28, 13, 49, 13, 645, DateTimeKind.Local).AddTicks(6260), 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(
@@ -190,9 +190,9 @@ namespace CLup.Migrations
                 columns: new[] { "Id", "BusinessId", "BusinessName", "Capacity", "CreatedAt", "End", "Start", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { 1, 1, "Cool", 50, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 12, 27, 20, 42, 21, 677, DateTimeKind.Local).AddTicks(3812), new DateTime(2020, 12, 27, 19, 42, 21, 674, DateTimeKind.Local).AddTicks(8770), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 2, 1, "Cool", 40, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 12, 27, 21, 42, 21, 677, DateTimeKind.Local).AddTicks(4149), new DateTime(2020, 12, 27, 20, 42, 21, 677, DateTimeKind.Local).AddTicks(4143), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
-                    { 3, 1, "Cool", 30, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 12, 27, 22, 42, 21, 677, DateTimeKind.Local).AddTicks(4152), new DateTime(2020, 12, 27, 21, 42, 21, 677, DateTimeKind.Local).AddTicks(4151), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                    { 1, 1, "Cool", 50, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 12, 28, 17, 49, 13, 645, DateTimeKind.Local).AddTicks(2448), new DateTime(2020, 12, 28, 16, 49, 13, 642, DateTimeKind.Local).AddTicks(4298), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 2, 1, "Cool", 40, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 12, 28, 18, 49, 13, 645, DateTimeKind.Local).AddTicks(2803), new DateTime(2020, 12, 28, 17, 49, 13, 645, DateTimeKind.Local).AddTicks(2798), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) },
+                    { 3, 1, "Cool", 30, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 12, 28, 19, 49, 13, 645, DateTimeKind.Local).AddTicks(2807), new DateTime(2020, 12, 28, 18, 49, 13, 645, DateTimeKind.Local).AddTicks(2806), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                 });
 
             migrationBuilder.InsertData(

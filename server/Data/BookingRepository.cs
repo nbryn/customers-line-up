@@ -28,6 +28,7 @@ namespace Data
         public async Task<Booking> FindBookingByUser(string userEmail, int timeSlotId)
         {
             return await _context.Bookings.Include(x => x.TimeSlot)
+                                          .Include(x => x.TimeSlot.Business)
                                           .FirstOrDefaultAsync(x => x.TimeSlotId == timeSlotId
                                                                   && x.UserEmail == userEmail);
         }
@@ -35,12 +36,14 @@ namespace Data
         public async Task<IList<Booking>> FindBookingsByUser(string userEmail)
         {
             return await _context.Bookings.Include(x => x.TimeSlot)
+                                          .Include(x => x.TimeSlot.Business)
                                           .Where(x => x.UserEmail.Equals(userEmail)).ToListAsync();
         }
 
         public async Task<IList<Booking>> FindBookingsByBusiness(int businessId)
         {
             return await _context.Bookings.Include(x => x.TimeSlot)
+                                          .Include(x => x.TimeSlot.Business)
                                           .Where(x => x.BusinessId == businessId).ToListAsync();
         }
 

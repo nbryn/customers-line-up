@@ -7,7 +7,7 @@ namespace Logic.DTO
     {
 
         [Required]
-        public int TimeInterval { get; set; }
+        public int TimeIerval { get; set; }
 
         [Required]
         public int BusinessId { get; set; }

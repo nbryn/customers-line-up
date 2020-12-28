@@ -7,7 +7,7 @@ namespace Logic.DTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Zip { get; set; }
+        public string Zip { get; set; }
         public string Address { get; set; }
         public string Opens { get; set; }
         public string Closes { get; set; }

@@ -1,10 +1,10 @@
 import { fetch } from '../api/Fetch'
 
-export const DAWA_ZIP_URL = 'https://dawa.aws.dk/postnumre?landpostnumre';
+export const DAWA_ZIP_URL = 'https://dawa.aws.dk/postnumre?landpostnumre&struktur=mini';
 
 const getAddressUrl = (zip: string) => `https://dawa.aws.dk/adgangsadresser?struktur=mini&postnr=${zip}`
 
-type Zip = {
+type DawaZip = {
     nr: string;
     navn: string;
 }
@@ -15,9 +15,9 @@ type Address = {
 }
 
 export async function fetchZips(): Promise<string[]> {
-    const dawaZips: Zip[] = await fetch(DAWA_ZIP_URL, 'GET');
+    const dawaZips: DawaZip[] = await fetch(DAWA_ZIP_URL, 'GET');
 
-    const zips = dawaZips.map((x) => x.nr);
+    const zips = dawaZips.map((x) => `${x.nr} - ${x.navn}`);
 
     return zips;
 }

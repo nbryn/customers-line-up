@@ -1,8 +1,9 @@
 import {DTO} from './General';
 
 export interface BusinessDTO extends DTO {
+    address: string;
     name: string;
-    zip: number | string;
+    zip: string;
     type: string;
     timeSlotLength: number | string;  
     capacity: number | string;  

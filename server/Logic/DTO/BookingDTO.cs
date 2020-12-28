@@ -8,6 +8,8 @@ namespace Logic.DTO
 
         public string Business { get; set; }
 
+        public string Address { get; set; }
+
         public string UserMail { get; set; }
 
         public string Interval { get; set; }

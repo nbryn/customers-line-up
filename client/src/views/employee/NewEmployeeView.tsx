@@ -5,7 +5,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 
 import {BusinessDTO} from '../../models/Business';
 import {Card} from '../../components/card/Card';
-import {ComboBox} from '../../components/form/ComboBox';
+import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {NewEmployeeDTO} from '../../models/Employee';
 import {employeeValidationSchema} from '../../validation/BusinessValidation';
 import {Form} from '../../components/form/Form';
@@ -52,8 +52,8 @@ export const NewEmployeeView: React.FC = () => {
    const history = useHistory();
    const location = useLocation<LocationState>();
 
-   const [users, setUsers] = useState<string[]>([]);
-   const [selectedUser, setSelectedUser] = useState<string>('');
+   const [users, setUsers] = useState<ComboBoxOption[]>([]);
+   const [selectedUser, setSelectedUser] = useState<ComboBoxOption>({label: ''});
    const [showComboBox, setShowComBox] = useState<boolean>(true);
 
    const requestHandler: RequestHandler<UserDTO[]> = useRequest(SUCCESS_MESSAGE);
@@ -78,12 +78,17 @@ export const NewEmployeeView: React.FC = () => {
             URL.getAllUsersNotAlreadyEmployedURL(business.id)
          );
 
-         setUsers(users.map((user) => user.email));
+         setUsers(
+            users.map((user) => ({
+               label: user.email,
+               value: user.name,
+            }))
+         );
       })();
    }, []);
 
    useEffect(() => {
-      if (users.find((email) => email === selectedUser)) {
+      if (users.find((user) => user.label === selectedUser?.label)) {
          setShowComBox(false);
       }
    }, [selectedUser]);
@@ -113,7 +118,7 @@ export const NewEmployeeView: React.FC = () => {
                         id="email"
                         type="text"
                         options={users}
-                        setFieldValue={setSelectedUser}
+                        setFieldValue={(option: ComboBoxOption) => setSelectedUser(option)}
                         partOfForm={false}
                      />
                   )}
@@ -125,7 +130,7 @@ export const NewEmployeeView: React.FC = () => {
                               e.preventDefault();
                               form.setRequest({
                                  businessId: business.id,
-                                 privateEmail: selectedUser,
+                                 privateEmail: selectedUser?.label,
                                  companyEmail: formHandler.values.companyEmail,
                               });
 
@@ -135,23 +140,23 @@ export const NewEmployeeView: React.FC = () => {
                            working={requestHandler.working}
                            valid={formHandler.isValid}
                         >
-                           {/* <FormGroup className={styles.formGroup}>
+                           <FormGroup className={styles.formGroup}>
                               <TextField
                                  className={styles.textField}
                                  id="name"
                                  label="Name"
                                  type="Text"
-                                 value={selectedUser.name}
+                                 value={selectedUser.value}
                                  disabled={true}
                               />
-                           </FormGroup> */}
+                           </FormGroup>
                            <FormGroup className={styles.formGroup}>
                               <TextField
                                  className={styles.textField}
                                  id="privateEmail"
                                  label="Private Email"
                                  type="email"
-                                 value={selectedUser}
+                                 value={selectedUser.label}
                                  disabled={true}
                               />
                            </FormGroup>
