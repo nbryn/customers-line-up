@@ -8,6 +8,8 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
+export type TextFieldType = 'text' | 'number' | 'time' | 'password' | undefined;
+
 type Props = {
    id: string;
    label: string | undefined;
@@ -18,7 +20,7 @@ type Props = {
    inputProps?: any;
    size?: 'small' | 'medium';
    margin?: 'none' | 'dense' | 'normal';
-   type?: string;
+   type?: TextFieldType;
    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
    autoFocus?: boolean;
    select?: boolean;

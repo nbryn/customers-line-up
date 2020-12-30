@@ -6,10 +6,8 @@ import React, {useState} from 'react';
 
 import {BusinessDTO} from '../../models/Business';
 import {FormHandler} from '../../hooks/useForm';
-import {TextField} from '../form/TextField';
+import {TextField, TextFieldType} from '../form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
-
-export type TextFieldType = 'text' | 'number' | 'time' | 'password' | undefined;
 
 type Props = {
    show: boolean;

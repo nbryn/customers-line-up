@@ -9,7 +9,7 @@ import {ExtendedCard, ExtendedCardData} from '../../components/card/ExtendedCard
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import TextFieldUtil from '../../util/TextFieldUtil';
-import {TextFieldModal, TextFieldType} from '../../components/modal/TextFieldModal';
+import {TextFieldModal} from '../../components/modal/TextFieldModal';
 import URL, {BUSINESS_TYPES_URL} from '../../api/URL';
 import {useForm} from '../../hooks/useForm';
 
