@@ -2,7 +2,9 @@ import * as yup from 'yup';
 
 export const signupValidationSchema: yup.ObjectSchema = yup.object({
     email: yup.string().email().required('Email is required'),
-    name: yup.string().min(2, 'Name should be minimum 2 characters').required('Name is required'),
+    name: yup.string()
+    .min(2, 'Name should be minimum 2 characters').required('Name is required')
+    .max(50, 'Maximum 50 characters'),
     zip: yup.string()
         .required('Zip is required'),
     address: yup.string()

@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+
 using System.Security.Claims;
 using System;
 
@@ -38,7 +40,7 @@ namespace Logic.Bookings
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            (Response response, string message) = await _service.CreateBooking(userMail, timeSlotId);
+            (Response response, string message) = await _service.VerifyNewBooking(userMail, timeSlotId);
 
             return new ObjectResult(message) { StatusCode = (int)response };
         }

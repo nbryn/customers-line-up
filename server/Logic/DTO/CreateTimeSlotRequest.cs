@@ -5,9 +5,8 @@ namespace Logic.DTO
 {
     public class CreateTimeSlotRequest
     {
-
         [Required]
-        public int TimeIerval { get; set; }
+        public int TimeInterval { get; set; }
 
         [Required]
         public int BusinessId { get; set; }
@@ -17,6 +16,5 @@ namespace Logic.DTO
 
         [Required]
         public DateTime End { get; set; }
-
     }
 }

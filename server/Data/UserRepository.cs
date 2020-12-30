@@ -23,14 +23,15 @@ namespace Data
             return await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
         }
 
-        public async Task<int> CreateUser(RegisterRequest user)
+        public async Task<int> CreateUser(RegisterUserDTO user)
         {
             User newUser = new User
             {
                 Name = user.Name,
                 Email = user.Email,
                 Password = user.Password,
-                Zip = user.Zip
+                Zip = user.Zip,
+                Address = user.Address
             };
 
             _context.Users.Add(newUser);

@@ -25,7 +25,7 @@ namespace Logic.Bookings
             _timeSlotRepository = timeSlotRepository;
             _bookingRepository = bookingRepository;
         }
-        public async Task<(Response, string)> CreateBooking(string userEmail, int timeSlotId)
+        public async Task<(Response, string)> VerifyNewBooking(string userEmail, int timeSlotId)
         {
             Booking bookingExists = await _bookingRepository.FindBookingByUser(userEmail, timeSlotId);
 
@@ -36,16 +36,21 @@ namespace Logic.Bookings
 
             TimeSlot timeSlot = await _timeSlotRepository.FindTimeSlotById(timeSlotId);
 
+            if (timeSlot == null)
+            {
+                return (Response.Conflict, "Time slot does not exist");
+            }
+
             if (timeSlot.Bookings?.Count >= timeSlot.Capacity)
             {
-                return (Response.Conflict, "This time slot is not available");
+                return (Response.Conflict, "This time slot is full");
             }
 
             Business business = await _businessRepository.FindBusinessById(timeSlot.BusinessId);
 
             if (business == null)
             {
-                //Handle business does not exists - Gather null checks on one place?
+                //Handle business does not exists - Gather null checks in one place?
             }
 
             Booking booking = new Booking { UserEmail = userEmail, TimeSlotId = timeSlotId, BusinessId = business.Id };
@@ -75,5 +80,6 @@ namespace Logic.Bookings
 
             return response;
         }
+
     }
 }

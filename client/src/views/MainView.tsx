@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 export const MainView: React.FC = () => {
    const styles = useStyles();
    const [mobileOpen, setMobileOpen] = useState(false);
-   const {userLoggedIn} = useUserContext();
+   const {user} = useUserContext();
 
    const handleMenuClose = () => {
       setMobileOpen(false);
@@ -31,7 +31,7 @@ export const MainView: React.FC = () => {
    return (
       <div className={styles.root}>
          <CssBaseline />
-         {!userLoggedIn ? (
+         {!user.email ? (
             <LoginView />
          ) : (
             <>

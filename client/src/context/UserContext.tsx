@@ -9,14 +9,12 @@ export type ContextValue = {
    user: UserDTO;
    logout: () => void;
    setUser: (user: UserDTO) => void;
-   userLoggedIn: boolean;
 };
 
 export const UserContext = React.createContext<ContextValue>({
    user: (Cookies.get('user') as unknown) as UserDTO,
    setUser: () => null,
    logout: () => null,
-   userLoggedIn: false,
 });
 
 type Props = {
@@ -25,12 +23,10 @@ type Props = {
 
 export const UserContextProvider: React.FC<Props> = (props: Props) => {
    const [user, setCurrentUser] = useState<UserDTO>({email: ''});
-   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
 
    const requestHandler: RequestHandler<UserDTO> = useRequest();
 
    const setUser = (user: UserDTO) => {
-      setUserLoggedIn(true);
       setCurrentUser(user);
 
       Cookies.set('token', user.token!);
@@ -39,7 +35,7 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
    const logout = () => {
       Cookies.remove('token');
 
-      setUserLoggedIn(false);
+      setCurrentUser({email: ''});
    };
 
    useEffect(() => {
@@ -48,7 +44,6 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
             const user = await requestHandler.query(USER_INFO_URL);
 
             setCurrentUser(user);
-            setUserLoggedIn(true);
          }
       })();
    }, []);
@@ -57,7 +52,6 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
       user,
       logout,
       setUser,
-      userLoggedIn,
    };
 
    return <UserContext.Provider value={contextValue}>{props.children}</UserContext.Provider>;

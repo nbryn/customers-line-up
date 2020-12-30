@@ -7,9 +7,9 @@ namespace Logic.Users
 {
     public interface IUserService
     {
-        Task<LoginResponse> RegisterUser(RegisterRequest user);
+        Task<LoginResponse> RegisterUser(RegisterUserDTO user);
 
-        Task<LoginResponse> AuthenticateUser(LoginRequest user);
+        Task<LoginResponse> AuthenticateUser(LoginDTO user);
 
         Task<IList<User>> FilterUsersByBusiness(int businessId);
 

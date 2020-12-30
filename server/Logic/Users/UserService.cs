@@ -25,7 +25,7 @@ namespace Logic.Users
 
         }
 
-        public async Task<LoginResponse> RegisterUser(RegisterRequest user)
+        public async Task<LoginResponse> RegisterUser(RegisterUserDTO user)
         {
             User userExists = await _userRepository.FindUserByEmail(user.Email);
 
@@ -51,7 +51,7 @@ namespace Logic.Users
 
             return response;
         }
-        public async Task<LoginResponse> AuthenticateUser(LoginRequest loginRequest)
+        public async Task<LoginResponse> AuthenticateUser(LoginDTO loginRequest)
         {
             User user = await _userRepository.FindUserByEmail(loginRequest.Email);
 

@@ -31,7 +31,7 @@ namespace Logic.Users
         [AllowAnonymous]
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest user)
+        public async Task<IActionResult> Register([FromBody] RegisterUserDTO user)
         {
             LoginResponse response = await _service.RegisterUser(user);
 
@@ -46,7 +46,7 @@ namespace Logic.Users
         [AllowAnonymous]
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
         {
             LoginResponse user = await _service.AuthenticateUser(loginRequest);
 

@@ -31,7 +31,6 @@ export const BusinessProfileView: React.FC = () => {
    const location = useLocation<LocationState>();
 
    const [modalKey, setModalKey] = useState('');
-   const [textFieldType, setTextFieldType] = useState<TextFieldType>();
    const [businessTypeOptions, setBusinessTypeOptions] = useState<string[]>([]);
 
    const requestHandler: RequestHandler<string[]> = useRequest();
@@ -62,13 +61,12 @@ export const BusinessProfileView: React.FC = () => {
 
    const businessData: ExtendedCardData[] = Object.keys(business)
       .filter((x) => x !== 'id')
-      .map((x) => ({
-         text: TextFieldUtil.mapKeyToLabel(x),
-         data: formHandler.values[x],
+      .map((key) => ({
+         text: TextFieldUtil.mapKeyToLabel(key),
+         data: formHandler.values[key],
          buttonText: 'Edit',
          buttonAction: () => {
-            setModalKey(x);
-            setTextFieldType(TextFieldUtil.mapKeyToType(x));
+            setModalKey(key);
          },
       }));
 
@@ -82,7 +80,7 @@ export const BusinessProfileView: React.FC = () => {
                show={modalKey ? true : false}
                showModal={setModalKey}
                textFieldKey={modalKey}
-               textFieldType={textFieldType}
+               textFieldType={TextFieldUtil.mapKeyToType(modalKey)}
                primaryAction={async () => {
                   await formHandler.handleSubmit();
                   setModalKey('');
@@ -94,10 +92,17 @@ export const BusinessProfileView: React.FC = () => {
             />
 
             <Col sm={12} md={6} lg={6} className={styles.col}>
-               <ExtendedCard title="General" data={businessData.slice(0, 4)} />
+               <ExtendedCard
+                  title="General"
+                  data={businessData.filter(
+                     (x) => x.text === 'Name' || x.text === 'Zip' || x.text === 'Address' || x.text === 'Type'
+                  )}
+               />
             </Col>
             <Col sm={12} md={6} lg={6} className={styles.col}>
-               <ExtendedCard title="Customer" data={businessData.slice(4)} />
+               <ExtendedCard title="Customer" data={businessData.filter(
+                     (x) => x.text === 'Capacity' || x.text === 'Visit Length' || x.text === 'Opens' || x.text === 'Closes'
+                  )} />
             </Col>
          </Row>
       </>
