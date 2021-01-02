@@ -1,6 +1,7 @@
+import React, {ReactText} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import MaterialUITextField from '@material-ui/core/TextField';
-import React, {ReactText} from 'react';
+
 
 const useStyles = makeStyles((theme) => ({
    helperText: {
@@ -8,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-export type TextFieldType = 'text' | 'number' | 'time' | 'password' | undefined;
+export type TextFieldType = 'text' | 'number' | 'time' | 'password' | 'email' | undefined;
 
 type Props = {
    id: string;
@@ -16,7 +17,6 @@ type Props = {
    value?: ReactText | undefined;
    onBlur?: (event: React.FocusEvent) => void;
    helperText?: string | boolean;
-   formHelperTextProps?: any;
    inputProps?: any;
    size?: 'small' | 'medium';
    margin?: 'none' | 'dense' | 'normal';

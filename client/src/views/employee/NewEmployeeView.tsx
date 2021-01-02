@@ -145,7 +145,7 @@ export const NewEmployeeView: React.FC = () => {
                                  className={styles.textField}
                                  id="name"
                                  label="Name"
-                                 type="Text"
+                                 type="text"
                                  value={selectedUser.value}
                                  disabled={true}
                               />
@@ -165,7 +165,7 @@ export const NewEmployeeView: React.FC = () => {
                                  className={styles.textField}
                                  id="companyEmail"
                                  label="Company Email"
-                                 type="Email"
+                                 type="email"
                                  value={formHandler.values.companyEmail}
                                  onChange={formHandler.handleChange}
                                  onBlur={formHandler.handleBlur}

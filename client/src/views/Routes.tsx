@@ -5,12 +5,14 @@ import {AllBusinessesView} from './business/AllBusinessesView';
 import {BusinessBookingView} from './booking/BusinessBookingView';
 import {BusinessEmployeeView} from './employee/BusinessEmployeeView';
 import {BusinessOverview} from './business/BusinessOverview';
+import {BusinessProfileView} from './business/BusinessProfileView';
 import {BusinessTimeSlotView} from './business/BusinessTimeSlotView';
 import {NewBookingView} from './booking/NewBookingView';
 import {NewBusinessView} from './business/NewBusinessView';
 import {NewEmployeeView} from './employee/NewEmployeeView';
+import {ProfileView} from './user/ProfileView';
 import {HomeView} from './user/HomeView';
-import {BusinessProfileView} from './business/BusinessProfileView';
+
 import {UserBookingView} from './booking/UserBookingView';
 
 export const Routes: React.FC = () => {
@@ -19,6 +21,7 @@ export const Routes: React.FC = () => {
          <Route exact path="/" component={HomeView} />
          <Route exact path="/user/bookings" component={UserBookingView} />
          <Route exact path="/user/business" component={AllBusinessesView} />
+         <Route exact path="/user/profile" component={ProfileView} />
 
          <Route exact path="/booking/new" component={NewBookingView} />
          <Route exact path="/business/new" component={NewBusinessView} />
