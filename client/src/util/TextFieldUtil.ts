@@ -11,6 +11,7 @@ function mapKeyToType(key: string): TextFieldType {
     if (key === 'opens' || key === 'closes') return 'time';
     if (key === 'capacity' || key === 'timeSlotLength') return 'number';
     if (key === 'password') return 'password';
+    if (key === 'email') return 'email';
 
     return 'text';
 }

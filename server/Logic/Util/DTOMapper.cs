@@ -45,6 +45,7 @@ namespace Logic.Util
                 Name = user.Name,
                 Email = user.Email,
                 Zip = user.Zip,
+                Address = user.Address,
             };
         }
 

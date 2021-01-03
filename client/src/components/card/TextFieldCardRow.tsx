@@ -1,4 +1,4 @@
-import React, {ReactText} from 'react';
+import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import {Badge, Col, Row} from 'react-bootstrap';
 import Chip from '@material-ui/core/Chip';
@@ -6,20 +6,20 @@ import DoneIcon from '@material-ui/icons/Done';
 import {makeStyles} from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 
-import {FormHandler} from '../../hooks/useForm';
 import {TextField, TextFieldType} from '../form/TextField';
-import {UserDTO} from '../../models/User';
 
 const useStyles = makeStyles({
    root: {
       minWidth: 275,
    },
    row: {
+      marginLeft: 0,
       marginTop: 25,
       marginBottom: 25,
    },
    chipCol: {
       textAlign: 'right',
+      marginTop: 12,
    },
    chip: {
       width: '60%',
@@ -34,18 +34,18 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-   buttonText: string;
+   buttonText?: string;
    label: string | undefined;
-   id: string;
+   key: string;
    color?: 'primary' | 'secondary';
    variant?: 'outlined';
    type?: TextFieldType;
    value: string;
-   buttonAction: () => void;
+   buttonAction?: () => void;
 };
 
-export const CardRow: React.FC<Props> = ({
-   id,
+export const TextFieldCardRow: React.FC<Props> = ({
+   key,
    label,
    type,
    buttonText,
@@ -62,28 +62,28 @@ export const CardRow: React.FC<Props> = ({
          <Row className={styles.row}>
             <Col>
                <TextField
-                  //className={styles.textField}
-                  id={id}
+                  id={key}
                   disabled={true}
                   label={label}
                   type={type}
-                  value={formHandler.values[id] as string}
+                  value={value}
                />
             </Col>
-
-            <Col className={styles.chipCol}>
-               <Chip
-                  className={styles.chip}
-                  size="medium"
-                  avatar={<Avatar>M</Avatar>}
-                  label={buttonText}
-                  clickable
-                  color={color || 'primary'}
-                  onClick={() => buttonAction()}
-                  deleteIcon={<DoneIcon />}
-                  variant={variant || 'default'}
-               />
-            </Col>
+            {buttonAction && (
+               <Col className={styles.chipCol}>
+                  <Chip
+                     className={styles.chip}
+                     size="medium"
+                     avatar={<Avatar>M</Avatar>}
+                     label={buttonText}
+                     clickable
+                     color={color || 'primary'}
+                     onClick={() => buttonAction()}
+                     deleteIcon={<DoneIcon />}
+                     variant={variant || 'default'}
+                  />
+               </Col>
+            )}
          </Row>
       </>
    );

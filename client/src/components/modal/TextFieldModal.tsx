@@ -1,18 +1,20 @@
+import React, {useState} from 'react';
 import BsModal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {MenuItem} from '@material-ui/core';
-import React, {useState} from 'react';
 
-import {BusinessDTO} from '../../models/Business';
+import {ComboBox, ComboBoxOption} from '../form/ComboBox';
 import {FormHandler} from '../../hooks/useForm';
 import {TextField, TextFieldType} from '../form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
 
 type Props = {
    show: boolean;
+   isComboBox?: boolean;
+   comboBoxOptions?: ComboBoxOption[];
    textFieldKey: string;
-   formHandler: FormHandler<BusinessDTO>;
+   formHandler: FormHandler<any>;
    textFieldType: TextFieldType;
    primaryActionText?: string;
    selectOptions?: string[];
@@ -23,6 +25,8 @@ type Props = {
 
 export const TextFieldModal: React.FC<Props> = ({
    show,
+   isComboBox = false,
+   comboBoxOptions,
    textFieldKey,
    primaryAction,
    primaryActionText,
@@ -46,6 +50,20 @@ export const TextFieldModal: React.FC<Props> = ({
 
                <BsModal.Body>
                   {updating && <CircularProgress />}
+                  {isComboBox ? <ComboBox
+                     id={textFieldKey}
+                     style={{width: '100%', marginLeft: 0}}
+                     label={TextFieldUtil.mapKeyToLabel(textFieldKey)}
+                     type="text"
+                     options={comboBoxOptions || []}
+                     onBlur={formHandler.handleBlur}
+                     setFieldValue={(option: ComboBoxOption, formFieldId) =>
+                        formHandler.setFieldValue(formFieldId, option.label)
+                     }
+                     error={formHandler.touched[textFieldKey] && Boolean(formHandler.errors[textFieldKey])}
+                     helperText={formHandler.touched[textFieldKey] && formHandler.errors[textFieldKey] as any}
+                     defaultLabel={textFieldKey === 'address' ? 'Address - After Zip' : ''}
+                  /> : (
                   <TextField
                      id={textFieldKey}
                      label={TextFieldUtil.mapKeyToLabel(textFieldKey)}
@@ -54,19 +72,21 @@ export const TextFieldModal: React.FC<Props> = ({
                      onChange={formHandler.handleChange(textFieldKey)}
                      onBlur={formHandler.handleBlur}
                      error={formHandler.touched[textFieldKey] && Boolean(formHandler.errors[textFieldKey])}
-                     helperText={formHandler.touched[textFieldKey] && formHandler.errors[textFieldKey]}
+                     helperText={formHandler.touched[textFieldKey] && formHandler.errors[textFieldKey] as any}
                      select={textFieldKey === 'type' ? true : false}
                      inputProps={{
                         step: 1800,
                      }}
                   >
-                     {textFieldKey === 'type' &&
-                        selectOptions!.map((x, index) => (
+                     {selectOptions &&
+                        selectOptions.map((x, index) => (
                            <MenuItem key={index} value={x}>
                               {x}
                            </MenuItem>
                         ))}
+                 
                   </TextField>
+                  )}
                </BsModal.Body>
 
                <BsModal.Footer>

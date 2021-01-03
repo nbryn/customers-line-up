@@ -1,5 +1,5 @@
-export type UserDTO = {
-    [key: string]: string | boolean | undefined;
+export interface UserDTO {
+    [key: string]: string | number | undefined;
     email: string;
     name?: string;
     zip?: string;
@@ -7,4 +7,4 @@ export type UserDTO = {
     password?: string;
     token?: string;
     role?: 'User' | 'Employee' | 'Owner' | 'Admin';
-};
+}

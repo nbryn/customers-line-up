@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react';
+import {pick} from 'lodash-es';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import {MenuItem} from '@material-ui/core';
 import {useHistory} from 'react-router-dom';
 
 import {Card} from '../../components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {Form} from '../../components/form/Form';
-import {TextFieldModal} from '../../components/modal/TextFieldModal';
+import {FormCard, FormCardData} from '../../components/card/FormCard';
+import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import {signupValidationSchema} from '../../validation/UserValidation';
 import StringUtil from '../../util/StringUtil';
-import {TextField} from '../../components/form/TextField';
 import {TextFieldCardRow} from '../../components/card/TextFieldCardRow';
+import {TextFieldModal} from '../../components/modal/TextFieldModal';
 import TextFieldUtil from '../../util/TextFieldUtil';
 import {BUSINESS_TYPES_URL, CREATE_BUSINESS_URL} from '../../api/URL';
 import {useForm} from '../../hooks/useForm';
@@ -28,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
    },
    formGroup: {
       marginBottom: 30,
+   },
+   header: {
+      justifyContent: 'center',
+      marginBottom: 20,
    },
    helperText: {
       color: 'red',
@@ -47,17 +52,13 @@ export const ProfileView: React.FC = () => {
    const history = useHistory();
    const {user} = useUserContext();
 
+   const [modalKey, setModalKey] = useState('');
    const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
    const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
    const requestHandler: RequestHandler<string[]> = useRequest(SUCCESS_MESSAGE);
 
-   const formValues: UserDTO = {
-      email: user.email,
-      name: user.name,
-      zip: user.zip,
-      address: user.address,
-   };
+   const formValues = pick(user, ['name', 'email', 'zip', 'address']);
 
    const {addressHandler, formHandler} = useForm<UserDTO>(
       formValues,
@@ -80,78 +81,38 @@ export const ProfileView: React.FC = () => {
       })();
    }, [formHandler.values.zip]);
 
+   const profileData: FormCardData[] = Object.keys(formValues).map((key) => ({
+      key,
+      label: StringUtil.capitalizeFirstLetter(key),
+      type: TextFieldUtil.mapKeyToType(key),
+      value: formHandler.values[key] as string,
+      buttonAction: () => setModalKey(key),
+      buttonText: 'Edit',
+   }));
+
    return (
       <>
+         <Row className={styles.header}>
+            <Header text="Profile" />
+         </Row>
          <Row className={styles.wrapper}>
-            <Col sm={6} lg={8}>
-               <Card className={styles.card} title="Profile" variant="outlined">
-                  <Form
-                     onSubmit={formHandler.handleSubmit}
-                     buttonText="Create"
-                     working={requestHandler.working}
-                     valid={formHandler.isValid}
-                  >
-                     <Row className={styles.wrapper}>
-                        <Col sm={6} lg={6}>
-                           {Object.keys(formValues).map((key) => {
-                              if (key === 'zip' || key === 'address') {
-                                 return (
-                                    <FormGroup key={key}>
-                                       <ComboBox
-                                          id={key}
-                                          style={{width: '75%', marginLeft: 42, marginTop: 25}}
-                                          label={StringUtil.capitalizeFirstLetter(key)}
-                                          type="text"
-                                          options={key === 'zip' ? zips : addresses}
-                                          onBlur={formHandler.handleBlur}
-                                          setFieldValue={(option: ComboBoxOption, formFieldId) =>
-                                             formHandler.setFieldValue(formFieldId, option.label)
-                                          }
-                                          error={
-                                             formHandler.touched[key] &&
-                                             Boolean(formHandler.errors[key])
-                                          }
-                                          helperText={
-                                             formHandler.touched[key] && formHandler.errors[key]
-                                          }
-                                          defaultLabel={
-                                             key === 'address' ? 'Address - After Zip' : ''
-                                          }
-                                       />
-                                    </FormGroup>
-                                 );
-                              }
-                              return (
-                                 <FormGroup key={key}>
-                                    <TextFieldCardRow 
-                                    id={key}
-                                    label={StringUtil.capitalizeFirstLetter(key)}
-                                    value={formHandler.values[key] as string}
-                                    />
-                                    {/* <TextField
-                                       className={styles.textField}
-                                       id={key}
-                                       disabled={true}
-                                       label={StringUtil.capitalizeFirstLetter(key)}
-                                       type={TextFieldUtil.mapKeyToType(key)}
-                                       value={formHandler.values[key] as string}
-                                       onChange={formHandler.handleChange}
-                                       onBlur={formHandler.handleBlur}
-                                       error={
-                                          formHandler.touched[key] &&
-                                          Boolean(formHandler.errors[key])
-                                       }
-                                       helperText={
-                                          formHandler.touched[key] && formHandler.errors[key]
-                                       }
-                                    /> */}
-                                 </FormGroup>
-                              );
-                           })}
-                        </Col>
-                     </Row>
-                  </Form>
-               </Card>
+            <Col sm={6} lg={6}>
+               <TextFieldModal
+                  show={modalKey ? true : false}
+                  isComboBox={(modalKey === 'zip' || modalKey === 'address') ? true : false}
+                  comboBoxOptions={modalKey === 'zip' ? zips : addresses}
+                  showModal={setModalKey}
+                  textFieldKey={modalKey}
+                  textFieldType={TextFieldUtil.mapKeyToType(modalKey)}
+                  primaryAction={async () => {
+                     await formHandler.handleSubmit();
+                     setModalKey('');
+                  }}
+                  formHandler={formHandler}
+                  primaryActionText="Save Changes"
+                  secondaryAction={() => setModalKey('')}
+               />
+               <FormCard title="User Data" data={profileData} />
             </Col>
          </Row>
       </>

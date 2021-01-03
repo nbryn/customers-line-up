@@ -1,6 +1,7 @@
+import React, {useEffect, useState} from 'react';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React, {useEffect, useState} from 'react';
+import {omit} from 'lodash-es';
 import {useLocation} from 'react-router-dom';
 
 import {BusinessDTO} from '../../models/Business';
@@ -45,8 +46,10 @@ export const BusinessProfileView: React.FC = () => {
       })();
    }, []);
 
+   const formValues = omit(business, ['id']) as BusinessDTO;
+
    const {formHandler} = useForm<BusinessDTO>(
-      business,
+      formValues,
       businessValidationSchema,
       URL.getUpdateBusinessDataURL(business.id),
       'PUT',
@@ -59,16 +62,14 @@ export const BusinessProfileView: React.FC = () => {
       }
    );
 
-   const businessData: ExtendedCardData[] = Object.keys(business)
-      .filter((x) => x !== 'id')
-      .map((key) => ({
-         text: TextFieldUtil.mapKeyToLabel(key),
-         data: formHandler.values[key],
-         buttonText: 'Edit',
-         buttonAction: () => {
-            setModalKey(key);
-         },
-      }));
+   const businessData: ExtendedCardData[] = Object.keys(formValues).map((key) => ({
+      text: TextFieldUtil.mapKeyToLabel(key),
+      data: formHandler.values[key],
+      buttonText: 'Edit',
+      buttonAction: () => {
+         setModalKey(key);
+      },
+   }));
 
    return (
       <>
@@ -95,14 +96,25 @@ export const BusinessProfileView: React.FC = () => {
                <ExtendedCard
                   title="General"
                   data={businessData.filter(
-                     (x) => x.text === 'Name' || x.text === 'Zip' || x.text === 'Address' || x.text === 'Type'
+                     (x) =>
+                        x.text === 'Name' ||
+                        x.text === 'Zip' ||
+                        x.text === 'Address' ||
+                        x.text === 'Type'
                   )}
                />
             </Col>
             <Col sm={12} md={6} lg={6} className={styles.col}>
-               <ExtendedCard title="Customer" data={businessData.filter(
-                     (x) => x.text === 'Capacity' || x.text === 'Visit Length' || x.text === 'Opens' || x.text === 'Closes'
-                  )} />
+               <ExtendedCard
+                  title="Customer"
+                  data={businessData.filter(
+                     (x) =>
+                        x.text === 'Capacity' ||
+                        x.text === 'Visit Length' ||
+                        x.text === 'Opens' ||
+                        x.text === 'Closes'
+                  )}
+               />
             </Col>
          </Row>
       </>

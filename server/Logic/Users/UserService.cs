@@ -46,7 +46,10 @@ namespace Logic.Users
             {
                 Id = userId,
                 Email = user.Email,
+                Zip = user.Zip,
+                Address = user.Address,
                 Token = token,
+                Role = Role.User.ToString(),
             };
 
             return response;
@@ -71,6 +74,8 @@ namespace Logic.Users
             {
                 Id = user.Id,
                 Email = user.Email,
+                Zip = user.Zip,
+                Address = user.Address,
                 Name = user.Name,
                 Token = token,
                 Role = role.ToString(),

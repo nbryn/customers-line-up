@@ -2,7 +2,8 @@ import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {Card} from './Card';
-import {CardRow} from './CardRow';
+import {TextFieldCardRow} from './TextFieldCardRow';
+import {TextFieldType} from '../form/TextField';
 
 const useStyles = makeStyles({
    root: {
@@ -16,21 +17,25 @@ const useStyles = makeStyles({
    },
 });
 
-export type ExtendedCardData = {
-   text: string;
-   data: string | number | undefined;
-   buttonText: string;
-   buttonAction: () => void;
-};
+export type FormCardData = {
+    label: string | undefined;
+    key: string;
+    color?: 'primary' | 'secondary';
+    variant?: 'outlined';
+    type?: TextFieldType;
+    value: string;
+    buttonAction?: () => void;
+    buttonText?: string;
+ };
 
 type Props = {
-   data: ExtendedCardData[];
+   data: FormCardData[];
    buttonAction?: () => void;
    title: string;
    buttonText?: string;
 };
 
-export const ExtendedCard: React.FC<Props> = ({buttonAction, buttonText, title, data}: Props) => {
+export const FormCard: React.FC<Props> = ({buttonAction, buttonText, title, data}: Props) => {
    const styles = useStyles();
 
    return (
@@ -44,10 +49,11 @@ export const ExtendedCard: React.FC<Props> = ({buttonAction, buttonText, title, 
          variant="outlined"
       >
          {data.map((x) => (
-            <CardRow
-               key={x.text}
-               text={x.text}
-               data={x.data}
+            <TextFieldCardRow
+               key={x.key}          
+               label={x.label}
+               type={x.type}
+               value={x.value}
                buttonText={x.buttonText}
                buttonAction={x.buttonAction}
             />

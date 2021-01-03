@@ -4,7 +4,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-//import {TextField} from './TextField'
+import {TextFieldType} from './TextField'
 
 const useStyles = makeStyles((theme) => ({
    inputRoot: {
@@ -27,7 +27,7 @@ export type Props = {
    id: string;
    label: string;
    options: ComboBoxOption[];
-   type?: string;
+   type?: TextFieldType;
    setFieldValue: (option: ComboBoxOption, formFieldId: string) => void;
    onBlur?: (event: React.FocusEvent) => void;
    error?: boolean;

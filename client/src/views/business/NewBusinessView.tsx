@@ -9,6 +9,7 @@ import {businessValidationSchema} from '../../validation/BusinessValidation';
 import {Card} from '../../components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {Form} from '../../components/form/Form';
+import {Header} from '../../components/Texts';
 import {Modal} from '../../components/modal/Modal';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import StringUtil from '../../util/StringUtil';
@@ -19,7 +20,7 @@ import {useForm} from '../../hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
    card: {
-      marginTop: 60,
+      marginTop: 20,
       borderRadius: 15,
       height: 600,
       textAlign: 'center',
@@ -95,6 +96,9 @@ export const NewBusinessView: React.FC = () => {
 
    return (
       <>
+      <Row className={styles.wrapper}>
+            <Header text="New Business" />
+         </Row>
          <Row className={styles.wrapper}>
             <Col sm={6} lg={8}>
                <Modal
@@ -105,7 +109,7 @@ export const NewBusinessView: React.FC = () => {
                   primaryActionText="My Businesses"
                   secondaryAction={() => requestHandler.setRequestInfo('')}
                />
-               <Card className={styles.card} title="Create Business" variant="outlined">
+               <Card className={styles.card} title="Business Data" variant="outlined">
                   <Form
                      onSubmit={formHandler.handleSubmit}
                      buttonText="Create"
