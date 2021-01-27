@@ -4,6 +4,8 @@ import {Error} from './Error';
 
 export async function fetch<T>(url: string, method: Method, request?: any): Promise<T> {
     let response: AxiosResponse<T>;
+
+    console.log(url);
   
     try {
       response = await axios({

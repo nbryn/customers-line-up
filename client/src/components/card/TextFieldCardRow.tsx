@@ -67,6 +67,9 @@ export const TextFieldCardRow: React.FC<Props> = ({
                   label={label}
                   type={type}
                   value={value}
+                  inputLabelProps={{
+                     shrink: label === 'Opens' || label === 'Closes' ? true : undefined,
+                  }}
                />
             </Col>
             {buttonAction && (

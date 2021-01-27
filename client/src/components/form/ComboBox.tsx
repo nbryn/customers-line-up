@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Autocomplete, {createFilterOptions} from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-import {TextFieldType} from './TextField'
+import {TextFieldType} from './TextField';
 
 const useStyles = makeStyles((theme) => ({
    inputRoot: {

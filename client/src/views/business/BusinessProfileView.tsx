@@ -6,9 +6,11 @@ import {useLocation} from 'react-router-dom';
 
 import {BusinessDTO} from '../../models/Business';
 import {businessValidationSchema} from '../../validation/BusinessValidation';
-import {ExtendedCard, ExtendedCardData} from '../../components/card/ExtendedCard';
+import {ComboBoxOption} from '../../components/form/ComboBox';
+import {FormCard, FormCardData} from '../../components/card/FormCard';
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
+import StringUtil from '../../util/StringUtil';
 import TextFieldUtil from '../../util/TextFieldUtil';
 import {TextFieldModal} from '../../components/modal/TextFieldModal';
 import URL, {BUSINESS_TYPES_URL} from '../../api/URL';
@@ -33,22 +35,16 @@ export const BusinessProfileView: React.FC = () => {
 
    const [modalKey, setModalKey] = useState('');
    const [businessTypeOptions, setBusinessTypeOptions] = useState<string[]>([]);
+   const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
+   const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
    const requestHandler: RequestHandler<string[]> = useRequest();
 
    const business = location.state.business;
 
-   useEffect(() => {
-      (async () => {
-         const types = await requestHandler.query(BUSINESS_TYPES_URL);
-
-         setBusinessTypeOptions(types);
-      })();
-   }, []);
-
    const formValues = omit(business, ['id']) as BusinessDTO;
 
-   const {formHandler} = useForm<BusinessDTO>(
+   const {addressHandler, formHandler} = useForm<BusinessDTO>(
       formValues,
       businessValidationSchema,
       URL.getUpdateBusinessDataURL(business.id),
@@ -62,13 +58,30 @@ export const BusinessProfileView: React.FC = () => {
       }
    );
 
-   const businessData: ExtendedCardData[] = Object.keys(formValues).map((key) => ({
-      text: TextFieldUtil.mapKeyToLabel(key),
-      data: formHandler.values[key],
+   useEffect(() => {
+      (async () => {
+         setZips(await addressHandler.fetchZips());
+
+         setBusinessTypeOptions(await requestHandler.query(BUSINESS_TYPES_URL));
+      })();
+   }, []);
+
+   useEffect(() => {
+      (async () => {
+         const {zip} = formHandler.values;
+         setAddresses(await addressHandler.fetchAddresses(zip?.substring(0, 4)));
+      })();
+   }, [formHandler.values.zip]);
+
+   console.log(formHandler.values);
+
+   const businessData: FormCardData[] = Object.keys(formValues).map((key) => ({
+      key,
+      label: StringUtil.capitalizeFirstLetter(key),
+      type: TextFieldUtil.mapKeyToType(key),
+      value: formHandler.values[key] as any,
+      buttonAction: () => setModalKey(key),
       buttonText: 'Edit',
-      buttonAction: () => {
-         setModalKey(key);
-      },
    }));
 
    return (
@@ -79,6 +92,8 @@ export const BusinessProfileView: React.FC = () => {
          <Row className={styles.row}>
             <TextFieldModal
                show={modalKey ? true : false}
+               isComboBox={modalKey === 'zip' || modalKey === 'address' ? true : false}
+               comboBoxOptions={modalKey === 'zip' ? zips : addresses}
                showModal={setModalKey}
                textFieldKey={modalKey}
                textFieldType={TextFieldUtil.mapKeyToType(modalKey)}
@@ -87,34 +102,12 @@ export const BusinessProfileView: React.FC = () => {
                   setModalKey('');
                }}
                formHandler={formHandler}
-               selectOptions={businessTypeOptions}
+               initialValue={business[modalKey] as string}
                primaryActionText="Save Changes"
-               secondaryAction={() => setModalKey('')}
+               selectOptions={businessTypeOptions}
             />
-
-            <Col sm={12} md={6} lg={6} className={styles.col}>
-               <ExtendedCard
-                  title="General"
-                  data={businessData.filter(
-                     (x) =>
-                        x.text === 'Name' ||
-                        x.text === 'Zip' ||
-                        x.text === 'Address' ||
-                        x.text === 'Type'
-                  )}
-               />
-            </Col>
-            <Col sm={12} md={6} lg={6} className={styles.col}>
-               <ExtendedCard
-                  title="Customer"
-                  data={businessData.filter(
-                     (x) =>
-                        x.text === 'Capacity' ||
-                        x.text === 'Visit Length' ||
-                        x.text === 'Opens' ||
-                        x.text === 'Closes'
-                  )}
-               />
+            <Col sm={12} md={6} lg={12} className={styles.col}>
+               <FormCard title="Business Data" data={businessData} />
             </Col>
          </Row>
       </>

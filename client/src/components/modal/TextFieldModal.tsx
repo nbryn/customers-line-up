@@ -16,10 +16,10 @@ type Props = {
    textFieldKey: string;
    formHandler: FormHandler<any>;
    textFieldType: TextFieldType;
+   initialValue: string | undefined;
    primaryActionText?: string;
    selectOptions?: string[];
    primaryAction?: () => Promise<void>;
-   secondaryAction: () => void;
    showModal: (value: string) => void;
 };
 
@@ -28,9 +28,9 @@ export const TextFieldModal: React.FC<Props> = ({
    isComboBox = false,
    comboBoxOptions,
    textFieldKey,
+   initialValue,
    primaryAction,
    primaryActionText,
-   secondaryAction,
    textFieldType,
    formHandler,
    selectOptions,
@@ -40,7 +40,13 @@ export const TextFieldModal: React.FC<Props> = ({
 
    return (
       <>
-         <BsModal show={show} onHide={() => showModal('')}>
+         <BsModal
+            show={show}
+            onHide={() => {
+               formHandler.setFieldValue(textFieldKey, initialValue);
+               showModal('');
+            }}
+         >
             <BsModal.Dialog>
                <BsModal.Header>
                   <BsModal.Title>{`Edit ${TextFieldUtil.mapKeyToLabel(
@@ -50,47 +56,72 @@ export const TextFieldModal: React.FC<Props> = ({
 
                <BsModal.Body>
                   {updating && <CircularProgress />}
-                  {isComboBox ? <ComboBox
-                     id={textFieldKey}
-                     style={{width: '100%', marginLeft: 0}}
-                     label={TextFieldUtil.mapKeyToLabel(textFieldKey)}
-                     type="text"
-                     options={comboBoxOptions || []}
-                     onBlur={formHandler.handleBlur}
-                     setFieldValue={(option: ComboBoxOption, formFieldId) =>
-                        formHandler.setFieldValue(formFieldId, option.label)
-                     }
-                     error={formHandler.touched[textFieldKey] && Boolean(formHandler.errors[textFieldKey])}
-                     helperText={formHandler.touched[textFieldKey] && formHandler.errors[textFieldKey] as any}
-                     defaultLabel={textFieldKey === 'address' ? 'Address - After Zip' : ''}
-                  /> : (
-                  <TextField
-                     id={textFieldKey}
-                     label={TextFieldUtil.mapKeyToLabel(textFieldKey)}
-                     type={textFieldType}
-                     value={formHandler.values[textFieldKey] || ''}
-                     onChange={formHandler.handleChange(textFieldKey)}
-                     onBlur={formHandler.handleBlur}
-                     error={formHandler.touched[textFieldKey] && Boolean(formHandler.errors[textFieldKey])}
-                     helperText={formHandler.touched[textFieldKey] && formHandler.errors[textFieldKey] as any}
-                     select={textFieldKey === 'type' ? true : false}
-                     inputProps={{
-                        step: 1800,
-                     }}
-                  >
-                     {selectOptions &&
-                        selectOptions.map((x, index) => (
-                           <MenuItem key={index} value={x}>
-                              {x}
-                           </MenuItem>
-                        ))}
-                 
-                  </TextField>
+                  {isComboBox ? (
+                     <ComboBox
+                        id={textFieldKey}
+                        style={{width: '100%', marginLeft: 0}}
+                        label={TextFieldUtil.mapKeyToLabel(textFieldKey)}
+                        type="text"
+                        options={comboBoxOptions || []}
+                        onBlur={formHandler.handleBlur}
+                        setFieldValue={(option: ComboBoxOption, formFieldId) =>
+                           formHandler.setFieldValue(formFieldId, option.label)
+                        }
+                        error={
+                           formHandler.touched[textFieldKey] &&
+                           Boolean(formHandler.errors[textFieldKey])
+                        }
+                        helperText={
+                           formHandler.touched[textFieldKey] &&
+                           (formHandler.errors[textFieldKey] as any)
+                        }
+                        defaultLabel={textFieldKey === 'address' ? 'Address - After Zip' : ''}
+                     />
+                  ) : (
+                     <TextField
+                        id={textFieldKey}
+                        label={TextFieldUtil.mapKeyToLabel(textFieldKey)}
+                        type={textFieldType}
+                        value={formHandler.values[textFieldKey] || ''}
+                        onChange={formHandler.handleChange(textFieldKey)}
+                        onBlur={formHandler.handleBlur}
+                        error={
+                           formHandler.touched[textFieldKey] &&
+                           Boolean(formHandler.errors[textFieldKey])
+                        }
+                        helperText={
+                           formHandler.touched[textFieldKey] &&
+                           (formHandler.errors[textFieldKey] as any)
+                        }
+                        select={textFieldKey === 'type' ? true : false}
+                        inputLabelProps={{
+                           shrink:
+                              textFieldKey === 'opens' || textFieldKey === 'closes'
+                                 ? true
+                                 : undefined,
+                        }}
+                        inputProps={{
+                           step: 1800,
+                        }}
+                     >
+                        {selectOptions &&
+                           selectOptions.map((x, index) => (
+                              <MenuItem key={index} value={x}>
+                                 {x}
+                              </MenuItem>
+                           ))}
+                     </TextField>
                   )}
                </BsModal.Body>
 
                <BsModal.Footer>
-                  <Button variant="secondary" onClick={secondaryAction}>
+                  <Button
+                     variant="secondary"
+                     onClick={() => {
+                        formHandler.setFieldValue(textFieldKey, initialValue);
+                        showModal('');
+                     }}
+                  >
                      Close
                   </Button>
                   {primaryAction && (
