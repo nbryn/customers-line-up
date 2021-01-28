@@ -34,12 +34,11 @@ export const BusinessBookingView: React.FC = () => {
 
    const columns: TableColumn[] = [
       {title: 'id', field: 'id', hidden: true},
-      {title: 'timeSlotId', field: 'timeSlotId', hidden: true}, 
-      {title: 'UserMail', field: 'userMail'},
-      {title: 'Interval', field: 'interval'}, 
-      {title: 'Date', field: 'date'},   
+      {title: 'timeSlotId', field: 'timeSlotId', hidden: true},
+      {title: 'User', field: 'userMail'},
+      {title: 'Interval', field: 'interval'},
+      {title: 'Date', field: 'date'},
       {title: 'Capacity', field: 'capacity'},
-      
    ];
 
    const actions = [
@@ -54,7 +53,7 @@ export const BusinessBookingView: React.FC = () => {
          onClick: async (event: React.ChangeEvent, rowData: BookingDTO) => {
             const url = URL.getDeleteBookingForBusinessURL(rowData.timeSlotId, rowData.userMail);
 
-            await requestHandler.mutation(url, "DELETE");
+            await requestHandler.mutation(url, 'DELETE');
 
             setRemoveBooking(rowData.id);
          },

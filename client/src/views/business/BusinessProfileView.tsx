@@ -10,7 +10,6 @@ import {ComboBoxOption} from '../../components/form/ComboBox';
 import {FormCard, FormCardData} from '../../components/card/FormCard';
 import {Header} from '../../components/Texts';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
-import StringUtil from '../../util/StringUtil';
 import TextFieldUtil from '../../util/TextFieldUtil';
 import {TextFieldModal} from '../../components/modal/TextFieldModal';
 import URL, {BUSINESS_TYPES_URL} from '../../api/URL';
@@ -69,17 +68,20 @@ export const BusinessProfileView: React.FC = () => {
    useEffect(() => {
       (async () => {
          const {zip} = formHandler.values;
-         setAddresses(await addressHandler.fetchAddresses(zip?.substring(0, 4)));
+         const addresses = await addressHandler.fetchAddresses(zip?.substring(0, 4));
+
+         setAddresses(addresses);
       })();
    }, [formHandler.values.zip]);
 
-   console.log(formHandler.values);
-
    const businessData: FormCardData[] = Object.keys(formValues).map((key) => ({
       key,
-      label: StringUtil.capitalizeFirstLetter(key),
-      type: TextFieldUtil.mapKeyToType(key),
-      value: formHandler.values[key] as any,
+      label: TextFieldUtil.mapKeyToLabel(key),
+      type: 'text',
+      value:
+         key === 'timeSlotLength'
+            ? `${formHandler.values[key]} minutes`
+            : (formHandler.values[key] as any),
       buttonAction: () => setModalKey(key),
       buttonText: 'Edit',
    }));

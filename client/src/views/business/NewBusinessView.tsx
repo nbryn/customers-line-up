@@ -96,7 +96,7 @@ export const NewBusinessView: React.FC = () => {
 
    return (
       <>
-      <Row className={styles.wrapper}>
+         <Row className={styles.wrapper}>
             <Header text="New Business" />
          </Row>
          <Row className={styles.wrapper}>
@@ -145,7 +145,9 @@ export const NewBusinessView: React.FC = () => {
                                              helperText={
                                                 formHandler.touched[key] && formHandler.errors[key]
                                              }
-                                             defaultLabel={key === 'address' ? 'Address - After Zip' : ''}
+                                             defaultLabel={
+                                                key === 'address' ? 'Address - After Zip' : ''
+                                             }
                                           />
                                        </FormGroup>
                                     );
@@ -160,6 +162,7 @@ export const NewBusinessView: React.FC = () => {
                                           value={formHandler.values[key]}
                                           onChange={formHandler.handleChange(key)}
                                           onBlur={formHandler.handleBlur}
+                                          select={key === 'type' ? true : false}
                                           error={
                                              formHandler.touched[key] &&
                                              Boolean(formHandler.errors[key])
@@ -167,7 +170,14 @@ export const NewBusinessView: React.FC = () => {
                                           helperText={
                                              formHandler.touched[key] && formHandler.errors[key]
                                           }
-                                       />
+                                       >
+                                          {key === 'type' &&
+                                             businessTypes.map((type) => (
+                                                <MenuItem key={type} value={type}>
+                                                   {type}
+                                                </MenuItem>
+                                             ))}
+                                       </TextField>
                                     </FormGroup>
                                  );
                               })}
@@ -185,7 +195,6 @@ export const NewBusinessView: React.FC = () => {
                                        value={formHandler.values[key]}
                                        onChange={formHandler.handleChange}
                                        onBlur={formHandler.handleBlur}
-                                       select={key === 'type' ? true : false}
                                        error={
                                           formHandler.touched[key] &&
                                           Boolean(formHandler.errors[key])
@@ -193,18 +202,13 @@ export const NewBusinessView: React.FC = () => {
                                        helperText={
                                           formHandler.touched[key] && formHandler.errors[key]
                                        }
-                                       inputLabelProps={{shrink: true}}
+                                       inputLabelProps={{
+                                          shrink: TextFieldUtil.shouldInputLabelShrink(key),
+                                       }}
                                        inputProps={{
                                           step: 1800,
                                        }}
-                                    >
-                                       {key === 'type' &&
-                                          businessTypes.map((type) => (
-                                             <MenuItem key={type} value={type}>
-                                                {type}
-                                             </MenuItem>
-                                          ))}
-                                    </TextField>
+                                    />
                                  </FormGroup>
                               ))}
                         </Col>

@@ -56,7 +56,7 @@ namespace Logic.Businesses
         }
 
         [HttpPut]
-        [Route("/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] NewBusinessDTO dto)
         {
             Response response = await _repository.UpdateBusiness(id, dto);

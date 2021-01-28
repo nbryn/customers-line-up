@@ -7,6 +7,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 
 import {TextField, TextFieldType} from '../form/TextField';
+import TextFieldUtil from '../../util/TextFieldUtil';
 
 const useStyles = makeStyles({
    root: {
@@ -68,7 +69,7 @@ export const TextFieldCardRow: React.FC<Props> = ({
                   type={type}
                   value={value}
                   inputLabelProps={{
-                     shrink: label === 'Opens' || label === 'Closes' ? true : undefined,
+                     shrink: TextFieldUtil.shouldInputLabelShrink(key),
                   }}
                />
             </Col>

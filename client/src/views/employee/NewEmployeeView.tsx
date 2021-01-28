@@ -23,10 +23,6 @@ const useStyles = makeStyles((theme) => ({
       height: 600,
       textAlign: 'center',
    },
-   comboBox: {
-      marginTop: 10,
-      marginLeft: 110,
-   },
    formGroup: {
       marginBottom: 30,
    },
@@ -108,12 +104,12 @@ export const NewEmployeeView: React.FC = () => {
                <Card
                   className={styles.card}
                   title="New Employee"
-                  subTitle="Choose an existing user you want add as an employee"
+                  subTitle="Choose an existing user you want to add as an employee"
                   variant="outlined"
                >
                   {showComboBox && (
                      <ComboBox
-                        style={styles.comboBox}
+                        style={{marginTop: 10, marginLeft: 110, width: '60%'}}
                         label="Email"
                         id="email"
                         type="text"

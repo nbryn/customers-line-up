@@ -37,7 +37,6 @@ export const AllBusinessesView: React.FC = () => {
          icon: () => <Chip size="small" label="Go to business" clickable color="primary" />,
          tooltip: 'See available time slots',
          onClick: (event: any, business: BusinessDTO) => {
-            console.log(business);
             history.push('/booking/new', {business});
          },
       },
@@ -49,7 +48,7 @@ export const AllBusinessesView: React.FC = () => {
             <Header text="Available Businesses" />
          </Row>
          <Row className={styles.row}>
-            <Col sm={6} md={8} lg={6} xl={10}>
+            <Col sm={6} md={8} xl={12}>
                <TableContainer
                   actions={actions}
                   columns={columns}
