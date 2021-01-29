@@ -30,6 +30,7 @@ namespace Data
                 Closes = business.Closes,
                 TimeSlotLength = business.timeSlotLength,
                 Zip = business.Zip,
+                Address = business.Address,
                 Type = type,
             };
 

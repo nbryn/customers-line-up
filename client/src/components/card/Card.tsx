@@ -18,13 +18,13 @@ const useStyles = makeStyles({
    },
    header: {
       textAlign: 'center',
-      marginBottom: 15
+      marginBottom: 15,
    },
 });
 
 type Props = {
    title?: string;
-   subTitle?: string;
+   subtitle?: string;
    buttonAction?: () => void;
    buttonColor?: 'inherit' | 'default' | 'primary' | 'secondary';
    buttonText?: string;
@@ -32,7 +32,7 @@ type Props = {
    variant?: 'outlined' | 'elevation';
    className?: any;
    buttonStyle?: any;
-   children: React.ReactNode;
+   children?: React.ReactNode;
 };
 
 export const Card: React.FC<Props> = ({
@@ -43,15 +43,15 @@ export const Card: React.FC<Props> = ({
    buttonText,
    buttonSize,
    title,
-   subTitle,
+   subtitle,
    variant,
-   buttonStyle
+   buttonStyle,
 }: Props) => {
    const styles = useStyles();
 
    return (
       <MUICard className={className} variant={variant}>
-         <CardHeader className={styles.header} title={title} subheader={subTitle} />
+         <CardHeader className={styles.header} title={title} subheader={subtitle} />
          <CardContent className={styles.content}>{children}</CardContent>
          <CardActions className={styles.button}>
             {buttonText && (

@@ -40,34 +40,39 @@ namespace Logic.TimeSlots
             return response;
         }
 
-        public async Task<IEnumerable<TimeSlotDTO>> GenerateTimeSlots(CreateTimeSlotRequest request)
+        public async Task<Response> GenerateTimeSlots(CreateTimeSlotRequest request)
         {
-            ICollection<TimeSlotDTO> TimeSlots = new List<TimeSlotDTO>();
-
             Business business = await _businessRepository.FindBusinessById(request.BusinessId);
 
-            DateTime start = request.Start.AddHours(Double.Parse(business.Opens));
+            if (business == null)
+            {
+                return Response.NotFound;
+            }
 
-            DateTime closingTime = request.Start.AddHours(Double.Parse(business.Closes));
+            DateTime opens = request.Start.AddHours(Double.Parse(business.Opens));
 
-            for (DateTime date = start; date.Date <= request.End.Date; date = date.AddHours(request.TimeInterval))
+            DateTime closes = request.Start.AddHours(Double.Parse(business.Closes));
+
+            //DateTime closingTime = request.Start.AddHours(Double.Parse(business.Closes));
+
+            for (DateTime date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(business.TimeSlotLength))
             {
                 // Only add TimeSlots when shop is open
-                if (date.Equals(closingTime))
+        /*         if (date.Equals(closingTime))
                 {
                     closingTime = closingTime.AddHours(24);
 
                     date = date.AddHours((23 - date.Hour) + Double.Parse(business.Opens));
 
                     continue;
-                }
+                } */
 
                 TimeSlot timeSlot = new TimeSlot
                 {
                     BusinessId = business.Id,
                     BusinessName = business.Name,
                     Start = date,
-                    End = date.AddHours(request.TimeInterval),
+                    End = date.AddMinutes(business.TimeSlotLength),
                     Capacity = business.Capacity,
                 };
 
@@ -75,12 +80,9 @@ namespace Logic.TimeSlots
 
                 timeSlot.Id = response.Item1;
 
-                TimeSlotDTO dto = _dtoMapper.ConvertTimeSlotToDTO(timeSlot);
-
-                TimeSlots.Add(dto);
             }
 
-            return TimeSlots;
+            return Response.Created;
         }
         public async Task<ICollection<TimeSlotDTO>> GetAllTimeSlotsForBusiness(int businessId)
         {

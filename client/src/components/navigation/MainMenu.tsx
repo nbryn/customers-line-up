@@ -199,7 +199,17 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
             >
                {drawer}
                <List>
-                  <ListItem className={styles.listItem} button onClick={logout}>
+                  <ListItem
+                     className={styles.listItem}
+                     button
+                     onClick={() => {
+                        window.location.href = window.location.href.substring(
+                           0,
+                           window.location.href.indexOf('/') + 1
+                        );
+                        logout();
+                     }}
+                  >
                      <ListItemIcon className={styles.listItemIcon}>
                         <PeopleIcon />
                      </ListItemIcon>

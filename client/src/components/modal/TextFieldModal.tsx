@@ -64,7 +64,7 @@ export const TextFieldModal: React.FC<Props> = ({
                         type="text"
                         options={comboBoxOptions || []}
                         onBlur={formHandler.handleBlur}
-                        setFieldValue={(option: ComboBoxOption, formFieldId) =>
+                        setFieldValue={(option: ComboBoxOption, formFieldId: string) =>
                            formHandler.setFieldValue(formFieldId, option.label)
                         }
                         error={

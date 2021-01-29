@@ -34,9 +34,9 @@ namespace Logic.TimeSlots
         [Route("")]
         public async Task<IActionResult> NewTimeSlot([FromBody] CreateTimeSlotRequest dto)
         {
-            IEnumerable<TimeSlotDTO> timeSlots = await _service.GenerateTimeSlots(dto);
+            Response response = await _service.GenerateTimeSlots(dto);
 
-            return Ok(timeSlots);
+            return new StatusCodeResult((int)response);
         }
 
         [HttpDelete]

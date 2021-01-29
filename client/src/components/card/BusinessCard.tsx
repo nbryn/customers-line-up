@@ -49,7 +49,7 @@ export const BusinessCard: React.FC<Props> = ({
          buttonText={secondaryButtonText}
          buttonSize="small"
          title={business.name}
-         subTitle={business.type}
+         subtitle={business.type}
          variant="outlined"
          buttonStyle={styles.secondaryButton}
       >

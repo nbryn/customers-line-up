@@ -71,7 +71,7 @@ export const NewEmployeeView: React.FC = () => {
    useEffect(() => {
       (async () => {
          const users = await requestHandler.query(
-            URL.getAllUsersNotAlreadyEmployedURL(business.id)
+            URL.getAllUsersNotAlreadyEmployedByBusinessURL(business.id)
          );
 
          setUsers(
@@ -90,97 +90,94 @@ export const NewEmployeeView: React.FC = () => {
    }, [selectedUser]);
 
    return (
-      <>
-         <Row className={styles.wrapper}>
-            <Col sm={6} lg={6}>
-               <Modal
-                  show={requestHandler.requestInfo ? true : false}
-                  title="Employee Info"
-                  text={requestHandler.requestInfo}
-                  primaryAction={() => history.push('/business/employees/manage')}
-                  primaryActionText="My Employees"
-                  secondaryAction={() => requestHandler.setRequestInfo('')}
-               />
-               <Card
-                  className={styles.card}
-                  title="New Employee"
-                  subTitle="Choose an existing user you want to add as an employee"
-                  variant="outlined"
-               >
-                  {showComboBox && (
-                     <ComboBox
-                        style={{marginTop: 10, marginLeft: 110, width: '60%'}}
-                        label="Email"
-                        id="email"
-                        type="text"
-                        options={users}
-                        setFieldValue={(option: ComboBoxOption) => setSelectedUser(option)}
-                        partOfForm={false}
-                     />
-                  )}
-                  {!showComboBox && (
-                     <>
-                        <Form
-                           style={{marginTop: 20}}
-                           onSubmit={(e: React.FormEvent) => {
-                              e.preventDefault();
-                              form.setRequest({
-                                 businessId: business.id,
-                                 privateEmail: selectedUser?.label,
-                                 companyEmail: formHandler.values.companyEmail,
-                              });
+      <Row className={styles.wrapper}>
+         <Col sm={6} lg={6}>
+            <Modal
+               show={requestHandler.requestInfo ? true : false}
+               title="Employee Info"
+               text={requestHandler.requestInfo}
+               primaryAction={() => history.push('/business/employees/manage')}
+               primaryActionText="My Employees"
+               secondaryAction={() => requestHandler.setRequestInfo('')}
+            />
+            <Card
+               className={styles.card}
+               title="New Employee"
+               subtitle="Choose an existing user you want to add as an employee"
+               variant="outlined"
+            >
+               {showComboBox && (
+                  <ComboBox
+                     style={{marginTop: 10, marginLeft: 110, width: '60%'}}
+                     label="Email"
+                     id="email"
+                     type="text"
+                     options={users}
+                     setFieldValue={(option: ComboBoxOption) => setSelectedUser(option)}
+                     partOfForm={false}
+                  />
+               )}
+               {!showComboBox && (
+                  <>
+                     <Form
+                        style={{marginTop: 20}}
+                        onSubmit={(e: React.FormEvent) => {
+                           e.preventDefault();
+                           form.setRequest({
+                              businessId: business.id,
+                              privateEmail: selectedUser?.label,
+                              companyEmail: formHandler.values.companyEmail,
+                           });
 
-                              formHandler.handleSubmit();
-                           }}
-                           buttonText="Create"
-                           working={requestHandler.working}
-                           valid={formHandler.isValid}
-                        >
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="name"
-                                 label="Name"
-                                 type="text"
-                                 value={selectedUser.value}
-                                 disabled={true}
-                              />
-                           </FormGroup>
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="privateEmail"
-                                 label="Private Email"
-                                 type="email"
-                                 value={selectedUser.label}
-                                 disabled={true}
-                              />
-                           </FormGroup>
-                           <FormGroup className={styles.formGroup}>
-                              <TextField
-                                 className={styles.textField}
-                                 id="companyEmail"
-                                 label="Company Email"
-                                 type="email"
-                                 value={formHandler.values.companyEmail}
-                                 onChange={formHandler.handleChange}
-                                 onBlur={formHandler.handleBlur}
-                                 error={
-                                    formHandler.touched.companyEmail &&
-                                    Boolean(formHandler.errors.companyEmail)
-                                 }
-                                 helperText={
-                                    formHandler.touched.companyEmail &&
-                                    formHandler.errors.companyEmail
-                                 }
-                              />
-                           </FormGroup>
-                        </Form>
-                     </>
-                  )}
-               </Card>
-            </Col>
-         </Row>
-      </>
+                           formHandler.handleSubmit();
+                        }}
+                        buttonText="Create"
+                        working={requestHandler.working}
+                        valid={formHandler.isValid}
+                     >
+                        <FormGroup className={styles.formGroup}>
+                           <TextField
+                              className={styles.textField}
+                              id="name"
+                              label="Name"
+                              type="text"
+                              value={selectedUser.value}
+                              disabled={true}
+                           />
+                        </FormGroup>
+                        <FormGroup className={styles.formGroup}>
+                           <TextField
+                              className={styles.textField}
+                              id="privateEmail"
+                              label="Private Email"
+                              type="email"
+                              value={selectedUser.label}
+                              disabled={true}
+                           />
+                        </FormGroup>
+                        <FormGroup className={styles.formGroup}>
+                           <TextField
+                              className={styles.textField}
+                              id="companyEmail"
+                              label="Company Email"
+                              type="email"
+                              value={formHandler.values.companyEmail}
+                              onChange={formHandler.handleChange}
+                              onBlur={formHandler.handleBlur}
+                              error={
+                                 formHandler.touched.companyEmail &&
+                                 Boolean(formHandler.errors.companyEmail)
+                              }
+                              helperText={
+                                 formHandler.touched.companyEmail && formHandler.errors.companyEmail
+                              }
+                           />
+                        </FormGroup>
+                     </Form>
+                  </>
+               )}
+            </Card>
+         </Col>
+      </Row>
    );
 };

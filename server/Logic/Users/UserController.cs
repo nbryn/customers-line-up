@@ -61,7 +61,7 @@ namespace Logic.Users
         [Authorize(Policy = Policies.User)]
         [Route("")]
         [HttpGet]
-        public async Task<UserDTO> FetchUserInfo()
+        public async Task<IActionResult> FetchUserInfo()
         {
             string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             
@@ -71,9 +71,9 @@ namespace Logic.Users
 
             UserDTO dto = _dtoMapper.ConvertUserToDTO(user);
 
-            dto.Role = nameof(role);
+            dto.Role = role.ToString();
 
-            return dto;
+            return Ok(dto);
         }
 
         [Authorize(Policy = Policies.User)]

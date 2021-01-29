@@ -8,7 +8,7 @@ namespace Logic.TimeSlots
 {
     public interface ITimeSlotService
     {
-        Task<IEnumerable<TimeSlotDTO>> GenerateTimeSlots(CreateTimeSlotRequest request);
+        Task<Response> GenerateTimeSlots(CreateTimeSlotRequest request);
 
         Task<Response> RemoveTimeSlot(string userEmail, int timeSlotId);
     }
