@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using Microsoft.EntityFrameworkCore;
 
 using Logic.TimeSlots;
@@ -44,8 +45,8 @@ namespace Data
         public async Task<TimeSlot> FindTimeSlotById(int timeSlotId)
         {
             TimeSlot timeSlot = await _context.TimeSlots.Include(x => x.Bookings)
-                                                               .Include(x => x.Business)
-                                                               .FirstOrDefaultAsync(x => x.Id == timeSlotId);
+                                                        .Include(x => x.Business)
+                                                        .FirstOrDefaultAsync(x => x.Id == timeSlotId);
 
             return timeSlot;
         }
@@ -53,19 +54,28 @@ namespace Data
         public async Task<IList<TimeSlot>> FindTimeSlotsByBusiness(int businessId)
         {
             IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
-                                                                       .Include(x => x.Business)
-                                                                       .Where(x => x.BusinessId == businessId)
-                                                                       .ToListAsync();
+                                                                .Include(x => x.Business)
+                                                                .Where(x => x.BusinessId == businessId)
+                                                                .ToListAsync();
             return timeSlots;
+        }
+
+        public async Task<IList<TimeSlot>> FindTimeSlotByBusinessAndDate(int businessId, DateTime date)
+        {
+            IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
+                                                                .Include(x => x.Business)
+                                                                .Where(x => x.BusinessId == businessId && x.Start.Date == date.Date)
+                                                                .ToListAsync();
+            return timeSlots;                                                
         }
 
         public async Task<IList<TimeSlot>> FindAvailableTimeSlotsByBusiness(AvailableTimeSlotsRequest request)
         {
             IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
-                                                                        .Include(x => x.Business)
-                                                                        .Where(x => x.BusinessId == request.BusinessId &&
+                                                                .Include(x => x.Business)
+                                                                .Where(x => x.BusinessId == request.BusinessId &&
                                                                                (x.Start > request.Start && x.End < request.End))
-                                                                        .ToListAsync();
+                                                                .ToListAsync();
 
             return timeSlots;
         }

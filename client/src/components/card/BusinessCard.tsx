@@ -15,11 +15,11 @@ const useStyles = makeStyles({
       marginBottom: 15,
    },
    primaryButton: {
-      width: '50%',
+      width: '54%',
       marginTop: 25,
    },
    secondaryButton: {
-      width: '50%',
+      width: '54%',
       marginBottom: 15,
    },
 });

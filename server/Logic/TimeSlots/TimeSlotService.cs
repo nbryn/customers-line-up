@@ -49,11 +49,16 @@ namespace Logic.TimeSlots
                 return Response.NotFound;
             }
 
+            IList<TimeSlot> existingTimeSlots = await _timeSlotRepository.FindTimeSlotByBusinessAndDate(request.BusinessId, request.Start);
+
+            if (existingTimeSlots.Count() > 0)
+            {
+               return Response.Conflict;
+            }
+
             DateTime opens = request.Start.AddHours(Double.Parse(business.Opens));
 
             DateTime closes = request.Start.AddHours(Double.Parse(business.Closes));
-
-            //DateTime closingTime = request.Start.AddHours(Double.Parse(business.Closes));
 
             for (DateTime date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(business.TimeSlotLength))
             {

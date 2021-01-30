@@ -49,7 +49,7 @@ function getSecondaryPath(path: string): string {
 }
 
 function getSecondaryButtonText(path: string): string {
-   if (path === 'timeslots') return 'New Time Slot';
+   if (path === 'timeslots') return 'Generate Time Slots';
    if (path === 'employees') return 'New Employee';
 
    return '';

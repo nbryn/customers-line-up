@@ -36,6 +36,11 @@ namespace Logic.TimeSlots
         {
             Response response = await _service.GenerateTimeSlots(dto);
 
+            if (response == Context.Response.Conflict)
+            {
+                return Conflict("Time slots already exists on this day.");
+            }
+
             return new StatusCodeResult((int)response);
         }
 

@@ -4,7 +4,7 @@ import React from 'react';
 
 type Props = {
    show: boolean;
-   title: string;
+   title?: string;
    text: string;
    primaryAction?: () => void;
    primaryActionText?: string;
@@ -23,7 +23,7 @@ export const Modal: React.FC<Props> = ({
       <>
          <BsModal show={show}>
             <BsModal.Dialog>
-               <BsModal.Header >
+               <BsModal.Header>
                   <BsModal.Title>{title}</BsModal.Title>
                </BsModal.Header>
 

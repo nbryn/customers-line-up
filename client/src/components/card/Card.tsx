@@ -29,6 +29,7 @@ type Props = {
    buttonColor?: 'inherit' | 'default' | 'primary' | 'secondary';
    buttonText?: string;
    buttonSize?: 'small' | 'medium' | 'large';
+   disableButton?: boolean;
    variant?: 'outlined' | 'elevation';
    className?: any;
    buttonStyle?: any;
@@ -42,6 +43,7 @@ export const Card: React.FC<Props> = ({
    buttonColor,
    buttonText,
    buttonSize,
+   disableButton = false,
    title,
    subtitle,
    variant,
@@ -61,6 +63,7 @@ export const Card: React.FC<Props> = ({
                   color={buttonColor}
                   onClick={buttonAction}
                   size={buttonSize}
+                  disabled={disableButton}
                >
                   {buttonText}
                </Button>
