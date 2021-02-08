@@ -1,7 +1,7 @@
+import React, {ReactElement} from 'react';
 import {Badge} from 'react-bootstrap';
 import MaterialTable from 'material-table';
 import IRowData from 'material-table/types';
-import React from 'react';
 
 export type TableColumn = {
    title: string;
@@ -21,7 +21,7 @@ type Props = {
    actions: any;
    columns: TableColumn[];
    data: any;
-   title: string;
+   title: string | ReactElement;
    emptyMessage?: string;
 };
 

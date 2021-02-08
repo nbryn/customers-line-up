@@ -1,11 +1,13 @@
+import React, {useState} from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React from 'react';
+import Tippy from '@tippyjs/react';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import {BusinessDTO, TimeSlotDTO} from '../../models/Business';
 import {Header} from '../../components/Texts';
+import {MapModal} from '../../components/modal/MapModal';
 import {Modal} from '../../components/modal/Modal';
 import {RequestHandler, useRequest} from '../../hooks/useRequest';
 import {TableColumn} from '../../components/Table';
@@ -28,6 +30,8 @@ export const NewBookingView: React.FC = () => {
    const styles = useStyles();
    const history = useHistory();
    const location = useLocation<LocationState>();
+
+   const [showMapModal, setShowMapModal] = useState<boolean>(false);
 
    const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest(SUCCESS_MESSAGE);
 
@@ -52,6 +56,7 @@ export const NewBookingView: React.FC = () => {
          <Row className={styles.row}>
             <Header text={`Available Time Slots For ${business.name}`} />
          </Row>
+         <MapModal visible={showMapModal} setVisible={setShowMapModal} />
          <Row className={styles.row}>
             <Col sm={6} md={8} lg={6} xl={10}>
                <TableContainer
@@ -65,7 +70,13 @@ export const NewBookingView: React.FC = () => {
                         interval: x.start + ' - ' + x.end,
                      }));
                   }}
-                  tableTitle={`Time Slots - ${business.address}`}
+                  tableTitle={
+                     <Tippy>
+                        <a onClick={() => setShowMapModal(true)}>
+                           <i>{`${business.address} - show on map`}</i>
+                        </a>
+                     </Tippy>
+                  }
                   emptyMessage="No Time Slots Available"
                />
 

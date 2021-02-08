@@ -1,14 +1,16 @@
 import BsModal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import React from 'react';
+import React, {ReactNode} from 'react';
 
 type Props = {
    show: boolean;
    title?: string;
-   text: string;
+   text?: string;
+   primaryDisabled?: boolean;
    primaryAction?: () => void;
    primaryActionText?: string;
-   secondaryAction: () => void;
+   secondaryAction?: () => void;
+   children?: ReactNode;
 };
 
 export const Modal: React.FC<Props> = ({
@@ -16,8 +18,10 @@ export const Modal: React.FC<Props> = ({
    title,
    text,
    primaryAction,
+   primaryDisabled = false,
    primaryActionText,
    secondaryAction,
+   children,
 }: Props) => {
    return (
       <>
@@ -29,6 +33,7 @@ export const Modal: React.FC<Props> = ({
 
                <BsModal.Body>
                   <p>{text}</p>
+                  {children}
                </BsModal.Body>
 
                <BsModal.Footer>
@@ -36,7 +41,7 @@ export const Modal: React.FC<Props> = ({
                      Close
                   </Button>
                   {primaryAction && (
-                     <Button variant="primary" onClick={primaryAction}>
+                     <Button variant="primary" onClick={primaryAction} disabled={primaryDisabled}>
                         {primaryActionText}
                      </Button>
                   )}

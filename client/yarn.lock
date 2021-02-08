@@ -1504,7 +1504,7 @@
     "schema-utils" "^2.6.5"
     "source-map" "^0.7.3"
 
-"@popperjs/core@^2.5.3":
+"@popperjs/core@^2.4.4", "@popperjs/core@^2.5.3":
   "integrity" "sha512-ZpKr+WTb8zsajqgDkvCEWgp6d5eJT6Q63Ng2neTbzBO76Lbe91vX/iVIW9dikq+Fs3yEo+ls4cxeXABD2LtcbQ=="
   "resolved" "https://registry.npmjs.org/@popperjs/core/-/core-2.5.4.tgz"
   "version" "2.5.4"
@@ -1717,6 +1717,13 @@
   "version" "12.2.2"
   dependencies:
     "@babel/runtime" "^7.10.2"
+
+"@tippyjs/react@^4.2.0":
+  "integrity" "sha512-T6UcHtwtGkvgsBQ4bNp8BtXGxa2ujfOkWUogYkRtN4UVJ2QRgDdFoJeaPxdndnVYFEa2uTVxSFxs8QkSkZ2Gdw=="
+  "resolved" "https://registry.npmjs.org/@tippyjs/react/-/react-4.2.0.tgz"
+  "version" "4.2.0"
+  dependencies:
+    "tippy.js" "^6.2.0"
 
 "@types/anymatch@*":
   "integrity" "sha512-/+CRPXpBDpo2RK9C68N3b2cOvO0Cf5B9aPijHsoDQTHivnGSObdOF2BRQOYjojWTDy6nQvMjmqRXIxH55VjxxA=="
@@ -8734,6 +8741,11 @@
   "resolved" "https://registry.npmjs.org/pify/-/pify-4.0.1.tgz"
   "version" "4.0.1"
 
+"pigeon-maps@^0.17.0":
+  "integrity" "sha512-4VmHXpO9+pFNL3SwqMGg06CZZW+RV/8a4vSlVRIvV621e6ugsezqXlo+n2O5UiXweCgU8WPTN6WHErtLBslrtA=="
+  "resolved" "https://registry.npmjs.org/pigeon-maps/-/pigeon-maps-0.17.0.tgz"
+  "version" "0.17.0"
+
 "pinkie-promise@^2.0.0":
   "integrity" "sha1-ITXW36ejWMBprJsXh3YogihFD/o="
   "resolved" "https://registry.npmjs.org/pinkie-promise/-/pinkie-promise-2.0.1.tgz"
@@ -9842,7 +9854,7 @@
     "strip-ansi" "6.0.0"
     "text-table" "0.2.0"
 
-"react-dom@^17.0.1":
+"react-dom@^17.0.1", "react-dom@>=16.8":
   "integrity" "sha512-6eV150oJZ9U2t9svnsspTMrWNyHc6chX0KzDeAOXftRa8bNeOKTTfCJ7KorIwenkHd2xqVTBTCZd79yk/lx/Ug=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-17.0.1.tgz"
   "version" "17.0.1"
@@ -10041,7 +10053,7 @@
     "loose-envify" "^1.4.0"
     "prop-types" "^15.6.2"
 
-"react@^17.0.1":
+"react@*", "react@^17.0.1", "react@>=16.8":
   "integrity" "sha512-lG9c9UuMHdcAexXtigOZLX8exLWkW0Ku29qPRU8uhF2R9BN96dLCt0psvzPLlHc5OWkgymP3qwTRgbnw5BKx3w=="
   "resolved" "https://registry.npmjs.org/react/-/react-17.0.1.tgz"
   "version" "17.0.1"
@@ -11662,6 +11674,13 @@
   "integrity" "sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA=="
   "resolved" "https://registry.npmjs.org/tiny-warning/-/tiny-warning-1.0.3.tgz"
   "version" "1.0.3"
+
+"tippy.js@^6.2.0":
+  "integrity" "sha512-k+kWF9AJz5xLQHBi3K/XlmJiyu+p9gsCyc5qZhxxGaJWIW8SMjw1R+C7saUnP33IM8gUhDA2xX//ejRSwqR0tA=="
+  "resolved" "https://registry.npmjs.org/tippy.js/-/tippy.js-6.2.7.tgz"
+  "version" "6.2.7"
+  dependencies:
+    "@popperjs/core" "^2.4.4"
 
 "tmp@^0.0.33":
   "integrity" "sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw=="
