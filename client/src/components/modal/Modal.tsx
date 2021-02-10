@@ -25,7 +25,7 @@ export const Modal: React.FC<Props> = ({
 }: Props) => {
    return (
       <>
-         <BsModal show={show}>
+         <BsModal show={show} onHide={secondaryAction}>
             <BsModal.Dialog>
                <BsModal.Header>
                   <BsModal.Title>{title}</BsModal.Title>

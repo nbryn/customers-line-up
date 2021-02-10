@@ -19,204 +19,192 @@ import {BUSINESS_TYPES_URL, CREATE_BUSINESS_URL} from '../../api/URL';
 import {useForm} from '../../hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
-   card: {
-      marginTop: 20,
-      borderRadius: 15,
-      height: 600,
-      textAlign: 'center',
-   },
-   formGroup: {
-      marginBottom: 30,
-   },
-   helperText: {
-      color: 'red',
-   },
-   textField: {
-      width: '75%',
-   },
-   wrapper: {
-      justifyContent: 'center',
-   },
+  card: {
+    marginTop: 20,
+    borderRadius: 15,
+    height: 600,
+    textAlign: 'center',
+  },
+  formGroup: {
+    marginBottom: 30,
+  },
+  helperText: {
+    color: 'red',
+  },
+  textField: {
+    width: '75%',
+  },
+  wrapper: {
+    justifyContent: 'center',
+  },
 }));
 
 const SUCCESS_MESSAGE = 'Business Created - Go to my businesses to see your businesses';
 
 export const NewBusinessView: React.FC = () => {
-   const styles = useStyles();
-   const history = useHistory();
+  const styles = useStyles();
+  const history = useHistory();
 
-   const [businessTypes, setBusinessTypes] = useState<string[]>([]);
-   const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
-   const [zips, setZips] = useState<ComboBoxOption[]>([]);
+  const [businessTypes, setBusinessTypes] = useState<string[]>([]);
+  const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
+  const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
-   const requestHandler: RequestHandler<string[]> = useRequest(SUCCESS_MESSAGE);
+  const requestHandler: RequestHandler<string[]> = useRequest(SUCCESS_MESSAGE);
 
-   const formValues: BusinessDTO = {
-      id: 0,
-      name: '',
-      zip: '',
-      address: '',
-      type: '',
-      capacity: '',
-      timeSlotLength: '',
-      opens: '',
-      closes: '',
-   };
+  const formValues: BusinessDTO = {
+    id: 0,
+    name: '',
+    zip: '',
+    address: '',
+    type: '',
+    capacity: '',
+    timeSlotLength: '',
+    opens: '',
+    closes: '',
+  };
 
-   const {addressHandler, formHandler} = useForm<BusinessDTO>(
-      formValues,
-      businessValidationSchema,
-      CREATE_BUSINESS_URL,
-      'POST',
-      requestHandler.mutation,
-      (business) => {
-         business.opens = business.opens.replace(':', '.');
-         business.closes = business.closes.replace(':', '.');
+  const {addressHandler, formHandler} = useForm<BusinessDTO>(
+    formValues,
+    businessValidationSchema,
+    CREATE_BUSINESS_URL,
+    'POST',
+    requestHandler.mutation,
+    (business) => {
+      const address = addresses.find((x) => x.label === business.address);
 
-         return business;
-      }
-   );
+      business.longitude = address?.longitude;
+      business.latitude = address?.latitude;
 
-   useEffect(() => {
-      (async () => {
-         const types = await requestHandler.query(BUSINESS_TYPES_URL);
+      business.opens = business.opens.replace(':', '.');
+      business.closes = business.closes.replace(':', '.');
 
-         setBusinessTypes(types);
+      return business;
+    }
+  );
 
-         setZips(await addressHandler.fetchZips());
-      })();
-   }, []);
+  useEffect(() => {
+    (async () => {
+      const types = await requestHandler.query(BUSINESS_TYPES_URL);
 
-   useEffect(() => {
-      (async () => {
-         const {zip} = formHandler.values;
-         setAddresses(await addressHandler.fetchAddresses(zip?.substring(0, 4)));
-      })();
-   }, [formHandler.values.zip]);
+      setBusinessTypes(types);
 
-   return (
-      <>
-         <Row className={styles.wrapper}>
-            <Header text="New Business" />
-         </Row>
-         <Row className={styles.wrapper}>
-            <Col sm={6} lg={8}>
-               <Modal
-                  show={requestHandler.requestInfo ? true : false}
-                  title="Business Info"
-                  text={requestHandler.requestInfo}
-                  primaryAction={() => history.push('/business')}
-                  primaryActionText="My Businesses"
-                  secondaryAction={() => requestHandler.setRequestInfo('')}
-               />
-               <Card className={styles.card} title="Business Data" variant="outlined">
-                  <Form
-                     onSubmit={formHandler.handleSubmit}
-                     buttonText="Create"
-                     working={requestHandler.working}
-                     valid={formHandler.isValid}
-                  >
-                     <Row>
-                        <Col sm={6} lg={6}>
-                           {Object.keys(formValues)
-                              .slice(1, 5)
-                              .map((key) => {
-                                 if (key === 'zip' || key === 'address') {
-                                    return (
-                                       <FormGroup key={key} className={styles.formGroup}>
-                                          <ComboBox
-                                             id={key}
-                                             style={{
-                                                width: '75%',
-                                                marginLeft: 43,
-                                                marginTop: 25,
-                                             }}
-                                             label={StringUtil.capitalizeFirstLetter(key)}
-                                             type="text"
-                                             options={key === 'zip' ? zips : addresses}
-                                             onBlur={formHandler.handleBlur}
-                                             setFieldValue={(option: ComboBoxOption, formFieldId) =>
-                                                formHandler.setFieldValue(formFieldId, option.label)
-                                             }
-                                             error={
-                                                formHandler.touched[key] &&
-                                                Boolean(formHandler.errors[key])
-                                             }
-                                             helperText={
-                                                formHandler.touched[key] && formHandler.errors[key]
-                                             }
-                                             defaultLabel={
-                                                key === 'address' ? 'Address - After Zip' : ''
-                                             }
-                                          />
-                                       </FormGroup>
-                                    );
-                                 }
-                                 return (
-                                    <FormGroup key={key} className={styles.formGroup}>
-                                       <TextField
-                                          className={styles.textField}
-                                          id={key}
-                                          label={TextFieldUtil.mapKeyToLabel(key)}
-                                          type={TextFieldUtil.mapKeyToType(key)}
-                                          value={formHandler.values[key]}
-                                          onChange={formHandler.handleChange(key)}
-                                          onBlur={formHandler.handleBlur}
-                                          select={key === 'type' ? true : false}
-                                          error={
-                                             formHandler.touched[key] &&
-                                             Boolean(formHandler.errors[key])
-                                          }
-                                          helperText={
-                                             formHandler.touched[key] && formHandler.errors[key]
-                                          }
-                                       >
-                                          {key === 'type' &&
-                                             businessTypes.map((type) => (
-                                                <MenuItem key={type} value={type}>
-                                                   {type}
-                                                </MenuItem>
-                                             ))}
-                                       </TextField>
-                                    </FormGroup>
-                                 );
-                              })}
-                        </Col>
-                        <Col sm={6} lg={6}>
-                           {Object.keys(formValues)
-                              .slice(5)
-                              .map((key) => (
-                                 <FormGroup key={key} className={styles.formGroup}>
-                                    <TextField
-                                       className={styles.textField}
-                                       id={key}
-                                       label={TextFieldUtil.mapKeyToLabel(key)}
-                                       type={TextFieldUtil.mapKeyToType(key)}
-                                       value={formHandler.values[key]}
-                                       onChange={formHandler.handleChange}
-                                       onBlur={formHandler.handleBlur}
-                                       error={
-                                          formHandler.touched[key] &&
-                                          Boolean(formHandler.errors[key])
-                                       }
-                                       helperText={
-                                          formHandler.touched[key] && formHandler.errors[key]
-                                       }
-                                       inputLabelProps={{
-                                          shrink: TextFieldUtil.shouldInputLabelShrink(key),
-                                       }}
-                                       inputProps={{
-                                          step: 1800,
-                                       }}
-                                    />
-                                 </FormGroup>
+      setZips(await addressHandler.fetchZips());
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const {zip} = formHandler.values;
+      setAddresses(await addressHandler.fetchAddresses(zip?.substring(0, 4)));
+    })();
+  }, [formHandler.values.zip]);
+
+  return (
+    <>
+      <Row className={styles.wrapper}>
+        <Header text="New Business" />
+      </Row>
+      <Row className={styles.wrapper}>
+        <Col sm={6} lg={8}>
+          <Modal
+            show={requestHandler.requestInfo ? true : false}
+            title="Business Info"
+            text={requestHandler.requestInfo}
+            primaryAction={() => history.push('/business')}
+            primaryActionText="My Businesses"
+            secondaryAction={() => requestHandler.setRequestInfo('')}
+          />
+          <Card className={styles.card} title="Business Data" variant="outlined">
+            <Form
+              onSubmit={formHandler.handleSubmit}
+              buttonText="Create"
+              working={requestHandler.working}
+              valid={formHandler.isValid}
+            >
+              <Row>
+                <Col sm={6} lg={6}>
+                  {Object.keys(formValues)
+                    .slice(1, 5)
+                    .map((key) => {
+                      if (key === 'zip' || key === 'address') {
+                        return (
+                          <FormGroup key={key} className={styles.formGroup}>
+                            <ComboBox
+                              id={key}
+                              style={{
+                                width: '75%',
+                                marginLeft: 43,
+                                marginTop: 25,
+                              }}
+                              label={StringUtil.capitalizeFirstLetter(key)}
+                              type="text"
+                              options={key === 'zip' ? zips : addresses}
+                              onBlur={formHandler.handleBlur}
+                              setFieldValue={(option: ComboBoxOption, formFieldId) =>
+                                formHandler.setFieldValue(formFieldId, option.label)
+                              }
+                              error={formHandler.touched[key] && Boolean(formHandler.errors[key])}
+                              helperText={formHandler.touched[key] && formHandler.errors[key]}
+                              defaultLabel={key === 'address' ? 'Address - After Zip' : ''}
+                            />
+                          </FormGroup>
+                        );
+                      }
+                      return (
+                        <FormGroup key={key} className={styles.formGroup}>
+                          <TextField
+                            className={styles.textField}
+                            id={key}
+                            label={TextFieldUtil.mapKeyToLabel(key)}
+                            type={TextFieldUtil.mapKeyToType(key)}
+                            value={formHandler.values[key]}
+                            onChange={formHandler.handleChange(key)}
+                            onBlur={formHandler.handleBlur}
+                            select={key === 'type' ? true : false}
+                            error={formHandler.touched[key] && Boolean(formHandler.errors[key])}
+                            helperText={formHandler.touched[key] && formHandler.errors[key]}
+                          >
+                            {key === 'type' &&
+                              businessTypes.map((type) => (
+                                <MenuItem key={type} value={type}>
+                                  {type}
+                                </MenuItem>
                               ))}
-                        </Col>
-                     </Row>
-                  </Form>
-               </Card>
-            </Col>
-         </Row>
-      </>
-   );
+                          </TextField>
+                        </FormGroup>
+                      );
+                    })}
+                </Col>
+                <Col sm={6} lg={6}>
+                  {Object.keys(formValues)
+                    .slice(5)
+                    .map((key) => (
+                      <FormGroup key={key} className={styles.formGroup}>
+                        <TextField
+                          className={styles.textField}
+                          id={key}
+                          label={TextFieldUtil.mapKeyToLabel(key)}
+                          type={TextFieldUtil.mapKeyToType(key)}
+                          value={formHandler.values[key]}
+                          onChange={formHandler.handleChange}
+                          onBlur={formHandler.handleBlur}
+                          error={formHandler.touched[key] && Boolean(formHandler.errors[key])}
+                          helperText={formHandler.touched[key] && formHandler.errors[key]}
+                          inputLabelProps={{
+                            shrink: TextFieldUtil.shouldInputLabelShrink(key),
+                          }}
+                          inputProps={{
+                            step: 1800,
+                          }}
+                        />
+                      </FormGroup>
+                    ))}
+                </Col>
+              </Row>
+            </Form>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
 };

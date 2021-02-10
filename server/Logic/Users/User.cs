@@ -26,6 +26,12 @@ namespace Logic.Users
         [Required]
         public string Address { get; set; }
 
+        [Required]
+        public double Longitude { get; set; }
+
+        [Required]
+        public double Latitude { get; set; }
+
         public IList<Booking> Bookings { get; set; }
 
     }

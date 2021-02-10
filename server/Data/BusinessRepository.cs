@@ -31,6 +31,8 @@ namespace Data
                 TimeSlotLength = business.timeSlotLength,
                 Zip = business.Zip,
                 Address = business.Address,
+                Longitude = business.Longitude,
+                Latitude = business.Latitude,
                 Type = type,
             };
 

@@ -25,7 +25,7 @@ namespace Logic.Context
         public CLupContext(DbContextOptions<CLupContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+             Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -77,13 +77,13 @@ namespace Logic.Context
             var users = new[]
             {
                 new User {Id = 1, Name = "Peter", Email = "test@test.com", Password = BC.HashPassword("1234"), Zip = "3520 - Farum",
-                          Address = "Farum Hovedgade 10"},
+                          Address = "Farum Hovedgade 15", Longitude = 55.8122540, Latitude = 12.3706760},
                 new User {Id = 2, Name = "Jens", Email = "h@h.com", Password = BC.HashPassword("1234"), Zip = "3520 - Farum",
-                          Address = "Farum Hovedgade 15"},
+                          Address = "Farum Hovedgade 50", Longitude = 55.810706, Latitude = 12.3640744},
                 new User {Id = 3, Name = "Mads", Email = "mads@hotmail.com", Password = BC.HashPassword("1234"), Zip = "3520 - Farum",
-                          Address = "Farum Hovedgade 15"},
+                          Address = "Gedevasevej 15", Longitude = 55.8075915, Latitude = 12.3467888},
                 new User {Id = 4, Name = "Emil", Email = "emil@live.com", Password = BC.HashPassword("1234"), Zip = "3520 - Farum",
-                          Address = "Farum Hovedgade 15"}
+                          Address = "Farum Hovedgade 15", Longitude = 55.8200342, Latitude = 12.3591325}
             };
 
             modelBuilder.Entity<User>().HasData(users);
@@ -116,12 +116,15 @@ namespace Logic.Context
 
             var businesses = new[]
             {
-                new Business {Id = 1, Name = "Cool", OwnerEmail = "test@test.com", Zip = "3520 - Farum", Address = "Farum Hovedgade 30",
-                             Opens = "10.00", Closes = "16.00", TimeSlotLength = 50, Capacity = 50, Type = BusinessType.Supermarket},
-                new Business {Id = 2, Name = "Shop", OwnerEmail = "test@test.com", Zip = "3520 - Farum", Address = "Farum Hovedgade 50",
-                             Opens = "09.00", Closes = "14.00", TimeSlotLength = 20, Capacity = 40, Type = BusinessType.Museum},
+                new Business {Id = 1, Name = "Cool", OwnerEmail = "test@test.com", Zip = "3520 - Farum", Address = "Ryttergårdsvej 10", 
+                             Longitude = 55.8137419, Latitude = 12.3935222, Opens = "10.00", Closes = "16.00", TimeSlotLength = 50, 
+                             Capacity = 50, Type = BusinessType.Supermarket},
+                new Business {Id = 2, Name = "Shop", OwnerEmail = "test@test.com", Zip = "3520 - Farum", Address = "Farum Hovedgade 100",
+                             Longitude = 55.809127, Latitude = 12.3544073, Opens = "09.00", Closes = "14.00", TimeSlotLength = 20, 
+                             Capacity = 40, Type = BusinessType.Museum},
                 new Business {Id = 3, Name = "1337", OwnerEmail = "test@test.com", Zip = "2300 - København S", Address = "Vermlandsgade 30",
-                             Opens = "08.30", Closes = "15.30", TimeSlotLength = 10, Capacity = 30, Type = BusinessType.Kiosk}
+                                Longitude = 55.668442, Latitude = 12.5988833, Opens = "08.30", Closes = "15.30", TimeSlotLength = 10, 
+                                Capacity = 30, Type = BusinessType.Kiosk}
             };
 
             modelBuilder.Entity<Business>().HasData(businesses);

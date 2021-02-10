@@ -9,6 +9,8 @@ namespace Logic.DTO
         public string Name { get; set; }
         public string Zip { get; set; }
         public string Address { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
         public string Opens { get; set; }
         public string Closes { get; set; }
         public int TimeSlotLength { get; set; }

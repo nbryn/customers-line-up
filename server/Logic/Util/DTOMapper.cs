@@ -1,9 +1,7 @@
-using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 
 using Data;
-
 using Logic.Bookings;
 using Logic.Businesses;
 using Logic.DTO;
@@ -46,6 +44,8 @@ namespace Logic.Util
                 Email = user.Email,
                 Zip = user.Zip,
                 Address = user.Address,
+                Longitude = user.Longitude,
+                Latitude = user.Latitude,
             };
         }
 
@@ -57,6 +57,8 @@ namespace Logic.Util
                 Name = business.Name,
                 Zip = business.Zip,
                 Address = business.Address,
+                Longitude = business.Longitude,
+                Latitude = business.Latitude,
                 Opens = business.Opens,
                 Closes = business.Closes,
                 TimeSlotLength = business.TimeSlotLength,

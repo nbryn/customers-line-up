@@ -25,6 +25,12 @@ namespace Logic.Businesses
         public string Address { get; set; }
 
         [Required]
+        public double Longitude { get; set; }
+
+        [Required]
+        public double Latitude { get; set; }
+
+        [Required]
         public BusinessType Type { get; set; }
 
         [Required]

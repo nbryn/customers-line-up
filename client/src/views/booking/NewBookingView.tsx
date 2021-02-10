@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import Tippy from '@tippyjs/react';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import {BusinessDTO, TimeSlotDTO} from '../../models/Business';
@@ -15,81 +14,96 @@ import {TableContainer} from '../../containers/TableContainer';
 import URL from '../../api/URL';
 
 const useStyles = makeStyles((theme) => ({
-   row: {
-      justifyContent: 'center',
-   },
+  address: {marginTop: 10},
+  badge: {top: -5, marginLeft: 35},
+  row: {
+    justifyContent: 'center',
+  },
 }));
 
 interface LocationState {
-   business: BusinessDTO;
+  business: BusinessDTO;
 }
 
 const SUCCESS_MESSAGE = 'Booking Made - Go to my bookings to see your bookings';
 
 export const NewBookingView: React.FC = () => {
-   const styles = useStyles();
-   const history = useHistory();
-   const location = useLocation<LocationState>();
+  const styles = useStyles();
+  const history = useHistory();
+  const location = useLocation<LocationState>();
 
-   const [showMapModal, setShowMapModal] = useState<boolean>(false);
+  const [showMapModal, setShowMapModal] = useState<boolean>(false);
 
-   const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest(SUCCESS_MESSAGE);
+  const requestHandler: RequestHandler<TimeSlotDTO[]> = useRequest(SUCCESS_MESSAGE);
 
-   const {business} = location.state;
+  const {business} = location.state;
 
-   const columns: TableColumn[] = [
-      {title: 'id', field: 'id', hidden: true},
-      {title: 'Date', field: 'date'},
-      {title: 'Interval', field: 'interval'},
-   ];
+  const columns: TableColumn[] = [
+    {title: 'id', field: 'id', hidden: true},
+    {title: 'Date', field: 'date'},
+    {title: 'Interval', field: 'interval'},
+  ];
 
-   const actions = [
-      {
-         icon: () => <Chip size="small" label="Book Time" clickable color="primary" />,
-         onClick: async (event: any, rowData: TimeSlotDTO) => {
-            requestHandler.mutation(URL.getNewBookingURL(rowData.id), 'POST');
-         },
+  const actions = [
+    {
+      icon: () => <Chip size="small" label="Book Time" clickable color="primary" />,
+      onClick: async (event: any, rowData: TimeSlotDTO) => {
+        requestHandler.mutation(URL.getNewBookingURL(rowData.id), 'POST');
       },
-   ];
-   return (
-      <Container>
-         <Row className={styles.row}>
-            <Header text={`Available Time Slots For ${business.name}`} />
-         </Row>
-         <MapModal visible={showMapModal} setVisible={setShowMapModal} />
-         <Row className={styles.row}>
-            <Col sm={6} md={8} lg={6} xl={10}>
-               <TableContainer
-                  actions={actions}
-                  columns={columns}
-                  fetchTableData={async () => {
-                     const timeSlots = await requestHandler.query(URL.getTimeSlotURL(business.id!));
+    },
+  ];
+  return (
+    <Container>
+      <Row className={styles.row}>
+        <Header text={`Available Time Slots For ${business.name}`} />
+      </Row>
 
-                     return timeSlots.map((x) => ({
-                        ...x,
-                        interval: x.start + ' - ' + x.end,
-                     }));
-                  }}
-                  tableTitle={
-                     <Tippy>
-                        <a onClick={() => setShowMapModal(true)}>
-                           <i>{`${business.address} - show on map`}</i>
-                        </a>
-                     </Tippy>
-                  }
-                  emptyMessage="No Time Slots Available"
-               />
+      <MapModal
+        visible={showMapModal}
+        setVisible={() => setShowMapModal(false)}
+        zoom={14}
+        center={[business.longitude as number, business.latitude as number]}
+        markers={[[business.longitude as number, business.latitude as number], 13]}
+      />
+      <Row className={styles.row}>
+        <Col sm={6} md={8} lg={6} xl={10}>
+          <TableContainer
+            actions={actions}
+            columns={columns}
+            fetchTableData={async () => {
+              const timeSlots = await requestHandler.query(URL.getTimeSlotURL(business.id!));
 
-               <Modal
-                  show={requestHandler.requestInfo ? true : false}
-                  title="Booking Info"
-                  text={requestHandler.requestInfo}
-                  secondaryAction={() => requestHandler.setRequestInfo('')}
-                  primaryAction={() => history.push('/user/bookings')}
-                  primaryActionText="My Bookings"
-               />
-            </Col>
-         </Row>
-      </Container>
-   );
+              return timeSlots.map((x) => ({
+                ...x,
+                interval: x.start + ' - ' + x.end,
+              }));
+            }}
+            tableTitle={
+              <>
+                <h5 className={styles.address}>{business.address}</h5>
+                <Chip
+                  className={styles.badge}
+                  size="small"
+                  label="Open map"
+                  clickable
+                  color="secondary"
+                  onClick={() => setShowMapModal(true)}
+                />
+              </>
+            }
+            emptyMessage="No Time Slots Available"
+          />
+
+          <Modal
+            show={requestHandler.requestInfo ? true : false}
+            title="Booking Info"
+            text={requestHandler.requestInfo}
+            secondaryAction={() => requestHandler.setRequestInfo('')}
+            primaryAction={() => history.push('/user/bookings')}
+            primaryActionText="My Bookings"
+          />
+        </Col>
+      </Row>
+    </Container>
+  );
 };

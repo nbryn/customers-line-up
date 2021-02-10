@@ -127,6 +127,12 @@ namespace CLup.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)")
@@ -164,10 +170,12 @@ namespace CLup.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "Farum Hovedgade 30",
+                            Address = "Ryttergårdsvej 10",
                             Capacity = 50,
                             Closes = "16.00",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Latitude = 55.813741899999997,
+                            Longitude = 55.813741899999997,
                             Name = "Cool",
                             Opens = "10.00",
                             OwnerEmail = "test@test.com",
@@ -179,10 +187,12 @@ namespace CLup.Migrations
                         new
                         {
                             Id = 2,
-                            Address = "Farum Hovedgade 50",
+                            Address = "Farum Hovedgade 100",
                             Capacity = 40,
                             Closes = "14.00",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Latitude = 12.3544073,
+                            Longitude = 55.809126999999997,
                             Name = "Shop",
                             Opens = "09.00",
                             OwnerEmail = "test@test.com",
@@ -198,13 +208,15 @@ namespace CLup.Migrations
                             Capacity = 30,
                             Closes = "15.30",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Latitude = 12.598883300000001,
+                            Longitude = 55.668441999999999,
                             Name = "1337",
                             Opens = "08.30",
                             OwnerEmail = "test@test.com",
                             TimeSlotLength = 10,
                             Type = "Kiosk",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Zip = "2300 - Købehavn S"
+                            Zip = "2300 - København S"
                         });
                 });
 
@@ -239,7 +251,7 @@ namespace CLup.Migrations
                         {
                             UserEmail = "h@h.com",
                             BusinessId = 1,
-                            CreatedAt = new DateTime(2020, 12, 28, 13, 49, 13, 645, DateTimeKind.Local).AddTicks(5331),
+                            CreatedAt = new DateTime(2021, 2, 9, 12, 8, 38, 938, DateTimeKind.Local).AddTicks(9471),
                             Id = 1,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
@@ -247,7 +259,7 @@ namespace CLup.Migrations
                         {
                             UserEmail = "mads@hotmail.com",
                             BusinessId = 1,
-                            CreatedAt = new DateTime(2020, 12, 28, 13, 49, 13, 645, DateTimeKind.Local).AddTicks(6260),
+                            CreatedAt = new DateTime(2021, 2, 9, 12, 8, 38, 939, DateTimeKind.Local).AddTicks(497),
                             Id = 2,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
@@ -295,8 +307,8 @@ namespace CLup.Migrations
                             BusinessName = "Cool",
                             Capacity = 50,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            End = new DateTime(2020, 12, 28, 17, 49, 13, 645, DateTimeKind.Local).AddTicks(2448),
-                            Start = new DateTime(2020, 12, 28, 16, 49, 13, 642, DateTimeKind.Local).AddTicks(4298),
+                            End = new DateTime(2021, 2, 9, 16, 8, 38, 938, DateTimeKind.Local).AddTicks(6027),
+                            Start = new DateTime(2021, 2, 9, 15, 8, 38, 936, DateTimeKind.Local).AddTicks(9315),
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -306,8 +318,8 @@ namespace CLup.Migrations
                             BusinessName = "Cool",
                             Capacity = 40,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            End = new DateTime(2020, 12, 28, 18, 49, 13, 645, DateTimeKind.Local).AddTicks(2803),
-                            Start = new DateTime(2020, 12, 28, 17, 49, 13, 645, DateTimeKind.Local).AddTicks(2798),
+                            End = new DateTime(2021, 2, 9, 17, 8, 38, 938, DateTimeKind.Local).AddTicks(6451),
+                            Start = new DateTime(2021, 2, 9, 16, 8, 38, 938, DateTimeKind.Local).AddTicks(6442),
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
@@ -317,8 +329,8 @@ namespace CLup.Migrations
                             BusinessName = "Cool",
                             Capacity = 30,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            End = new DateTime(2020, 12, 28, 19, 49, 13, 645, DateTimeKind.Local).AddTicks(2807),
-                            Start = new DateTime(2020, 12, 28, 18, 49, 13, 645, DateTimeKind.Local).AddTicks(2806),
+                            End = new DateTime(2021, 2, 9, 18, 8, 38, 938, DateTimeKind.Local).AddTicks(6455),
+                            Start = new DateTime(2021, 2, 9, 17, 8, 38, 938, DateTimeKind.Local).AddTicks(6454),
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
@@ -337,6 +349,12 @@ namespace CLup.Migrations
 
                     b.Property<int>("Id")
                         .HasColumnType("int");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -365,33 +383,39 @@ namespace CLup.Migrations
                         new
                         {
                             Email = "test@test.com",
-                            Address = "Farum Hovedgade 10",
+                            Address = "Farum Hovedgade 15",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 1,
+                            Latitude = 12.370676,
+                            Longitude = 55.812254000000003,
                             Name = "Peter",
-                            Password = "$2a$11$QRegsi/m4Qcrj/J9mFFe5eO1D1u0.0046156RwuTCFPZ5qcbWAnCW",
+                            Password = "$2a$11$CT568AIZOOFDsFf8xyYjFezlirZHT4tlrx8Nz0y4UthO67igTkEpW",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = "3520 - Farum"
                         },
                         new
                         {
                             Email = "h@h.com",
-                            Address = "Farum Hovedgade 15",
+                            Address = "Farum Hovedgade 50",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 2,
+                            Latitude = 12.3640744,
+                            Longitude = 55.810706000000003,
                             Name = "Jens",
-                            Password = "$2a$11$ZOohoS8BfVrTB/I/aHpgC./kzFBBVJ3FhUwq/4LRMAeqESFTkd4yq",
+                            Password = "$2a$11$9es7wNR3EhqITImSbBycne6vUToau2qi.fhlVbUy/8hWFKSZuKStu",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = "3520 - Farum"
                         },
                         new
                         {
                             Email = "mads@hotmail.com",
-                            Address = "Farum Hovedgade 15",
+                            Address = "Gedevasevej 15",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 3,
+                            Latitude = 12.346788800000001,
+                            Longitude = 55.807591500000001,
                             Name = "Mads",
-                            Password = "$2a$11$EKaLo43d4ff70FRR5e6.CutOlesDbyhmz1TzTPXXPgi8IUcwfREmi",
+                            Password = "$2a$11$GET1TIXTLsvNuWgAclOoxObHPFDIfFDCScfjKDIcv6I.fGnQ44kne",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = "3520 - Farum"
                         },
@@ -401,8 +425,10 @@ namespace CLup.Migrations
                             Address = "Farum Hovedgade 15",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Id = 4,
+                            Latitude = 12.359132499999999,
+                            Longitude = 55.820034200000002,
                             Name = "Emil",
-                            Password = "$2a$11$peI.wJykQ/693/Bv8McdFe7u/UioiPLkv2iEHb9CCBn6De3vaAnV.",
+                            Password = "$2a$11$Y/OoSr329mRKCnb8fzp6h.OG6HHS7t2T2AvjNI3D20DoBdtnOkcuG",
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Zip = "3520 - Farum"
                         });

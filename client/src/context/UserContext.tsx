@@ -43,7 +43,7 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
          if (Cookies.get('token')) {
             const user = await requestHandler.query(USER_INFO_URL);
 
-            setCurrentUser(user);
+            setCurrentUser(user || {email: ''});
          }
       })();
    }, []);

@@ -31,7 +31,9 @@ namespace Data
                 Email = user.Email,
                 Password = user.Password,
                 Zip = user.Zip,
-                Address = user.Address
+                Address = user.Address,
+                Longitude = user.Longitude,
+                Latitude = user.Latitude,
             };
 
             _context.Users.Add(newUser);
