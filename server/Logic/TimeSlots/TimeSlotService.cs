@@ -26,34 +26,34 @@ namespace Logic.TimeSlots
             _dtoMapper = dtoMapper;
         }
 
-        public async Task<Response> RemoveTimeSlot(string userEmail, int timeSlotId)
+        public async Task<HttpCode> RemoveTimeSlot(string userEmail, int timeSlotId)
         {
             TimeSlot timeSlot = await _timeSlotRepository.FindTimeSlotById(timeSlotId);
 
             if (userEmail != timeSlot.Business.OwnerEmail)
             {
-                return Response.Forbidden;
+                return HttpCode.Forbidden;
             }
 
-            Response response = await _timeSlotRepository.DeleteTimeSlot(timeSlotId);
+            HttpCode response = await _timeSlotRepository.DeleteTimeSlot(timeSlotId);
 
             return response;
         }
 
-        public async Task<Response> GenerateTimeSlots(CreateTimeSlotRequest request)
+        public async Task<QueryResult> GenerateTimeSlots(GenerateTimeSlotsRequest request)
         {
             Business business = await _businessRepository.FindBusinessById(request.BusinessId);
 
             if (business == null)
             {
-                return Response.NotFound;
+                return new QueryResult(HttpCode.NotFound, "Business not found");
             }
 
             IList<TimeSlot> existingTimeSlots = await _timeSlotRepository.FindTimeSlotByBusinessAndDate(request.BusinessId, request.Start);
 
             if (existingTimeSlots.Count() > 0)
             {
-               return Response.Conflict;
+               return new QueryResult(HttpCode.Conflict, "Timeslot is full");
             }
 
             DateTime opens = request.Start.AddHours(Double.Parse(business.Opens));
@@ -87,13 +87,7 @@ namespace Logic.TimeSlots
 
             }
 
-            return Response.Created;
-        }
-        public async Task<ICollection<TimeSlotDTO>> GetAllTimeSlotsForBusiness(int businessId)
-        {
-            IList<TimeSlot> timeSlots = await _timeSlotRepository.FindTimeSlotsByBusiness(businessId);
-
-            return timeSlots.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x)).ToList();
+            return new QueryResult(HttpCode.Created);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Data
             _context = context;
         }
 
-        public async Task<Business> CreateBusiness(NewBusinessDTO business)
+        public async Task<Business> CreateBusiness(NewBusinessRequest business)
         {
             BusinessType.TryParse(business.Type, out BusinessType type);
 
@@ -44,13 +44,13 @@ namespace Data
 
         }
 
-        public async Task<Response> UpdateBusiness(int businessId, NewBusinessDTO dto)
+        public async Task<HttpCode> UpdateBusiness(int businessId, NewBusinessRequest dto)
         {
             Business business = await FindBusinessById(businessId);
 
             if (business == null)
             {
-                return Response.NotFound;
+                return HttpCode.NotFound;
             }
 
             BusinessType.TryParse(dto.Type, out BusinessType type);
@@ -65,7 +65,7 @@ namespace Data
 
             await _context.SaveChangesAsync();
 
-            return Response.Updated;
+            return HttpCode.Updated;
         }
 
         public async Task<Business> FindBusinessById(int businessId)

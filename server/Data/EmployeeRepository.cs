@@ -18,7 +18,7 @@ namespace Data
         {
             _context = context;
         }
-        public async Task<Response> CreateEmployee(NewEmployeeDTO request)
+        public async Task<HttpCode> CreateEmployee(NewEmployeeRequest request)
         {
             Employee newEmployee = new Employee
             {
@@ -31,23 +31,23 @@ namespace Data
 
             await _context.SaveChangesAsync();
 
-            return Response.Created;
+            return HttpCode.Created;
         }
 
-        public async Task<Response> DeleteEmployee(string email, int businessId)
+        public async Task<HttpCode> DeleteEmployee(string email, int businessId)
         {
             Employee employee = await FindEmployeeByEmailAndBusiness(email, businessId);
 
             if (employee == null)
             {
-                return Response.NotFound;
+                return HttpCode.NotFound;
             }
 
             _context.Employees.Remove(employee);
 
             await _context.SaveChangesAsync();
 
-            return Response.Deleted;
+            return HttpCode.Deleted;
         }
 
         public async Task<Employee> FindEmployeeByEmailAndBusiness(string email, int businessId)

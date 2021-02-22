@@ -1,14 +1,9 @@
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 
-using Logic.Businesses;
 using Data;
-using Logic.TimeSlots;
-
-
-using Logic.Context;
+using Logic.Businesses;
 using Logic.DTO;
+using Logic.TimeSlots;
 
 namespace Logic.Bookings
 {
@@ -25,25 +20,26 @@ namespace Logic.Bookings
             _timeSlotRepository = timeSlotRepository;
             _bookingRepository = bookingRepository;
         }
-        public async Task<(Response, string)> VerifyNewBooking(string userEmail, int timeSlotId)
+        public async Task<QueryResult> VerifyNewBooking(string userEmail, int timeSlotId)
         {
-            Booking bookingExists = await _bookingRepository.FindBookingByUser(userEmail, timeSlotId);
+            Booking bookingExists = await _bookingRepository.FindBookingByUserAndTimeSlot(userEmail, timeSlotId);
 
             if (bookingExists != null)
             {
-                return (Response.Conflict, "You already have a booking for this time slot");
+                return new QueryResult(HttpCode.Conflict, "You already have a booking for this time slot");
+                
             }
 
             TimeSlot timeSlot = await _timeSlotRepository.FindTimeSlotById(timeSlotId);
 
             if (timeSlot == null)
             {
-                return (Response.Conflict, "Time slot does not exist");
+                return new QueryResult(HttpCode.NotFound, "Time slot does not exist");
             }
 
             if (timeSlot.Bookings?.Count >= timeSlot.Capacity)
             {
-                return (Response.Conflict, "This time slot is full");
+                return new QueryResult(HttpCode.Conflict, "This time slot is full");
             }
 
             Business business = await _businessRepository.FindBusinessById(timeSlot.BusinessId);
@@ -57,26 +53,26 @@ namespace Logic.Bookings
 
             await _bookingRepository.SaveBooking(booking);
 
-            return (Response.Created, "Booking successfull");
+            return new QueryResult(HttpCode.Created, "Booking successfull");
         }
 
-        public async Task<Response> VerifyDeleteBookingRequest(string ownerEmail, string userEmail, int timeSlotId)
+        public async Task<HttpCode> VerifyDeleteBookingRequest(string ownerEmail, string userEmail, int timeSlotId)
         {
-            Booking booking = await _bookingRepository.FindBookingByUser(userEmail, timeSlotId);
+            Booking booking = await _bookingRepository.FindBookingByUserAndTimeSlot(userEmail, timeSlotId);
 
             if (booking == null)
             {
-                return Response.NotFound;
+                return HttpCode.NotFound;
             }
 
             Business business = await _businessRepository.FindBusinessById(booking.TimeSlot.BusinessId);
 
             if (business.OwnerEmail != ownerEmail)
             {
-                return Response.Forbidden;
+                return HttpCode.Forbidden;
             }
 
-            Response response = await _bookingRepository.DeleteBooking(userEmail, timeSlotId);
+            HttpCode response = await _bookingRepository.DeleteBooking(userEmail, timeSlotId);
 
             return response;
         }

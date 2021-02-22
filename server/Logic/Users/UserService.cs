@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Data;
 using Logic.Auth;
+using Logic.DTO;
 using Logic.DTO.User;
 
 namespace Logic.Users
@@ -15,8 +16,12 @@ namespace Logic.Users
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
 
-        public UserService(IBusinessOwnerRepository ownerRepository, IEmployeeRepository employeeRepository,
-            IUserRepository userRepository, IAuthService authService)
+        public UserService(
+            IBusinessOwnerRepository ownerRepository,
+            IEmployeeRepository employeeRepository,
+            IUserRepository userRepository,
+            IAuthService authService
+            )
         {
             _employeeRepository = employeeRepository;
             _ownerRepository = ownerRepository;
@@ -25,16 +30,14 @@ namespace Logic.Users
 
         }
 
-        public async Task<LoginResponse> RegisterUser(RegisterUserDTO user)
+        public async Task<QueryResponse<UserDTO>> RegisterUser(NewUserRequest user)
         {
             User userExists = await _userRepository.FindUserByEmail(user.Email);
 
             if (userExists != null)
             {
-                return new LoginResponse
-                {
-                    isError = true,
-                };
+                return new QueryResponse<UserDTO>(HttpCode.Conflict, $"An existing user with the email '{user.Email}' was found.");
+
             }
 
             string token = _authService.GenerateJWTToken(user);
@@ -42,46 +45,47 @@ namespace Logic.Users
 
             int userId = await _userRepository.CreateUser(user);
 
-            LoginResponse response = new LoginResponse
+            var response = new UserDTO
             {
                 Id = userId,
+                Name = user.Name,
                 Email = user.Email,
                 Zip = user.Zip,
                 Address = user.Address,
+                Longitude = user.Longitude,
+                Latitude = user.Latitude,
                 Token = token,
                 Role = Role.User.ToString(),
             };
 
-            return response;
+            return new QueryResponse<UserDTO>(HttpCode.Ok, response);
         }
-        public async Task<LoginResponse> AuthenticateUser(LoginDTO loginRequest)
+        public async Task<QueryResponse<UserDTO>> AuthenticateUser(LoginRequest loginRequest)
         {
             User user = await _userRepository.FindUserByEmail(loginRequest.Email);
 
             if (user == null || !BC.Verify(loginRequest.Password, user.Password))
             {
-                return new LoginResponse
-                {
-                    isError = true,
-                };
+                return new QueryResponse<UserDTO>(HttpCode.Unauthorized);
             }
 
             string token = _authService.GenerateJWTToken(loginRequest);
 
             Role role = await DetermineRole(user);
 
-            LoginResponse response = new LoginResponse
+            var response = new UserDTO
             {
-                Id = user.Id,
+                Name = user.Name,
                 Email = user.Email,
                 Zip = user.Zip,
                 Address = user.Address,
-                Name = user.Name,
+                Longitude = user.Longitude,
+                Latitude = user.Latitude,
                 Token = token,
-                Role = role.ToString(),
+                Role = Role.User.ToString(),
             };
 
-            return response;
+            return new QueryResponse<UserDTO>(HttpCode.Ok, response);
         }
 
         public async Task<IList<User>> FilterUsersByBusiness(int businessId)

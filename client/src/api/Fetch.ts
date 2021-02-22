@@ -20,8 +20,8 @@ export async function fetch<T>(url: string, method: Method, request?: any): Prom
       console.log(err);
       if (err.request.response) {
         console.log(err.request.response);
-        if (err.request.response.message) {
-          throw new Error(err.request.response.message);
+        if (err.request.response._message) {
+          throw new Error(err.request.response._message);
         }
   
         throw new Error(err.request.response);

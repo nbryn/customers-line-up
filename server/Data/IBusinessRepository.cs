@@ -9,7 +9,7 @@ namespace Data
 {
     public interface IBusinessRepository
     {
-         Task<Business> CreateBusiness(NewBusinessDTO business);
+         Task<Business> CreateBusiness(NewBusinessRequest business);
 
          Task<Business> FindBusinessById(int businessId);
 
@@ -17,6 +17,6 @@ namespace Data
 
          Task<IList<Business>> GetAll();
 
-         Task<Response> UpdateBusiness(int businessId, NewBusinessDTO dto);
+         Task<HttpCode> UpdateBusiness(int businessId, NewBusinessRequest dto);
     }
 }

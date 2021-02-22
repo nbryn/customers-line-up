@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
+
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
-using Logic.Auth;
-using Logic.Context;
-using Logic.DTO;
 using Data;
+using Logic.Auth;
+using Logic.DTO;
 using Logic.Util;
 
 namespace Logic.TimeSlots
@@ -32,23 +31,23 @@ namespace Logic.TimeSlots
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> NewTimeSlot([FromBody] CreateTimeSlotRequest dto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> NewTimeSlot([FromBody] GenerateTimeSlotsRequest dto)
         {
-            Response response = await _service.GenerateTimeSlots(dto);
+            var response = await _service.GenerateTimeSlots(dto);
 
-            if (response == Context.Response.Conflict)
-            {
-                return Conflict("Time slots already exists on this day.");
-            }
-
-            return new StatusCodeResult((int)response);
+            return new ObjectResult(response._message) { StatusCode = (int)response._statusCode };
         }
 
         [HttpDelete]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteTimeSlot(int id)
         {
-            Response response = await _repository.DeleteTimeSlot(id);
+            var response = await _repository.DeleteTimeSlot(id);
 
             return new StatusCodeResult((int)response);
         }
@@ -56,20 +55,38 @@ namespace Logic.TimeSlots
 
         [HttpGet]
         [Route("business/{id}")]
-        public async Task<ICollection<TimeSlotDTO>> FetchAllTimeSlotsForBusiness(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TimeSlotDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> FetchAllTimeSlotsForBusiness(int id)
         {
-            IList<TimeSlot> timeSlots = await _repository.FindTimeSlotsByBusiness(id);
+            var response = await _repository.FindTimeSlotsByBusiness(id);
 
-            return timeSlots.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x)).ToList();
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var timeSlots = response.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x)).ToList();
+
+            return Ok(timeSlots);
         }
 
         [HttpGet]
         [Route("available")]
-        public async Task<ICollection<TimeSlotDTO>> FetchAllAvailableTimeSlotsForBusiness([FromQuery] AvailableTimeSlotsRequest request)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TimeSlotDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> FetchAllAvailableTimeSlotsForBusiness([FromQuery] AvailableTimeSlotsRequest request)
         {
-            IList<TimeSlot> timeSlots = await _repository.FindAvailableTimeSlotsByBusiness(request);
+            var response = await _repository.FindAvailableTimeSlotsByBusiness(request);
 
-            return timeSlots.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x)).ToList();
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var timeSlots = response.Select(x => _dtoMapper.ConvertTimeSlotToDTO(x)).ToList();
+
+            return Ok(timeSlots);
         }
     }
 }

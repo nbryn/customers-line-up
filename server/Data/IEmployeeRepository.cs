@@ -9,8 +9,8 @@ namespace Data
 {
     public interface IEmployeeRepository
     {
-        Task<Response> CreateEmployee(NewEmployeeDTO request);
-        Task<Response> DeleteEmployee(string email, int businessId);
+        Task<HttpCode> CreateEmployee(NewEmployeeRequest request);
+        Task<HttpCode> DeleteEmployee(string email, int businessId);
         Task<Employee> FindEmployeeByEmailAndBusiness(string email, int businessId);
         Task<Employee> FindEmployeeByEmail(string email);
         Task<IList<Employee>> FindEmployeesByBusiness(int businessId);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Logic.Bookings;
+using Logic.DTO;
 using Logic.Context;
 
 namespace Data
@@ -25,7 +26,7 @@ namespace Data
             return (booking.UserEmail, booking.TimeSlotId);
         }
 
-        public async Task<Booking> FindBookingByUser(string userEmail, int timeSlotId)
+        public async Task<Booking> FindBookingByUserAndTimeSlot(string userEmail, int timeSlotId)
         {
             return await _context.Bookings.Include(x => x.TimeSlot)
                                           .Include(x => x.TimeSlot.Business)
@@ -35,31 +36,40 @@ namespace Data
 
         public async Task<IList<Booking>> FindBookingsByUser(string userEmail)
         {
-            return await _context.Bookings.Include(x => x.TimeSlot)
+            var bookings = await _context.Bookings.Include(x => x.TimeSlot)
                                           .Include(x => x.TimeSlot.Business)
-                                          .Where(x => x.UserEmail.Equals(userEmail)).ToListAsync();
+                                          .Where(x => x.UserEmail.Equals(userEmail))
+                                          .ToListAsync();
+         
+
+            return bookings;
         }
 
         public async Task<IList<Booking>> FindBookingsByBusiness(int businessId)
         {
-            return await _context.Bookings.Include(x => x.TimeSlot)
+            var bookings = await _context.Bookings.Include(x => x.TimeSlot)
                                           .Include(x => x.TimeSlot.Business)
-                                          .Where(x => x.BusinessId == businessId).ToListAsync();
+                                          .Where(x => x.BusinessId == businessId)
+                                          .ToListAsync();
+    
+
+            return bookings;
         }
 
-        public async Task<Response> DeleteBooking(string userEmail, int timeSlotId)
+        public async Task<HttpCode> DeleteBooking(string userEmail, int timeSlotId)
         {
-            Booking booking = await FindBookingByUser(userEmail, timeSlotId);
+            Booking booking = await FindBookingByUserAndTimeSlot(userEmail, timeSlotId);
+
             if (booking == null)
             {
-                return Response.NotFound;
+                return HttpCode.NotFound;
             }
 
             _context.Bookings.Remove(booking);
 
             await _context.SaveChangesAsync();
 
-            return Response.Deleted;
+            return HttpCode.Deleted;
         }
     }
 }

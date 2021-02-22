@@ -2,16 +2,16 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Logic.Bookings;
-using Logic.Context;
+using Logic.DTO;
 
 namespace Data
 {
     public interface IBookingRepository
     {
-        Task<Response> DeleteBooking(string userEmail, int timeSlotId);
+        Task<HttpCode> DeleteBooking(string userEmail, int timeSlotId);
         Task<IList<Booking>> FindBookingsByUser(string userEmail);
         Task<(string, int)> SaveBooking(Booking booking);
-        Task<Booking> FindBookingByUser(string userEmail, int timeSlotId);
+        Task<Booking> FindBookingByUserAndTimeSlot(string userEmail, int timeSlotId);
         Task<IList<Booking>> FindBookingsByBusiness(int businessId);
 
     }

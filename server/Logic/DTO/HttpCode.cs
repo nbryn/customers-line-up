@@ -1,10 +1,12 @@
-namespace Logic.Context
+namespace Logic.DTO
 {
-    public enum Response
+    public enum HttpCode
     {
+        Ok = 200,
         Created = 200,
         Updated = 200,
         Deleted = 200,
+        Unauthorized = 401,
         Forbidden = 403,
         NotFound = 404,
         BadRequest = 400,

@@ -22,7 +22,7 @@ namespace Logic.Auth
             _config = config;
         }
 
-        public string GenerateJWTToken(LoginDTO user)
+        public string GenerateJWTToken(LoginRequest user)
         {
             var securityKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));

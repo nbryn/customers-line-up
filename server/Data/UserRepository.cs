@@ -23,7 +23,7 @@ namespace Data
             return await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
         }
 
-        public async Task<int> CreateUser(RegisterUserDTO user)
+        public async Task<int> CreateUser(NewUserRequest user)
         {
             User newUser = new User
             {

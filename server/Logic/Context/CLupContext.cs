@@ -117,7 +117,7 @@ namespace Logic.Context
             var businesses = new[]
             {
                 new Business {Id = 1, Name = "Cool", OwnerEmail = "test@test.com", Zip = "3520 - Farum", Address = "Ryttergårdsvej 10", 
-                             Longitude = 55.8137419, Latitude = 12.3935222, Opens = "10.00", Closes = "16.00", TimeSlotLength = 50, 
+                             Longitude = 55.8137419, Latitude = 12.3935222, Opens = "10.00", Closes = "16.00", TimeSlotLength = 30, 
                              Capacity = 50, Type = BusinessType.Supermarket},
                 new Business {Id = 2, Name = "Shop", OwnerEmail = "test@test.com", Zip = "3520 - Farum", Address = "Farum Hovedgade 100",
                              Longitude = 55.809127, Latitude = 12.3544073, Opens = "09.00", Closes = "14.00", TimeSlotLength = 20, 
@@ -139,11 +139,11 @@ namespace Logic.Context
                                     Start = DateTime.Now.AddHours(3), End = DateTime.Now.AddHours(4),
                                     },
 
-                new TimeSlot {Id = 2, BusinessId = 1, BusinessName = "Cool", Capacity = 40,
+                new TimeSlot {Id = 2, BusinessId = 1, BusinessName = "Cool", Capacity = 50,
                                     Start = DateTime.Now.AddHours(4), End = DateTime.Now.AddHours(5),
                                     },
 
-                new TimeSlot {Id = 3, BusinessId = 1, BusinessName = "Cool", Capacity = 30,
+                new TimeSlot {Id = 3, BusinessId = 1, BusinessName = "Cool", Capacity = 50,
                                     Start = DateTime.Now.AddHours(5), End = DateTime.Now.AddHours(6),
                                     },
             };

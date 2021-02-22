@@ -1,14 +1,14 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Logic.DTO
 {
-    public class NewEmployeeDTO
+    public class GenerateTimeSlotsRequest
     {
         [Required]
         public int BusinessId { get; set; }
 
         [Required]
-        public string PrivateEmail { get; set; }
-        public string? CompanyEmail { get; set; }
+        public DateTime Start { get; set; }
     }
 }

@@ -24,7 +24,8 @@ namespace Logic.Employees
         private readonly IDTOMapper _dtoMapper;
 
         public EmployeeController(IEmployeeRepository repository,
-                                  IEmployeeService service, IDTOMapper dtoMapper)
+                                  IEmployeeService service, 
+                                  IDTOMapper dtoMapper)
         {
             _repository = repository;
             _dtoMapper = dtoMapper;
@@ -33,18 +34,25 @@ namespace Logic.Employees
 
         [HttpGet]
         [Route("business/{businessId}")]
-        public async Task<ICollection<EmployeeDTO>> FetchAllEmployeesForBusiness(int businessId)
+        public async Task<IActionResult> FetchAllEmployeesForBusiness(int businessId)
         {
-            IList<Employee> employees = await _repository.FindEmployeesByBusiness(businessId);
+            var response = await _repository.FindEmployeesByBusiness(businessId);
 
-            return employees.Select(x => _dtoMapper.ConvertEmployeeToDTO(x)).ToList();
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var employees = response.Select(x => _dtoMapper.ConvertEmployeeToDTO(x)).ToList();
+
+            return Ok(employees);
         }
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> NewEmployee(NewEmployeeDTO request)
+        public async Task<IActionResult> NewEmployee(NewEmployeeRequest request)
         {
-            Response response = await _service.VerifyNewEmployee(request);
+            HttpCode response = await _service.VerifyNewEmployee(request);
 
             return new StatusCodeResult((int)response);
         }
@@ -53,7 +61,7 @@ namespace Logic.Employees
         [Route("{email}")]
         public async Task<IActionResult> RemoveEmployee(string email, [FromQuery] int businessId)
         {
-            Response response = await _repository.DeleteEmployee(email, businessId);
+            HttpCode response = await _repository.DeleteEmployee(email, businessId);
 
             return new StatusCodeResult((int)response);
         }

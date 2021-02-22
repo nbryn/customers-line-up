@@ -1,14 +1,14 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Logic.DTO
 {
-    public class CreateTimeSlotRequest
+    public class NewEmployeeRequest
     {
         [Required]
         public int BusinessId { get; set; }
 
         [Required]
-        public DateTime Start { get; set; }
+        public string PrivateEmail { get; set; }
+        public string? CompanyEmail { get; set; }
     }
 }

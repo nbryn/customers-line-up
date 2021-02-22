@@ -17,29 +17,29 @@ namespace Data
         {
             _context = context;
         }
-        public async Task<(int, Response)> CreateTimeSlot(TimeSlot timeSlot)
+        public async Task<(int, HttpCode)> CreateTimeSlot(TimeSlot timeSlot)
         {
             await _context.TimeSlots.AddAsync(timeSlot);
 
             await _context.SaveChangesAsync();
 
-            return (timeSlot.Id, Response.Created);
+            return (timeSlot.Id, HttpCode.Created);
         }
 
-        public async Task<Response> DeleteTimeSlot(int timeSlotId)
+        public async Task<HttpCode> DeleteTimeSlot(int timeSlotId)
         {
             TimeSlot timeSlot = await FindTimeSlotById(timeSlotId);
 
             if (timeSlot == null)
             {
-                return Response.NotFound;
+                return HttpCode.NotFound;
             }
 
             _context.TimeSlots.Remove(timeSlot);
 
             await _context.SaveChangesAsync();
 
-            return (Response.Deleted);
+            return (HttpCode.Deleted);
         }
 
         public async Task<TimeSlot> FindTimeSlotById(int timeSlotId)
@@ -80,13 +80,13 @@ namespace Data
             return timeSlots;
         }
 
-        public async Task<Response> UpdateTimeSlot(TimeSlot timeSlot)
+        public async Task<HttpCode> UpdateTimeSlot(TimeSlot timeSlot)
         {
             TimeSlot ts = await FindTimeSlotById(timeSlot.Id);
 
             if (ts == null)
             {
-                return Response.NotFound;
+                return HttpCode.NotFound;
             }
 
             ts.Bookings = timeSlot.Bookings;
@@ -98,7 +98,7 @@ namespace Data
 
             await _context.SaveChangesAsync();
 
-            return Response.Updated;
+            return HttpCode.Updated;
         }
     }
 }

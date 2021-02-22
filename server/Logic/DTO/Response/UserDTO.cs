@@ -23,5 +23,7 @@ namespace Logic.DTO.User
 
         [Required]
         public string Role { get; set; }
+
+        public string Token { get; set; }
     }
 }

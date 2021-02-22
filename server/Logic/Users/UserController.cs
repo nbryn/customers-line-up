@@ -1,14 +1,18 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-using Logic.Util;
-using Logic.DTO.User;
-using Logic.Auth;
 using Data;
+using Logic.Auth;
+using Logic.DTO;
+using Logic.DTO.User;
+using Logic.Util;
+
+
 
 namespace Logic.Users
 {
@@ -20,8 +24,11 @@ namespace Logic.Users
         private readonly IUserService _service;
         private readonly IDTOMapper _dtoMapper;
 
-        public UserController(IUserRepository repository, IDTOMapper dtoMapper,
-        IUserService service)
+        public UserController(
+            IUserRepository repository,
+            IDTOMapper dtoMapper,
+            IUserService service
+            )
         {
             _repository = repository;
             _dtoMapper = dtoMapper;
@@ -31,13 +38,15 @@ namespace Logic.Users
         [AllowAnonymous]
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterUserDTO user)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> Register([FromBody] NewUserRequest user)
         {
-            LoginResponse response = await _service.RegisterUser(user);
+            var response = await _service.RegisterUser(user);
 
-            if (response.isError)
+            if (response._statusCode == HttpCode.Conflict)
             {
-                return Conflict(new { message = $"An existing user with the email '{user.Email}' was found." });
+                return Conflict(new { message = response._message });
             }
 
             return Ok(response);
@@ -46,26 +55,30 @@ namespace Logic.Users
         [AllowAnonymous]
         [Route("login")]
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginRequest)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {
-            LoginResponse user = await _service.AuthenticateUser(loginRequest);
+            var response = await _service.AuthenticateUser(loginRequest);
 
-            if (user.isError)
-            {
-                return Unauthorized();
-            }
-
-            return Ok(user);
+            return new ObjectResult(response._message) { StatusCode = (int)response._statusCode };
         }
 
         [Authorize(Policy = Policies.User)]
         [Route("")]
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchUserInfo()
         {
             string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
+
             User user = await _repository.FindUserByEmail(userEmail);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
 
             Role role = await _service.DetermineRole(user);
 
@@ -79,21 +92,39 @@ namespace Logic.Users
         [Authorize(Policy = Policies.User)]
         [Route("all/{businessId}")]
         [HttpGet]
-        public async Task<IEnumerable<UserDTO>> FetchAllUsersNotAlreadyEmployedByBusiness(int businessId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness(int businessId)
         {
-            IEnumerable<User> notAlreadyEmployedByBusiness = await _service.FilterUsersByBusiness(businessId);
+            var response = await _service.FilterUsersByBusiness(businessId);
 
-            return notAlreadyEmployedByBusiness.Select(x => _dtoMapper.ConvertUserToDTO(x));
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var employees = response.Select(x => _dtoMapper.ConvertUserToDTO(x));
+
+            return Ok(employees);
         }
 
         [Authorize(Policy = Policies.User)]
         [Route("all")]
         [HttpGet]
-        public async Task<IEnumerable<UserDTO>> FetchAllUsers()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> FetchAllUsers()
         {
-            var all = await _repository.GetAll();
+            var response = await _repository.GetAll();
 
-            return all.Select(x => _dtoMapper.ConvertUserToDTO(x));
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var users = response.Select(x => _dtoMapper.ConvertUserToDTO(x));
+
+            return Ok(users);
         }
     }
 }

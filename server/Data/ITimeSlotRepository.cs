@@ -10,7 +10,7 @@ namespace Data
 {
     public interface ITimeSlotRepository
     {
-        Task<(int, Response)> CreateTimeSlot(TimeSlot timeSlot);
+        Task<(int, HttpCode)> CreateTimeSlot(TimeSlot timeSlot);
 
         Task<IList<TimeSlot>> FindTimeSlotsByBusiness(int businessId);
 
@@ -20,9 +20,9 @@ namespace Data
 
         Task<TimeSlot> FindTimeSlotById(int timeSlotId);
 
-        Task<Response> UpdateTimeSlot(TimeSlot timeSlot);
+        Task<HttpCode> UpdateTimeSlot(TimeSlot timeSlot);
 
-        Task<Response> DeleteTimeSlot(int timeSlotId);
+        Task<HttpCode> DeleteTimeSlot(int timeSlotId);
         
     }
 }

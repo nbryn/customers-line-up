@@ -4,13 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System;
 
+using Data;
 using Logic.Auth;
-using Logic.Context;
 using Logic.DTO;
 using Logic.Util;
-using Data;
+
 
 namespace Logic.Businesses
 {
@@ -24,7 +23,8 @@ namespace Logic.Businesses
         private readonly IDTOMapper _dtoMapper;
 
         public BusinessController(IBusinessRepository repository,
-        IBusinessService service, IDTOMapper dtoMapper)
+                                  IBusinessService service, 
+                                  IDTOMapper dtoMapper)
         {
             _repository = repository;
             _dtoMapper = dtoMapper;
@@ -33,51 +33,65 @@ namespace Logic.Businesses
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> NewBusiness([FromBody] NewBusinessDTO dto)
+        public async Task<IActionResult> NewBusiness([FromBody] NewBusinessRequest dto)
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             dto.OwnerEmail = ownerEmail;
 
-            BusinessDTO business = await _service.RegisterBusiness(dto);
+            var response = await _service.RegisterBusiness(dto);
 
-            return Ok(business);
+            return new StatusCodeResult((int)response);
         }
 
         [HttpGet]
         [Route("owner")]
-        public async Task<IEnumerable<BusinessDTO>> FetchBusinessesForOwner()
+        public async Task<IActionResult> FetchBusinessesForOwner()
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var all = await _repository.FindBusinessesByOwner(ownerEmail);
+            var response = await _repository.FindBusinessesByOwner(ownerEmail);
 
-            return all.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var businesses = response.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
+
+            return Ok(businesses);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] NewBusinessDTO dto)
+        public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] NewBusinessRequest dto)
         {
-            Response response = await _repository.UpdateBusiness(id, dto);
+            HttpCode response = await _repository.UpdateBusiness(id, dto);
 
             return new StatusCodeResult((int)response);
         }
 
         [HttpGet]
         [Route("all")]
-        public async Task<IEnumerable<BusinessDTO>> FetchAll()
+        public async Task<IActionResult> FetchAll()
         {
-            var all = await _repository.GetAll();
+            var response = await _repository.GetAll();
 
-            return all.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var businesses = response.Select(x => _dtoMapper.ConvertBusinessToDTO(x));
+
+            return Ok(businesses);
         }
 
         [HttpGet]
         [Route("types")]
-        public IEnumerable<string> FetchBusinessTypes()
+        public IActionResult FetchBusinessTypes()
         {
-            return _dtoMapper.GetBusinessTypes();
+            return Ok(_dtoMapper.GetBusinessTypes());
         }
     }
 }

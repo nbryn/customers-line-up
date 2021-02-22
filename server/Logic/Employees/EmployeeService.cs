@@ -25,7 +25,7 @@ namespace Logic.Employees
             _userRepository = userRepository;
         }
 
-        public async Task<Response> VerifyNewEmployee(NewEmployeeDTO request)
+        public async Task<HttpCode> VerifyNewEmployee(NewEmployeeRequest request)
         {
             User user = await _userRepository.FindUserByEmail(request.PrivateEmail);
 
@@ -33,10 +33,10 @@ namespace Logic.Employees
 
             if (user == null || business == null)
             {
-                return Response.NotFound;
+                return HttpCode.NotFound;
             }
 
-            Response response = await _employeeRepository.CreateEmployee(request);
+            HttpCode response = await _employeeRepository.CreateEmployee(request);
 
             return response;
         }

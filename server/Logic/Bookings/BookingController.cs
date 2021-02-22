@@ -1,19 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
 using System.Security.Claims;
-using System;
+using System.Threading.Tasks;
 
 using Data;
 using Logic.Auth;
 using Logic.DTO;
 using Logic.Util;
-using Logic.Context;
-
 
 namespace Logic.Bookings
 {
@@ -27,7 +21,8 @@ namespace Logic.Bookings
         private readonly IDTOMapper _dtoMapper;
 
         public BookingController(IBookingRepository repository,
-        IBookingService service, IDTOMapper dtoMapper)
+                                 IBookingService service, 
+                                 IDTOMapper dtoMapper)
         {
             _repository = repository;
             _dtoMapper = dtoMapper;
@@ -40,9 +35,9 @@ namespace Logic.Bookings
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            (Response response, string message) = await _service.VerifyNewBooking(userMail, timeSlotId);
+            var response = await _service.VerifyNewBooking(userMail, timeSlotId);
 
-            return new ObjectResult(message) { StatusCode = (int)response };
+            return new ObjectResult(response._message) { StatusCode = (int)response._statusCode };
         }
 
         [HttpDelete]
@@ -51,40 +46,53 @@ namespace Logic.Bookings
         {
             string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            Response response = await _repository.DeleteBooking(userEmail, timeSlotId);
+            HttpCode response = await _repository.DeleteBooking(userEmail, timeSlotId);
 
             return new StatusCodeResult((int)response);
         }
 
         [HttpDelete]
         [Route("business/{timeSlotId}")]
-        public async Task<IActionResult> RemoveBookingBusiness(int timeSlotId, [FromQuery] string userEmail)
+        public async Task<IActionResult> RemoveBookingForBusiness(int timeSlotId, [FromQuery] string userEmail)
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            Response response = await _service.VerifyDeleteBookingRequest(ownerEmail, userEmail, timeSlotId);
+            HttpCode response = await _service.VerifyDeleteBookingRequest(ownerEmail, userEmail, timeSlotId);
 
             return new StatusCodeResult((int)response);
         }
 
-
         [HttpGet]
         [Route("user")]
-        public async Task<ICollection<BookingDTO>> FetchUserBookings()
+        public async Task<IActionResult> FetchUserBookings()
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            IList<Booking> bookings = await _repository.FindBookingsByUser(userMail);
+            var response = await _repository.FindBookingsByUser(userMail);
 
-            return bookings.Select(x => _dtoMapper.ConvertBookingToDTO(x)).ToList();
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var bookings = response.Select(x => _dtoMapper.ConvertBookingToDTO(x)).ToList();
+
+            return Ok(bookings);
         }
 
         [HttpGet]
         [Route("business/{businessId}")]
-        public async Task<ICollection<BookingDTO>> FetchBusinessBookings(int businessId)
+        public async Task<IActionResult> FetchBusinessBookings(int businessId)
         {
-            IList<Booking> bookings = await _repository.FindBookingsByBusiness(businessId);
+            var response = await _repository.FindBookingsByBusiness(businessId);
 
-            return bookings.Select(x => _dtoMapper.ConvertBookingToDTO(x)).ToList();
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            var bookings = response.Select(x => _dtoMapper.ConvertBookingToDTO(x)).ToList();
+
+            return Ok(bookings);
         }
     }
 }
