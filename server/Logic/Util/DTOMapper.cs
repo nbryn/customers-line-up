@@ -76,6 +76,8 @@ namespace Logic.Util
                 Id = booking.TimeSlotId,
                 TimeSlotId = booking.TimeSlotId,
                 Business = $"{timeSlot.BusinessName} - {business.Zip.Substring(0, business.Zip.IndexOf(" "))}",
+                Longitude = business.Longitude,
+                Latitude = business.Latitude,
                 Address = business.Address,
                 UserMail = booking.UserEmail,
                 Date = timeSlot.Start.ToString("dd/MM/yyyy"),

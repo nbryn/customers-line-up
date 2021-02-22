@@ -11,7 +11,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 
-//import Logo
+import Booking from '../../assets/images/Booking.png';
 import {useUserContext} from '../../context/UserContext';
 
 const drawerWidth = 210;
@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
    logo: {
       [theme.breakpoints.up('md')]: {
          backgroundImage: '',
-         marginTop: -50,
+         marginTop: 10,
          marginBottom: 50,
-         marginLeft: 0,
+         marginLeft: 40,
          width: '80px',
-         height: '100px',
+         height: '75px',
       },
    },
    listItem: {
@@ -139,7 +139,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
    const drawer = (
       <>
          <div className={styles.logo}>
-            <img src={''} />
+            <img src={Booking} />
          </div>
          <Divider />
          <List>

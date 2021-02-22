@@ -6,7 +6,7 @@ import {Card} from '../../components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {Form} from '../../components/form/Form';
 import {REGISTER_URL} from '../../api/URL';
-import {RequestHandler, useRequest} from '../../hooks/useRequest';
+import {ApiCaller, useApi} from '../../hooks/useApi';
 import {signupValidationSchema} from '../../validation/UserValidation';
 import StringUtil from '../../util/StringUtil';
 import {TextField} from '../../components/form/TextField';
@@ -42,7 +42,7 @@ export const SignupView: React.FC = () => {
   const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
   const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
-  const requestHandler: RequestHandler<UserDTO> = useRequest();
+  const apiCaller: ApiCaller<UserDTO> = useApi();
 
   const formValues: UserDTO = {
     email: '',
@@ -57,7 +57,7 @@ export const SignupView: React.FC = () => {
     signupValidationSchema,
     REGISTER_URL,
     'POST',
-    requestHandler.mutation,
+    apiCaller.mutation,
     (user: UserDTO) => {
       const address = addresses.find((x) => x.label === user.address);
 
@@ -89,9 +89,9 @@ export const SignupView: React.FC = () => {
             <Form
               onSubmit={formHandler.handleSubmit}
               buttonText="Signup"
-              working={requestHandler.working}
+              working={apiCaller.working}
               valid={formHandler.isValid}
-              errorMessage={requestHandler.requestInfo}
+              errorMessage={apiCaller.requestInfo}
             >
               {Object.keys(formValues).map((key) => {
                 if (key === 'zip' || key === 'address') {

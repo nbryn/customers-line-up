@@ -9,7 +9,7 @@ import {BusinessCard} from '../../components/card/BusinessCard';
 import {BusinessDTO} from '../../models/Business';
 import PathUtil, {PathInfo} from '../../util/PathUtil';
 import {Header} from '../../components/Texts';
-import {RequestHandler, useRequest} from '../../hooks/useRequest';
+import {ApiCaller, useApi} from '../../hooks/useApi';
 
 const useStyles = makeStyles((theme) => ({
    row: {
@@ -25,11 +25,11 @@ export const BusinessOverview: React.FC = () => {
 
    const pathInfo: PathInfo = PathUtil.getPathAndTextFromURL(window.location.pathname);
 
-   const requestHandler: RequestHandler<BusinessDTO[]> = useRequest();
+   const apiCaller: ApiCaller<BusinessDTO[]> = useApi();
 
    useEffect(() => {
       (async () => {
-         const businesses: BusinessDTO[] = await requestHandler.query(BUSINESSES_OWNER_URL);
+         const businesses: BusinessDTO[] = await apiCaller.query(BUSINESSES_OWNER_URL);
 
          setBusinessData(businesses);
       })();
@@ -41,7 +41,7 @@ export const BusinessOverview: React.FC = () => {
             <Header text="Choose Business" />
          </Row>
          <Row className={styles.row}>
-            {requestHandler.working && <CircularProgress />}
+            {apiCaller.working && <CircularProgress />}
             <>
                {businessData.map((x) => {
                   localStorage.setItem('business', JSON.stringify(x));

@@ -11,7 +11,7 @@ import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {Form} from '../../components/form/Form';
 import {Header} from '../../components/Texts';
 import {Modal} from '../../components/modal/Modal';
-import {RequestHandler, useRequest} from '../../hooks/useRequest';
+import {ApiCaller, useApi} from '../../hooks/useApi';
 import StringUtil from '../../util/StringUtil';
 import {TextField} from '../../components/form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
@@ -49,7 +49,7 @@ export const NewBusinessView: React.FC = () => {
   const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
   const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
-  const requestHandler: RequestHandler<string[]> = useRequest(SUCCESS_MESSAGE);
+  const apiCaller: ApiCaller<string[]> = useApi(SUCCESS_MESSAGE);
 
   const formValues: BusinessDTO = {
     id: 0,
@@ -68,7 +68,7 @@ export const NewBusinessView: React.FC = () => {
     businessValidationSchema,
     CREATE_BUSINESS_URL,
     'POST',
-    requestHandler.mutation,
+    apiCaller.mutation,
     (business) => {
       const address = addresses.find((x) => x.label === business.address);
 
@@ -84,7 +84,7 @@ export const NewBusinessView: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const types = await requestHandler.query(BUSINESS_TYPES_URL);
+      const types = await apiCaller.query(BUSINESS_TYPES_URL);
 
       setBusinessTypes(types);
 
@@ -107,18 +107,18 @@ export const NewBusinessView: React.FC = () => {
       <Row className={styles.wrapper}>
         <Col sm={6} lg={8}>
           <Modal
-            show={requestHandler.requestInfo ? true : false}
+            show={apiCaller.requestInfo ? true : false}
             title="Business Info"
-            text={requestHandler.requestInfo}
+            text={apiCaller.requestInfo}
             primaryAction={() => history.push('/business')}
             primaryActionText="My Businesses"
-            secondaryAction={() => requestHandler.setRequestInfo('')}
+            secondaryAction={() => apiCaller.setRequestInfo('')}
           />
           <Card className={styles.card} title="Business Data" variant="outlined">
             <Form
               onSubmit={formHandler.handleSubmit}
               buttonText="Create"
-              working={requestHandler.working}
+              working={apiCaller.working}
               valid={formHandler.isValid}
             >
               <Row>

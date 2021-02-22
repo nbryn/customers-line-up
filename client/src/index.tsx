@@ -7,15 +7,12 @@ import {UserContextProvider} from '../src/context/UserContext';
 import {MainView} from './views/MainView';
 
 ReactDOM.render(
-      <UserContextProvider>
-         <Router>
+    <UserContextProvider>
+        <Router>
             <MainView />
-         </Router>
-      </UserContextProvider>,
-   document.getElementById('root')
+        </Router>
+    </UserContextProvider>,
+    document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

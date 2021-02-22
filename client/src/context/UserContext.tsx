@@ -3,62 +3,66 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import {UserDTO} from '../models/User';
 import {USER_INFO_URL} from '../api/URL';
-import {useRequest, RequestHandler} from '../hooks/useRequest';
+import {useApi, ApiCaller} from '../hooks/useApi';
 
 export type ContextValue = {
-   user: UserDTO;
-   logout: () => void;
-   setUser: (user: UserDTO) => void;
+    user: UserDTO;
+    logout: () => void;
+    setUser: (user: UserDTO) => void;
 };
 
 export const UserContext = React.createContext<ContextValue>({
-   user: (Cookies.get('user') as unknown) as UserDTO,
-   setUser: () => null,
-   logout: () => null,
+    user: (Cookies.get('user') as unknown) as UserDTO,
+    setUser: () => null,
+    logout: () => null,
 });
 
 type Props = {
-   children: React.ReactNode;
+    children: React.ReactNode;
 };
 
 export const UserContextProvider: React.FC<Props> = (props: Props) => {
-   const [user, setCurrentUser] = useState<UserDTO>({email: ''});
+    const [user, setCurrentUser] = useState<UserDTO>({email: ''});
 
-   const requestHandler: RequestHandler<UserDTO> = useRequest();
+    const apiCaller: ApiCaller<UserDTO> = useApi();
 
-   const setUser = (user: UserDTO) => {
-      setCurrentUser(user);
+    const setUser = (user: UserDTO) => {
+        setCurrentUser(user);
 
-      Cookies.set('token', user.token!);
-   };
+        Cookies.set('token', user.token!);
+    };
 
-   const logout = () => {
-      Cookies.remove('token');
+    const logout = () => {
+        Cookies.remove('token');
 
-      setCurrentUser({email: ''});
-   };
+        setCurrentUser({email: ''});
+    };
 
-   useEffect(() => {
-      (async () => {
-         if (Cookies.get('token')) {
-            const user = await requestHandler.query(USER_INFO_URL);
+    useEffect(() => {
+        (async () => {
+            if (Cookies.get('token')) {
+                const user = await apiCaller.query(USER_INFO_URL);
 
-            setCurrentUser(user || {email: ''});
-         }
-      })();
-   }, []);
+                setCurrentUser(user || {email: ''});
+            }
+        })();
+    }, []);
 
-   const contextValue: ContextValue = {
-      user,
-      logout,
-      setUser,
-   };
+    useEffect(() => {
+        setTimeout(() => logout(), 7200000);
+    }, []);
 
-   return <UserContext.Provider value={contextValue}>{props.children}</UserContext.Provider>;
+    const contextValue: ContextValue = {
+        user,
+        logout,
+        setUser,
+    };
+
+    return <UserContext.Provider value={contextValue}>{props.children}</UserContext.Provider>;
 };
 
 export const useUserContext = (): ContextValue => {
-   const context = useContext(UserContext);
+    const context = useContext(UserContext);
 
-   return context;
+    return context;
 };

@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import {fetch} from '../api/Fetch';
 
-export interface RequestHandler<T> {
+export interface ApiCaller<T> {
   mutation: <T>(url: string, method: Method, request?: any) => Promise<T>;
   query: (url: string) => Promise<T>
   setRequestInfo: (info: string) => void;
@@ -12,7 +12,7 @@ export interface RequestHandler<T> {
   working: boolean;
 }
 
-export function useRequest<T>(succesMessage?: string): RequestHandler<T> {
+export function useApi<T>(succesMessage?: string): ApiCaller<T> {
   const [working, setWorking] = useState<boolean>(false);
   const [requestInfo, setRequestInfo] = useState<string>('');
 

@@ -6,7 +6,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {ComboBoxOption} from '../../components/form/ComboBox';
 import {FormCard, FormCardData} from '../../components/card/FormCard';
 import {Header} from '../../components/Texts';
-import {RequestHandler, useRequest} from '../../hooks/useRequest';
+import {ApiCaller, useApi} from '../../hooks/useApi';
 import {userValidationSchema} from '../../validation/UserValidation';
 import StringUtil from '../../util/StringUtil';
 import {TextFieldModal} from '../../components/modal/TextFieldModal';
@@ -41,8 +41,6 @@ const useStyles = makeStyles((theme) => ({
    },
 }));
 
-const SUCCESS_MESSAGE = 'Business Created - Go to my businesses to see your businesses';
-
 export const ProfileView: React.FC = () => {
    const styles = useStyles();
    const {user} = useUserContext();
@@ -51,7 +49,7 @@ export const ProfileView: React.FC = () => {
    const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
    const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
-   const requestHandler: RequestHandler<string[]> = useRequest(SUCCESS_MESSAGE);
+   const apiCaller: ApiCaller<string[]> = useApi();
 
    const formValues = pick(user, ['name', 'email', 'zip', 'address']);
 
@@ -60,7 +58,7 @@ export const ProfileView: React.FC = () => {
       userValidationSchema,
       CREATE_BUSINESS_URL,
       'POST',
-      requestHandler.mutation
+      apiCaller.mutation
    );
 
    useEffect(() => {

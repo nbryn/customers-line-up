@@ -6,7 +6,7 @@ import {Card} from '../../components/card/Card';
 import {Form} from '../../components/form/Form';
 import {LOGIN_URL} from '../../api/URL';
 import {loginValidationSchema} from '../../validation/UserValidation';
-import {RequestHandler, useRequest} from '../../hooks/useRequest';
+import {ApiCaller, useApi} from '../../hooks/useApi';
 import {SignupView} from './SignupView';
 import StringUtil from '../../util/StringUtil';
 import {TextField} from '../../components/form/TextField';
@@ -40,7 +40,7 @@ export const LoginView: React.FC = () => {
 
    const [renderSignUp, setRenderSignUp] = useState(false);
 
-   const requestHandler: RequestHandler<UserDTO> = useRequest();
+   const apiCaller: ApiCaller<UserDTO> = useApi();
 
    const formValues: UserDTO = {
       email: '',
@@ -52,7 +52,7 @@ export const LoginView: React.FC = () => {
       loginValidationSchema,
       LOGIN_URL,
       'POST',
-      requestHandler.mutation,
+      apiCaller.mutation,
       undefined,
       setUser
    );
@@ -77,9 +77,9 @@ export const LoginView: React.FC = () => {
                      <Form
                         onSubmit={formHandler.handleSubmit}
                         buttonText="Login"
-                        working={requestHandler.working}
+                        working={apiCaller.working}
                         valid={formHandler.isValid}
-                        errorMessage={requestHandler.requestInfo ? 'Wrong Email/Password' : ''}
+                        errorMessage={apiCaller.requestInfo ? 'Wrong Email/Password' : ''}
                      >
                         {Object.keys(formValues).map((key) => (
                            <FormGroup key={key}>
