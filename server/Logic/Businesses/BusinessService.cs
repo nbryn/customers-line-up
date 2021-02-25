@@ -13,10 +13,10 @@ namespace Logic.Businesses
         private readonly IBusinessRepository _businessRepository;
         private readonly IDTOMapper _dtoMapper;
 
-
-
-        public BusinessService(IBusinessOwnerRepository businessOwnerRepository,
-        IBusinessRepository businessRepository, IDTOMapper dtoMapper)
+        public BusinessService(
+            IBusinessOwnerRepository businessOwnerRepository,
+            IBusinessRepository businessRepository, 
+            IDTOMapper dtoMapper)
         {
             _businessOwnerRepository = businessOwnerRepository;
             _businessRepository = businessRepository;
@@ -32,9 +32,9 @@ namespace Logic.Businesses
                 await _businessOwnerRepository.CreateBusinessOwner(business.OwnerEmail);
             }
 
-            Business newBusiness = await _businessRepository.CreateBusiness(business);
+            var response = await _businessRepository.CreateBusiness(business);
 
-            return HttpCode.Created;
+            return response;
         }
     }
 }

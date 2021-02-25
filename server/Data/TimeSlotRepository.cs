@@ -60,7 +60,7 @@ namespace Data
             return timeSlots;
         }
 
-        public async Task<IList<TimeSlot>> FindTimeSlotByBusinessAndDate(int businessId, DateTime date)
+        public async Task<IList<TimeSlot>> FindTimeSlotsByBusinessAndDate(int businessId, DateTime date)
         {
             IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
                                                                 .Include(x => x.Business)

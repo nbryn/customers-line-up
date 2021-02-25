@@ -1,10 +1,9 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Logic.Businesses;
-using Logic.Context;
 using Data;
 using Logic.DTO;
 using Logic.Util;
@@ -17,9 +16,11 @@ namespace Logic.TimeSlots
         private readonly IBusinessRepository _businessRepository;
         private readonly IDTOMapper _dtoMapper;
 
-
-        public TimeSlotService(ITimeSlotRepository timeSlotRepository,
-            IBusinessRepository businessRepository, IDTOMapper dtoMapper)
+        public TimeSlotService(
+            ITimeSlotRepository timeSlotRepository,
+            IBusinessRepository businessRepository, 
+            IDTOMapper dtoMapper
+            )
         {
             _businessRepository = businessRepository;
             _timeSlotRepository = timeSlotRepository;
@@ -49,11 +50,11 @@ namespace Logic.TimeSlots
                 return new QueryResult(HttpCode.NotFound, "Business not found");
             }
 
-            IList<TimeSlot> existingTimeSlots = await _timeSlotRepository.FindTimeSlotByBusinessAndDate(request.BusinessId, request.Start);
+            IList<TimeSlot> existingTimeSlots = await _timeSlotRepository.FindTimeSlotsByBusinessAndDate(request.BusinessId, request.Start);
 
             if (existingTimeSlots.Count() > 0)
             {
-               return new QueryResult(HttpCode.Conflict, "Timeslot is full");
+               return new QueryResult(HttpCode.Conflict, "Time slots already generated for this date");
             }
 
             DateTime opens = request.Start.AddHours(Double.Parse(business.Opens));
@@ -82,9 +83,6 @@ namespace Logic.TimeSlots
                 };
 
                 var response = await _timeSlotRepository.CreateTimeSlot(timeSlot);
-
-                timeSlot.Id = response.Item1;
-
             }
 
             return new QueryResult(HttpCode.Created);

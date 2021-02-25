@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Logic.Bookings;
-using Logic.DTO;
 using Logic.Context;
+using Logic.DTO;
 
 namespace Data
 {
@@ -17,13 +17,13 @@ namespace Data
         {
             _context = context;
         }
-        public async Task<(string, int)> SaveBooking(Booking booking)
+        public async Task<HttpCode> SaveBooking(Booking booking)
         {
             _context.Bookings.Add(booking);
 
             await _context.SaveChangesAsync();
 
-            return (booking.UserEmail, booking.TimeSlotId);
+            return HttpCode.Created;
         }
 
         public async Task<Booking> FindBookingByUserAndTimeSlot(string userEmail, int timeSlotId)

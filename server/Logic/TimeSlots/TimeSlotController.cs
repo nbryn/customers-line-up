@@ -1,4 +1,5 @@
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -21,8 +22,10 @@ namespace Logic.TimeSlots
         private readonly ITimeSlotService _service;
         private readonly IDTOMapper _dtoMapper;
 
-        public TimeSlotController(ITimeSlotRepository repository,
-        ITimeSlotService service, IDTOMapper dtoMapper)
+        public TimeSlotController(
+            ITimeSlotRepository repository,
+            ITimeSlotService service, 
+            IDTOMapper dtoMapper)
         {
             _repository = repository;
             _dtoMapper = dtoMapper;
@@ -55,7 +58,7 @@ namespace Logic.TimeSlots
 
         [HttpGet]
         [Route("business/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TimeSlotDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TimeSlotDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllTimeSlotsForBusiness(int id)
         {
@@ -73,7 +76,7 @@ namespace Logic.TimeSlots
 
         [HttpGet]
         [Route("available")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TimeSlotDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TimeSlotDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllAvailableTimeSlotsForBusiness([FromQuery] AvailableTimeSlotsRequest request)
         {

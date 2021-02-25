@@ -13,8 +13,10 @@ namespace Logic.Bookings
         private readonly ITimeSlotRepository _timeSlotRepository;
         private readonly IBookingRepository _bookingRepository;
 
-        public BookingService(IBusinessRepository businessRepository, ITimeSlotRepository timeSlotRepository,
-        IBookingRepository bookingRepository)
+        public BookingService(
+            IBusinessRepository businessRepository, 
+            ITimeSlotRepository timeSlotRepository,
+            IBookingRepository bookingRepository)
         {
             _businessRepository = businessRepository;
             _timeSlotRepository = timeSlotRepository;
@@ -51,7 +53,7 @@ namespace Logic.Bookings
 
             Booking booking = new Booking { UserEmail = userEmail, TimeSlotId = timeSlotId, BusinessId = business.Id };
 
-            await _bookingRepository.SaveBooking(booking);
+            var response = await _bookingRepository.SaveBooking(booking);
 
             return new QueryResult(HttpCode.Created, "Booking successfull");
         }

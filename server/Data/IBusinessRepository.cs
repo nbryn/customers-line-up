@@ -2,14 +2,13 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Logic.Businesses;
-using Logic.Context;
 using Logic.DTO;
 
 namespace Data
 {
     public interface IBusinessRepository
     {
-         Task<Business> CreateBusiness(NewBusinessRequest business);
+         Task<HttpCode> CreateBusiness(NewBusinessRequest business);
 
          Task<Business> FindBusinessById(int businessId);
 

@@ -10,7 +10,7 @@ namespace Data
     {
         Task<HttpCode> DeleteBooking(string userEmail, int timeSlotId);
         Task<IList<Booking>> FindBookingsByUser(string userEmail);
-        Task<(string, int)> SaveBooking(Booking booking);
+        Task<HttpCode> SaveBooking(Booking booking);
         Task<Booking> FindBookingByUserAndTimeSlot(string userEmail, int timeSlotId);
         Task<IList<Booking>> FindBookingsByBusiness(int businessId);
 

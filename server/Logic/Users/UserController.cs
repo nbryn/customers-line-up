@@ -27,8 +27,7 @@ namespace Logic.Users
         public UserController(
             IUserRepository repository,
             IDTOMapper dtoMapper,
-            IUserService service
-            )
+            IUserService service)
         {
             _repository = repository;
             _dtoMapper = dtoMapper;
@@ -92,7 +91,7 @@ namespace Logic.Users
         [Authorize(Policy = Policies.User)]
         [Route("all/{businessId}")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UserDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness(int businessId)
         {
@@ -111,7 +110,7 @@ namespace Logic.Users
         [Authorize(Policy = Policies.User)]
         [Route("all")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UserDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllUsers()
         {

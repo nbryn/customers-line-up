@@ -14,7 +14,7 @@ namespace Data
 
         Task<IList<TimeSlot>> FindTimeSlotsByBusiness(int businessId);
 
-        Task<IList<TimeSlot>> FindTimeSlotByBusinessAndDate(int businessId, DateTime date);
+        Task<IList<TimeSlot>> FindTimeSlotsByBusinessAndDate(int businessId, DateTime date);
 
         Task<IList<TimeSlot>> FindAvailableTimeSlotsByBusiness(AvailableTimeSlotsRequest request);
 

@@ -1,13 +1,13 @@
-using System;
+
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 using Data;
 using Logic.Auth;
-using Logic.Context;
 using Logic.DTO;
 using Logic.Util;
 
@@ -23,9 +23,10 @@ namespace Logic.Employees
         private readonly IEmployeeService _service;
         private readonly IDTOMapper _dtoMapper;
 
-        public EmployeeController(IEmployeeRepository repository,
-                                  IEmployeeService service, 
-                                  IDTOMapper dtoMapper)
+        public EmployeeController(
+            IEmployeeRepository repository,
+            IEmployeeService service, 
+            IDTOMapper dtoMapper)
         {
             _repository = repository;
             _dtoMapper = dtoMapper;
@@ -34,6 +35,8 @@ namespace Logic.Employees
 
         [HttpGet]
         [Route("business/{businessId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<EmployeeDTO>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllEmployeesForBusiness(int businessId)
         {
             var response = await _repository.FindEmployeesByBusiness(businessId);
@@ -50,6 +53,8 @@ namespace Logic.Employees
 
         [HttpPost]
         [Route("")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> NewEmployee(NewEmployeeRequest request)
         {
             HttpCode response = await _service.VerifyNewEmployee(request);
@@ -59,6 +64,8 @@ namespace Logic.Employees
 
         [HttpDelete]
         [Route("{email}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RemoveEmployee(string email, [FromQuery] int businessId)
         {
             HttpCode response = await _repository.DeleteEmployee(email, businessId);

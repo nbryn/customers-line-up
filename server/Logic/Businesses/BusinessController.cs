@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +23,10 @@ namespace Logic.Businesses
         private readonly IBusinessService _service;
         private readonly IDTOMapper _dtoMapper;
 
-        public BusinessController(IBusinessRepository repository,
-                                  IBusinessService service, 
-                                  IDTOMapper dtoMapper)
+        public BusinessController(
+            IBusinessRepository repository,
+            IBusinessService service, 
+            IDTOMapper dtoMapper)
         {
             _repository = repository;
             _dtoMapper = dtoMapper;
@@ -33,6 +35,7 @@ namespace Logic.Businesses
 
         [HttpPost]
         [Route("")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> NewBusiness([FromBody] NewBusinessRequest dto)
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -46,6 +49,8 @@ namespace Logic.Businesses
 
         [HttpGet]
         [Route("owner")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BusinessDTO>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchBusinessesForOwner()
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -64,6 +69,8 @@ namespace Logic.Businesses
 
         [HttpPut]
         [Route("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] NewBusinessRequest dto)
         {
             HttpCode response = await _repository.UpdateBusiness(id, dto);
@@ -73,6 +80,8 @@ namespace Logic.Businesses
 
         [HttpGet]
         [Route("all")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BusinessDTO>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAll()
         {
             var response = await _repository.GetAll();
@@ -89,6 +98,7 @@ namespace Logic.Businesses
 
         [HttpGet]
         [Route("types")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult FetchBusinessTypes()
         {
             return Ok(_dtoMapper.GetBusinessTypes());

@@ -17,7 +17,7 @@ namespace Data
             _context = context;
         }
 
-        public async Task<Business> CreateBusiness(NewBusinessRequest business)
+        public async Task<HttpCode> CreateBusiness(NewBusinessRequest business)
         {
             BusinessType.TryParse(business.Type, out BusinessType type);
 
@@ -40,7 +40,7 @@ namespace Data
 
             await _context.SaveChangesAsync();
 
-            return newBusiness;
+            return HttpCode.Created;
 
         }
 
