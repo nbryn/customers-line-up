@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System;
 
 using CLup.Auth;
 using CLup.Extensions;
@@ -40,7 +41,7 @@ namespace CLup.Users
         {
             var response = await _service.RegisterUser(user);
 
-            return this.CreateActionResult(response); ;
+            return this.CreateActionResult<UserDTO>(response);
         }
 
         [AllowAnonymous]
@@ -52,7 +53,7 @@ namespace CLup.Users
         {
             var response = await _service.AuthenticateUser(loginRequest);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<UserDTO>(response);
         }
 
         [Authorize(Policy = Policies.User)]
@@ -85,7 +86,7 @@ namespace CLup.Users
         {
             var response = await _service.FilterUsersByBusiness(businessId);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<IList<UserDTO>>(response);
         }
 
         [Authorize(Policy = Policies.User)]
@@ -97,7 +98,7 @@ namespace CLup.Users
         {
             var response = await _repository.GetAll();
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<IList<UserDTO>>(response);
         }
     }
 }

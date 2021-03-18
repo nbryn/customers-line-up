@@ -26,6 +26,7 @@ export async function fetch<T>(url: string, method: Method, request?: any): Prom
   
         throw new Error(err.request.response);
       } else {
+        console.log(err.request);
         throw new Error("Network/Undefined Error!")
       }
       // const errors = new Map();

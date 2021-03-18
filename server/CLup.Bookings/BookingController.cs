@@ -75,7 +75,7 @@ namespace CLup.Bookings
 
             var response = await _repository.FindBookingsByUser(userMail);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<IList<BookingDTO>>(response);
         }
 
         [HttpGet]
@@ -86,7 +86,7 @@ namespace CLup.Bookings
         {
             var response = await _repository.FindBookingsByBusiness(businessId);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<IList<BookingDTO>>(response);
         }
     }
 }

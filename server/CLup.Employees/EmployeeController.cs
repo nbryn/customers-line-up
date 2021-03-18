@@ -35,7 +35,7 @@ namespace Logic.Employees
         {
             var response = await _repository.FindEmployeesByBusiness(businessId);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<IList<EmployeeDTO>>(response);
         }
 
         [HttpPost]

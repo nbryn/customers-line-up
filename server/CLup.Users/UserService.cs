@@ -1,5 +1,6 @@
 using AutoMapper;
 using BC = BCrypt.Net.BCrypt;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -66,6 +67,7 @@ namespace CLup.Users
             await DetermineRole(user);
 
             var response = _mapper.Map<UserDTO>(user);
+            response.Token = token;
 
             return new ServiceResponse<UserDTO>(HttpCode.Ok, response);
         }

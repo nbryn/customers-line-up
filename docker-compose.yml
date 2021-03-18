@@ -7,7 +7,7 @@ services:
    environment:
      - "ACCEPT_EULA=Y"
      - "SA_PASSWORD=Secret_paSS123"
-   container_name: mssql
+   container_name: customers-lineup
    ports:
    - "1433:1433"
   # client:

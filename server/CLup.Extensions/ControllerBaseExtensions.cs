@@ -77,6 +77,11 @@ namespace CLup.Extensions
                 return controller.Conflict(response._message ?? null);
             }
 
+            if (response._statusCode == HttpCode.Unauthorized)
+            {
+                return controller.Unauthorized(response._message ?? null);
+            }
+
             return controller.BadRequest(response._message ?? null);
 
         }

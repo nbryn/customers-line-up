@@ -53,7 +53,7 @@ namespace CLup.Businesses
 
             var response = await _repository.FindBusinessesByOwner(ownerEmail);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<IList<BusinessDTO>>(response);
         }
 
         [HttpPut]
@@ -75,7 +75,7 @@ namespace CLup.Businesses
         {
             var response = await _repository.GetAll();
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<IList<BusinessDTO>>(response);
         }
 
         [HttpGet]

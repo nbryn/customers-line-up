@@ -48,6 +48,7 @@ namespace CLup.Context
 
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

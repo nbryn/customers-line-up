@@ -23,6 +23,7 @@ export function useApi<T>(succesMessage?: string): ApiCaller<T> {
     try {
       setWorking(true);
       response = await fetch(url, method, request);
+
       if (succesMessage) setRequestInfo(succesMessage);
 
     } catch (err) {

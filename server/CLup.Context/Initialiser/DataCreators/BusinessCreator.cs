@@ -6,14 +6,13 @@ namespace CLup.Context.Initialiser.DataCreators
     {
 
         public static Business Create(
-            int id, string name, string ownerEmail,
+            string name, string ownerEmail,
             string address, string zip, double longitude,
             double latitude, int capacity, string opens,
             string closes, int TimeSlotLength, BusinessType type)
         {
             Business business = new Business
             {
-                Id = id,
                 Name = name,
                 OwnerEmail = ownerEmail,
                 Zip = zip,
@@ -30,11 +29,10 @@ namespace CLup.Context.Initialiser.DataCreators
             return business;
         }
 
-        public static BusinessOwner CreateOwner(int id, string userEmail)
+        public static BusinessOwner CreateOwner(string userEmail)
         {
             BusinessOwner owner = new BusinessOwner
             {
-                Id = id,
                 UserEmail = userEmail
             };
 

@@ -8,7 +8,6 @@ using CLup.Employees;
 using CLup.TimeSlots;
 using CLup.Users;
 
-
 namespace CLup.Context
 {
     public interface ICLupContext

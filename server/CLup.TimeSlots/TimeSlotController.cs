@@ -59,7 +59,7 @@ namespace CLup.TimeSlots
         {
             var response = await _repository.FindTimeSlotsByBusiness(id);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<IList<TimeSlotDTO>>(response);
         }
 
         [HttpGet]
@@ -70,7 +70,7 @@ namespace CLup.TimeSlots
         {
             var response = await _repository.FindAvailableTimeSlotsByBusiness(request);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult<IList<TimeSlotDTO>>(response);
         }
     }
 }
