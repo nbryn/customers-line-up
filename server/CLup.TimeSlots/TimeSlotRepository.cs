@@ -1,0 +1,113 @@
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+using CLup.Context;
+using CLup.Extensions;
+using CLup.TimeSlots.DTO;
+using CLup.TimeSlots.Interfaces;
+using CLup.Util;
+
+namespace CLup.TimeSlots
+{
+    public class TimeSlotRepository : ITimeSlotRepository
+    {
+        private readonly ICLupContext _context;
+        private readonly IMapper _mapper;
+        public TimeSlotRepository(
+            ICLupContext context,
+            IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+        public async Task<ServiceResponse<int>> CreateTimeSlot(TimeSlot timeSlot)
+        {
+            await _context.TimeSlots.AddAsync(timeSlot);
+
+            await _context.SaveChangesAsync();
+
+            return new ServiceResponse<int>(HttpCode.Created, timeSlot.Id);
+        }
+
+        public async Task<ServiceResponse> DeleteTimeSlot(int timeSlotId)
+        {
+            TimeSlot timeSlot = await FindTimeSlotById(timeSlotId);
+
+            if (timeSlot == null)
+            {
+                return new ServiceResponse(HttpCode.NotFound);
+            }
+
+            _context.TimeSlots.Remove(timeSlot);
+
+            await _context.SaveChangesAsync();
+
+            return new ServiceResponse(HttpCode.Deleted);
+        }
+
+        public async Task<TimeSlot> FindTimeSlotById(int timeSlotId)
+        {
+            TimeSlot timeSlot = await _context.TimeSlots.Include(x => x.Bookings)
+                                                        .Include(x => x.Business)
+                                                        .FirstOrDefaultAsync(x => x.Id == timeSlotId);
+
+            return timeSlot;
+        }
+
+        public async Task<ServiceResponse<IList<TimeSlotDTO>>> FindTimeSlotsByBusiness(int businessId)
+        {
+            IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
+                                                                .Include(x => x.Business)
+                                                                .Where(x => x.BusinessId == businessId)
+                                                                .ToListAsync();
+
+            return this.AssembleResponse<TimeSlot, TimeSlotDTO>(timeSlots, _mapper);
+        }
+
+        public async Task<ServiceResponse<IList<TimeSlotDTO>>> FindTimeSlotsByBusinessAndDate(int businessId, DateTime date)
+        {
+            IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
+                                                                .Include(x => x.Business)
+                                                                .Where(x => x.BusinessId == businessId && x.Start.Date == date.Date)
+                                                                .ToListAsync();
+
+            return this.AssembleResponse<TimeSlot, TimeSlotDTO>(timeSlots, _mapper);                                               
+        }
+
+        public async Task<ServiceResponse<IList<TimeSlotDTO>>> FindAvailableTimeSlotsByBusiness(AvailableTimeSlotsRequest request)
+        {
+            IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
+                                                                .Include(x => x.Business)
+                                                                .Where(x => x.BusinessId == request.BusinessId &&
+                                                                               (x.Start > request.Start && x.End < request.End))
+                                                                .ToListAsync();
+
+            return this.AssembleResponse<TimeSlot, TimeSlotDTO>(timeSlots, _mapper);
+        }
+
+        public async Task<ServiceResponse> UpdateTimeSlot(TimeSlot timeSlot)
+        {
+            TimeSlot ts = await FindTimeSlotById(timeSlot.Id);
+
+            if (ts == null)
+            {
+                return new ServiceResponse(HttpCode.NotFound);
+            }
+
+            ts.Bookings = timeSlot.Bookings;
+            ts.BusinessId = timeSlot.BusinessId;
+            ts.BusinessName = timeSlot.BusinessName;
+            ts.Capacity = timeSlot.Capacity;
+            ts.Start = timeSlot.Start;
+            ts.End = timeSlot.End;
+
+            await _context.SaveChangesAsync();
+
+            return new ServiceResponse(HttpCode.Updated);
+        }
+    }
+}
