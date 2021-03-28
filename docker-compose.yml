@@ -1,31 +1,45 @@
-version: '3.4'
+version: "3.4"
 
 services:
-# For running DB in container instead of using prod Azure Database
- db:
-   image: mcr.microsoft.com/mssql/server:2019-latest
-   environment:
-     - "ACCEPT_EULA=Y"
-     - "SA_PASSWORD=Secret_paSS123"
-   container_name: customers-lineup
-   ports:
-   - "1433:1433"
-  # client:
-  #   build:
-  #     context: client 
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:80" # Map the exposed port 80 on the container to port 3000 on the host machine
-  #   restart: always
-  #   # depends_on:
-  #   #  - server
-  #   networks:
-  #     - client
- 
-# networks:
-#   server:
-#   client:
+  db:
+    container_name: clup_db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - "ACCEPT_EULA=Y"
+      - "SA_PASSWORD=Secret_paSS123"
+    ports:
+      - "1433:1433"
 
+  server:
+    container_name: clup_server
+    build:
+      context: server
+      dockerfile: Dockerfile
+    volumes:
+      - ./server:/app
+    command: ["dotnet", "watch", "run"]
+    ports:
+      - "5001:5001"
+    restart: always
+    depends_on:
+      - db
 
+  client:
+    container_name: clup_client
+    build:
+      context: client
+      dockerfile: Dockerfile
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    ports:
+      - "3000:3000"
+    restart: always
+    depends_on:
+      - server
+    links:
+      - server
 # docker-compose build --no-cache server client
-  
+

@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
@@ -48,17 +50,28 @@ namespace CLup.Extensions
 
         }
 
-        public static void ConfigureDataContext(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureDataContext(
+            this IServiceCollection services,
+            IConfiguration configuration,
+            IWebHostEnvironment environment)
         {
             services.AddTransient<DataInitialiser>();
 
-            //var connectionString = "DataSource=myshareddb;mode=memory;cache=shared";
+            if (environment.IsDevelopment())
+            {
+                var connectionString = configuration.GetConnectionString("development");
 
-            var connectionString = configuration.GetConnectionString("development");
-
-            services.AddDbContext<CLupContext>(options =>
-                              options.UseSqlServer(connectionString),
-                   ServiceLifetime.Transient);
+                services.AddDbContext<CLupContext>(options =>
+                                  options.UseSqlServer(connectionString),
+                       ServiceLifetime.Transient);
+            }
+            else
+            {
+                var connectionString = "DataSource=myshareddb;mode=memory;cache=shared";
+                services.AddDbContext<CLupContext>(options =>
+                                  options.UseSqlite(connectionString),
+                       ServiceLifetime.Transient);
+            }
         }
 
         public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration)

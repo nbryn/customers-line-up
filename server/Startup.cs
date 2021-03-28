@@ -11,10 +11,13 @@ namespace CLup
     public class Startup
     {
         internal IConfiguration _config { get; private set; }
+
+        public IWebHostEnvironment Environment { get; }
         readonly string CorsApi = "CorsApi";
-        public Startup(IConfiguration config)
+        public Startup(IConfiguration config, IWebHostEnvironment environment)
         {
             _config = config;
+            Environment = environment;
         }
         public void ConfigureServices(IServiceCollection services)
         {
@@ -34,7 +37,7 @@ namespace CLup
 
             services.ConfigureDataServices(_config);
             services.ConfigureRepositories(_config);
-            services.ConfigureDataContext(_config);
+            services.ConfigureDataContext(_config, Environment);
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
         }

@@ -16,11 +16,10 @@ namespace CLup.Extensions
             CLupContext context = scope.ServiceProvider.GetRequiredService<CLupContext>();
 
             context.Database.Migrate();
-            
+
             var dataInitializer = scope.ServiceProvider.GetService<DataInitialiser>();
 
             dataInitializer.InitialiseSeed();
-
         }
     }
 }

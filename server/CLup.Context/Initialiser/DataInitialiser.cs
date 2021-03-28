@@ -43,7 +43,6 @@ namespace CLup.Context.Initialiser
 
             _context.Add(UserCreator.Create("Emil", "emil@live.com", BC.HashPassword("1234"), "3520 - Farum",
                           "Farum Hovedgade 15", 55.8200342, 12.3591325));
-
         }
         private void AddBusinesses()
         {
@@ -85,6 +84,7 @@ namespace CLup.Context.Initialiser
             {
                 return;
             }
+
             _context.Add(BookingCreator.Create("test@test.com", 1, 1));
             _context.Add(BookingCreator.Create("test@test.com", 1, 2));
             _context.Add(BookingCreator.Create("test@test.com", 1, 3));
@@ -95,10 +95,9 @@ namespace CLup.Context.Initialiser
             {
                 return;
             }
+
             _context.Add(EmployeeCreator.Create(DateTime.Now, 1, "test@test.com"));
-
             _context.Add(EmployeeCreator.Create(DateTime.Now, 2, "h@h.com"));
-
         }
 
     }
