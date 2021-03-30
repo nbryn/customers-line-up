@@ -24,7 +24,7 @@ export function useTimeSlotService(succesMessage?: string): TimeSlotService {
         const today = new Date();
         today.setDate(today.getDate() - 100);
         const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 3);
+        tomorrow.setDate(tomorrow.getDate() + 30);
 
         const start = today.toISOString().substring(0, 10);
         const end = tomorrow.toISOString().substring(0, 10);

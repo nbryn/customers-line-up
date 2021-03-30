@@ -9,6 +9,7 @@ export interface BusinessDTO extends DTO {
    capacity: number | string;
    opens: string;
    closes: string;
+   ownerEmail?: string;
    longitude?: number;
    latitude?: number;
 }

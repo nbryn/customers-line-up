@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 using CLup.Auth;
 using CLup.Extensions;
@@ -39,6 +40,7 @@ namespace CLup
             services.ConfigureRepositories(_config);
             services.ConfigureDataContext(_config, Environment);
             services.AddAutoMapper(typeof(Startup));
+            services.ConfigureSwagger();
             services.AddControllers();
         }
 
@@ -51,6 +53,16 @@ namespace CLup
 
             app.ConfigureDataInitialiser();
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customers Lineup API");
+                c.RoutePrefix = string.Empty;
+                c.DocExpansion(DocExpansion.None);
+                c.DisplayRequestDuration();
+            });
 
             app.UseRouting();
 

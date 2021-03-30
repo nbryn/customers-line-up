@@ -14,11 +14,11 @@ namespace CLup.Employees
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private readonly ICLupContext _context;
+        private readonly CLupContext _context;
         private readonly IMapper _mapper;
 
         public EmployeeRepository(
-            ICLupContext context,
+            CLupContext context,
             IMapper mapper)
             
         {

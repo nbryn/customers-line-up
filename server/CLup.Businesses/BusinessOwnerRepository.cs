@@ -10,9 +10,9 @@ namespace CLup.Businesses
 {
     public class BusinessOwnerRepository : IBusinessOwnerRepository
     {
-        private readonly ICLupContext _context;
+        private readonly CLupContext _context;
 
-        public BusinessOwnerRepository(ICLupContext context)
+        public BusinessOwnerRepository(CLupContext context)
         {
             _context = context;
         }

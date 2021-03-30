@@ -45,7 +45,7 @@ export const BusinessProfileView: React.FC = () => {
 
     const businessService = useBusinessService();
 
-    const formValues = omit(business, ['id', 'longitude', 'latitude']) as BusinessDTO;
+    const formValues = omit(business, ['id', 'longitude', 'latitude', 'ownerEmail']) as BusinessDTO;
 
     const {addressHandler, formHandler} = useForm<BusinessDTO>({
         initialValues: formValues,

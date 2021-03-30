@@ -13,11 +13,11 @@ namespace CLup.Users
 {
     public class UserRepository : IUserRepository
     {      
-        private readonly ICLupContext _context;
+        private readonly CLupContext _context;
         private readonly IMapper _mapper;
 
         public UserRepository(
-            ICLupContext context,
+            CLupContext context,
             IMapper mapper)
         {
             _context = context;
@@ -31,17 +31,8 @@ namespace CLup.Users
 
         public async Task<ServiceResponse<int>> CreateUser(NewUserRequest user)
         {
-            User newUser = new User
-            {
-                Name = user.Name,
-                Email = user.Email,
-                Password = user.Password,
-                Zip = user.Zip,
-                Address = user.Address,
-                Longitude = user.Longitude,
-                Latitude = user.Latitude,
-            };
-
+            var newUser = _mapper.Map<User>(user);
+      
             _context.Users.Add(newUser);
 
             await _context.SaveChangesAsync();
@@ -60,7 +51,6 @@ namespace CLup.Users
 
             return this.AssembleResponse<User, UserDTO>(users, _mapper);
         }
-
     }
 }
 

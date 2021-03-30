@@ -10,6 +10,8 @@ namespace CLup.Users
         {
             CreateMap<User, UserDTO>()
                 .ForMember(u => u.Role, s => s.MapFrom(m => m.Role.ToString()));
+
+            CreateMap<NewUserRequest, User>();
         }
     }
 }

@@ -9,6 +9,7 @@ import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {employeeValidationSchema} from '../../validation/BusinessValidation';
 import {ErrorView} from '../ErrorView';
 import {Form} from '../../components/form/Form';
+import {Header} from '../../components/Texts';
 import {Modal} from '../../components/modal/Modal';
 import {NewEmployeeDTO} from '../../models/Employee';
 import {TextField} from '../../components/form/TextField';
@@ -18,7 +19,6 @@ import {useUserService} from '../../services/UserService';
 
 const useStyles = makeStyles((theme) => ({
     card: {
-        marginTop: 60,
         borderRadius: 15,
         height: 600,
         textAlign: 'center',
@@ -73,7 +73,7 @@ export const CreateEmployeeView: React.FC = () => {
 
     useEffect(() => {
         (async () => {
-            const users = await userService.fetchAllUsersNotEmployedByBusiness (business.id);
+            const users = await userService.fetchAllUsersNotEmployedByBusiness(business.id);
 
             setUsers(
                 users.map((user) => ({
@@ -91,95 +91,100 @@ export const CreateEmployeeView: React.FC = () => {
     }, [selectedUser]);
 
     return (
-        <Row className={styles.wrapper}>
-            <Col sm={6} lg={6}>
-                <Modal
-                    show={employeeService.requestInfo ? true : false}
-                    title="Employee Info"
-                    text={employeeService.requestInfo}
-                    primaryAction={() => history.push('/business/employees/manage')}
-                    primaryActionText="My Employees"
-                    secondaryAction={() => employeeService.setRequestInfo('')}
-                />
-                <Card
-                    className={styles.card}
-                    title="New Employee"
-                    subtitle="Choose an existing user you want to add as an employee"
-                    variant="outlined"
-                >
-                    {showComboBox && (
-                        <ComboBox
-                            style={{marginTop: 10, marginLeft: 110, width: '60%'}}
-                            label="Email"
-                            id="email"
-                            type="text"
-                            options={users}
-                            setFieldValue={(option: ComboBoxOption) => setSelectedUser(option)}
-                            partOfForm={false}
-                        />
-                    )}
-                    {!showComboBox && (
-                        <>
-                            <Form
-                                style={{marginTop: 20}}
-                                onSubmit={(e: React.FormEvent) => {
-                                    e.preventDefault();
-                                    form.setRequest({
-                                        businessId: business.id,
-                                        privateEmail: selectedUser?.label,
-                                        companyEmail: formHandler.values.companyEmail,
-                                    });
+        <>
+            <Row className={styles.wrapper}>
+                <Header text={business.name} />
+            </Row>
+            <Row className={styles.wrapper}>
+                <Col sm={6} lg={6}>
+                    <Modal
+                        show={employeeService.requestInfo ? true : false}
+                        title="Employee Info"
+                        text={employeeService.requestInfo}
+                        primaryAction={() => history.push('/business/employees/manage')}
+                        primaryActionText="My Employees"
+                        secondaryAction={() => employeeService.setRequestInfo('')}
+                    />
+                    <Card
+                        className={styles.card}
+                        title="New Employee"
+                        subtitle="Choose an existing user you want to add as an employee"
+                        variant="outlined"
+                    >
+                        {showComboBox && (
+                            <ComboBox
+                                style={{marginTop: 10, marginLeft: 110, width: '60%'}}
+                                label="Email"
+                                id="email"
+                                type="text"
+                                options={users}
+                                setFieldValue={(option: ComboBoxOption) => setSelectedUser(option)}
+                                partOfForm={false}
+                            />
+                        )}
+                        {!showComboBox && (
+                            <>
+                                <Form
+                                    style={{marginTop: 20}}
+                                    onSubmit={(e: React.FormEvent) => {
+                                        e.preventDefault();
+                                        form.setRequest({
+                                            businessId: business.id,
+                                            privateEmail: selectedUser?.label,
+                                            companyEmail: formHandler.values.companyEmail,
+                                        });
 
-                                    formHandler.handleSubmit();
-                                }}
-                                buttonText="Create"
-                                working={employeeService.working}
-                                valid={formHandler.isValid}
-                            >
-                                <FormGroup className={styles.formGroup}>
-                                    <TextField
-                                        className={styles.textField}
-                                        id="name"
-                                        label="Name"
-                                        type="text"
-                                        value={selectedUser.value}
-                                        disabled={true}
-                                    />
-                                </FormGroup>
-                                <FormGroup className={styles.formGroup}>
-                                    <TextField
-                                        className={styles.textField}
-                                        id="privateEmail"
-                                        label="Private Email"
-                                        type="email"
-                                        value={selectedUser.label}
-                                        disabled={true}
-                                    />
-                                </FormGroup>
-                                <FormGroup className={styles.formGroup}>
-                                    <TextField
-                                        className={styles.textField}
-                                        id="companyEmail"
-                                        label="Company Email"
-                                        type="email"
-                                        value={formHandler.values.companyEmail}
-                                        onChange={formHandler.handleChange}
-                                        onBlur={formHandler.handleBlur}
-                                        error={
-                                            formHandler.touched.companyEmail &&
-                                            Boolean(formHandler.errors.companyEmail)
-                                        }
-                                        helperText={
-                                            formHandler.touched.companyEmail &&
-                                            formHandler.errors.companyEmail
-                                        }
-                                    />
-                                </FormGroup>
-                            </Form>
-                        </>
-                    )}
-                </Card>
-            </Col>
-        </Row>
+                                        formHandler.handleSubmit();
+                                    }}
+                                    buttonText="Create"
+                                    working={employeeService.working}
+                                    valid={formHandler.isValid}
+                                >
+                                    <FormGroup className={styles.formGroup}>
+                                        <TextField
+                                            className={styles.textField}
+                                            id="name"
+                                            label="Name"
+                                            type="text"
+                                            value={selectedUser.value}
+                                            disabled={true}
+                                        />
+                                    </FormGroup>
+                                    <FormGroup className={styles.formGroup}>
+                                        <TextField
+                                            className={styles.textField}
+                                            id="privateEmail"
+                                            label="Private Email"
+                                            type="email"
+                                            value={selectedUser.label}
+                                            disabled={true}
+                                        />
+                                    </FormGroup>
+                                    <FormGroup className={styles.formGroup}>
+                                        <TextField
+                                            className={styles.textField}
+                                            id="companyEmail"
+                                            label="Company Email"
+                                            type="email"
+                                            value={formHandler.values.companyEmail}
+                                            onChange={formHandler.handleChange}
+                                            onBlur={formHandler.handleBlur}
+                                            error={
+                                                formHandler.touched.companyEmail &&
+                                                Boolean(formHandler.errors.companyEmail)
+                                            }
+                                            helperText={
+                                                formHandler.touched.companyEmail &&
+                                                formHandler.errors.companyEmail
+                                            }
+                                        />
+                                    </FormGroup>
+                                </Form>
+                            </>
+                        )}
+                    </Card>
+                </Col>
+            </Row>
+        </>
     );
 };

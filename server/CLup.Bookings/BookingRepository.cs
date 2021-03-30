@@ -14,11 +14,11 @@ namespace CLup.Bookings
 {
     public class BookingRepository : IBookingRepository
     {
-        private readonly ICLupContext _context;
+        private readonly CLupContext _context;
         private readonly IMapper _mapper;
 
         public BookingRepository(
-            ICLupContext context,
+            CLupContext context,
             IMapper mapper)
         {
             _context = context;

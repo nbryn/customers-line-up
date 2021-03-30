@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 using CLup.Auth;
@@ -28,7 +30,7 @@ namespace CLup.Extensions
     {
         public static void ConfigureDataServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ICLupContext, CLupContext>();
+            services.AddScoped<CLupContext, CLupContext>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
 
@@ -48,6 +50,39 @@ namespace CLup.Extensions
             services.AddScoped<IBusinessRepository, BusinessRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
 
+        }
+
+        public static void ConfigureSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Customers Lineup Api", Version = "v1" });
+
+                c.EnableAnnotations();
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+                    {
+                        new OpenApiSecurityScheme {
+                            Reference = new OpenApiReference {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "oauth2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header,
+                    },
+                        new List<string>()
+                    }
+                });
+            });
         }
 
         public static void ConfigureDataContext(

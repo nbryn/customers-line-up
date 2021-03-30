@@ -15,10 +15,10 @@ namespace CLup.TimeSlots
 {
     public class TimeSlotRepository : ITimeSlotRepository
     {
-        private readonly ICLupContext _context;
+        private readonly CLupContext _context;
         private readonly IMapper _mapper;
         public TimeSlotRepository(
-            ICLupContext context,
+            CLupContext context,
             IMapper mapper)
         {
             _context = context;
@@ -75,7 +75,7 @@ namespace CLup.TimeSlots
                                                                 .Where(x => x.BusinessId == businessId && x.Start.Date == date.Date)
                                                                 .ToListAsync();
 
-            return this.AssembleResponse<TimeSlot, TimeSlotDTO>(timeSlots, _mapper);                                               
+            return this.AssembleResponse<TimeSlot, TimeSlotDTO>(timeSlots, _mapper);
         }
 
         public async Task<ServiceResponse<IList<TimeSlotDTO>>> FindAvailableTimeSlotsByBusiness(AvailableTimeSlotsRequest request)
@@ -89,21 +89,18 @@ namespace CLup.TimeSlots
             return this.AssembleResponse<TimeSlot, TimeSlotDTO>(timeSlots, _mapper);
         }
 
-        public async Task<ServiceResponse> UpdateTimeSlot(TimeSlot timeSlot)
+        public async Task<ServiceResponse> UpdateTimeSlot(TimeSlot updatedTimeSlot)
         {
-            TimeSlot ts = await FindTimeSlotById(timeSlot.Id);
+            TimeSlot existingTimeSlot = await FindTimeSlotById(updatedTimeSlot.Id);
 
-            if (ts == null)
+            if (existingTimeSlot == null)
             {
                 return new ServiceResponse(HttpCode.NotFound);
             }
 
-            ts.Bookings = timeSlot.Bookings;
-            ts.BusinessId = timeSlot.BusinessId;
-            ts.BusinessName = timeSlot.BusinessName;
-            ts.Capacity = timeSlot.Capacity;
-            ts.Start = timeSlot.Start;
-            ts.End = timeSlot.End;
+            updatedTimeSlot.Id = existingTimeSlot.Id;
+
+            _context.Entry(existingTimeSlot).CurrentValues.SetValues(updatedTimeSlot);
 
             await _context.SaveChangesAsync();
 

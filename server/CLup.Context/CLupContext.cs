@@ -12,7 +12,7 @@ using CLup.Users;
 
 namespace CLup.Context
 {
-    public class CLupContext : DbContext, ICLupContext
+    public class CLupContext : DbContext
     {
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BusinessOwner> BusinessOwners { get; set; }

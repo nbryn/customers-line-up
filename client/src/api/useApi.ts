@@ -1,14 +1,13 @@
 import {useState} from 'react';
-import {AxiosResponse, Method} from 'axios';
+import {Method} from 'axios';
 
 import {apiClient} from './ApiClient';
-
 export interface ApiCaller {
     get: <T>(url: string) => Promise<T>;
-    patch: <T>(url: string, data?: any) => Promise<T>;
-    post: <T>(url: string, data?: any) => Promise<T>;
-    put: <T>(url: string, data?: any) => Promise<T>;
-    remove: <T>(url: string) => Promise<void>;
+    patch: <T1, T2>(url: string, data?: T2) => Promise<T1>;
+    post: <T1, T2>(url: string, data?: T2) => Promise<T1>;
+    put: <T1, T2>(url: string, data?: T2) => Promise<T1>;
+    remove: <T>(url: string) => Promise<T>;
     setRequestInfo: (info: string) => void;
     requestInfo: string;
     working: boolean;
@@ -22,16 +21,16 @@ export function useApi(succesMessage?: string): ApiCaller {
         return await request<T>(url, 'GET');
     };
 
-    const patch = async <T>(url: string, data: any): Promise<T> => {
-        return await request<T>(url, 'PATCH', data);
+    const patch = async <T1, T2>(url: string, data: T2): Promise<T1> => {
+        return await request<T1>(url, 'PATCH', data);
     };
 
-    const post = async <T>(url: string, data: any): Promise<T> => {
-        return await request<T>(url, 'POST', data);
+    const post = async <T1, T2>(url: string, data: T2): Promise<T1> => {
+        return await request<T1>(url, 'POST', data);
     };
 
-    const put = async <T>(url: string, data: any): Promise<T> => {
-        return await request<T>(url, 'PUT', data);
+    const put = async <T1, T2>(url: string, data: T2): Promise<T1> => {
+        return await request<T1>(url, 'PUT', data);
     };
 
     const remove = async <T>(url: string): Promise<T> => {
