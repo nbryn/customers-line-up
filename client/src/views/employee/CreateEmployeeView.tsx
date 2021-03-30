@@ -3,7 +3,6 @@ import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory, useLocation} from 'react-router-dom';
 
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import {BusinessDTO} from '../../models/Business';
 import {Card} from '../../components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
@@ -13,9 +12,9 @@ import {Form} from '../../components/form/Form';
 import {Modal} from '../../components/modal/Modal';
 import {NewEmployeeDTO} from '../../models/Employee';
 import {TextField} from '../../components/form/TextField';
-import URL, {NEW_EMPLOYEE_URL} from '../../api/URL';
-import {UserDTO} from '../../models/User';
+import {useEmployeeService} from '../../services/EmployeeService';
 import {useForm} from '../../hooks/useForm';
+import {useUserService} from '../../services/UserService';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -44,7 +43,7 @@ interface LocationState {
 
 const SUCCESS_MESSAGE = 'Employee Created - Go to my employees to see your employees';
 
-export const NewEmployeeView: React.FC = () => {
+export const CreateEmployeeView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
     const location = useLocation<LocationState>();
@@ -53,7 +52,8 @@ export const NewEmployeeView: React.FC = () => {
     const [selectedUser, setSelectedUser] = useState<ComboBoxOption>({label: ''});
     const [showComboBox, setShowComBox] = useState<boolean>(true);
 
-    const apiCaller: ApiCaller<UserDTO[]> = useApi(SUCCESS_MESSAGE);
+    const employeeService = useEmployeeService(SUCCESS_MESSAGE);
+    const userService = useUserService();
 
     if (!location.state) {
         return <ErrorView />;
@@ -65,19 +65,15 @@ export const NewEmployeeView: React.FC = () => {
         companyEmail: '',
     };
 
-    const {formHandler, ...form} = useForm<NewEmployeeDTO>(
-        formValues,
-        employeeValidationSchema,
-        NEW_EMPLOYEE_URL,
-        'POST',
-        apiCaller.mutation
-    );
+    const {formHandler, ...form} = useForm<NewEmployeeDTO>({
+        initialValues: formValues,
+        validationSchema: employeeValidationSchema,
+        onSubmit: employeeService.createEmployee,
+    });
 
     useEffect(() => {
         (async () => {
-            const users = await apiCaller.query(
-                URL.getAllUsersNotAlreadyEmployedByBusinessURL(business.id)
-            );
+            const users = await userService.fetchAllUsersNotEmployedByBusiness (business.id);
 
             setUsers(
                 users.map((user) => ({
@@ -98,12 +94,12 @@ export const NewEmployeeView: React.FC = () => {
         <Row className={styles.wrapper}>
             <Col sm={6} lg={6}>
                 <Modal
-                    show={apiCaller.requestInfo ? true : false}
+                    show={employeeService.requestInfo ? true : false}
                     title="Employee Info"
-                    text={apiCaller.requestInfo}
+                    text={employeeService.requestInfo}
                     primaryAction={() => history.push('/business/employees/manage')}
                     primaryActionText="My Employees"
-                    secondaryAction={() => apiCaller.setRequestInfo('')}
+                    secondaryAction={() => employeeService.setRequestInfo('')}
                 />
                 <Card
                     className={styles.card}
@@ -137,7 +133,7 @@ export const NewEmployeeView: React.FC = () => {
                                     formHandler.handleSubmit();
                                 }}
                                 buttonText="Create"
-                                working={apiCaller.working}
+                                working={employeeService.working}
                                 valid={formHandler.isValid}
                             >
                                 <FormGroup className={styles.formGroup}>

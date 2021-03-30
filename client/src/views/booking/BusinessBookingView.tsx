@@ -4,14 +4,13 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
-import URL from '../../api/URL';
 import {BusinessDTO} from '../../models/Business';
 import {BookingDTO} from '../../models/Booking';
 import {ErrorView} from '../ErrorView';
 import {Header} from '../../components/Texts';
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
+import {useBookingService} from '../../services/BookingService';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -29,10 +28,10 @@ export const BusinessBookingView: React.FC = () => {
 
     const [removeBooking, setRemoveBooking] = useState<number | null>(null);
 
-    const apiCaller: ApiCaller<BookingDTO[]> = useApi();
+    const bookingService = useBookingService();
 
     if (!location.state) {
-       <ErrorView />
+        <ErrorView />;
     }
 
     const {business} = location.state;
@@ -40,7 +39,7 @@ export const BusinessBookingView: React.FC = () => {
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
         {title: 'timeSlotId', field: 'timeSlotId', hidden: true},
-        {title: 'User', field: 'userMail'},
+        {title: 'User', field: 'userEmail'},
         {title: 'Interval', field: 'interval'},
         {title: 'Date', field: 'date'},
         {title: 'Capacity', field: 'capacity'},
@@ -56,12 +55,7 @@ export const BusinessBookingView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Delete Booking" clickable color="secondary" />,
             onClick: async (event: React.ChangeEvent, rowData: BookingDTO) => {
-                const url = URL.getDeleteBookingForBusinessURL(
-                    rowData.timeSlotId,
-                    rowData.userMail
-                );
-
-                await apiCaller.mutation(url, 'DELETE');
+                await bookingService.deleteBookingForBusiness(rowData.timeSlotId, rowData.userMail);
 
                 setRemoveBooking(rowData.id);
             },
@@ -79,7 +73,7 @@ export const BusinessBookingView: React.FC = () => {
                         actions={actions}
                         columns={columns}
                         fetchTableData={async () =>
-                            await apiCaller.query(URL.getBusinessBookingsURL(business.id))
+                            await bookingService.fetchBookingsByBusiness(business.id)
                         }
                         removeEntryId={removeBooking}
                         tableTitle="Bookings"

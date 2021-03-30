@@ -2,8 +2,7 @@ import Cookies from 'js-cookie';
 import React, {useContext, useEffect, useState} from 'react';
 
 import {UserDTO} from '../models/User';
-import {USER_INFO_URL} from '../api/URL';
-import {useApi, ApiCaller} from '../hooks/useApi';
+import {useUserService} from '../services/UserService';
 
 export type ContextValue = {
     user: UserDTO;
@@ -24,24 +23,26 @@ type Props = {
 export const UserContextProvider: React.FC<Props> = (props: Props) => {
     const [user, setCurrentUser] = useState<UserDTO>({email: ''});
 
-    const apiCaller: ApiCaller<UserDTO> = useApi();
+    const userService = useUserService()
 
     const setUser = (user: UserDTO) => {
         setCurrentUser(user);
 
-        Cookies.set('token', user.token!);
+        console.log(user);
+
+        Cookies.set('access_token', user.token!);
     };
 
     const logout = () => {
-        Cookies.remove('token');
+        Cookies.remove('access_token');
 
         setCurrentUser({email: ''});
     };
 
     useEffect(() => {
         (async () => {
-            if (Cookies.get('token')) {
-                const user = await apiCaller.query(USER_INFO_URL);
+            if (Cookies.get('access_token')) {
+                const user = await userService.fetchUserInfo();
 
                 setCurrentUser(user || {email: ''});
             }

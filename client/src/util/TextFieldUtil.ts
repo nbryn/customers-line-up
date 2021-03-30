@@ -4,7 +4,7 @@ import {TextFieldType} from '../components/form/TextField';
 function mapKeyToLabel(key: string): string {
    if (key === 'timeSlotLength') return 'Visit Length';
 
-   return StringUtil.capitalizeFirstLetter(key);
+   return StringUtil.capitalize(key);
 }
 
 function mapKeyToType(key: string): TextFieldType {

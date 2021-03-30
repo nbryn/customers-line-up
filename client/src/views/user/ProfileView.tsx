@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+/* import React, {useEffect, useState} from 'react';
 import {pick} from 'lodash-es';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
@@ -6,7 +6,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {ComboBoxOption} from '../../components/form/ComboBox';
 import {FormCard, FormCardData} from '../../components/card/FormCard';
 import {Header} from '../../components/Texts';
-import {ApiCaller, useApi} from '../../hooks/useApi';
+import {ApiCaller, useApi} from '../../api/useApi';
 import {userValidationSchema} from '../../validation/UserValidation';
 import StringUtil from '../../util/StringUtil';
 import {TextFieldModal} from '../../components/modal/TextFieldModal';
@@ -76,7 +76,7 @@ export const ProfileView: React.FC = () => {
 
    const profileData: FormCardData[] = Object.keys(formValues).map((key) => ({
       key,
-      label: StringUtil.capitalizeFirstLetter(key),
+      label: StringUtil.capitalize(key),
       type: TextFieldUtil.mapKeyToType(key),
       value: formHandler.values[key] as string,
       buttonAction: () => setModalKey(key),
@@ -110,4 +110,6 @@ export const ProfileView: React.FC = () => {
          </Row>
       </>
    );
-};
+}; */
+
+export {}

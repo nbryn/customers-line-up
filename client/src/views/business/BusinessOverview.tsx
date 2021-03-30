@@ -4,12 +4,11 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
-import {BUSINESSES_OWNER_URL} from '../../api/URL';
 import {BusinessCard} from '../../components/card/BusinessCard';
 import {BusinessDTO} from '../../models/Business';
 import PathUtil, {PathInfo} from '../../util/PathUtil';
 import {Header} from '../../components/Texts';
-import {ApiCaller, useApi} from '../../hooks/useApi';
+import {useBusinessService} from '../../services/BusinessService';
 
 const useStyles = makeStyles((theme) => ({
    row: {
@@ -25,11 +24,11 @@ export const BusinessOverview: React.FC = () => {
 
    const pathInfo: PathInfo = PathUtil.getPathAndTextFromURL(window.location.pathname);
 
-   const apiCaller: ApiCaller<BusinessDTO[]> = useApi();
+   const businessService = useBusinessService();
 
    useEffect(() => {
       (async () => {
-         const businesses: BusinessDTO[] = await apiCaller.query(BUSINESSES_OWNER_URL);
+         const businesses: BusinessDTO[] = await businessService.fetchBusinesssesByOwner();
 
          setBusinessData(businesses);
       })();
@@ -41,7 +40,7 @@ export const BusinessOverview: React.FC = () => {
             <Header text="Choose Business" />
          </Row>
          <Row className={styles.row}>
-            {apiCaller.working && <CircularProgress />}
+            {businessService.working && <CircularProgress />}
             <>
                {businessData.map((x) => {
                   localStorage.setItem('business', JSON.stringify(x));

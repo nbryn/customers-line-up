@@ -4,14 +4,13 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import {BusinessDTO} from '../../models/Business';
 import {ErrorView} from '../ErrorView';
 import {Header} from '../../components/Texts';
 import {TimeSlotDTO} from '../../models/TimeSlot';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
-import URL from '../../api/URL';
+import {useTimeSlotService} from '../../services/TimeSlotService';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -28,7 +27,7 @@ export const BusinessTimeSlotView: React.FC = () => {
     const location = useLocation<LocationState>();
     const [removeTimeSlot, setRemoveTimeSlot] = useState<number | null>(null);
 
-    const apiCaller: ApiCaller<TimeSlotDTO[]> = useApi();
+    const timeSlotService = useTimeSlotService();
 
     if (!location.state) {
         return <ErrorView />;
@@ -47,7 +46,7 @@ export const BusinessTimeSlotView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Delete Time Slot" clickable color="primary" />,
             onClick: async (event: any, rowData: TimeSlotDTO) => {
-                await apiCaller.mutation(URL.getDeleteTimeSlotURL(rowData.id), 'DELETE');
+                await timeSlotService.deleteTimeSlot(rowData.id);
 
                 setRemoveTimeSlot(rowData.id);
             },
@@ -65,8 +64,8 @@ export const BusinessTimeSlotView: React.FC = () => {
                         actions={actions}
                         columns={columns}
                         fetchTableData={async () => {
-                            const timeSlots = await apiCaller.query(
-                                URL.getTimeSlotsURL(business.id)
+                            const timeSlots = await timeSlotService.fetchAvailableTimeSlotsByBusiness(
+                                business.id
                             );
 
                             return timeSlots.map((x) => ({

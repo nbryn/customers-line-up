@@ -11,11 +11,10 @@ import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {Form} from '../../components/form/Form';
 import {Header} from '../../components/Texts';
 import {Modal} from '../../components/modal/Modal';
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import StringUtil from '../../util/StringUtil';
 import {TextField} from '../../components/form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
-import {BUSINESS_TYPES_URL, CREATE_BUSINESS_URL} from '../../api/URL';
+import {useBusinessService} from '../../services/BusinessService';
 import {useForm} from '../../hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SUCCESS_MESSAGE = 'Business Created - Go to my businesses to see your businesses';
 
-export const NewBusinessView: React.FC = () => {
+export const CreateBusinessView: React.FC = () => {
   const styles = useStyles();
   const history = useHistory();
 
@@ -49,7 +48,7 @@ export const NewBusinessView: React.FC = () => {
   const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
   const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
-  const apiCaller: ApiCaller<string[]> = useApi(SUCCESS_MESSAGE);
+  const businessService = useBusinessService(SUCCESS_MESSAGE);
 
   const formValues: BusinessDTO = {
     id: 0,
@@ -63,13 +62,11 @@ export const NewBusinessView: React.FC = () => {
     closes: '',
   };
 
-  const {addressHandler, formHandler} = useForm<BusinessDTO>(
-    formValues,
-    businessValidationSchema,
-    CREATE_BUSINESS_URL,
-    'POST',
-    apiCaller.mutation,
-    (business) => {
+  const {addressHandler, formHandler} = useForm<BusinessDTO>({
+    initialValues: formValues,
+    validationSchema: businessValidationSchema,
+    onSubmit: businessService.createBusiness,
+    formatter: (business) => {
       const address = addresses.find((x) => x.label === business.address);
 
       business.longitude = address?.longitude;
@@ -80,11 +77,11 @@ export const NewBusinessView: React.FC = () => {
 
       return business;
     }
-  );
+  });
 
   useEffect(() => {
     (async () => {
-      const types = await apiCaller.query(BUSINESS_TYPES_URL);
+      const types = await businessService.fetchBusinessTypes();
 
       setBusinessTypes(types);
 
@@ -107,18 +104,18 @@ export const NewBusinessView: React.FC = () => {
       <Row className={styles.wrapper}>
         <Col sm={6} lg={8}>
           <Modal
-            show={apiCaller.requestInfo ? true : false}
+            show={businessService.requestInfo ? true : false}
             title="Business Info"
-            text={apiCaller.requestInfo}
+            text={businessService.requestInfo}
             primaryAction={() => history.push('/business')}
             primaryActionText="My Businesses"
-            secondaryAction={() => apiCaller.setRequestInfo('')}
+            secondaryAction={() => businessService.setRequestInfo('')}
           />
           <Card className={styles.card} title="Business Data" variant="outlined">
             <Form
               onSubmit={formHandler.handleSubmit}
               buttonText="Create"
-              working={apiCaller.working}
+              working={businessService.working}
               valid={formHandler.isValid}
             >
               <Row>
@@ -136,7 +133,7 @@ export const NewBusinessView: React.FC = () => {
                                 marginLeft: 43,
                                 marginTop: 25,
                               }}
-                              label={StringUtil.capitalizeFirstLetter(key)}
+                              label={StringUtil.capitalize(key)}
                               type="text"
                               options={key === 'zip' ? zips : addresses}
                               onBlur={formHandler.handleBlur}

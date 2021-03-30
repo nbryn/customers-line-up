@@ -4,14 +4,13 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
-import URL from '../../api/URL';
+import {BusinessDTO} from '../../models/Business';
 import {EmployeeDTO} from '../../models/Employee';
 import {ErrorView} from '../ErrorView';
 import {Header} from '../../components/Texts';
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
-import {BusinessDTO} from '../../models/Business';
+import {useEmployeeService} from '../../services/EmployeeService';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -28,7 +27,7 @@ export const BusinessEmployeeView: React.FC = () => {
     const location = useLocation<LocationState>();
     const [removeEmployee, setRemoveEmployee] = useState<number | null>(null);
 
-    const apiCaller: ApiCaller<EmployeeDTO[]> = useApi();
+    const employeeService = useEmployeeService();
 
     if (!location.state) {
         return <ErrorView />;
@@ -48,10 +47,7 @@ export const BusinessEmployeeView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Remove Employee" clickable color="primary" />,
             onClick: async (event: any, employee: EmployeeDTO) => {
-                await apiCaller.mutation(
-                    URL.getDeleteEmployeeURL(employee.privateEmail!, employee.businessId!),
-                    'DELETE'
-                );
+                await employeeService.removeEmployee(employee.privateEmail!, employee.businessId!);
 
                 setRemoveEmployee(employee.id);
             },
@@ -69,7 +65,7 @@ export const BusinessEmployeeView: React.FC = () => {
                         actions={actions}
                         columns={columns}
                         fetchTableData={async () =>
-                            await apiCaller.query(URL.getEmployeesURL(business.id))
+                            await employeeService.fetchEmployeesByBusiness(business.id)
                         }
                         tableTitle="Employees"
                         emptyMessage="No Employees Yet"
