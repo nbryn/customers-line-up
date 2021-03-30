@@ -9,10 +9,10 @@ import {ErrorView} from '../ErrorView';
 import {Header} from '../../components/Texts';
 import {MapModal} from '../../components/modal/MapModal';
 import {Modal} from '../../components/modal/Modal';
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
-import URL from '../../api/URL';
+import {useBookingService} from '../../services/BookingService';
+import {useTimeSlotService} from '../../services/TimeSlotService';
 
 const useStyles = makeStyles((theme) => ({
     address: {marginTop: 10},
@@ -28,14 +28,15 @@ interface LocationState {
 
 const SUCCESS_MESSAGE = 'Booking Made - Go to my bookings to see your bookings';
 
-export const NewBookingView: React.FC = () => {
+export const CreateBookingView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
     const location = useLocation<LocationState>();
 
     const [showMapModal, setShowMapModal] = useState<boolean>(false);
 
-    const apiCaller: ApiCaller<TimeSlotDTO[]> = useApi(SUCCESS_MESSAGE);
+    const bookingService = useBookingService(SUCCESS_MESSAGE);
+    const timeSlotService = useTimeSlotService();
 
     if (!location.state) {
         return <ErrorView />;
@@ -53,7 +54,7 @@ export const NewBookingView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Book Time" clickable color="primary" />,
             onClick: async (event: any, rowData: TimeSlotDTO) => {
-                apiCaller.mutation(URL.getNewBookingURL(rowData.id), 'POST');
+                await bookingService.createBooking(rowData.id);
             },
         },
     ];
@@ -76,8 +77,8 @@ export const NewBookingView: React.FC = () => {
                         actions={actions}
                         columns={columns}
                         fetchTableData={async () => {
-                            const timeSlots = await apiCaller.query(
-                                URL.getTimeSlotURL(business.id!)
+                            const timeSlots = await timeSlotService.fetchTimeSlotsByBusiness(
+                                business.id!
                             );
 
                             return timeSlots.map((x) => ({
@@ -102,10 +103,10 @@ export const NewBookingView: React.FC = () => {
                     />
 
                     <Modal
-                        show={apiCaller.requestInfo ? true : false}
+                        show={bookingService.requestInfo ? true : false}
                         title="Booking Info"
-                        text={apiCaller.requestInfo}
-                        secondaryAction={() => apiCaller.setRequestInfo('')}
+                        text={bookingService.requestInfo}
+                        secondaryAction={() => bookingService.setRequestInfo('')}
                         primaryAction={() => history.push('/user/bookings')}
                         primaryActionText="My Bookings"
                     />

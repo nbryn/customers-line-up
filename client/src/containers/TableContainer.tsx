@@ -29,6 +29,8 @@ export const TableContainer: React.FC<Props> = ({
       (async () => {
          const tableData = await fetchTableData();
 
+         console.log(tableData)
+
          setTableData(tableData);
          setLoading(false);
       })();

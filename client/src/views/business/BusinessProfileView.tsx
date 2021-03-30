@@ -10,11 +10,10 @@ import {ComboBoxOption} from '../../components/form/ComboBox';
 import {ErrorView} from '../ErrorView';
 import {FormCard, FormCardData} from '../../components/card/FormCard';
 import {Header} from '../../components/Texts';
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import TextFieldUtil from '../../util/TextFieldUtil';
 import {TextFieldModal} from '../../components/modal/TextFieldModal';
-import URL, {BUSINESS_TYPES_URL} from '../../api/URL';
 import {useForm} from '../../hooks/useForm';
+import {useBusinessService} from '../../services/BusinessService';
 
 const useStyles = makeStyles((theme) => ({
     col: {
@@ -38,35 +37,33 @@ export const BusinessProfileView: React.FC = () => {
     const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
     const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
-    const apiCaller: ApiCaller<string[]> = useApi();
-
     if (!location.state) {
         return <ErrorView />;
     }
 
     const business = location.state.business;
 
+    const businessService = useBusinessService();
+
     const formValues = omit(business, ['id', 'longitude', 'latitude']) as BusinessDTO;
 
-    const {addressHandler, formHandler} = useForm<BusinessDTO>(
-        formValues,
-        businessValidationSchema,
-        URL.getUpdateBusinessDataURL(business.id),
-        'PUT',
-        apiCaller.mutation,
-        (business) => {
+    const {addressHandler, formHandler} = useForm<BusinessDTO>({
+        initialValues: formValues,
+        validationSchema: businessValidationSchema,
+        onSubmit: businessService.updateBusinessInfo(business.id),
+        formatter: (business) => {
             business.opens = business.opens.replace(':', '.');
             business.closes = business.closes.replace(':', '.');
 
             return business;
         }
-    );
+    });
 
     useEffect(() => {
         (async () => {
             setZips(await addressHandler.fetchZips());
 
-            setBusinessTypeOptions(await apiCaller.query(BUSINESS_TYPES_URL));
+            setBusinessTypeOptions(await businessService.fetchBusinessTypes());
         })();
     }, []);
 

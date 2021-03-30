@@ -4,13 +4,12 @@ import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory} from 'react-router';
 
-import {ALL_BUSINESSES_URL} from '../../api/URL';
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import {BusinessDTO} from '../../models/Business';
 import {Header} from '../../components/Texts';
 import {MapModal, MapModalProps, defaultMapProps} from '../../components/modal/MapModal';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
+import {useBusinessService} from '../../services/BusinessService';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -24,7 +23,7 @@ export const AllBusinessesView: React.FC = () => {
 
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
 
-    const apiCaller: ApiCaller<BusinessDTO[]> = useApi();
+    const businessService = useBusinessService();
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -75,7 +74,7 @@ export const AllBusinessesView: React.FC = () => {
                         actions={actions}
                         columns={columns}
                         fetchTableData={async () => {
-                            const businesses = await apiCaller.query(ALL_BUSINESSES_URL);
+                            const businesses = await businessService.fetchAllBusinesses()
 
                             return businesses.map((business) => {
                                 const zipSplit: string[] = business.zip.split(' ');

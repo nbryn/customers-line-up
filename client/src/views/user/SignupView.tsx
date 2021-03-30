@@ -2,11 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
+import {useAuthService} from '../../services/AuthService';
 import {Card} from '../../components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import {Form} from '../../components/form/Form';
-import {REGISTER_URL} from '../../api/URL';
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import {signupValidationSchema} from '../../validation/UserValidation';
 import StringUtil from '../../util/StringUtil';
 import {TextField} from '../../components/form/TextField';
@@ -42,7 +41,7 @@ export const SignupView: React.FC = () => {
   const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
   const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
-  const apiCaller: ApiCaller<UserDTO> = useApi();
+  const authService = useAuthService();
 
   const formValues: UserDTO = {
     email: '',
@@ -52,13 +51,11 @@ export const SignupView: React.FC = () => {
     password: '',
   };
 
-  const {addressHandler, formHandler} = useForm<UserDTO>(
-    formValues,
-    signupValidationSchema,
-    REGISTER_URL,
-    'POST',
-    apiCaller.mutation,
-    (user: UserDTO) => {
+  const {addressHandler, formHandler} = useForm<UserDTO>({
+    initialValues: formValues,
+    validationSchema: signupValidationSchema,
+    onSubmit: authService.register,
+    formatter: (user: UserDTO) => {
       const address = addresses.find((x) => x.label === user.address);
 
       user.longitude = address?.longitude;
@@ -66,7 +63,7 @@ export const SignupView: React.FC = () => {
       return user;
     },
     setUser
-  );
+  });
 
   useEffect(() => {
     (async () => {
@@ -89,9 +86,9 @@ export const SignupView: React.FC = () => {
             <Form
               onSubmit={formHandler.handleSubmit}
               buttonText="Signup"
-              working={apiCaller.working}
+              working={authService.working}
               valid={formHandler.isValid}
-              errorMessage={apiCaller.requestInfo}
+              errorMessage={authService.requestInfo}
             >
               {Object.keys(formValues).map((key) => {
                 if (key === 'zip' || key === 'address') {
@@ -100,7 +97,7 @@ export const SignupView: React.FC = () => {
                       <ComboBox
                         id={key}
                         style={{width: '51.5%', marginLeft: 129, marginTop: 25}}
-                        label={StringUtil.capitalizeFirstLetter(key)}
+                        label={StringUtil.capitalize(key)}
                         type="text"
                         options={key === 'zip' ? zips : addresses}
                         onBlur={formHandler.handleBlur}
@@ -119,7 +116,7 @@ export const SignupView: React.FC = () => {
                     <TextField
                       className={styles.textField}
                       id={key}
-                      label={StringUtil.capitalizeFirstLetter(key)}
+                      label={StringUtil.capitalize(key)}
                       type={TextFieldUtil.mapKeyToType(key)}
                       value={formHandler.values[key] as string}
                       onChange={formHandler.handleChange}

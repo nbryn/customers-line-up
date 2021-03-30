@@ -1,15 +1,14 @@
+import React, {useState} from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React, {useState} from 'react';
 
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import {BookingDTO} from '../../models/Booking';
 import {Header} from '../../components/Texts';
 import {MapModal, MapModalProps, defaultMapProps} from '../../components/modal/MapModal';
 import {TableColumn} from '../../components/Table';
 import {TableContainer} from '../../containers/TableContainer';
-import URL, {USER_BOOKINGS_URL} from '../../api/URL';
+import {useBookingService} from '../../services/BookingService';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -23,7 +22,7 @@ export const UserBookingView: React.FC = () => {
     const [removeBooking, setRemoveBooking] = useState<number | null>(null);
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
 
-    const apiCaller: ApiCaller<BookingDTO[]> = useApi();
+    const bookingService = useBookingService();
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -39,10 +38,7 @@ export const UserBookingView: React.FC = () => {
             icon: () => <Chip size="small" label="Delete" clickable color="primary" />,
             tooltip: 'Delete Booking',
             onClick: async (event: any, booking: BookingDTO) => {
-                await apiCaller.mutation(
-                    URL.getDeleteBookingForUserURL(booking.timeSlotId),
-                    'DELETE'
-                );
+                await bookingService.deleteBookingForUser(booking.timeSlotId)
 
                 setRemoveBooking(booking.id);
             },
@@ -51,6 +47,7 @@ export const UserBookingView: React.FC = () => {
             icon: () => <Chip size="small" label="See on map" clickable color="secondary" />,
             tooltip: 'Show location on map',
             onClick: (event: any, booking: BookingDTO) => {
+                console.log(booking);
                 setMapModalInfo({
                     visible: true,
                     zoom: 14,
@@ -78,7 +75,7 @@ export const UserBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        fetchTableData={async () => await apiCaller.query(USER_BOOKINGS_URL)}
+                        fetchTableData={async () => await bookingService.fetchBookingsByUser()}
                         removeEntryId={removeBooking}
                         tableTitle="Bookings"
                         emptyMessage="No Bookings Yet"

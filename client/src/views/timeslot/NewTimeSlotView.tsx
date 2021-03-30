@@ -3,14 +3,13 @@ import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory, useLocation} from 'react-router-dom';
 
-import {ApiCaller, useApi} from '../../hooks/useApi';
 import {BusinessDTO} from '../../models/Business';
 import {Card} from '../../components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../components/form/ComboBox';
 import DateUtil from '../../util/DateUtil';
 import {ErrorView} from '../ErrorView';
 import {Modal} from '../../components/modal/Modal';
-import {NEW_TIMESLOT_URL} from '../../api/URL';
+import {useTimeSlotService} from '../../services/TimeSlotService';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -51,7 +50,7 @@ export const NewTimeSlotView: React.FC = () => {
 
     const business = location.state.business;
 
-    const apiCaller: ApiCaller<void> = useApi(SUCCESS_MESSAGE);
+    const timeSlotService = useTimeSlotService(SUCCESS_MESSAGE);
 
     useEffect(() => {
         setDateOptions(dateOptions.filter((date) => date.label !== selectedDate?.label));
@@ -61,19 +60,19 @@ export const NewTimeSlotView: React.FC = () => {
         <Row className={styles.row}>
             <Col lg={6}>
                 <Modal
-                    show={apiCaller.requestInfo ? true : false}
+                    show={timeSlotService.requestInfo ? true : false}
                     title={
-                        apiCaller.requestInfo !== SUCCESS_MESSAGE
-                            ? apiCaller.requestInfo
+                        timeSlotService.requestInfo !== SUCCESS_MESSAGE
+                            ? timeSlotService.requestInfo
                             : selectedDate &&
                               `Time slots added on ${selectedDate.label.substring(
                                   selectedDate.label.indexOf(',') + 1
                               )}`
                     }
-                    text={apiCaller.requestInfo}
+                    text={timeSlotService.requestInfo}
                     primaryAction={() => history.push('/business/timeslots/manage', {business})}
                     primaryActionText="See time slots"
-                    secondaryAction={() => apiCaller.setRequestInfo('')}
+                    secondaryAction={() => timeSlotService.setRequestInfo('')}
                 />
                 <Card
                     className={styles.card}
@@ -86,8 +85,8 @@ export const NewTimeSlotView: React.FC = () => {
                     buttonSize="large"
                     disableButton={!selectedDate || dateOptions.length === 0 ? true : false}
                     buttonAction={async () =>
-                        await apiCaller.mutation(NEW_TIMESLOT_URL, 'POST', {
-                            BusinessId: business.id,
+                        await timeSlotService.generateTimeSlots({
+                            businessId: business.id,
                             start: selectedDate?.value,
                         })
                     }
