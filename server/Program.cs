@@ -15,7 +15,7 @@ namespace CLup
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:5001");
+                    webBuilder.UseUrls("http://localhost:5001");
                 });
     }
 }

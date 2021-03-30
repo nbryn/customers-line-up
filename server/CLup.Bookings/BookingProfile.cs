@@ -2,10 +2,8 @@ using AutoMapper;
 using System.Linq;
 
 using CLup.Bookings.DTO;
-
 namespace CLup.Bookings
 {
-
     public class BookingProfile : Profile
     {
         public BookingProfile()
@@ -18,7 +16,10 @@ namespace CLup.Bookings
                     m => m.TimeSlot.Start.TimeOfDay.ToString().Substring(0, 5) + " - " +
                                m.TimeSlot.End.TimeOfDay.ToString().Substring(0, 5)))
                 .ForMember(b => b.Capacity, s => s.MapFrom(
-					m => m.TimeSlot.Bookings.Count().ToString() + "/" + m.TimeSlot.Capacity));
+                    m => m.TimeSlot.Bookings.Count().ToString() + "/" + m.TimeSlot.Capacity))
+                .ForMember(b => b.Latitude, s => s.MapFrom(m => m.Business.Latitude))
+                .ForMember(b => b.Longitude, s => s.MapFrom(m => m.Business.Longitude))
+                .ForMember(b => b.Address, s => s.MapFrom(m => m.Business.Address));
         }
     }
 }

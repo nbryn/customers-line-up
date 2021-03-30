@@ -4,7 +4,6 @@ using System.Linq;
 
 using CLup.Businesses;
 using CLup.Context.Initialiser.DataCreators;
-
 namespace CLup.Context.Initialiser
 {
     public class DataInitialiser
@@ -15,7 +14,6 @@ namespace CLup.Context.Initialiser
         {
             _context = context;
         }
-
         public void InitialiseSeed()
         {
             AddUsers();
@@ -23,6 +21,7 @@ namespace CLup.Context.Initialiser
             AddTimeSlots();
             AddBookings();
             AddEmployees();
+            AddBusinessOwners();
             _context.SaveChanges();
         }
         private void AddUsers()
@@ -74,8 +73,8 @@ namespace CLup.Context.Initialiser
             }
 
             _context.Add(TimeSlotCreator.Create(1, "Cool", 50, DateTime.Now.AddHours(3), DateTime.Now.AddHours(4)));
-            _context.TimeSlots.Add(TimeSlotCreator.Create(1, "Cool", 50, DateTime.Now.AddHours(4), DateTime.Now.AddHours(5)));
-            _context.TimeSlots.Add(TimeSlotCreator.Create(1, "Cool", 50, DateTime.Now.AddHours(5), DateTime.Now.AddHours(6)));
+            _context.Add(TimeSlotCreator.Create(1, "Cool", 50, DateTime.Now.AddHours(4), DateTime.Now.AddHours(5)));
+            _context.Add(TimeSlotCreator.Create(1, "Cool", 50, DateTime.Now.AddHours(5), DateTime.Now.AddHours(6)));
 
         }
         private void AddBookings()
@@ -96,9 +95,18 @@ namespace CLup.Context.Initialiser
                 return;
             }
 
-            _context.Add(EmployeeCreator.Create(DateTime.Now, 1, "test@test.com"));
-            _context.Add(EmployeeCreator.Create(DateTime.Now, 2, "h@h.com"));
+            _context.Add(EmployeeCreator.Create(DateTime.Now, 1, "test@test.com", "cool@cool.com"));
+            _context.Add(EmployeeCreator.Create(DateTime.Now, 2, "h@h.com", "shop@shop.com"));
         }
 
+        private void AddBusinessOwners()
+        {
+            if (_context.BusinessOwners.Any())
+            {
+                return;
+            }
+
+            _context.Add(BusinessOwnerCreator.Create(1, "test@test.com"));
+        }
     }
 }
