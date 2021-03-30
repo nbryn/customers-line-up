@@ -1,6 +1,5 @@
 using AutoMapper;
 using BC = BCrypt.Net.BCrypt;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -10,7 +9,6 @@ using CLup.Util;
 using CLup.Employees.Interfaces;
 using CLup.Users.DTO;
 using CLup.Users.Interfaces;
-
 namespace CLup.Users
 {
     public class UserService : IUserService
@@ -20,7 +18,6 @@ namespace CLup.Users
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
-
         public UserService(
             IBusinessOwnerRepository ownerRepository,
             IEmployeeRepository employeeRepository,
@@ -94,12 +91,16 @@ namespace CLup.Users
             if (await _ownerRepository.FindOwnerByEmail(user.Email) != null)
             {
                 user.Role = Role.Owner;
+
+                return;
             }
             var isEmployee = await _employeeRepository.FindEmployeeByEmail(user.Email);
 
             if (isEmployee._statusCode != HttpCode.NotFound)
             {
                 user.Role = Role.Employee;
+
+                return;
             }
 
             user.Role = Role.User;

@@ -1,4 +1,5 @@
 using CLup.Context;
+using CLup.Businesses;
 using CLup.TimeSlots;
 using CLup.Users;
 
@@ -15,6 +16,8 @@ namespace CLup.Bookings
         public TimeSlot TimeSlot { get; set; }
 
         public int BusinessId { get; set; }
-    
+
+        public Business Business { get; set; }
+
     }
 }

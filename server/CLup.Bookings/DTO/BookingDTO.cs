@@ -14,7 +14,7 @@ namespace CLup.Bookings.DTO
 
         public string Address { get; set; }
 
-        public string UserMail { get; set; }
+        public string UserEmail { get; set; }
 
         public string Interval { get; set; }
 
