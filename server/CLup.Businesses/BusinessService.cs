@@ -20,7 +20,7 @@ namespace CLup.Businesses
             _businessRepository = businessRepository;
 
         }
-        public async Task<ServiceResponse> RegisterBusiness(NewBusinessRequest business)
+        public async Task<ServiceResponse> RegisterBusiness(BusinessRequest business)
         {
             BusinessOwner owner = await _businessOwnerRepository.FindOwnerByEmail(business.OwnerEmail);
 

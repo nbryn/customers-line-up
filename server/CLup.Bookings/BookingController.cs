@@ -30,6 +30,8 @@ namespace CLup.Bookings
 
         [HttpPost]
         [Route("{timeSlotId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> NewBooking(int timeSlotId)
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

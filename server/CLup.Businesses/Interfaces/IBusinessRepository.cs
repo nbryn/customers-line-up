@@ -9,7 +9,7 @@ namespace CLup.Businesses.Interfaces
 {
     public interface IBusinessRepository : IRepository<Business>
     {
-         Task<ServiceResponse> CreateBusiness(NewBusinessRequest business);
+         Task<ServiceResponse> CreateBusiness(BusinessRequest business);
 
          Task<Business> FindBusinessById(int businessId);
 
@@ -17,6 +17,6 @@ namespace CLup.Businesses.Interfaces
 
          Task<ServiceResponse<IList<BusinessDTO>>> GetAll();
 
-         Task<ServiceResponse> UpdateBusiness(int businessId, NewBusinessRequest dto);
+         Task<ServiceResponse> UpdateBusiness(int businessId, BusinessRequest dto);
     }
 }

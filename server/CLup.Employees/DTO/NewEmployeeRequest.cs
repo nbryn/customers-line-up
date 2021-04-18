@@ -9,6 +9,8 @@ namespace CLup.Employees.DTO
 
         [Required]
         public string PrivateEmail { get; set; }
+        
+        #nullable enable
         public string? CompanyEmail { get; set; }
     }
 }

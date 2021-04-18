@@ -64,6 +64,7 @@ export const BusinessEmployeeView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
+                        loading={employeeService.working}
                         fetchTableData={async () =>
                             await employeeService.fetchEmployeesByBusiness(business.id)
                         }

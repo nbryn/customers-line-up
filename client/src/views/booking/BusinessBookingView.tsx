@@ -72,6 +72,7 @@ export const BusinessBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
+                        loading={bookingService.working}
                         fetchTableData={async () =>
                             await bookingService.fetchBookingsByBusiness(business.id)
                         }

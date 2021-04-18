@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,13 +7,13 @@ using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 using CLup.Auth;
+using CLup.Bookings;
 using CLup.Extensions;
 namespace CLup
 {
     public class Startup
     {
         internal IConfiguration _config { get; private set; }
-
         public IWebHostEnvironment Environment { get; }
         readonly string CorsApi = "CorsApi";
         public Startup(IConfiguration config, IWebHostEnvironment environment)
@@ -41,7 +42,12 @@ namespace CLup
             services.ConfigureDataContext(_config, Environment);
             services.AddAutoMapper(typeof(Startup));
             services.ConfigureSwagger();
-            services.AddControllers();
+            services.AddControllers()
+                    .AddFluentValidation(fv =>
+                    {
+                        fv.ImplicitlyValidateChildProperties = true;
+                        fv.RegisterValidatorsFromAssemblyContaining<BookingValidator>();
+                    });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -63,6 +63,7 @@ export const BusinessTimeSlotView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
+                        loading={timeSlotService.working}
                         fetchTableData={async () => {
                             const timeSlots = await timeSlotService.fetchAvailableTimeSlotsByBusiness(
                                 business.id

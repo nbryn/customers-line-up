@@ -23,7 +23,7 @@ namespace CLup.Businesses
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse> CreateBusiness(NewBusinessRequest business)
+        public async Task<ServiceResponse> CreateBusiness(BusinessRequest business)
         {
             BusinessType.TryParse(business.Type, out BusinessType type);
 
@@ -36,7 +36,7 @@ namespace CLup.Businesses
             return new ServiceResponse(HttpCode.Created);
         }
 
-        public async Task<ServiceResponse> UpdateBusiness(int businessId, NewBusinessRequest dto)
+        public async Task<ServiceResponse> UpdateBusiness(int businessId, BusinessRequest dto)
         {
             var business = await FindBusinessById(businessId);
 

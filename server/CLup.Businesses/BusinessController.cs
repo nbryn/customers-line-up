@@ -9,7 +9,6 @@ using CLup.Auth;
 using CLup.Businesses.DTO;
 using CLup.Businesses.Interfaces;
 using CLup.Extensions;
-using CLup.Util;
 
 namespace CLup.Businesses
 {
@@ -32,8 +31,13 @@ namespace CLup.Businesses
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> NewBusiness([FromBody] NewBusinessRequest dto)
+        public async Task<IActionResult> NewBusiness([FromBody] BusinessRequest dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             dto.OwnerEmail = ownerEmail;
@@ -60,8 +64,13 @@ namespace CLup.Businesses
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] NewBusinessRequest dto)
+        public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] BusinessRequest dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var response = await _repository.UpdateBusiness(id, dto);
 
             return this.CreateActionResult(response);

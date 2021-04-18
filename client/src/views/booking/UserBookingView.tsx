@@ -75,6 +75,7 @@ export const UserBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
+                        loading={bookingService.working}
                         fetchTableData={async () => await bookingService.fetchBookingsByUser()}
                         removeEntryId={removeBooking}
                         tableTitle="Bookings"

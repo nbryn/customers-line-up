@@ -15,8 +15,13 @@ import {useBookingService} from '../../services/BookingService';
 import {useTimeSlotService} from '../../services/TimeSlotService';
 
 const useStyles = makeStyles((theme) => ({
-    address: {marginTop: 10},
-    badge: {top: -5, marginLeft: 35},
+    address: {
+        marginTop: 10,
+    },
+    badge: {
+        top: -5,
+        marginLeft: 35,
+    },
     row: {
         justifyContent: 'center',
     },
@@ -76,6 +81,7 @@ export const CreateBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
+                        loading={timeSlotService.working}
                         fetchTableData={async () => {
                             const timeSlots = await timeSlotService.fetchTimeSlotsByBusiness(
                                 business.id!

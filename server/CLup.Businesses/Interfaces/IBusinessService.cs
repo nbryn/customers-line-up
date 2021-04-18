@@ -8,7 +8,7 @@ namespace CLup.Businesses.Interfaces
 {
     public interface IBusinessService
     {
-        Task<ServiceResponse> RegisterBusiness(NewBusinessRequest business);
+        Task<ServiceResponse> RegisterBusiness(BusinessRequest business);
 
         IEnumerable<string> GetBusinessTypes();
     }

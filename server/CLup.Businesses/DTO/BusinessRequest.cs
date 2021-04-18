@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace CLup.Businesses.DTO
 {
-    public class NewBusinessRequest
+    public class BusinessRequest
     {
         [Required]
         [StringLength(50)]
@@ -21,7 +21,7 @@ namespace CLup.Businesses.DTO
         [Required]
         public int Capacity { get; set; }
         [Required]
-        public int timeSlotLength { get; set; }
+        public int TimeSlotLength { get; set; }
 
         [Required]
         public string Type { get; set; }

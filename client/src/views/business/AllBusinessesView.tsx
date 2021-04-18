@@ -73,6 +73,7 @@ export const AllBusinessesView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
+                        loading={businessService.working}
                         fetchTableData={async () => {
                             const businesses = await businessService.fetchAllBusinesses()
 
