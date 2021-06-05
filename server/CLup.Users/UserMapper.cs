@@ -4,9 +4,9 @@ using CLup.Users.DTO;
 
 namespace CLup.Users
 {
-    public class UserProfile : Profile
+    public class UserMapper : Profile
     {
-        public UserProfile()
+        public UserMapper()
         {
             CreateMap<User, UserDTO>()
                 .ForMember(u => u.Role, s => s.MapFrom(m => m.Role.ToString()));

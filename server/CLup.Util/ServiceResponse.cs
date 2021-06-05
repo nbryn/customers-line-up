@@ -6,7 +6,7 @@ namespace CLup.Util
         public string _message { get; set; }
         public HttpCode _statusCode { get; set; }
 
-        public bool HaveErrors => ((int)_statusCode).ToString().StartsWith("4");
+        public bool HasErrors => ((int)_statusCode).ToString().StartsWith("4");
 
         public ServiceResponse()
         {

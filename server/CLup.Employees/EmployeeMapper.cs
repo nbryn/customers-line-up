@@ -4,9 +4,9 @@ using CLup.Employees.DTO;
 
 namespace CLup.Employees
 {
-    public class EmployeeProfile : Profile
+    public class EmployeeMapper : Profile
     {
-        public EmployeeProfile()
+        public EmployeeMapper()
         {
             CreateMap<Employee, EmployeeDTO>()
                 .ForMember(b => b.EmployedSince, s => s.MapFrom(m => m.CreatedAt.ToString("dd/MM/yyyy")))

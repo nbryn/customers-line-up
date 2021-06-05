@@ -31,7 +31,7 @@ namespace CLup.Extensions
             bool includeResponseData = true)
         {
 
-            if (response.HaveErrors)
+            if (response.HasErrors)
             {
                 return Error(controller, response);
             }
@@ -50,7 +50,7 @@ namespace CLup.Extensions
             ServiceResponse response,
             HttpStatusCode successStatusCode = HttpStatusCode.OK)
         {
-            if (response.HaveErrors)
+            if (response.HasErrors)
             {
                 return Error(controller, response);
             }

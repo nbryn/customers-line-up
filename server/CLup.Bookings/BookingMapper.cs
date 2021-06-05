@@ -4,9 +4,9 @@ using System.Linq;
 using CLup.Bookings.DTO;
 namespace CLup.Bookings
 {
-    public class BookingProfile : Profile
+    public class BookingMapper : Profile
     {
-        public BookingProfile()
+        public BookingMapper()
         {
             CreateMap<Booking, BookingDTO>()
                 .ForMember(b => b.Business, s => s.MapFrom(

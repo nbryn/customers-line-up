@@ -6,9 +6,9 @@ using CLup.TimeSlots.DTO;
 
 namespace CLup.TimeSlots
 {
-    public class TimeSlotProfile : Profile
+    public class TimeSlotMapper : Profile
     {
-        public TimeSlotProfile()
+        public TimeSlotMapper()
         {
             CreateMap<TimeSlot, TimeSlotDTO>()
                 .ForMember(t => t.Business, s => s.MapFrom(m => m.BusinessName))
