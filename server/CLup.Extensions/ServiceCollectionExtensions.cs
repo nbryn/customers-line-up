@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MySql.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -102,9 +103,9 @@ namespace CLup.Extensions
             }
             else
             {
-                var connectionString = "DataSource=myshareddb;mode=memory;cache=shared";
+                var connectionString = "MYSQLCONNSTR_localdb";
                 services.AddDbContext<CLupContext>(options =>
-                                  options.UseSqlite(connectionString),
+                                  options.UseMySQL(connectionString),
                        ServiceLifetime.Transient);
             }
         }
