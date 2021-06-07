@@ -31,7 +31,7 @@ namespace Logic.Employees
         [Route("business/{businessId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<EmployeeDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllEmployeesForBusiness(int businessId)
+        public async Task<IActionResult> FetchAllEmployeesForBusiness(string businessId)
         {
             var response = await _repository.FindEmployeesByBusiness(businessId);
 
@@ -53,7 +53,7 @@ namespace Logic.Employees
         [Route("{email}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RemoveEmployee(string email, [FromQuery] int businessId)
+        public async Task<IActionResult> RemoveEmployee(string email, [FromQuery] string businessId)
         {
             var response = await _repository.DeleteEmployee(email, businessId);
 

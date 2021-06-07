@@ -5,37 +5,34 @@ import {useApi} from '../api/useApi';
 const defaultRoute = 'booking';
 
 export interface BookingService extends BaseService {
-    createBooking: (timeSlotId: number) => Promise<void>;
-    deleteBookingForBusiness: (timeSlotId: number, userEmail: string) => Promise<void>;
-    deleteBookingForUser: (timeSlotId: number) => Promise<void>;
-    fetchBookingsByBusiness: (businessId: number) => Promise<BookingDTO[]>;
+    createBooking: (timeSlotId: string) => void;
+    deleteBookingForBusiness: (timeSlotId: string, userEmail: string) => void;
+    deleteBookingForUser: (timeSlotId: string) => void;
+    fetchBookingsByBusiness: (businessId: string) => Promise<BookingDTO[]>;
     fetchBookingsByUser: () => Promise<BookingDTO[]>;
 }
 
 export function useBookingService(succesMessage?: string): BookingService {
     const apiCaller = useApi(succesMessage);
 
-    const createBooking = async (timeSlotId: number): Promise<void> => {
-        await apiCaller.post(`${defaultRoute}/${timeSlotId}`);
+    const createBooking = (timeSlotId: string): void => {
+        apiCaller.post(`${defaultRoute}/${timeSlotId}`);
     };
 
-    const deleteBookingForBusiness = async (
-        timeSlotId: number,
-        userEmail: string
-    ): Promise<void> => {
-        await apiCaller.remove(`${defaultRoute}/business/${timeSlotId}?userEmail=${userEmail}`);
+    const deleteBookingForBusiness = (timeSlotId: string, userEmail: string): void => {
+        apiCaller.remove(`${defaultRoute}/business/${timeSlotId}?userEmail=${userEmail}`);
     };
 
-    const deleteBookingForUser = async (timeSlotId: number): Promise<void> => {
-        await apiCaller.remove(`${defaultRoute}/user${timeSlotId}`);
+    const deleteBookingForUser = (timeSlotId: string): void => {
+        apiCaller.remove(`${defaultRoute}/user${timeSlotId}`);
     };
 
-    const fetchBookingsByBusiness = async (businessId: number): Promise<BookingDTO[]> => {
-        return await apiCaller.get(`${defaultRoute}/business/${businessId}`);
+    const fetchBookingsByBusiness = (businessId: string): Promise<BookingDTO[]> => {
+        return apiCaller.get(`${defaultRoute}/business/${businessId}`);
     };
 
-    const fetchBookingsByUser = async (): Promise<BookingDTO[]> => {
-        return await apiCaller.get(`${defaultRoute}/user`);
+    const fetchBookingsByUser = (): Promise<BookingDTO[]> => {
+        return apiCaller.get(`${defaultRoute}/user`);
     };
 
     const setRequestInfo = (info: string) => apiCaller.setRequestInfo(info);

@@ -5,14 +5,14 @@ import {useApi} from '../api/useApi';
 const defaultRoute = 'user';
 
 export interface UserService extends BaseService {
-    fetchAllUsersNotEmployedByBusiness: (businessId: number) => Promise<UserDTO[]>;
+    fetchAllUsersNotEmployedByBusiness: (businessId: string) => Promise<UserDTO[]>;
     fetchUserInfo: () => Promise<UserDTO>;
 }
 
 export function useUserService(succesMessage?: string): UserService {
     const apiCaller = useApi(succesMessage);
 
-    const fetchAllUsersNotEmployedByBusiness = (businessId: number): Promise<UserDTO[]> => {
+    const fetchAllUsersNotEmployedByBusiness = (businessId: string): Promise<UserDTO[]> => {
         return apiCaller.get(`${defaultRoute}/all/${businessId}`);
     };
 

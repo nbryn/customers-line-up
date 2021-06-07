@@ -2,9 +2,9 @@ namespace CLup.Bookings.DTO
 {
     public class BookingDTO
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
-        public int TimeSlotId { get; set; }
+        public string TimeSlotId { get; set; }
 
         public string Business { get; set; }
 

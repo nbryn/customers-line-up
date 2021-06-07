@@ -1,8 +1,10 @@
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 using CLup.Context;
 using CLup.Employees.DTO;
@@ -29,6 +31,7 @@ namespace CLup.Employees
         {
             Employee newEmployee = new Employee
             {
+                Id = Guid.NewGuid().ToString(),
                 BusinessId = request.BusinessId,
                 UserEmail = request.PrivateEmail,
                 CompanyEmail = request.CompanyEmail,
@@ -41,7 +44,7 @@ namespace CLup.Employees
             return new ServiceResponse(HttpCode.Created);
         }
 
-        public async Task<ServiceResponse> DeleteEmployee(string email, int businessId)
+        public async Task<ServiceResponse> DeleteEmployee(string email, string businessId)
         {
             Employee employee = await FindEmployeeByEmailAndBusiness(email, businessId);
 
@@ -57,7 +60,7 @@ namespace CLup.Employees
             return new ServiceResponse(HttpCode.Deleted);
         }
 
-        public async Task<Employee> FindEmployeeByEmailAndBusiness(string email, int businessId)
+        public async Task<Employee> FindEmployeeByEmailAndBusiness(string email, string businessId)
         {
             Employee employee = await _context.Employees.Include(e => e.Business)
                                                         .Include(e => e.User)
@@ -76,7 +79,7 @@ namespace CLup.Employees
             return this.AssembleResponse<Employee, EmployeeDTO>(employee, _mapper);
         }
 
-        public async Task<ServiceResponse<IList<EmployeeDTO>>> FindEmployeesByBusiness(int businessId)
+        public async Task<ServiceResponse<IList<EmployeeDTO>>> FindEmployeesByBusiness(string businessId)
         {
             IList<Employee> employees = await _context.Employees.Include(e => e.Business)
                                                                 .Include(e => e.User)

@@ -26,7 +26,7 @@ export const BusinessBookingView: React.FC = () => {
     const styles = useStyles();
     const location = useLocation<LocationState>();
 
-    const [removeBooking, setRemoveBooking] = useState<number | null>(null);
+    const [removeBooking, setRemoveBooking] = useState<string | null>(null);
 
     const bookingService = useBookingService();
 

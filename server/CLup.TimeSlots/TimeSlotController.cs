@@ -44,7 +44,7 @@ namespace CLup.TimeSlots
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteTimeSlot(int id)
+        public async Task<IActionResult> DeleteTimeSlot(string id)
         {
             var response = await _repository.DeleteTimeSlot(id);
 
@@ -55,7 +55,7 @@ namespace CLup.TimeSlots
         [Route("business/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TimeSlotDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllTimeSlotsForBusiness(int id)
+        public async Task<IActionResult> FetchAllTimeSlotsForBusiness(string id)
         {
             var response = await _repository.FindTimeSlotsByBusiness(id);
 

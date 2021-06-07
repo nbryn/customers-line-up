@@ -32,7 +32,7 @@ namespace CLup.Bookings
         [Route("{timeSlotId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> NewBooking(int timeSlotId)
+        public async Task<IActionResult> NewBooking(string timeSlotId)
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -45,7 +45,7 @@ namespace CLup.Bookings
         [Route("user/{timeSlotId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RemoveBookingForUser(int timeSlotId)
+        public async Task<IActionResult> RemoveBookingForUser(string timeSlotId)
         {
             string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -58,7 +58,7 @@ namespace CLup.Bookings
         [Route("business/{timeSlotId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> RemoveBookingForBusiness(int timeSlotId, [FromQuery] string userEmail)
+        public async Task<IActionResult> RemoveBookingForBusiness(string timeSlotId, [FromQuery] string userEmail)
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -84,7 +84,7 @@ namespace CLup.Bookings
         [Route("business/{businessId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BookingDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchBusinessBookings(int businessId)
+        public async Task<IActionResult> FetchBusinessBookings(string businessId)
         {
             var response = await _repository.FindBookingsByBusiness(businessId);
 

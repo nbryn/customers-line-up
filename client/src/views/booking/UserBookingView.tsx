@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 export const UserBookingView: React.FC = () => {
     const styles = useStyles();
 
-    const [removeBooking, setRemoveBooking] = useState<number | null>(null);
+    const [removeBooking, setRemoveBooking] = useState<string | null>(null);
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
 
     const bookingService = useBookingService();

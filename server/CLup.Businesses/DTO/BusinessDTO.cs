@@ -2,7 +2,7 @@ namespace CLup.Businesses.DTO
 {
     public class BusinessDTO
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Zip { get; set; }
         public string Address { get; set; }

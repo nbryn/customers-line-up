@@ -11,7 +11,7 @@ export type Props = {
    loading: boolean;
    fetchTableData: () => Promise<DTO[]>;
    tableData?: DTO[];
-   removeEntryId?: number | null;
+   removeEntryId?: string | null;
    emptyMessage?: string;
 };
 

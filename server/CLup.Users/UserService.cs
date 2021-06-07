@@ -69,7 +69,7 @@ namespace CLup.Users
             return new ServiceResponse<UserDTO>(HttpCode.Ok, response);
         }
 
-        public async Task<ServiceResponse<IList<UserDTO>>> FilterUsersByBusiness(int businessId)
+        public async Task<ServiceResponse<IList<UserDTO>>> FilterUsersByBusiness(string businessId)
         {
             var notAlreadyEmployedByBusiness = new List<UserDTO>();
 

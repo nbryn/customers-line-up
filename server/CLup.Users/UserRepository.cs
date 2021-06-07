@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -29,7 +30,7 @@ namespace CLup.Users
             return await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
         }
 
-        public async Task<ServiceResponse<int>> CreateUser(NewUserRequest user)
+        public async Task<ServiceResponse<Guid>> CreateUser(NewUserRequest user)
         {
             var newUser = _mapper.Map<User>(user);
       
@@ -37,7 +38,7 @@ namespace CLup.Users
 
             await _context.SaveChangesAsync();
 
-            return new ServiceResponse<int>(HttpCode.Created, newUser.Id);
+            return new ServiceResponse<Guid>(HttpCode.Created, newUser.Id);
         }
 
         public Task<User> FindUserById(int userId)

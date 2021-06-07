@@ -6,7 +6,7 @@ namespace CLup.TimeSlots.DTO
     public class AvailableTimeSlotsRequest
     {
         [Required]
-        public int BusinessId { get; set; }
+        public string BusinessId { get; set; }
 
         [Required]
         public DateTime Start { get; set; }

@@ -9,32 +9,32 @@ export interface BusinessService extends BaseService {
     fetchAllBusinesses: () => Promise<BusinessDTO[]>;
     fetchBusinesssesByOwner: () => Promise<BusinessDTO[]>;
     fetchBusinessTypes: () => Promise<string[]>;
-    updateBusinessInfo: (businessId: number) => (data: BusinessDTO) => Promise<BusinessDTO>;
+    updateBusinessInfo: (businessId: string) => (data: BusinessDTO) => Promise<BusinessDTO>;
 }
 
 export function useBusinessService(successMessage?: string): BusinessService {
     const apiCaller = useApi(successMessage);
 
-    const createBusiness = async (data: BusinessDTO): Promise<BusinessDTO> => {
-        return await apiCaller.post(`${defaultRoute}`, data);
+    const createBusiness = (data: BusinessDTO): Promise<BusinessDTO> => {
+        return apiCaller.post(`${defaultRoute}`, data);
     };
 
-    const fetchAllBusinesses = async (): Promise<BusinessDTO[]> => {
-        return await apiCaller.get(`${defaultRoute}/all`);
+    const fetchAllBusinesses = (): Promise<BusinessDTO[]> => {
+        return apiCaller.get(`${defaultRoute}/all`);
     };
 
-    const fetchBusinesssesByOwner = async (): Promise<BusinessDTO[]> => {
-        return await apiCaller.get(`${defaultRoute}/owner`);
+    const fetchBusinesssesByOwner = (): Promise<BusinessDTO[]> => {
+        return apiCaller.get(`${defaultRoute}/owner`);
     };
 
-    const fetchBusinessTypes = async (): Promise<string[]> => {
-        return await apiCaller.get(`${defaultRoute}/types`);
+    const fetchBusinessTypes = (): Promise<string[]> => {
+        return apiCaller.get(`${defaultRoute}/types`);
     };
 
-    const updateBusinessInfo = (businessId: number) => async (
+    const updateBusinessInfo = (businessId: string) => (
         data: BusinessDTO
     ): Promise<BusinessDTO> => {
-        return await apiCaller.put(`${defaultRoute}/${businessId}`, data);
+        return apiCaller.put(`${defaultRoute}/${businessId}`, data);
     };
 
     const setRequestInfo = (info: string) => apiCaller.setRequestInfo(info);

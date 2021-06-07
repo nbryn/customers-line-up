@@ -1,3 +1,4 @@
+using System;
 using CLup.Businesses;
 
 namespace CLup.Context.Initialiser.DataCreators
@@ -6,13 +7,14 @@ namespace CLup.Context.Initialiser.DataCreators
     {
 
         public static Business Create(
-            string name, string ownerEmail,
+            string id, string name, string ownerEmail,
             string address, string zip, double longitude,
             double latitude, int capacity, string opens,
             string closes, int TimeSlotLength, BusinessType type)
         {
             Business business = new Business
             {
+                Id = id,
                 Name = name,
                 OwnerEmail = ownerEmail,
                 Zip = zip,
@@ -23,17 +25,22 @@ namespace CLup.Context.Initialiser.DataCreators
                 Opens = opens,
                 Closes = closes,
                 TimeSlotLength = TimeSlotLength,
-                Type = type
+                Type = type,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             return business;
         }
 
-        public static BusinessOwner CreateOwner(string userEmail)
+        public static BusinessOwner CreateOwner(string id, string userEmail)
         {
             BusinessOwner owner = new BusinessOwner
-            {
-                UserEmail = userEmail
+            {   
+                Id = id,
+                UserEmail = userEmail,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             return owner;

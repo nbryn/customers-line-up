@@ -24,16 +24,16 @@ namespace CLup.TimeSlots
             _context = context;
             _mapper = mapper;
         }
-        public async Task<ServiceResponse<int>> CreateTimeSlot(TimeSlot timeSlot)
+        public async Task<ServiceResponse<Guid>> CreateTimeSlot(TimeSlot timeSlot)
         {
             await _context.TimeSlots.AddAsync(timeSlot);
 
             await _context.SaveChangesAsync();
 
-            return new ServiceResponse<int>(HttpCode.Created, timeSlot.Id);
+            return new ServiceResponse<Guid>(HttpCode.Created, timeSlot.Id);
         }
 
-        public async Task<ServiceResponse> DeleteTimeSlot(int timeSlotId)
+        public async Task<ServiceResponse> DeleteTimeSlot(string timeSlotId)
         {
             TimeSlot timeSlot = await FindTimeSlotById(timeSlotId);
 
@@ -49,16 +49,16 @@ namespace CLup.TimeSlots
             return new ServiceResponse(HttpCode.Deleted);
         }
 
-        public async Task<TimeSlot> FindTimeSlotById(int timeSlotId)
+        public async Task<TimeSlot> FindTimeSlotById(string timeSlotId)
         {
             TimeSlot timeSlot = await _context.TimeSlots.Include(x => x.Bookings)
                                                         .Include(x => x.Business)
-                                                        .FirstOrDefaultAsync(x => x.Id == timeSlotId);
+                                                        .FirstOrDefaultAsync(x => x.Id.ToString() == timeSlotId);
 
             return timeSlot;
         }
 
-        public async Task<ServiceResponse<IList<TimeSlotDTO>>> FindTimeSlotsByBusiness(int businessId)
+        public async Task<ServiceResponse<IList<TimeSlotDTO>>> FindTimeSlotsByBusiness(string businessId)
         {
             IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
                                                                 .Include(x => x.Business)
@@ -68,7 +68,7 @@ namespace CLup.TimeSlots
             return this.AssembleResponse<TimeSlot, TimeSlotDTO>(timeSlots, _mapper);
         }
 
-        public async Task<ServiceResponse<IList<TimeSlotDTO>>> FindTimeSlotsByBusinessAndDate(int businessId, DateTime date)
+        public async Task<ServiceResponse<IList<TimeSlotDTO>>> FindTimeSlotsByBusinessAndDate(string businessId, DateTime date)
         {
             IList<TimeSlot> timeSlots = await _context.TimeSlots.Include(x => x.Bookings)
                                                                 .Include(x => x.Business)
@@ -91,7 +91,7 @@ namespace CLup.TimeSlots
 
         public async Task<ServiceResponse> UpdateTimeSlot(TimeSlot updatedTimeSlot)
         {
-            TimeSlot existingTimeSlot = await FindTimeSlotById(updatedTimeSlot.Id);
+            TimeSlot existingTimeSlot = await FindTimeSlotById(updatedTimeSlot.Id.ToString());
 
             if (existingTimeSlot == null)
             {

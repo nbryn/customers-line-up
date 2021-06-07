@@ -51,7 +51,7 @@ export const CreateBusinessView: React.FC = () => {
   const businessService = useBusinessService(SUCCESS_MESSAGE);
 
   const formValues: BusinessDTO = {
-    id: 0,
+    id: '',
     name: '',
     zip: '',
     address: '',
@@ -92,7 +92,9 @@ export const CreateBusinessView: React.FC = () => {
   useEffect(() => {
     (async () => {
       const {zip} = formHandler.values;
-      setAddresses(await addressHandler.fetchAddresses(zip?.substring(0, 4)));
+      if (!zip) return;
+
+      setAddresses(await addressHandler.fetchAddresses(zip.substring(0, 4)));
     })();
   }, [formHandler.values.zip]);
 

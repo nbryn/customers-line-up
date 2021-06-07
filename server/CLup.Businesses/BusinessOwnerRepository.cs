@@ -1,4 +1,6 @@
+using System;
 using System.Threading.Tasks;
+
 using Microsoft.EntityFrameworkCore;
 
 using CLup.Businesses.Interfaces;
@@ -22,6 +24,7 @@ namespace CLup.Businesses
         {
             BusinessOwner newOwner = new BusinessOwner
             {
+                Id = Guid.NewGuid().ToString(),
                 UserEmail = ownerEmail,
             };
 

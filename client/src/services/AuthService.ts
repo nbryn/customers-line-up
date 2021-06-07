@@ -12,12 +12,12 @@ export interface AuthService extends BaseService {
 export function useAuthService(): AuthService {
     const apiCaller = useApi();
 
-    const login = async (data: UserDTO): Promise<UserDTO> => {
-        return await apiCaller.post(`${defaultRoute}/login`, data);
+    const login = (data: UserDTO): Promise<UserDTO> => {
+        return apiCaller.post(`${defaultRoute}/login`, data);
     };
 
-    const register = async (data: UserDTO): Promise<UserDTO> => {
-        return await apiCaller.post(`${defaultRoute}/register`, data);
+    const register = (data: UserDTO): Promise<UserDTO> => {
+        return apiCaller.post(`${defaultRoute}/register`, data);
     };
 
     const setRequestInfo = (info: string) => apiCaller.setRequestInfo(info);

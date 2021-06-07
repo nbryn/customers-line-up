@@ -82,7 +82,7 @@ namespace CLup.Users
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UserDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness(int businessId)
+        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness(string businessId)
         {
             var response = await _service.FilterUsersByBusiness(businessId);
 

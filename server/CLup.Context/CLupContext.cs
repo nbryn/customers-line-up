@@ -20,6 +20,7 @@ namespace CLup.Context
         public DbSet<Employee> Employees { get; set; }
         public DbSet<TimeSlot> TimeSlots { get; set; }
         public DbSet<User> Users { get; set; }
+
         public CLupContext(DbContextOptions<CLupContext> options)
             : base(options)
         {
@@ -58,6 +59,11 @@ namespace CLup.Context
 
             modelBuilder.Entity<Employee>().HasKey(e => new { e.UserEmail, e.BusinessId });
 
+            modelBuilder.Entity<Business>()
+                       .Property(b => b.Type)
+                       .HasConversion(b => b.ToString("G"),
+                       b => Enum.Parse<BusinessType>(b));
+
             modelBuilder.Entity<User>()
                         .HasIndex(c => c.Email)
                         .IsUnique();
@@ -65,29 +71,25 @@ namespace CLup.Context
             modelBuilder.Entity<User>()
                         .HasKey(u => u.Email);
 
-       
-            modelBuilder.Entity<BusinessOwner>()
+
+             modelBuilder.Entity<BusinessOwner>()
                         .HasMany(c => c.Businesses);
 
             modelBuilder.Entity<BusinessOwner>()
                         .HasIndex(c => c.UserEmail)
                         .IsUnique();
 
+            modelBuilder.Entity<Business>()
+                        .HasMany(x => x.TimeSlots)
+                        .WithOne(x => x.Business);
 
             modelBuilder.Entity<Business>()
-                        .HasMany(x => x.TimeSlots);
+                        .HasMany(x => x.Employees)
+                        .WithOne(x => x.Business);
 
-            modelBuilder.Entity<Business>()
-                        .HasMany(x => x.Employees);
-
-            modelBuilder.Entity<Business>()
-                        .Property(b => b.Type)
-                        .HasConversion(b => b.ToString("G"),
-                        b => Enum.Parse<BusinessType>(b));
-
-            
             modelBuilder.Entity<TimeSlot>()
-                        .HasMany(b => b.Bookings);
+                        .HasMany(t => t.Bookings)
+                        .WithOne(b => b.TimeSlot);
         }
     }
 }

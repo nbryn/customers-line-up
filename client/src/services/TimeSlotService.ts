@@ -5,22 +5,20 @@ import {useApi} from '../api/useApi';
 const defaultRoute = 'timeslot';
 
 export interface TimeSlotService extends BaseService {
-    deleteTimeSlot: (timeSlotId: number) => Promise<void>;
-    fetchAvailableTimeSlotsByBusiness: (businessId: number) => Promise<TimeSlotDTO[]>;
-    fetchTimeSlotsByBusiness: (businessId: number) => Promise<TimeSlotDTO[]>;
-    generateTimeSlots: (data: {businessId: number, start?: string}) => Promise<void>;
+    deleteTimeSlot: (timeSlotId: string) => void;
+    fetchAvailableTimeSlotsByBusiness: (businessId: string) => Promise<TimeSlotDTO[]>;
+    fetchTimeSlotsByBusiness: (businessId: string) => Promise<TimeSlotDTO[]>;
+    generateTimeSlots: (data: {businessId: string; start?: string}) => void;
 }
 
 export function useTimeSlotService(succesMessage?: string): TimeSlotService {
     const apiCaller = useApi(succesMessage);
 
-    const deleteTimeSlot = async (timeSlotId: number): Promise<void> => {
-        await apiCaller.remove(`${defaultRoute}/${timeSlotId}`);
+    const deleteTimeSlot = (timeSlotId: string): void => {
+        apiCaller.remove(`${defaultRoute}/${timeSlotId}`);
     };
 
-    const fetchAvailableTimeSlotsByBusiness = async (
-        businessId: number
-    ): Promise<TimeSlotDTO[]> => {
+    const fetchAvailableTimeSlotsByBusiness = (businessId: string): Promise<TimeSlotDTO[]> => {
         const today = new Date();
         today.setDate(today.getDate() - 100);
         const tomorrow = new Date();
@@ -29,17 +27,17 @@ export function useTimeSlotService(succesMessage?: string): TimeSlotService {
         const start = today.toISOString().substring(0, 10);
         const end = tomorrow.toISOString().substring(0, 10);
 
-        return await apiCaller.get(
+        return apiCaller.get(
             `${defaultRoute}/available?businessid=${businessId}&start=${start}&end=${end}`
         );
     };
 
-    const fetchTimeSlotsByBusiness = async (businessId: number): Promise<TimeSlotDTO[]> => {
-        return await apiCaller.get(`${defaultRoute}/business/${businessId}`);
+    const fetchTimeSlotsByBusiness = (businessId: string): Promise<TimeSlotDTO[]> => {
+        return apiCaller.get(`${defaultRoute}/business/${businessId}`);
     };
 
-    const generateTimeSlots = async (data: {businessId: number, start?: string}): Promise<void> => {
-        await apiCaller.post(defaultRoute, data);
+    const generateTimeSlots = (data: {businessId: string; start?: string}): void => {
+        apiCaller.post(defaultRoute, data);
     };
 
     const setRequestInfo = (info: string) => apiCaller.setRequestInfo(info);

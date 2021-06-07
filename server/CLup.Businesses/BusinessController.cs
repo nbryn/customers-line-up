@@ -64,7 +64,7 @@ namespace CLup.Businesses
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateBusinessData(int id, [FromBody] BusinessRequest dto)
+        public async Task<IActionResult> UpdateBusinessData(string id, [FromBody] BusinessRequest dto)
         {
             if (!ModelState.IsValid)
             {

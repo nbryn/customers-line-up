@@ -11,12 +11,12 @@ namespace CLup.Businesses.Interfaces
     {
          Task<ServiceResponse> CreateBusiness(BusinessRequest business);
 
-         Task<Business> FindBusinessById(int businessId);
+         Task<Business> FindBusinessById(string businessId);
 
          Task<ServiceResponse<IList<BusinessDTO>>> FindBusinessesByOwner(string ownerEmail);
 
          Task<ServiceResponse<IList<BusinessDTO>>> GetAll();
 
-         Task<ServiceResponse> UpdateBusiness(int businessId, BusinessRequest dto);
+         Task<ServiceResponse> UpdateBusiness(string businessId, BusinessRequest dto);
     }
 }

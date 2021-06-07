@@ -9,12 +9,12 @@ namespace CLup.Employees
 {
     public class Employee : BaseEntity
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
   
         public Business Business { get; set; }
 
         [Required]
-        public int BusinessId { get; set; }
+        public string BusinessId { get; set; }
 
         public User User { get; set; }
 

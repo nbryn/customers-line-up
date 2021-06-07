@@ -21,7 +21,7 @@ export type BusinessDataDTO = {
 };
 
 export interface TimeSlotDTO extends DTO {
-   id: number;
+   id: string;
    date: string;
    start: string;
    end: string;

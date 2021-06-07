@@ -1,7 +1,7 @@
 import {DTO} from './General';
 
 export interface BookingDTO extends DTO {
-    timeSlotId: number;
+    timeSlotId: string;
     address: string;
     business: string;
     longitude: number;

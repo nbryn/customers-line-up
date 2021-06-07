@@ -25,7 +25,7 @@ interface LocationState {
 export const BusinessEmployeeView: React.FC = () => {
     const styles = useStyles();
     const location = useLocation<LocationState>();
-    const [removeEmployee, setRemoveEmployee] = useState<number | null>(null);
+    const [removeEmployee, setRemoveEmployee] = useState<string | null>(null);
 
     const employeeService = useEmployeeService();
 

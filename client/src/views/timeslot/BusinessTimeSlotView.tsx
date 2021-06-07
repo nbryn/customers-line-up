@@ -25,7 +25,7 @@ interface LocationState {
 export const BusinessTimeSlotView: React.FC = () => {
     const styles = useStyles();
     const location = useLocation<LocationState>();
-    const [removeTimeSlot, setRemoveTimeSlot] = useState<number | null>(null);
+    const [removeTimeSlot, setRemoveTimeSlot] = useState<string | null>(null);
 
     const timeSlotService = useTimeSlotService();
 

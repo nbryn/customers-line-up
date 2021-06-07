@@ -33,7 +33,7 @@ namespace CLup.Bookings
             return new ServiceResponse(HttpCode.Created);
         }
 
-        public async Task<Booking> FindBookingByUserAndTimeSlot(string userEmail, int timeSlotId)
+        public async Task<Booking> FindBookingByUserAndTimeSlot(string userEmail, string timeSlotId)
         {
 
             var booking = await _context.Bookings.Include(x => x.TimeSlot)
@@ -57,7 +57,7 @@ namespace CLup.Bookings
             return this.AssembleResponse<Booking, BookingDTO>(bookings, _mapper);
         }
 
-        public async Task<ServiceResponse<IList<BookingDTO>>> FindBookingsByBusiness(int businessId)
+        public async Task<ServiceResponse<IList<BookingDTO>>> FindBookingsByBusiness(string businessId)
         {
             var bookings = await _context.Bookings.Include(x => x.TimeSlot)
                                           .Include(x => x.TimeSlot.Business)
@@ -67,7 +67,7 @@ namespace CLup.Bookings
             return this.AssembleResponse<Booking, BookingDTO>(bookings, _mapper);
         }
 
-        public async Task<ServiceResponse> DeleteBooking(string userEmail, int timeSlotId)
+        public async Task<ServiceResponse> DeleteBooking(string userEmail, string timeSlotId)
         {
             var booking = await FindBookingByUserAndTimeSlot(userEmail, timeSlotId);
 

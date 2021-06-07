@@ -71,11 +71,8 @@ namespace CLup
             });
 
             app.UseRouting();
-
             app.UseCors("CorsApi");
-
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

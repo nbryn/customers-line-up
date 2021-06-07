@@ -1,8 +1,10 @@
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 using CLup.Businesses.DTO;
 using CLup.Businesses.Interfaces;
@@ -26,17 +28,15 @@ namespace CLup.Businesses
         public async Task<ServiceResponse> CreateBusiness(BusinessRequest business)
         {
             BusinessType.TryParse(business.Type, out BusinessType type);
-
             var newBusiness = _mapper.Map<Business>(business);
 
             _context.Businesses.Add(newBusiness);
-
             await _context.SaveChangesAsync();
 
             return new ServiceResponse(HttpCode.Created);
         }
 
-        public async Task<ServiceResponse> UpdateBusiness(int businessId, BusinessRequest dto)
+        public async Task<ServiceResponse> UpdateBusiness(string businessId, BusinessRequest dto)
         {
             var business = await FindBusinessById(businessId);
 
@@ -55,9 +55,9 @@ namespace CLup.Businesses
             return new ServiceResponse(HttpCode.Updated);
         }
 
-        public async Task<Business> FindBusinessById(int businessId)
+        public async Task<Business> FindBusinessById(string businessId)
         {
-            Business business = await _context.Businesses.FirstOrDefaultAsync(x => x.Id == businessId);
+            Business business = await _context.Businesses.FirstOrDefaultAsync(x => x.Id.ToString() == businessId);
 
             return business;
         }

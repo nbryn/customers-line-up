@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 
 using CLup.Bookings.Interfaces;
@@ -16,7 +17,7 @@ namespace CLup.Bookings
         private readonly IBookingRepository _bookingRepository;
 
         public BookingService(
-            IBusinessRepository businessRepository, 
+            IBusinessRepository businessRepository,
             ITimeSlotRepository timeSlotRepository,
             IBookingRepository bookingRepository)
         {
@@ -24,14 +25,14 @@ namespace CLup.Bookings
             _timeSlotRepository = timeSlotRepository;
             _bookingRepository = bookingRepository;
         }
-        public async Task<ServiceResponse> VerifyNewBooking(string userEmail, int timeSlotId)
+        public async Task<ServiceResponse> VerifyNewBooking(string userEmail, string timeSlotId)
         {
             Booking bookingExists = await _bookingRepository.FindBookingByUserAndTimeSlot(userEmail, timeSlotId);
 
             if (bookingExists != null)
             {
                 return new ServiceResponse(HttpCode.Conflict, "You already have a booking for this time slot");
-                
+
             }
 
             TimeSlot timeSlot = await _timeSlotRepository.FindTimeSlotById(timeSlotId);
@@ -41,7 +42,7 @@ namespace CLup.Bookings
                 return new ServiceResponse(HttpCode.NotFound, "Time slot does not exist");
             }
 
-            if (timeSlot.Bookings?.Count >= timeSlot.Capacity)
+            if (timeSlot.Bookings.Count() >= timeSlot.Capacity)
             {
                 return new ServiceResponse(HttpCode.Conflict, "This time slot is full");
             }
@@ -53,14 +54,14 @@ namespace CLup.Bookings
                 //Handle business does not exists - Gather null checks in one place?
             }
 
-            Booking booking = new Booking { UserEmail = userEmail, TimeSlotId = timeSlotId, BusinessId = business.Id };
+            Booking booking = new Booking { UserEmail = userEmail, TimeSlotId = timeSlotId, BusinessId = business.Id.ToString() };
 
             var response = await _bookingRepository.SaveBooking(booking);
 
             return new ServiceResponse(HttpCode.Created, "Booking successfull");
         }
 
-        public async Task<ServiceResponse> VerifyDeleteBookingRequest(string ownerEmail, string userEmail, int timeSlotId)
+        public async Task<ServiceResponse> VerifyDeleteBookingRequest(string ownerEmail, string userEmail, string timeSlotId)
         {
             Booking booking = await _bookingRepository.FindBookingByUserAndTimeSlot(userEmail, timeSlotId);
 

@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using MySql.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using CLup.Auth;
@@ -103,10 +104,32 @@ namespace CLup.Extensions
             }
             else
             {
-                var connectionString = "MYSQLCONNSTR_localdb";
+
+                var connectionString = configuration.GetConnectionString("localdb");
                 services.AddDbContext<CLupContext>(options =>
-                                  options.UseMySQL(connectionString),
+                                  options.UseMySQL(NormalizeConnString(connectionString)),
                        ServiceLifetime.Transient);
+
+                string NormalizeConnString(string raw)
+                {
+                    string conn = string.Empty;
+                    try
+                    {
+                        var dict =
+                             raw.Split(';')
+                                 .Where(kvp => kvp.Contains('='))
+                                 .Select(kvp => kvp.Split(new char[] { '=' }, 2))
+                                 .ToDictionary(kvp => kvp[0].Trim(), kvp => kvp[1].Trim(), StringComparer.InvariantCultureIgnoreCase);
+                        var ds = dict["Data Source"];
+                        var dsa = ds.Split(":");
+                        conn = $"Server={dsa[0]};Port={dsa[1]};Database={dict["Database"]};Uid={dict["User Id"]};Pwd={dict["Password"]};";
+                    }
+                    catch
+                    {
+                        throw new Exception("unexpected connection string: datasource is empty or null");
+                    }
+                    return conn;
+                }
             }
         }
 
@@ -133,7 +156,6 @@ namespace CLup.Extensions
                 config.AddPolicy(Policies.Admin, Policies.AdminPolicy());
                 config.AddPolicy(Policies.User, Policies.UserPolicy());
             });
-
         }
 
         public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)

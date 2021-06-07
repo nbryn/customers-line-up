@@ -10,10 +10,10 @@ namespace CLup.TimeSlots
 {
     public class TimeSlot : BaseEntity
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
-        public int BusinessId { get; set; }
+        public string BusinessId { get; set; }
 
         public Business Business { get; set; }
 
@@ -28,6 +28,6 @@ namespace CLup.TimeSlots
         [Required]
         public DateTime End { get; set; }
 
-        public ICollection<Booking>? Bookings { get; set; }
+        public IEnumerable<Booking>? Bookings { get; set; }
     }
 }

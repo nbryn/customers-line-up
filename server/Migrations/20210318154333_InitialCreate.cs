@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CLup.Migrations
@@ -11,8 +11,7 @@ namespace CLup.Migrations
                 name: "BusinessOwners",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     UserEmail = table.Column<string>(nullable: true)
@@ -29,7 +28,7 @@ namespace CLup.Migrations
                     Email = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    Id = table.Column<int>(nullable: false),
+                    Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(nullable: false),
                     Zip = table.Column<string>(nullable: false),
@@ -47,8 +46,7 @@ namespace CLup.Migrations
                 name: "Businesses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
@@ -62,7 +60,7 @@ namespace CLup.Migrations
                     Opens = table.Column<string>(nullable: false),
                     Closes = table.Column<string>(nullable: false),
                     TimeSlotLength = table.Column<int>(nullable: false),
-                    BusinessOwnerId = table.Column<int>(nullable: true)
+                    BusinessOwnerId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,11 +77,11 @@ namespace CLup.Migrations
                 name: "Employees",
                 columns: table => new
                 {
-                    BusinessId = table.Column<int>(nullable: false),
+                    BusinessId = table.Column<string>(nullable: false),
                     UserEmail = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    Id = table.Column<int>(nullable: false),
+                    Id = table.Column<string>(nullable: false),
                     CompanyEmail = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -107,11 +105,10 @@ namespace CLup.Migrations
                 name: "TimeSlots",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    BusinessId = table.Column<int>(nullable: false),
+                    BusinessId = table.Column<string>(nullable: false),
                     BusinessName = table.Column<string>(nullable: true),
                     Capacity = table.Column<int>(nullable: false),
                     Start = table.Column<DateTime>(nullable: false),
@@ -133,10 +130,10 @@ namespace CLup.Migrations
                 columns: table => new
                 {
                     UserEmail = table.Column<string>(nullable: false),
-                    TimeSlotId = table.Column<int>(nullable: false),
+                    TimeSlotId = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    BusinessId = table.Column<int>(nullable: false)
+                    BusinessId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

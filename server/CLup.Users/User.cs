@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ namespace CLup.Users
 {
     public class User : BaseEntity
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -31,6 +32,7 @@ namespace CLup.Users
 
         [Required]
         public double Latitude { get; set; }
+        
         public Role Role { get; set; }
 
         public IList<Booking> Bookings { get; set; }

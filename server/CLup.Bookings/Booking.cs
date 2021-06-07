@@ -11,11 +11,11 @@ namespace CLup.Bookings
 
         public User User { get; set; }
 
-        public int TimeSlotId { get; set; }
+        public string TimeSlotId { get; set; }
 
         public TimeSlot TimeSlot { get; set; }
 
-        public int BusinessId { get; set; }
+        public string BusinessId { get; set; }
 
         public Business Business { get; set; }
 

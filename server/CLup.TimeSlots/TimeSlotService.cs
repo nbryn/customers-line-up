@@ -27,7 +27,7 @@ namespace CLup.TimeSlots
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse> RemoveTimeSlot(string userEmail, int timeSlotId)
+        public async Task<ServiceResponse> RemoveTimeSlot(string userEmail, string timeSlotId)
         {
             TimeSlot timeSlot = await _timeSlotRepository.FindTimeSlotById(timeSlotId);
 

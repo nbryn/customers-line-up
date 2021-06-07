@@ -12,7 +12,7 @@ namespace CLup.Users.Interfaces
 
         Task<ServiceResponse<UserDTO>> AuthenticateUser(LoginRequest user);
 
-        Task<ServiceResponse<IList<UserDTO>>> FilterUsersByBusiness(int businessId);
+        Task<ServiceResponse<IList<UserDTO>>> FilterUsersByBusiness(string businessId);
 
         Task DetermineRole(User user);
 

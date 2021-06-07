@@ -9,6 +9,6 @@ namespace CLup.TimeSlots.Interfaces
     {
         Task<ServiceResponse> GenerateTimeSlots(GenerateTimeSlotsRequest request);
 
-        Task<ServiceResponse> RemoveTimeSlot(string userEmail, int timeSlotId);
+        Task<ServiceResponse> RemoveTimeSlot(string userEmail, string timeSlotId);
     }
 }

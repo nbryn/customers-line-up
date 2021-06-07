@@ -1,7 +1,7 @@
 import {DTO} from './General';
 
 export interface EmployeeDTO extends DTO {
-    businessId?: number,
+    businessId?: string,
     name?: string,
     privateEmail?: string,
     companyEmail?: string,
@@ -9,7 +9,7 @@ export interface EmployeeDTO extends DTO {
 }
 
 export type NewEmployeeDTO = {
-    businessId?: number,
+    businessId?: string,
     privateEmail?: string,
     companyEmail?: string,
 }

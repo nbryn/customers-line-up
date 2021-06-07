@@ -6,23 +6,23 @@ const defaultRoute = 'employee';
 
 export interface EmployeeService extends BaseService {
     createEmployee: (data: EmployeeDTO) => Promise<void>;
-    fetchEmployeesByBusiness: (businessId: number) => Promise<EmployeeDTO[]>;
-    removeEmployee: (employeeEmail: string, businessId: number) => Promise<void>;
+    fetchEmployeesByBusiness: (businessId: string) => Promise<EmployeeDTO[]>;
+    removeEmployee: (employeeEmail: string, businessId: string) => void;
 }
 
 export function useEmployeeService(succesMessage?: string): EmployeeService {
     const apiCaller = useApi(succesMessage);
 
-    const createEmployee = async (data: EmployeeDTO): Promise<void> => {
-        return await apiCaller.post(`${defaultRoute}`, data);
+    const createEmployee = (data: EmployeeDTO): Promise<void> => {
+        return apiCaller.post(`${defaultRoute}`, data);
     };
 
-    const fetchEmployeesByBusiness = async (businessId: number): Promise<EmployeeDTO[]> => {
-        return await apiCaller.get(`${defaultRoute}/business/${businessId}`);
+    const fetchEmployeesByBusiness = (businessId: string): Promise<EmployeeDTO[]> => {
+        return apiCaller.get(`${defaultRoute}/business/${businessId}`);
     };
 
-    const removeEmployee = async (email: string, businessId: number): Promise<void> => {
-        await apiCaller.remove(`${defaultRoute}/${email}?businessId=${businessId}`);
+    const removeEmployee = (email: string, businessId: string): void => {
+        apiCaller.remove(`${defaultRoute}/${email}?businessId=${businessId}`);
     };
 
     const setRequestInfo = (info: string) => apiCaller.setRequestInfo(info);

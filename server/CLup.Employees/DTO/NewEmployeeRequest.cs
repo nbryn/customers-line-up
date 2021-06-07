@@ -5,7 +5,7 @@ namespace CLup.Employees.DTO
     public class NewEmployeeRequest
     {
         [Required]
-        public int BusinessId { get; set; }
+        public string BusinessId { get; set; }
 
         [Required]
         public string PrivateEmail { get; set; }
