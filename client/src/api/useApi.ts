@@ -40,9 +40,7 @@ export function useApi(successMessage?: string): ApiCaller {
 
     const request = async <T>(url: string, method: Method, request?: any, showSuccessMsg = true): Promise<T> => {
         let response: T;
-
-        console.log(showSuccessMsg);
-
+        
         console.log(url);
 
         try {
