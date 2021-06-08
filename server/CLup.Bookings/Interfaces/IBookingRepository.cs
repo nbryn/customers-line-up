@@ -13,6 +13,7 @@ namespace CLup.Bookings.Interfaces
         Task<ServiceResponse<IList<BookingDTO>>> FindBookingsByUser(string userEmail);
         Task<ServiceResponse> SaveBooking(Booking booking);
         Task<Booking> FindBookingByUserAndTimeSlot(string userEmail, string timeSlotId);
+        Task<Booking> FindNextBookingByUser(string userEmail);
         Task<ServiceResponse<IList<BookingDTO>>> FindBookingsByBusiness(string businessId);
 
     }

@@ -1,8 +1,10 @@
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 using System.Threading.Tasks;
+
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 using CLup.Bookings.DTO;
 using CLup.Bookings.Interfaces;
@@ -82,7 +84,16 @@ namespace CLup.Bookings
 
             return new ServiceResponse(HttpCode.Deleted);
         }
+        public async Task<Booking> FindNextBookingByUser(string userEmail)
+        {
+            var bookings = await _context.Bookings.Include(b => b.TimeSlot)
+                                                  .Where(b => b.UserEmail == userEmail)
+                                                  .ToListAsync();
 
+            var booking = bookings.OrderBy(x => Math.Abs(x.TimeSlot.Start.Ticks - DateTime.Now.Ticks)).First();
+
+            return booking;
+        }
 
     }
 }

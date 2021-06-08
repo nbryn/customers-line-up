@@ -1,9 +1,12 @@
-using AutoMapper;
-using BC = BCrypt.Net.BCrypt;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
+using AutoMapper;
+using BC = BCrypt.Net.BCrypt;
+
 using CLup.Auth;
+using CLup.Bookings.Interfaces;
 using CLup.Businesses.Interfaces;
 using CLup.Util;
 using CLup.Employees.Interfaces;
@@ -15,17 +18,23 @@ namespace CLup.Users
     {
         private readonly IBusinessOwnerRepository _ownerRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IBusinessRepository _businessRepository;
+        private readonly IBookingRepository _bookingRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
         private readonly IMapper _mapper;
         public UserService(
             IBusinessOwnerRepository ownerRepository,
             IEmployeeRepository employeeRepository,
+            IBusinessRepository businessRepository,
+            IBookingRepository bookingRepository,
             IUserRepository userRepository,
             IAuthService authService,
             IMapper mapper)
         {
             _employeeRepository = employeeRepository;
+            _businessRepository = businessRepository;
+            _bookingRepository = bookingRepository;
             _ownerRepository = ownerRepository;
             _userRepository = userRepository;
             _authService = authService;
@@ -104,6 +113,23 @@ namespace CLup.Users
             }
 
             user.Role = Role.User;
+        }
+
+        public async Task<ServiceResponse<UserInsightsDTO>> FetchUserInsights(string userEmail)
+        {
+            var bookings = await _bookingRepository.FindBookingsByUser(userEmail);
+            var businesses = await _businessRepository.FindBusinessesByOwner(userEmail);
+            var nextBooking = await _bookingRepository.FindNextBookingByUser(userEmail);
+
+            var insights = new UserInsightsDTO
+            {
+                Bookings = bookings._response.Count,
+                Businesses = businesses._response.Count,
+                NextBookingBusiness = nextBooking.Business.Name,
+                NextBookingTime = nextBooking.TimeSlot.Start.ToString("dd/MM/yyyy - HH:mm")
+            };
+
+            return new ServiceResponse<UserInsightsDTO>(HttpCode.Ok, insights);
         }
     }
 }

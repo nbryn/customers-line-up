@@ -28,7 +28,9 @@ namespace CLup.Businesses
         public async Task<ServiceResponse> CreateBusiness(BusinessRequest business)
         {
             BusinessType.TryParse(business.Type, out BusinessType type);
+
             var newBusiness = _mapper.Map<Business>(business);
+            newBusiness.Id = Guid.NewGuid().ToString();
 
             _context.Businesses.Add(newBusiness);
             await _context.SaveChangesAsync();
@@ -57,7 +59,7 @@ namespace CLup.Businesses
 
         public async Task<Business> FindBusinessById(string businessId)
         {
-            Business business = await _context.Businesses.FirstOrDefaultAsync(x => x.Id.ToString() == businessId);
+            Business business = await _context.Businesses.FirstOrDefaultAsync(x => x.Id == businessId);
 
             return business;
         }
@@ -65,7 +67,8 @@ namespace CLup.Businesses
         public async Task<ServiceResponse<IList<BusinessDTO>>> FindBusinessesByOwner(string ownerEmail)
         {
             var businesses = await _context.Businesses.Where(x => x.OwnerEmail.Equals(ownerEmail))
-                                                                  .ToListAsync();
+                                                      .ToListAsync();
+
             return this.AssembleResponse<Business, BusinessDTO>(businesses, _mapper);
         }
 

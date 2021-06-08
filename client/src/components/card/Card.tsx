@@ -31,7 +31,7 @@ type Props = {
    buttonSize?: 'small' | 'medium' | 'large';
    disableButton?: boolean;
    variant?: 'outlined' | 'elevation';
-   className?: any;
+   className?: string;
    buttonStyle?: any;
    children?: React.ReactNode;
 };

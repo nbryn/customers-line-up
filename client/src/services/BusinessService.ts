@@ -9,7 +9,7 @@ export interface BusinessService extends BaseService {
     fetchAllBusinesses: () => Promise<BusinessDTO[]>;
     fetchBusinesssesByOwner: () => Promise<BusinessDTO[]>;
     fetchBusinessTypes: () => Promise<string[]>;
-    updateBusinessInfo: (businessId: string) => (data: BusinessDTO) => Promise<BusinessDTO>;
+    updateBusinessInfo: (businessId: string, ownerEmail: string) => (data: BusinessDTO) => Promise<BusinessDTO>;
 }
 
 export function useBusinessService(successMessage?: string): BusinessService {
@@ -31,10 +31,10 @@ export function useBusinessService(successMessage?: string): BusinessService {
         return apiCaller.get(`${defaultRoute}/types`);
     };
 
-    const updateBusinessInfo = (businessId: string) => (
+    const updateBusinessInfo = (businessId: string, ownerEmail: string) => (
         data: BusinessDTO
     ): Promise<BusinessDTO> => {
-        return apiCaller.put(`${defaultRoute}/${businessId}`, data);
+        return apiCaller.put(`${defaultRoute}/${businessId}`, {...data, ownerEmail});
     };
 
     const setRequestInfo = (info: string) => apiCaller.setRequestInfo(info);

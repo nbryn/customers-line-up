@@ -50,7 +50,7 @@ export const BusinessProfileView: React.FC = () => {
     const {addressHandler, formHandler} = useForm<BusinessDTO>({
         initialValues: formValues,
         validationSchema: businessValidationSchema,
-        onSubmit: businessService.updateBusinessInfo(business.id),
+        onSubmit: businessService.updateBusinessInfo(business.id, business.ownerEmail!),
         formatter: (business) => {
             business.opens = business.opens.replace(':', '.');
             business.closes = business.closes.replace(':', '.');

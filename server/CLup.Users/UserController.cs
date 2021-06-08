@@ -1,11 +1,11 @@
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System;
 
 using CLup.Auth;
 using CLup.Extensions;
@@ -99,6 +99,19 @@ namespace CLup.Users
             var response = await _repository.GetAll();
 
             return this.CreateActionResult<IList<UserDTO>>(response);
+        }
+
+        [Authorize(Policy = Policies.User)]
+        [Route("insights")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UserDTO>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetUserInsights()
+        {
+            string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var response = await _service.FetchUserInsights(userEmail);
+
+            return this.CreateActionResult<UserInsightsDTO>(response);
         }
     }
 }

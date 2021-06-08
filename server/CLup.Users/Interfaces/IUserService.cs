@@ -14,7 +14,11 @@ namespace CLup.Users.Interfaces
 
         Task<ServiceResponse<IList<UserDTO>>> FilterUsersByBusiness(string businessId);
 
+        Task<ServiceResponse<UserInsightsDTO>> FetchUserInsights(string userEmail);
+
         Task DetermineRole(User user);
+
+
 
     }
 }

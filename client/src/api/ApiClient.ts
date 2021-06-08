@@ -19,15 +19,15 @@ apiClient.interceptors.request.use((request: AxiosRequestConfig) => {
 
 apiClient.interceptors.response.use(
     (response) => response.data,
-    async (error: any) => {
-        const response = error.response;
+    async (e: any) => {
+        const error = e.response;
 
-        console.log(response);
+        console.log(error);
 
         const refreshToken = Cookies.get('refresh_token');
 
-        if (response) {
-            if (response.status === 401 && error.config && !error.config._retry) {
+        if (error) {
+            if (error.status === 401 && error.config && !error.config._retry) {
                 try {
                     if (refreshToken) {
                         /* const newRefreshToken = Cookies.get('refresh_token');
@@ -49,9 +49,9 @@ apiClient.interceptors.response.use(
                 return Promise.reject(error);
             }
 
-            if (response.data) {
-                console.log(response.data);
-                return Promise.reject(response.data);
+            if (error.data) {
+                console.log(error.data);
+                return Promise.reject(error.data);
             }
         }
 

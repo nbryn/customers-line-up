@@ -10,3 +10,10 @@ export interface UserDTO {
    latitude?: number;
    role?: 'User' | 'Employee' | 'Owner' | 'Admin';
 }
+
+export type UserInsights = {
+   bookings: number;
+   businesses: number;
+   nextBookingBusiness: string;
+   nextBookingTime: string;
+};

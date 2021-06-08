@@ -1,7 +1,6 @@
 import React, {ReactElement} from 'react';
 import {Badge} from 'react-bootstrap';
 import MaterialTable from 'material-table';
-import IRowData from 'material-table/types';
 
 export type TableColumn = {
    title: string;
