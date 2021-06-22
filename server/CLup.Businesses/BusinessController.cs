@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using CLup.Auth;
 using CLup.Businesses.DTO;
-using CLup.Businesses.Interfaces;
 using CLup.Extensions;
 
 namespace CLup.Businesses
@@ -20,18 +19,7 @@ namespace CLup.Businesses
     public class BusinessController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IBusinessRepository _repository;
-        private readonly IBusinessService _service;
-
-        public BusinessController(
-            IMediator mediator,
-            IBusinessRepository repository,
-            IBusinessService service)
-        {
-            _mediator = mediator;
-            _repository = repository;
-            _service = service;
-        }
+        public BusinessController(IMediator mediator) => _mediator = mediator;
 
         [HttpPost]
         [Route("")]

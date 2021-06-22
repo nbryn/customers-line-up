@@ -1,52 +1,45 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using CLup.Auth;
 using CLup.Employees.DTO;
-using CLup.Employees.Interfaces;
 using CLup.Extensions;
 
-namespace Logic.Employees
+namespace CLup.Employees
 {
     [ApiController]
     [Authorize(Policy = Policies.User)]
     [Route("[controller]")]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeRepository _repository;
-        private readonly IEmployeeService _service;
-        public EmployeeController(
-            IEmployeeRepository repository,
-            IEmployeeService service)
-        {
-            _repository = repository;
-            _service = service;
-        }
+        private readonly IMediator _mediator;
+        public EmployeeController(IMediator mediator) => _mediator = mediator;
 
         [HttpGet]
         [Route("business/{businessId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<EmployeeDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllEmployeesForBusiness(string businessId)
-        {
-            var response = await _repository.FindEmployeesByBusiness(businessId);
+        public async Task<IActionResult> EmployeesByBusiness(string businessId)
+        {  
+            var result = await _mediator.Send(new BusinessEmployees.Query(businessId));
 
-            return this.CreateActionResult<IList<EmployeeDTO>>(response);
+            return this.CreateActionResult(result);
         }
 
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> NewEmployee(NewEmployeeRequest request)
+        public async Task<IActionResult> NewEmployee(CreateEmployee.Command command)
         {
-            var response = await _service.VerifyNewEmployee(request);
+            var result = await _mediator.Send(command);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult(result);
         }
 
         [HttpDelete]
@@ -55,9 +48,9 @@ namespace Logic.Employees
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RemoveEmployee(string email, [FromQuery] string businessId)
         {
-            var response = await _repository.DeleteEmployee(email, businessId);
+            var result = await _mediator.Send(new DeleteEmployee.Command(businessId, email));
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult(result);
        }
     }
 }

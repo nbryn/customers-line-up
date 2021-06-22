@@ -1,9 +1,10 @@
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using CLup.Auth;
 using CLup.Extensions;
@@ -33,7 +34,7 @@ namespace CLup.TimeSlots
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> NewTimeSlot([FromBody] GenerateTimeSlotsRequest dto)
+        public async Task<IActionResult> NewTimeSlot([FromBody] GenerateTimeSlots.Command command)
         {
             var response = await _service.GenerateTimeSlots(dto);
 

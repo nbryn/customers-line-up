@@ -24,17 +24,12 @@ namespace CLup.Util
             return new Result(false, message, code);
         }
 
-        public static Result NotFound()
-        {
-            return new Result(false, String.Empty, HttpCode.NotFound);
-        }
-
         public static Result<T> NotFound<T>()
         {
             return new Result<T>(default(T), false, String.Empty, HttpCode.NotFound);
         }
 
-        public static Result NotFound(string message)
+        public static Result NotFound(string message = "")
         {
             return new Result(false, message, HttpCode.NotFound);
         }
@@ -54,7 +49,7 @@ namespace CLup.Util
             return new Result(true, String.Empty, HttpCode.Ok);
         }
 
-         public static Result Updated()
+        public static Result Updated()
         {
             return new Result(true, String.Empty, HttpCode.Updated);
         }
@@ -62,6 +57,11 @@ namespace CLup.Util
         public static Result Created()
         {
             return new Result(true, String.Empty, HttpCode.Created);
+        }
+
+        public static Result Conflict(string message)
+        {
+            return new Result(true, message ?? String.Empty, HttpCode.Conflict);
         }
 
         public static Result Deleted()
