@@ -1,4 +1,5 @@
 using FluentValidation.AspNetCore;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -28,8 +29,8 @@ namespace CLup
             services.ConfigureCors(_config);
 
             services.AddSingleton<IConfiguration>(_config);
-
             services.ConfigureJwt(_config);
+            services.AddMediatR(typeof(Startup));
 
             services.AddAuthorization(config =>
             {
@@ -40,6 +41,7 @@ namespace CLup
             services.ConfigureDataServices(_config);
             services.ConfigureRepositories(_config);
             services.ConfigureDataContext(_config, Environment);
+
             services.AddAutoMapper(typeof(Startup));
             services.ConfigureSwagger();
             services.AddControllers()
@@ -59,9 +61,8 @@ namespace CLup
 
             app.ConfigureDataInitialiser();
             app.UseHttpsRedirection();
-
+            
             app.UseSwagger();
-
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Customers Lineup API");

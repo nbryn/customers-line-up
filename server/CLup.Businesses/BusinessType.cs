@@ -9,6 +9,5 @@ namespace CLup.Businesses
         Bakery,
         Library,
         Other,
-
     }
 }

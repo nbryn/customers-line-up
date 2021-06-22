@@ -10,7 +10,6 @@ namespace CLup.Extensions
 
     public static class ControllerBaseExtensions
     {
-
         public static IActionResult ErrorResult(this ControllerBase controller, string code, string description)
         {
             return controller.BadRequest(new ErrorResponse[]
@@ -56,6 +55,46 @@ namespace CLup.Extensions
             }
 
             return controller.StatusCode((int)successStatusCode);
+        }
+
+        public static IActionResult CreateActionResult(
+            this ControllerBase controller,
+            Result result,
+            HttpStatusCode successStatusCode = HttpStatusCode.OK)
+        {
+            if (result.Failure)
+            {
+                return Error(controller, result);
+            }
+
+            return controller.StatusCode((int)successStatusCode);
+        }
+
+        private static IActionResult Error(
+        this ControllerBase controller,
+        Result result)
+        {
+            if (result.Code == HttpCode.NotFound)
+            {
+                return controller.NotFound(result.Error ?? null);
+            }
+            if (result.Code == HttpCode.Forbidden)
+            {
+                return controller.Forbid(result.Error ?? null);
+            }
+
+            if (result.Code == HttpCode.Conflict)
+            {
+                return controller.Conflict(result.Error ?? null);
+            }
+
+            if (result.Code == HttpCode.Unauthorized)
+            {
+                return controller.Unauthorized(result.Error ?? null);
+            }
+
+            return controller.BadRequest(result.Error ?? null);
+
         }
 
 

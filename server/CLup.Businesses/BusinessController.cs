@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 using CLup.Auth;
 using CLup.Businesses.DTO;
@@ -17,13 +19,16 @@ namespace CLup.Businesses
     [Route("[controller]")]
     public class BusinessController : ControllerBase
     {
+        private readonly IMediator _mediator;
         private readonly IBusinessRepository _repository;
         private readonly IBusinessService _service;
 
         public BusinessController(
+            IMediator mediator,
             IBusinessRepository repository,
             IBusinessService service)
         {
+            _mediator = mediator;
             _repository = repository;
             _service = service;
         }
@@ -31,7 +36,7 @@ namespace CLup.Businesses
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> NewBusiness([FromBody] BusinessRequest dto)
+        public async Task<IActionResult> NewBusiness([FromBody] CreateBusiness.Command command)
         {
             if (!ModelState.IsValid)
             {
@@ -40,40 +45,41 @@ namespace CLup.Businesses
 
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            dto.OwnerEmail = ownerEmail;
+            command.OwnerEmail = ownerEmail;
 
-            var response = await _service.RegisterBusiness(dto);
+            var result = await _mediator.Send(command);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult(result);
         }
 
         [HttpGet]
         [Route("owner")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BusinessDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchBusinessesForOwner()
+        public async Task<IActionResult> BusinessesByOwner()
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var response = await _repository.FindBusinessesByOwner(ownerEmail);
+            var result = await _mediator.Send(new BusinessesByOwner.Query(ownerEmail));
 
-            return this.CreateActionResult<IList<BusinessDTO>>(response);
+            return this.CreateActionResult(result);
         }
 
         [HttpPut]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateBusinessData(string id, [FromBody] BusinessRequest dto)
+        public async Task<IActionResult> UpdateBusinessData(string id, [FromBody] UpdateBusiness.Command command)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var response = await _repository.UpdateBusiness(id, dto);
+            command.Id = id;
+            var result = await _mediator.Send(command);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult(result);
         }
 
         [HttpGet]
@@ -82,17 +88,17 @@ namespace CLup.Businesses
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAll()
         {
-            var response = await _repository.GetAll();
+            var result = await _mediator.Send(new AllBusinesses.Query());
 
-            return this.CreateActionResult<IList<BusinessDTO>>(response);
+            return this.CreateActionResult(result);
         }
 
         [HttpGet]
         [Route("types")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult FetchBusinessTypes()
+        public async Task<IActionResult> FetchBusinessTypes()
         {
-            return Ok(_service.GetBusinessTypes());
+            return Ok(await _mediator.Send(new BusinessTypes.Query()));
         }
     }
 }
