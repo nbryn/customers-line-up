@@ -18,8 +18,6 @@ namespace CLup.Employees
         public class Query : IRequest<Result<IList<EmployeeDTO>>>
         {
             public string BusinessId { get; set; }
-
-            public Query(string businessId) => BusinessId = businessId;
         }
 
         public class Handler : IRequestHandler<Query, Result<IList<EmployeeDTO>>>

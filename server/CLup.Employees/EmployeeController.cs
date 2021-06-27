@@ -24,9 +24,9 @@ namespace CLup.Employees
         [Route("business/{businessId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<EmployeeDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> EmployeesByBusiness(string businessId)
+        public async Task<IActionResult> EmployeesByBusiness([FromRoute] BusinessEmployees.Query query)
         {  
-            var result = await _mediator.Send(new BusinessEmployees.Query(businessId));
+            var result = await _mediator.Send(query);
 
             return this.CreateActionResult(result);
         }

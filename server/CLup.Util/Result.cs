@@ -11,7 +11,6 @@ namespace CLup.Util
         {
             get { return !Success; }
         }
-
         protected Result(bool success, string error, HttpCode code)
         {
             Success = success;
@@ -49,6 +48,11 @@ namespace CLup.Util
             return new Result(true, String.Empty, HttpCode.Ok);
         }
 
+        public static Result<T> Ok<T>(T value)
+        {
+            return new Result<T>(value, true, String.Empty, HttpCode.Ok);
+        }
+
         public static Result Updated()
         {
             return new Result(true, String.Empty, HttpCode.Updated);
@@ -59,19 +63,27 @@ namespace CLup.Util
             return new Result(true, String.Empty, HttpCode.Created);
         }
 
+        public static Result<T> Created<T>(T value)
+        {
+            return new Result<T>(value, true, String.Empty, HttpCode.Created);
+        }
         public static Result Conflict(string message)
         {
             return new Result(true, message ?? String.Empty, HttpCode.Conflict);
         }
 
+        public static Result<T> Conflict<T>(string message)
+        {
+            return new Result<T>(default(T), false, message ?? String.Empty, HttpCode.Conflict);
+        }
         public static Result Deleted()
         {
             return new Result(true, String.Empty, HttpCode.Deleted);
         }
 
-        public static Result<T> Ok<T>(T value)
+        public static Result<T> Unauthorized<T>()
         {
-            return new Result<T>(value, true, String.Empty, HttpCode.Ok);
+            return new Result<T>(default(T), false,String.Empty, HttpCode.Unauthorized);
         }
     }
     public class Result<T> : Result
@@ -84,5 +96,4 @@ namespace CLup.Util
             Value = value;
         }
     }
-
 }

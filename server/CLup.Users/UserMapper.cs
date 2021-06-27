@@ -13,7 +13,7 @@ namespace CLup.Users
             CreateMap<User, UserDTO>()
                 .ForMember(u => u.Role, s => s.MapFrom(m => m.Role.ToString()));
 
-            CreateMap<NewUserRequest, User>()
+            CreateMap<RegisterUser.Command, User>()
                 .ForMember(u => u.Id, s => s.MapFrom(m => Guid.NewGuid().ToString()))
                 .ForMember(u => u.CreatedAt, s => s.MapFrom(m => DateTime.Now))
                 .ForMember(u => u.UpdatedAt, s => s.MapFrom(m => DateTime.Now));

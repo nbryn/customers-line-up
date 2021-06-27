@@ -4,6 +4,6 @@ namespace CLup.Auth
 {
     public interface IAuthService
     {
-       string GenerateJWTToken(LoginRequest user);
+       string GenerateJWTToken(string email);
     }
 }

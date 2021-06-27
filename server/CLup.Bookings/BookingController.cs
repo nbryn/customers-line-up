@@ -79,9 +79,9 @@ namespace CLup.Bookings
         [Route("business/{businessId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BookingDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> BusinessBookings(string businessId)
+        public async Task<IActionResult> BusinessBookings([FromRoute] BusinessBookings.Query query)
         {
-            var response = await _mediator.Send(new BusinessBookings.Query(businessId));
+            var response = await _mediator.Send(query);
 
             return this.CreateActionResult(response);
         }

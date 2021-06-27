@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using CLup.Auth;
 using CLup.Extensions;
 using CLup.TimeSlots.DTO;
-using CLup.TimeSlots.Interfaces;
 
 namespace CLup.TimeSlots
 {
@@ -18,60 +18,53 @@ namespace CLup.TimeSlots
     [Route("[controller]")]
     public class TimeSlotController : ControllerBase
     {
-        private readonly ITimeSlotRepository _repository;
-        private readonly ITimeSlotService _service;
+        private readonly IMediator _mediator;
 
-        public TimeSlotController(
-            ITimeSlotRepository repository,
-            ITimeSlotService service)
-        {
-            _repository = repository;
-            _service = service;
-        }
+        public TimeSlotController(IMediator mediator) =>  _mediator = mediator;
 
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> NewTimeSlot([FromBody] GenerateTimeSlots.Command command)
+        public async Task<IActionResult> GenerateTimeSlots([FromBody] GenerateTimeSlots.Command command)
         {
-            var response = await _service.GenerateTimeSlots(dto);
+            var result = await _mediator.Send(command);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult(result);
         }
 
         [HttpDelete]
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteTimeSlot(string id)
+        public async Task<IActionResult> DeleteTimeSlot([FromRoute] DeleteTimeSlot.Command command)
         {
-            var response = await _repository.DeleteTimeSlot(id);
+            var result = await _mediator.Send(command);
 
-            return this.CreateActionResult(response);
+            return this.CreateActionResult(result);
         }
 
         [HttpGet]
         [Route("business/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TimeSlotDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllTimeSlotsForBusiness(string id)
+        public async Task<IActionResult> TimeSlotsByBusiness([FromRoute] TimeSlotsByBusiness.Query query)
         {
-            var response = await _repository.FindTimeSlotsByBusiness(id);
+            var result = await _mediator.Send(query);
 
-            return this.CreateActionResult<IList<TimeSlotDTO>>(response);
+            return this.CreateActionResult(result);
         }
 
         [HttpGet]
         [Route("available")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TimeSlotDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllAvailableTimeSlotsForBusiness([FromQuery] AvailableTimeSlotsRequest request)
+        public async Task<IActionResult> AvailableTimeSlotsByBusiness([FromQuery] AvailableTimeSlotsByBusiness.Query query)
         {
-            var response = await _repository.FindAvailableTimeSlotsByBusiness(request);
+            var result = await _mediator.Send(query);
 
-            return this.CreateActionResult<IList<TimeSlotDTO>>(response);
+            return this.CreateActionResult(result);
         }
     }
 }

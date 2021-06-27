@@ -81,9 +81,7 @@ namespace CLup.TimeSlots
                     timeSlot.End = date.AddMinutes(business.TimeSlotLength);
 
                     await _context.TimeSlots.AddAsync(timeSlot);
-
                     await _context.SaveChangesAsync();
-
                 }
 
                 return Result.Created();
