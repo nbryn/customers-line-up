@@ -70,7 +70,7 @@ export const BusinessEmployeeView: React.FC = () => {
                         }
                         tableTitle="Employees"
                         emptyMessage="No Employees Yet"
-                        removeEntryId={removeEmployee}
+                        removeEntryWithId={removeEmployee}
                     />
                 </Col>
             </Row>

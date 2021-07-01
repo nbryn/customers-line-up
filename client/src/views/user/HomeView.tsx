@@ -7,7 +7,7 @@ import {useHistory} from 'react-router-dom';
 import {HomeCard} from '../../components/card/HomeCard';
 import {useUserContext} from '../../context/UserContext';
 import {UserInsights} from '../../models/User';
-import {useUserService} from '../../services/UserService';
+import {useInsightsService} from '../../services/InsightsService';
 
 const useStyles = makeStyles((theme) => ({
     headline: {
@@ -23,19 +23,18 @@ const useStyles = makeStyles((theme) => ({
 
 // Refactor HomeCard BusinessCard into one. 
 // Also look taking TextField out of TextField modal and use children instead
-// Move User/Business Insights into seperate Controller
 export const HomeView: React.FC = () => {
-    const [userInsights, setUserInsights] = useState<UserInsights>({} as UserInsights);
+    const [userInsights, setUserInsights] = useState({} as UserInsights);
 
     const styles = useStyles();
     const {user} = useUserContext();
 
     const history = useHistory();
-    const userService = useUserService();
+    const insightsService = useInsightsService();
 
     useEffect(() => {
         (async () => {
-            const insights = await userService.fetchUserInsights();
+            const insights = await insightsService.fetchUserInsights();
 
             setUserInsights(insights);
         })();

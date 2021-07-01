@@ -76,7 +76,7 @@ export const BusinessBookingView: React.FC = () => {
                         fetchTableData={async () =>
                             await bookingService.fetchBookingsByBusiness(business.id)
                         }
-                        removeEntryId={removeBooking}
+                        removeEntryWithId={removeBooking}
                         tableTitle="Bookings"
                         emptyMessage="No Bookings Yet"
                     />

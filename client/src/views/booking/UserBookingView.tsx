@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 export const UserBookingView: React.FC = () => {
     const styles = useStyles();
 
-    const [removeBooking, setRemoveBooking] = useState<string | null>(null);
+    const [removeBookingWithId, setRemoveBookingWithId] = useState<string | null>(null);
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
 
     const bookingService = useBookingService();
@@ -40,7 +40,7 @@ export const UserBookingView: React.FC = () => {
             onClick: async (event: any, booking: BookingDTO) => {
                 await bookingService.deleteBookingForUser(booking.timeSlotId)
 
-                setRemoveBooking(booking.id);
+                setRemoveBookingWithId(booking.timeSlotId);
             },
         },
         {
@@ -77,7 +77,7 @@ export const UserBookingView: React.FC = () => {
                         columns={columns}
                         loading={bookingService.working}
                         fetchTableData={async () => await bookingService.fetchBookingsByUser()}
-                        removeEntryId={removeBooking}
+                        removeEntryWithId={removeBookingWithId}
                         tableTitle="Bookings"
                         emptyMessage="No Bookings Yet"
                     />

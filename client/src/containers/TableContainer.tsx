@@ -11,7 +11,7 @@ export type Props = {
    loading: boolean;
    fetchTableData: () => Promise<DTO[]>;
    tableData?: DTO[];
-   removeEntryId?: string | null;
+   removeEntryWithId?: string | null;
    emptyMessage?: string;
 };
 
@@ -21,7 +21,7 @@ export const TableContainer: React.FC<Props> = ({
    tableTitle,
    loading,
    fetchTableData,
-   removeEntryId,
+   removeEntryWithId,
    emptyMessage,
 }: Props) => {
    const [tableData, setTableData] = useState<DTO[]>([]);
@@ -35,10 +35,12 @@ export const TableContainer: React.FC<Props> = ({
    }, []);
 
    useEffect(() => {
-      const updatedData = tableData.filter((b) => b.id !== removeEntryId);
+      const updatedData = tableData.filter((b) => b.id !== removeEntryWithId);
+
+      console.log(removeEntryWithId);
 
       setTableData(updatedData);
-   }, [removeEntryId]);
+   }, [removeEntryWithId]);
 
    return (
       <>

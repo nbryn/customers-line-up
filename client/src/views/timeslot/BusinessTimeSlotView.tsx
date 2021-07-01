@@ -76,7 +76,7 @@ export const BusinessTimeSlotView: React.FC = () => {
                         }}
                         tableTitle="Time Slots"
                         emptyMessage="No Time Slots Yet"
-                        removeEntryId={removeTimeSlot}
+                        removeEntryWithId={removeTimeSlot}
                     />
                 </Col>
             </Row>
