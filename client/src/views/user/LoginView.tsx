@@ -38,7 +38,6 @@ export const LoginView: React.FC = () => {
     const {setUser} = useUserContext();
 
     const [renderSignUp, setRenderSignUp] = useState(false);
-
     const authService = useAuthService();
 
     const formValues: UserDTO = {
@@ -89,7 +88,7 @@ export const LoginView: React.FC = () => {
                                             onBlur={formHandler.handleBlur}
                                             error={
                                                 formHandler.touched[key] &&
-                                                Boolean(formHandler.errors[key])
+                                                !!formHandler.errors[key]
                                             }
                                             helperText={
                                                 formHandler.touched[key] && formHandler.errors[key]

@@ -4,68 +4,86 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
-import {BusinessCard} from '../../components/card/BusinessCard';
+import {CardInfo} from '../../components/card/CardInfo';
 import {BusinessDTO} from '../../models/Business';
+import {HomeCard} from '../../components/card/HomeCard';
 import PathUtil, {PathInfo} from '../../util/PathUtil';
 import {Header} from '../../components/Texts';
 import {useBusinessService} from '../../services/BusinessService';
 
 const useStyles = makeStyles((theme) => ({
-   row: {
-      justifyContent: 'center',
-   },
+    icon: {
+        marginBottom: 10,
+        marginLeft: -35,
+    },
+    row: {
+        justifyContent: 'center',
+    },
 }));
 
 export const BusinessOverview: React.FC = () => {
-   const styles = useStyles();
-   const history = useHistory();
+    const styles = useStyles();
+    const history = useHistory();
 
-   const [businessData, setBusinessData] = useState<BusinessDTO[]>([]);
+    const [businessData, setBusinessData] = useState<BusinessDTO[]>([]);
 
-   const pathInfo: PathInfo = PathUtil.getPathAndTextFromURL(window.location.pathname);
+    const pathInfo: PathInfo = PathUtil.getPathAndTextFromURL(window.location.pathname);
 
-   const businessService = useBusinessService();
+    const businessService = useBusinessService();
 
-   useEffect(() => {
-      (async () => {
-         const businesses: BusinessDTO[] = await businessService.fetchBusinesssesByOwner();
+    useEffect(() => {
+        (async () => {
+            const businesses: BusinessDTO[] = await businessService.fetchBusinesssesByOwner();
 
-         setBusinessData(businesses);
-      })();
-   }, []);
+            setBusinessData(businesses);
+        })();
+    }, []);
 
-   return (
-      <>
-         <Row className={styles.row}>
-            <Header text="Choose Business" />
-         </Row>
-         <Row className={styles.row}>
-            {businessService.working && <CircularProgress />}
-            <>
-               {businessData.map((x) => {
-                  localStorage.setItem('business', JSON.stringify(x));
-                  return (
-                     <Col key={x.id} sm={6} md={8} lg={4}>
-                        <BusinessCard
-                           business={x}
-                           buttonText={pathInfo.primaryButtonText}
-                           buttonAction={() =>
-                              history.push(`/business/${pathInfo.primaryPath}`, {
-                                 business: x,
-                              })
-                           }
-                           secondaryButtonText={pathInfo.secondaryButtonText}
-                           secondaryAction={() =>
-                              history.push(`/business/${pathInfo.secondaryPath}`, {
-                                 business: x,
-                              })
-                           }
-                        />
-                     </Col>
-                  );
-               })}
-            </>
-         </Row>
-      </>
-   );
+    return (
+        <>
+            <Row className={styles.row}>
+                <Header text="Choose Business" />
+            </Row>
+            <Row className={styles.row}>
+                {businessService.working && <CircularProgress />}
+                <>
+                    {businessData.map((business) => {
+                        localStorage.setItem('business', JSON.stringify(business));
+                        return (
+                            <Col key={business.id} sm={6} md={8} lg={4}>
+                                <HomeCard
+                                    title={business.name}
+                                    buttonText={pathInfo.primaryButtonText}
+                                    buttonAction={() =>
+                                        history.push(`/business/${pathInfo.primaryPath}`, {
+                                            business: business,
+                                        })
+                                    }
+                                    secondaryButtonText={pathInfo.secondaryButtonText}
+                                    secondaryAction={() =>
+                                        history.push(`/business/${pathInfo.secondaryPath}`, {
+                                            business: business,
+                                        })
+                                    }
+                                >
+                                    <CardInfo
+                                        icon1={{
+                                            text: `City: ${business.zip}`,
+                                            icon: 'City',
+                                            styles: styles.icon,
+                                        }}
+                                        icon2={{
+                                            text: `Address: ${business.address}`,
+                                            icon: 'Home',
+                                            styles: styles.icon,
+                                        }}
+                                    />
+                                </HomeCard>
+                            </Col>
+                        );
+                    })}
+                </>
+            </Row>
+        </>
+    );
 };

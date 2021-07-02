@@ -11,7 +11,7 @@ import {ErrorView} from './ErrorView';
 import {CreateBookingView} from './booking/CreateBookingView';
 import {CreateBusinessView} from './business/CreateBusinessView';
 import {CreateEmployeeView} from './employee/CreateEmployeeView';
-import {NewTimeSlotView} from './timeslot/NewTimeSlotView';
+import {GenerateTimeSlotsView} from './timeslot/GenerateTimeSlotsView';
 import {NotFoundView} from './NotFoundView';
 //import {ProfileView} from './user/ProfileView';
 import {HomeView} from './user/HomeView';
@@ -36,7 +36,7 @@ export const Routes: React.FC = () => {
             <Route exact path="/business/employees/manage" component={BusinessEmployeeView} />
             <Route exact path="/business/bookings/manage" component={BusinessBookingView} />
             <Route exact path="/business/timeslots/manage" component={BusinessTimeSlotView} />
-            <Route exact path="/business/timeslots/new" component={NewTimeSlotView} />
+            <Route exact path="/business/timeslots/new" component={GenerateTimeSlotsView} />
             <Route exact path="/business/manage" component={BusinessProfileView} />
 
             <Route exact path="/error" component={ErrorView} />

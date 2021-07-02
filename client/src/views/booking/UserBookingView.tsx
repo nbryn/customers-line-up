@@ -38,7 +38,7 @@ export const UserBookingView: React.FC = () => {
             icon: () => <Chip size="small" label="Delete" clickable color="primary" />,
             tooltip: 'Delete Booking',
             onClick: async (event: any, booking: BookingDTO) => {
-                await bookingService.deleteBookingForUser(booking.timeSlotId)
+                await bookingService.deleteBookingForUser(booking.timeSlotId);
 
                 setRemoveBookingWithId(booking.timeSlotId);
             },
@@ -76,7 +76,13 @@ export const UserBookingView: React.FC = () => {
                         actions={actions}
                         columns={columns}
                         loading={bookingService.working}
-                        fetchTableData={async () => await bookingService.fetchBookingsByUser()}
+                        fetchTableData={async () => {
+                            const data = await bookingService.fetchBookingsByUser();
+                            return data.map((x) => ({
+                                ...x,
+                                id: x.timeSlotId,
+                            }));
+                        }}
                         removeEntryWithId={removeBookingWithId}
                         tableTitle="Bookings"
                         emptyMessage="No Bookings Yet"

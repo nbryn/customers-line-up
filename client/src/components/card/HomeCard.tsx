@@ -1,10 +1,8 @@
 import React, {ReactNode} from 'react';
 import Button from '@material-ui/core/Button';
 import {makeStyles} from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 
 import {Card} from './Card';
-import {UserInsights} from '../../models/User';
 
 const useStyles = makeStyles({
     root: {
@@ -27,9 +25,11 @@ const useStyles = makeStyles({
 type Props = {
     buttonAction: () => void;
     buttonText: string;
-    children: ReactNode;
+    children?: ReactNode;
+    primaryButtonDisabled?: boolean;
     secondaryAction?: () => void;
     secondaryButtonText?: string;
+    subtitle?: string;
     title: string;
 };
 
@@ -37,8 +37,10 @@ export const HomeCard: React.FC<Props> = ({
     buttonAction,
     buttonText,
     children,
+    primaryButtonDisabled,
     secondaryAction,
     secondaryButtonText,
+    subtitle,
     title,
 }: Props) => {
     const styles = useStyles();
@@ -51,13 +53,14 @@ export const HomeCard: React.FC<Props> = ({
             buttonText={secondaryButtonText}
             buttonSize="small"
             title={title}
-            subtitle="Summary"
+            subtitle={subtitle}
             variant="outlined"
             buttonStyle={styles.secondaryButton}
         >
-            <div className={styles.card}>{children }</div>
+            <div className={styles.card}>{children}</div>
             <Button
                 className={styles.primaryButton}
+                disabled={primaryButtonDisabled}
                 variant="contained"
                 color="primary"
                 onClick={buttonAction}

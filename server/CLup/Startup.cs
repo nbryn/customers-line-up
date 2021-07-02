@@ -7,9 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-using CLup.Auth;
-using CLup.Bookings;
+using CLup.Features.Auth;
+using CLup.Features.Bookings;
 using CLup.Extensions;
+
 namespace CLup
 {
     public class Startup

@@ -4,24 +4,47 @@ import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import {useHistory} from 'react-router-dom';
 
+import {CardInfo} from '../../components/card/CardInfo';
 import {HomeCard} from '../../components/card/HomeCard';
 import {useUserContext} from '../../context/UserContext';
 import {UserInsights} from '../../models/User';
 import {useInsightsService} from '../../services/InsightsService';
 
 const useStyles = makeStyles((theme) => ({
-    headline: {
-        marginTop: 10,
-        textAlign: 'center',
-    },
     card: {
         textAlign: 'center',
         float: 'none',
         marginTop: 35,
     },
+    headline: {
+        marginTop: 10,
+        textAlign: 'center',
+    },
+    icon1: {
+        marginBottom: 10,
+        marginLeft: -175,
+    },
+    icon2: {
+        marginBottom: 10,
+        marginLeft: -85,
+    },
+    icon3: {
+        marginLeft: -175,
+    },
+    icon4: {
+        marginBottom: 10,
+        marginLeft: -170,
+    },
+    icon5: {
+        marginBottom: 10,
+        marginLeft: -185,
+    },
+    icon6: {
+        marginLeft: -195,
+    },
 }));
 
-// Refactor HomeCard BusinessCard into one. 
+// Refactor HomeCard BusinessCard into one.
 // Also look taking TextField out of TextField modal and use children instead
 export const HomeView: React.FC = () => {
     const [userInsights, setUserInsights] = useState({} as UserInsights);
@@ -57,23 +80,54 @@ export const HomeView: React.FC = () => {
                         secondaryAction={() => history.push('/user/business')}
                         secondaryButtonText="New Booking"
                         title="Booking Info"
+                        subtitle="Summary"
                     >
-                        <Typography>Booking Total: {userInsights.bookings}</Typography>
-                        <Typography>Next Booking: {userInsights.nextBookingTime}</Typography>
-                        <Typography>Where: {userInsights.nextBookingBusiness}</Typography>
+                        <CardInfo
+                            icon1={{
+                                text: `Bookings: ${userInsights.bookings}`,
+                                icon: 'Home',
+                                styles: styles.icon1,
+                            }}
+                            icon2={{
+                                text: `Next: ${userInsights.nextBookingTime}`,
+                                icon: 'Hot',
+                                styles: styles.icon2,
+                            }}
+                            icon3={{
+                                text: `Where: ${userInsights.nextBookingBusiness}`,
+                                icon: 'Grain',
+                                styles: styles.icon3,
+                            }}
+                        />
                     </HomeCard>
                 </Col>
                 <Col className={styles.card} sm={6} md={8} lg={6}>
                     <HomeCard
                         buttonAction={() => history.push('/business')}
                         buttonText="My Businesses"
+                        primaryButtonDisabled={userInsights.businesses == 0}
                         secondaryAction={() => history.push('/business/new')}
                         secondaryButtonText="Create Business"
                         title="Business Info"
+                        subtitle="Summary"
                     >
-                        <Typography>Number of Businesses: {userInsights.businesses}</Typography>
-                        <Typography>"Number of Employees"</Typography>
-                        <Typography>"Number of Bookings"</Typography>
+                        <CardInfo
+                            icon1={{
+                                text: `Businesses: ${userInsights.businesses}`,
+                                icon: 'Home',
+                                styles: styles.icon4,
+                            }}
+                            icon2={{
+                                text: `Employees: `,
+                                icon: 'Hot',
+                                styles: styles.icon5,
+                            }}
+                            icon3={{
+                                text: `Bookings: `,
+                                icon: 'Grain',
+                                styles: styles.icon6,
+                            }}
+                        />
                     </HomeCard>
                 </Col>
             </Row>
