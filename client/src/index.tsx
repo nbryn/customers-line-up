@@ -3,8 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 
-import {UserContextProvider} from '../src/context/UserContext';
-import {MainView} from './views/MainView';
+import {UserContextProvider} from './features/user/UserContext';
+import {MainView} from './app/MainView';
 
 ReactDOM.render(
     <UserContextProvider>
