@@ -4,13 +4,14 @@ import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useLocation, useHistory} from 'react-router-dom';
 
-import {BusinessDTO, TimeSlotDTO} from '../business/Business';
-import {ErrorView} from '../../app/ErrorView';
+import {BusinessDTO} from '../business/Business';
+import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
 import {MapModal} from '../../common/components/modal/MapModal';
 import {Modal} from '../../common/components/modal/Modal';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
+import {TimeSlotDTO} from '../timeslot/TimeSlot';
 import {useBookingService} from './BookingService';
 import {useTimeSlotService} from '../timeslot/TimeSlotService';
 

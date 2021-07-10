@@ -6,7 +6,7 @@ import {useLocation} from 'react-router-dom';
 
 import {BusinessDTO} from '../business/Business';
 import {BookingDTO} from './Booking';
-import {ErrorView} from '../../app/ErrorView';
+import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';

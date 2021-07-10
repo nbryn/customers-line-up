@@ -13,13 +13,17 @@ namespace CLup.Features.Users
 {
     public class UsersNotEmployedByBusiness
     {
-        public class Query : IRequest<Result<IList<UserDTO>>>
+        public class Query : IRequest<Result<Model>>
         {
             public string BusinessId { get; set; }
-            
-            public Query(string businessId) => BusinessId = businessId;
         }
-        public class Handler : IRequestHandler<Query, Result<IList<UserDTO>>>
+
+        public class Model
+        {
+            public string BusinessId { get; set; }
+            public IList<UserDTO> Users { get; set; }
+        }
+        public class Handler : IRequestHandler<Query, Result<Model>>
         {
             private readonly CLupContext _context;
             private readonly IMapper _mapper;
@@ -29,11 +33,12 @@ namespace CLup.Features.Users
                 _context = context;
                 _mapper = mapper;
             }
-            public async Task<Result<IList<UserDTO>>> Handle(Query query, CancellationToken cancellationToken)
+
+            public async Task<Result<Model>> Handle(Query query, CancellationToken cancellationToken)
             {
                 var notAlreadyEmployedByBusiness = new List<UserDTO>();
 
-                foreach (var user in _context.Users)
+                foreach (var user in await _context.Users.ToListAsync())
                 {
                     var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserEmail == user.Email &&
                                                                                 e.BusinessId == query.BusinessId);
@@ -43,7 +48,13 @@ namespace CLup.Features.Users
                     }
                 }
 
-                return Result.Ok<IList<UserDTO>>(notAlreadyEmployedByBusiness);
+                var result = new Model
+                {
+                    BusinessId = query.BusinessId,
+                    Users = notAlreadyEmployedByBusiness,
+                };
+
+                return Result.Ok<Model>(result);
             }
         }
     }

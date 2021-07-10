@@ -3,7 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {DTO} from '../../app/General';
+import {DTO} from '../models/General';
 import {Table, TableColumn} from '../components/Table';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,7 +18,7 @@ export type Props = {
     columns: TableColumn[];
     tableTitle: string | ReactElement;
     loading: boolean;
-    fetchTableData: () => Promise<DTO[]>;
+    fetchTableData?: () => Promise<DTO[]> | any;
     tableData?: DTO[];
     removeEntryWithId?: string | null;
     emptyMessage?: string;
@@ -31,21 +31,24 @@ export const TableContainer: React.FC<Props> = ({
     loading,
     fetchTableData,
     removeEntryWithId,
+    tableData,
     emptyMessage,
 }: Props) => {
     const styles = useStyles();
-    const [tableData, setTableData] = useState<DTO[]>([]);
+    const [tableData2, setTableData] = useState<DTO[]>([]);
 
     useEffect(() => {
         (async () => {
-            const tableData = await fetchTableData();
+            if (fetchTableData) {
+                const tableData = await fetchTableData();
 
-            setTableData(tableData);
+                setTableData(tableData);
+            }
         })();
     }, []);
 
     useEffect(() => {
-        const updatedData = tableData.filter((b) => b.id !== removeEntryWithId);
+        const updatedData = tableData2.filter((b) => b.id !== removeEntryWithId);
 
         setTableData(updatedData);
     }, [removeEntryWithId]);
@@ -60,7 +63,7 @@ export const TableContainer: React.FC<Props> = ({
                 <Table
                     actions={actions}
                     columns={columns}
-                    data={tableData}
+                    data={tableData?.map((item) => Object.assign({}, item)) ?? tableData2}
                     title={tableTitle}
                     emptyMessage={emptyMessage}
                 />

@@ -1,4 +1,4 @@
-import {DTO} from '../../app/General';
+import {DTO} from '../../common/models/General';
 
 export interface BusinessDTO extends DTO {
    address: string;
@@ -19,11 +19,3 @@ export type BusinessDataDTO = {
    numberOfTimeSlots: number;
    numberOfEmployees?: number;
 };
-
-export interface TimeSlotDTO extends DTO {
-   id: string;
-   date: string;
-   start: string;
-   end: string;
-   business?: string;
-}

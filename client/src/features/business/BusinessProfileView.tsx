@@ -7,7 +7,7 @@ import {useLocation} from 'react-router-dom';
 import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
 import {ComboBoxOption} from '../../common/components/form/ComboBox';
-import {ErrorView} from '../../app/ErrorView';
+import {ErrorView} from '../../common/views/ErrorView';
 import {FormCard, FormCardData} from '../../common/components/card/FormCard';
 import {Header} from '../../common/components/Texts';
 import TextFieldUtil from '../../common/util/TextFieldUtil';

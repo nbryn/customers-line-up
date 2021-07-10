@@ -32,7 +32,7 @@ namespace CLup.Features.Employees
 
             public async Task<Result<IList<EmployeeDTO>>> Handle(Query query, CancellationToken cancellationToken)
             {
-                var business = _context.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId);
+                var business = await _context.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId);
 
                 if (business == null)
                 {

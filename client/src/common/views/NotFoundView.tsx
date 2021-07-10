@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 
-import PageNotFound from '../assets/images/PageNotFound.png';
+import PageNotFound from '../../assets/images/PageNotFound.png';
 
 const useStyles = makeStyles((theme) => ({
    link: {

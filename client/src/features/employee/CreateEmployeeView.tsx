@@ -2,18 +2,29 @@ import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory, useLocation} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 
 import {BusinessDTO} from '../business/Business';
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
+import {createEmployee} from './employeeSlice';
+import EmployeeService from './EmployeeService';
 import {employeeValidationSchema} from '../business/BusinessValidation';
-import {ErrorView} from '../../app/ErrorView';
+import {ErrorView} from '../../common/views/ErrorView';
+import {fetchUsersNotEmployedByBusiness, selectUsersAsComboBoxOption} from '../user/userSlice';
 import {Form} from '../../common/components/form/Form';
 import {Header} from '../../common/components/Texts';
 import {Modal} from '../../common/components/modal/Modal';
 import {NewEmployeeDTO} from './Employee';
 import {TextField} from '../../common/components/form/TextField';
-import {useEmployeeService} from './EmployeeService';
+import {
+    clearApiMessage,
+    isLoading,
+    RootState,
+    selectApiMessage,
+    useAppDispatch,
+    useAppSelector,
+} from '../../app/Store';
 import {useForm} from '../../common/hooks/useForm';
 import {useUserService} from '../user/UserService';
 
@@ -41,18 +52,17 @@ interface LocationState {
     business: BusinessDTO;
 }
 
-const SUCCESS_MESSAGE = 'Employee Created - Go to my employees to see your employees';
-
 export const CreateEmployeeView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
     const location = useLocation<LocationState>();
+    
+    const loading = useAppSelector(isLoading);
+    const dispatch = useAppDispatch();
 
-    const [users, setUsers] = useState<ComboBoxOption[]>([]);
     const [selectedUser, setSelectedUser] = useState<ComboBoxOption>({label: ''});
-    const [showComboBox, setShowComBox] = useState<boolean>(true);
+    const [showComboBox, setShowComBox] = useState(true);
 
-    const employeeService = useEmployeeService(SUCCESS_MESSAGE);
     const userService = useUserService();
 
     if (!location.state) {
@@ -60,6 +70,10 @@ export const CreateEmployeeView: React.FC = () => {
     }
 
     const {business} = location.state;
+    const apiMessage = useAppSelector(selectApiMessage);
+    const usersNotEmployedByBusiness = useSelector<RootState, ComboBoxOption[] | null>((state) =>
+        selectUsersAsComboBoxOption(state, business.id)
+    );
 
     const formValues: NewEmployeeDTO = {
         companyEmail: '',
@@ -68,24 +82,17 @@ export const CreateEmployeeView: React.FC = () => {
     const {formHandler, ...form} = useForm<NewEmployeeDTO>({
         initialValues: formValues,
         validationSchema: employeeValidationSchema,
-        onSubmit: employeeService.createEmployee,
+        onSubmit: EmployeeService.createEmployee,
     });
 
     useEffect(() => {
         (async () => {
-            const users = await userService.fetchAllUsersNotEmployedByBusiness(business.id);
-
-            setUsers(
-                users.map((user) => ({
-                    label: user.email,
-                    value: user.name,
-                }))
-            );
+            dispatch(fetchUsersNotEmployedByBusiness({service: userService, data: business.id}));
         })();
     }, []);
 
     useEffect(() => {
-        if (users.find((user) => user.label === selectedUser?.label)) {
+        if (usersNotEmployedByBusiness?.find((user) => user.label === selectedUser?.label)) {
             setShowComBox(false);
         }
     }, [selectedUser]);
@@ -98,12 +105,12 @@ export const CreateEmployeeView: React.FC = () => {
             <Row className={styles.wrapper}>
                 <Col sm={6} lg={6}>
                     <Modal
-                        show={employeeService.requestInfo ? true : false}
+                        show={apiMessage ? true : false}
                         title="Employee Info"
-                        text={employeeService.requestInfo}
-                        primaryAction={() => history.push('/business/employees/manage')}
+                        text={apiMessage}
+                        primaryAction={() => history.push('/business/employees/manage', {business})}
                         primaryActionText="My Employees"
-                        secondaryAction={() => employeeService.setRequestInfo('')}
+                        secondaryAction={() => dispatch(clearApiMessage)}
                     />
                     <Card
                         className={styles.card}
@@ -111,13 +118,13 @@ export const CreateEmployeeView: React.FC = () => {
                         subtitle="Choose an existing user you want to add as an employee"
                         variant="outlined"
                     >
-                        {showComboBox && (
+                        {showComboBox && usersNotEmployedByBusiness && (
                             <ComboBox
                                 style={{marginTop: 10, marginLeft: 110, width: '60%'}}
                                 label="Email"
                                 id="email"
                                 type="text"
-                                options={users}
+                                options={usersNotEmployedByBusiness}
                                 setFieldValue={(option: ComboBoxOption) => setSelectedUser(option)}
                                 partOfForm={false}
                             />
@@ -137,7 +144,7 @@ export const CreateEmployeeView: React.FC = () => {
                                         formHandler.handleSubmit();
                                     }}
                                     buttonText="Create"
-                                    working={employeeService.working}
+                                    working={loading}
                                     valid={formHandler.isValid}
                                 >
                                     <FormGroup className={styles.formGroup}>

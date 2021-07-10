@@ -9,16 +9,14 @@ import {AllBusinessesView} from '../features/business/AllBusinessesView';
 import {CreateBusinessView} from '../features/business/CreateBusinessView';
 import {BusinessOverview} from '../features/business/BusinessOverview';
 import {BusinessProfileView} from '../features/business/BusinessProfileView';
-import {BusinessEmployeeView} from '../features/employee/BusinessEmployeeView';
+import {EmployeeView} from '../features/employee/EmployeeView';
 import {CreateEmployeeView} from '../features/employee/CreateEmployeeView';
-import {BusinessTimeSlotView} from '../features/timeslot/BusinessTimeSlotView';
+import {TimeSlotView} from '../features/timeslot/TimeSlotView';
 import {GenerateTimeSlotsView} from '../features/timeslot/GenerateTimeSlotsView';
-import {ErrorView} from './ErrorView';
-import {NotFoundView} from './NotFoundView';
+import {ErrorView} from '../common/views/ErrorView';
+import {NotFoundView} from '../common/views/NotFoundView';
 //import {ProfileView} from './user/ProfileView';
 import {HomeView} from '../features/user/HomeView';
-
-
 
 export const Routes: React.FC = () => {
     return (
@@ -35,9 +33,9 @@ export const Routes: React.FC = () => {
             <Route exact path="/business/timeslots" component={BusinessOverview} />
             <Route exact path="/business/employees" component={BusinessOverview} />
             <Route exact path="/business/employees/new" component={CreateEmployeeView} />
-            <Route exact path="/business/employees/manage" component={BusinessEmployeeView} />
+            <Route exact path="/business/employees/manage" component={EmployeeView} />
             <Route exact path="/business/bookings/manage" component={BusinessBookingView} />
-            <Route exact path="/business/timeslots/manage" component={BusinessTimeSlotView} />
+            <Route exact path="/business/timeslots/manage" component={TimeSlotView} />
             <Route exact path="/business/timeslots/new" component={GenerateTimeSlotsView} />
             <Route exact path="/business/manage" component={BusinessProfileView} />
 

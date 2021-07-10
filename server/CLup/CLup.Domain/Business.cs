@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-using CLup.Domain;
-
 namespace CLup.Domain
 {
     public class Business : BaseEntity

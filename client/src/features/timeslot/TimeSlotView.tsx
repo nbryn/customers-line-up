@@ -5,7 +5,7 @@ import React, {useState} from 'react';
 import {useLocation} from 'react-router-dom';
 
 import {BusinessDTO} from '../business/Business';
-import {ErrorView} from '../../app/ErrorView';
+import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
 import {TimeSlotDTO} from './TimeSlot';
 import {TableColumn} from '../../common/components/Table';
@@ -22,7 +22,7 @@ interface LocationState {
     business: BusinessDTO;
 }
 
-export const BusinessTimeSlotView: React.FC = () => {
+export const TimeSlotView: React.FC = () => {
     const styles = useStyles();
     const location = useLocation<LocationState>();
     const [removeTimeSlot, setRemoveTimeSlot] = useState<string | null>(null);

@@ -1,16 +1,18 @@
+import React, {useEffect} from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React, {useState} from 'react';
 import {useLocation} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 
 import {BusinessDTO} from '../business/Business';
+import {deleteEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} from './employeeSlice';
 import {EmployeeDTO} from './Employee';
-import {ErrorView} from '../../app/ErrorView';
+import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
-import {useEmployeeService} from './EmployeeService';
+import {isLoading, RootState, useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -22,18 +24,25 @@ interface LocationState {
     business: BusinessDTO;
 }
 
-export const BusinessEmployeeView: React.FC = () => {
+export const EmployeeView: React.FC = () => {
     const styles = useStyles();
     const location = useLocation<LocationState>();
-    const [removeEmployee, setRemoveEmployee] = useState<string | null>(null);
+    const loading = useAppSelector(isLoading);
 
-    const employeeService = useEmployeeService();
+    const dispatch = useAppDispatch();
 
     if (!location.state) {
         return <ErrorView />;
     }
-
     const {business} = location.state;
+
+    const employees = useSelector<RootState, EmployeeDTO[]>((state) =>
+        selectEmployeesByBusiness(state, business.id)
+    );
+
+    useEffect(() => {
+        dispatch(fetchEmployeesByBusiness(business.id));
+    }, []);
 
     const columns: TableColumn[] = [
         {title: 'BusinessId', field: 'businessId', hidden: true},
@@ -47,9 +56,12 @@ export const BusinessEmployeeView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Remove Employee" clickable color="primary" />,
             onClick: async (event: any, employee: EmployeeDTO) => {
-                await employeeService.removeEmployee(employee.privateEmail!, employee.businessId!);
-
-                setRemoveEmployee(employee.id);
+                dispatch(
+                    deleteEmployee({
+                        id: employee.businessId!,
+                        data: employee.privateEmail!,
+                    })
+                );
             },
         },
     ];
@@ -64,13 +76,10 @@ export const BusinessEmployeeView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={employeeService.working}
-                        fetchTableData={async () =>
-                            await employeeService.fetchEmployeesByBusiness(business.id)
-                        }
+                        loading={loading}
                         tableTitle="Employees"
+                        tableData={employees}
                         emptyMessage="No Employees Yet"
-                        removeEntryWithId={removeEmployee}
                     />
                 </Col>
             </Row>

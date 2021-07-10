@@ -62,7 +62,7 @@ namespace CLup.Features.Users
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UserDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness(UsersNotEmployedByBusiness.Query query)
+        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] UsersNotEmployedByBusiness.Query query)
         {
             var result = await _mediator.Send(query);
 

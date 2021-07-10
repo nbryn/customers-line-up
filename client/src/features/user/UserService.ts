@@ -1,11 +1,11 @@
 import {BaseService} from '../../common/services/BaseService';
-import {UserDTO, UserInsights} from './User';
+import {UserDTO, NotEmployedByBusiness, UserInsights} from './User';
 import {useApi} from '../../common/api/useApi';
 
 const defaultRoute = 'user';
 
 export interface UserService extends BaseService {
-    fetchAllUsersNotEmployedByBusiness: (businessId: string) => Promise<UserDTO[]>;
+    fetchAllUsersNotEmployedByBusiness: (businessId: string) => Promise<NotEmployedByBusiness>;
     fetchUserInfo: () => Promise<UserDTO>;
     fetchUserInsights: () => Promise<UserInsights>;
 }
@@ -13,7 +13,9 @@ export interface UserService extends BaseService {
 export function useUserService(succesMessage?: string): UserService {
     const apiCaller = useApi(succesMessage);
 
-    const fetchAllUsersNotEmployedByBusiness = (businessId: string): Promise<UserDTO[]> => {
+    const fetchAllUsersNotEmployedByBusiness = (
+        businessId: string
+    ): Promise<NotEmployedByBusiness> => {
         return apiCaller.get(`${defaultRoute}/all/${businessId}`);
     };
 

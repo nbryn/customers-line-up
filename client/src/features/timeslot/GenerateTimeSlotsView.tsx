@@ -7,7 +7,7 @@ import {BusinessDTO} from '../business/Business';
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
 import DateUtil from '../../common/util/DateUtil';
-import {ErrorView} from '../../app/ErrorView';
+import {ErrorView} from '../../common/views/ErrorView';
 import {Modal} from '../../common/components/modal/Modal';
 import {useTimeSlotService} from './TimeSlotService';
 

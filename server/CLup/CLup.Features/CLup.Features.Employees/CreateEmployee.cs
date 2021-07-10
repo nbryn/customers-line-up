@@ -56,6 +56,9 @@ namespace CLup.Features.Employees
                     BusinessId = command.BusinessId,
                     UserEmail = command.PrivateEmail,
                     CompanyEmail = command.CompanyEmail,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+
                 };
 
                 _context.Employees.Add(employee);
