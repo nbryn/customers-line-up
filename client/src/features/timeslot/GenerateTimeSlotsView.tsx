@@ -5,11 +5,16 @@ import {useHistory, useLocation} from 'react-router-dom';
 
 import {BusinessDTO} from '../business/Business';
 import {Card} from '../../common/components/card/Card';
+import {
+    clearApiMessage,
+    generateTimeSlots,
+    TIMESLOTS_GENERATED_MSG,
+} from '../timeslot/timeSlotSlice';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
 import DateUtil from '../../common/util/DateUtil';
+import {State, selectApiMessage, useAppDispatch, useAppSelector} from '../../app/Store';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Modal} from '../../common/components/modal/Modal';
-import {useTimeSlotService} from './TimeSlotService';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -34,12 +39,13 @@ interface LocationState {
     business: BusinessDTO;
 }
 
-const SUCCESS_MESSAGE = 'Success! Press see time slots to manage time slots.';
-
 export const GenerateTimeSlotsView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
     const location = useLocation<LocationState>();
+
+    const dispatch = useAppDispatch();
+    const apiMessage = useAppSelector(selectApiMessage(State.TimeSlots));
 
     const [dateOptions, setDateOptions] = useState<ComboBoxOption[]>(DateUtil.getNext7Days());
     const [selectedDate, setSelectedDate] = useState<ComboBoxOption>();
@@ -50,8 +56,6 @@ export const GenerateTimeSlotsView: React.FC = () => {
 
     const business = location.state.business;
 
-    const timeSlotService = useTimeSlotService(SUCCESS_MESSAGE);
-
     useEffect(() => {
         setDateOptions(dateOptions.filter((date) => date.label !== selectedDate?.label));
     }, [selectedDate]);
@@ -60,19 +64,19 @@ export const GenerateTimeSlotsView: React.FC = () => {
         <Row className={styles.row}>
             <Col lg={6}>
                 <Modal
-                    show={timeSlotService.requestInfo ? true : false}
+                    show={apiMessage ? true : false}
                     title={
-                        timeSlotService.requestInfo !== SUCCESS_MESSAGE
-                            ? timeSlotService.requestInfo
+                        apiMessage !== TIMESLOTS_GENERATED_MSG
+                            ? apiMessage
                             : selectedDate &&
                               `Time slots added on ${selectedDate.label.substring(
                                   selectedDate.label.indexOf(',') + 1
                               )}`
                     }
-                    text={timeSlotService.requestInfo}
+                    text={apiMessage}
                     primaryAction={() => history.push('/business/timeslots/manage', {business})}
                     primaryActionText="See time slots"
-                    secondaryAction={() => timeSlotService.setRequestInfo('')}
+                    secondaryAction={() => dispatch(clearApiMessage())}
                 />
                 <Card
                     className={styles.card}
@@ -83,12 +87,14 @@ export const GenerateTimeSlotsView: React.FC = () => {
                     buttonColor="primary"
                     buttonStyle={styles.button}
                     buttonSize="large"
-                    disableButton={!selectedDate || dateOptions.length === 0 ? true : false}
-                    buttonAction={async () =>
-                        await timeSlotService.generateTimeSlots({
-                            businessId: business.id,
-                            start: selectedDate?.value,
-                        })
+                    disableButton={!selectedDate || !dateOptions.length ? true : false}
+                    buttonAction={() =>
+                        dispatch(
+                            generateTimeSlots({
+                                businessId: business.id,
+                                start: selectedDate!.value!,
+                            })
+                        )
                     }
                 >
                     <ComboBox

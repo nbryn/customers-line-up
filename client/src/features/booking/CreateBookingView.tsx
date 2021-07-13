@@ -5,15 +5,22 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import {BusinessDTO} from '../business/Business';
+import {clearApiMessage, createBooking} from './bookingSlice';
+import {
+    State,
+    isLoading,
+    selectApiMessage,
+    useAppDispatch,
+    useAppSelector,
+} from '../../app/Store';
 import {ErrorView} from '../../common/views/ErrorView';
+import {fetchTimeSlotsByBusiness, selectTimeSlotsByBusiness} from '../timeslot/timeSlotSlice';
 import {Header} from '../../common/components/Texts';
 import {MapModal} from '../../common/components/modal/MapModal';
 import {Modal} from '../../common/components/modal/Modal';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 import {TimeSlotDTO} from '../timeslot/TimeSlot';
-import {useBookingService} from './BookingService';
-import {useTimeSlotService} from '../timeslot/TimeSlotService';
 
 const useStyles = makeStyles((theme) => ({
     address: {
@@ -32,23 +39,22 @@ interface LocationState {
     business: BusinessDTO;
 }
 
-const SUCCESS_MESSAGE = 'Booking Made - Go to my bookings to see your bookings';
-
 export const CreateBookingView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
     const location = useLocation<LocationState>();
+    const dispatch = useAppDispatch();
 
+    const loading = useAppSelector(isLoading(State.TimeSlots));
+    const apiMessage = useAppSelector(selectApiMessage(State.Bookings));
     const [showMapModal, setShowMapModal] = useState<boolean>(false);
-
-    const bookingService = useBookingService(SUCCESS_MESSAGE);
-    const timeSlotService = useTimeSlotService();
 
     if (!location.state) {
         return <ErrorView />;
     }
 
     const {business} = location.state;
+    const timeSlots = useAppSelector(selectTimeSlotsByBusiness(business.id));
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -60,7 +66,7 @@ export const CreateBookingView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Book Time" clickable color="primary" />,
             onClick: async (event: any, rowData: TimeSlotDTO) => {
-                await bookingService.createBooking(rowData.id);
+                dispatch(createBooking(rowData.id));
             },
         },
     ];
@@ -82,17 +88,9 @@ export const CreateBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={timeSlotService.working}
-                        fetchTableData={async () => {
-                            const timeSlots = await timeSlotService.fetchTimeSlotsByBusiness(
-                                business.id!
-                            );
-
-                            return timeSlots.map((x) => ({
-                                ...x,
-                                interval: x.start + ' - ' + x.end,
-                            }));
-                        }}
+                        loading={loading}
+                        tableData={timeSlots}
+                        fetchData={() => dispatch(fetchTimeSlotsByBusiness(business.id))}
                         tableTitle={
                             <>
                                 <h5 className={styles.address}>{business.address}</h5>
@@ -110,10 +108,10 @@ export const CreateBookingView: React.FC = () => {
                     />
 
                     <Modal
-                        show={bookingService.requestInfo ? true : false}
+                        show={apiMessage ? true : false}
                         title="Booking Info"
-                        text={bookingService.requestInfo}
-                        secondaryAction={() => bookingService.setRequestInfo('')}
+                        text={apiMessage}
+                        secondaryAction={() => dispatch(clearApiMessage())}
                         primaryAction={() => history.push('/user/bookings')}
                         primaryActionText="My Bookings"
                     />

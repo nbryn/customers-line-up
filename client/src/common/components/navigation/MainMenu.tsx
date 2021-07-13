@@ -13,6 +13,8 @@ import {useHistory} from 'react-router-dom';
 
 import Booking from '../../../assets/images/Booking.png';
 import {useUserContext} from '../../../features/user/UserContext';
+import {selectCurrentUser} from '../../../features/user/userSlice';
+import {useAppSelector} from '../../../app/Store';
 
 const drawerWidth = 210;
 
@@ -61,7 +63,8 @@ type Props = {
 export const MainMenu: React.FC<Props> = (props: Props) => {
    const history = useHistory();
    const styles = useStyles();
-   const {user, logout} = useUserContext();
+   const user = useAppSelector(selectCurrentUser);
+   const {logout} = useUserContext();
 
    const menuItems: MenuItem[] = [
       {
@@ -157,7 +160,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
          </List>
          <Divider />
          <List>
-            {user.role === 'Owner' &&
+            {user?.role === 'Owner' &&
                ownerItems.map((menuItem) => (
                   <ListItem
                      className={styles.listItem}
@@ -169,7 +172,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
                      <ListItemText primary={menuItem.label} />
                   </ListItem>
                ))}
-            {user.role === 'Employee' &&
+            {user?.role === 'Employee' &&
                employeeItems.map((menuItem) => (
                   <ListItem
                      className={styles.listItem}

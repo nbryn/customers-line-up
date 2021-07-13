@@ -13,14 +13,7 @@ namespace CLup.Features.Bookings
     {
         public class Command : IRequest<Result>
         {
-            public string UserEmail { get; set; }
-            public string TimeSlotId { get; set; }
-
-            public Command(string userEmail, string timeSlotId)
-            {
-                UserEmail = userEmail;
-                TimeSlotId = timeSlotId;
-            }
+            public string BookingId { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, Result>
@@ -31,8 +24,7 @@ namespace CLup.Features.Bookings
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.TimeSlotId == command.TimeSlotId &&
-                                                                          x.UserEmail == command.UserEmail);
+                var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == command.BookingId);
 
                 if (booking == null)
                 {

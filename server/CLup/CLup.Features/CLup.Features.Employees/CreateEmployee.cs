@@ -18,9 +18,7 @@ namespace CLup.Features.Employees
         public class Command : IRequest<Result>
         {
             public string BusinessId { get; set; }
-
             public string PrivateEmail { get; set; }
-
             public string CompanyEmail { get; set; }
         }
 

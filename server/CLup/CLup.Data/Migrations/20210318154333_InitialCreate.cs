@@ -129,6 +129,7 @@ namespace CLup.Migrations
                 name: "Bookings",
                 columns: table => new
                 {
+                    Id = table.Column<string>(nullable: false),
                     UserEmail = table.Column<string>(nullable: false),
                     TimeSlotId = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),

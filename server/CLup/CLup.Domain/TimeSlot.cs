@@ -6,7 +6,6 @@ namespace CLup.Domain
 {
     public class TimeSlot : BaseEntity
     {
-        public string Id { get; set; }
 
         [Required]
         public string BusinessId { get; set; }

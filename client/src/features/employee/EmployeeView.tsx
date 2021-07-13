@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
@@ -12,7 +12,7 @@ import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
-import {isLoading, RootState, useAppDispatch, useAppSelector} from '../../app/Store';
+import {State, isLoading, RootState, useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -27,9 +27,9 @@ interface LocationState {
 export const EmployeeView: React.FC = () => {
     const styles = useStyles();
     const location = useLocation<LocationState>();
-    const loading = useAppSelector(isLoading);
 
     const dispatch = useAppDispatch();
+    const loading = useAppSelector(isLoading(State.Employees));
 
     if (!location.state) {
         return <ErrorView />;
@@ -39,10 +39,6 @@ export const EmployeeView: React.FC = () => {
     const employees = useSelector<RootState, EmployeeDTO[]>((state) =>
         selectEmployeesByBusiness(state, business.id)
     );
-
-    useEffect(() => {
-        dispatch(fetchEmployeesByBusiness(business.id));
-    }, []);
 
     const columns: TableColumn[] = [
         {title: 'BusinessId', field: 'businessId', hidden: true},
@@ -77,6 +73,7 @@ export const EmployeeView: React.FC = () => {
                         actions={actions}
                         columns={columns}
                         loading={loading}
+                        fetchData={() => dispatch(fetchEmployeesByBusiness(business.id))}
                         tableTitle="Employees"
                         tableData={employees}
                         emptyMessage="No Employees Yet"

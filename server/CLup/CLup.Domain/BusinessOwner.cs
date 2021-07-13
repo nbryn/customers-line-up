@@ -4,7 +4,6 @@ namespace CLup.Domain
 {
     public class BusinessOwner : BaseEntity
     {
-        public string Id { get; set; }
 
         public string UserEmail { get; set; }
 

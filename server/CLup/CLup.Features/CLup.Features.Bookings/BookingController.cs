@@ -34,27 +34,25 @@ namespace CLup.Features.Bookings
         }
 
         [HttpDelete]
-        [Route("user/{timeSlotId}")]
+        [Route("user/{bookingId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UserDeleteBooking(string timeSlotId)
+        public async Task<IActionResult> UserDeleteBooking([FromRoute] UserDeleteBooking.Command command)
         {
-            string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var response = await _mediator.Send(new UserDeleteBooking.Command(userEmail, timeSlotId));
+            var response = await _mediator.Send(command);
 
             return this.CreateActionResult(response);
         }
 
         [HttpDelete]
-        [Route("business/{timeSlotId}")]
+        [Route("business/{businessId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> BusinessDeleteBooking(string timeSlotId, [FromQuery] string userEmail)
+        public async Task<IActionResult> BusinessDeleteBooking(string businessId, [FromQuery] string bookingId)
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var response = await _mediator.Send(new BusinessDeleteBooking.Command(ownerEmail, userEmail, timeSlotId));
+ 
+            var response = await _mediator.Send(new BusinessDeleteBooking.Command(ownerEmail, bookingId, businessId));
 
             return this.CreateActionResult(response);
         }

@@ -16,12 +16,11 @@ const useStyles = makeStyles((theme) => ({
 export type Props = {
     actions: any;
     columns: TableColumn[];
-    tableTitle: string | ReactElement;
     loading: boolean;
-    fetchTableData?: () => Promise<DTO[]> | any;
-    tableData?: DTO[];
-    removeEntryWithId?: string | null;
+    tableData: DTO[];
+    tableTitle: string | ReactElement;
     emptyMessage?: string;
+    fetchData: () => void;
 };
 
 export const TableContainer: React.FC<Props> = ({
@@ -29,29 +28,17 @@ export const TableContainer: React.FC<Props> = ({
     columns,
     tableTitle,
     loading,
-    fetchTableData,
-    removeEntryWithId,
     tableData,
     emptyMessage,
+    fetchData,
 }: Props) => {
     const styles = useStyles();
-    const [tableData2, setTableData] = useState<DTO[]>([]);
 
     useEffect(() => {
         (async () => {
-            if (fetchTableData) {
-                const tableData = await fetchTableData();
-
-                setTableData(tableData);
-            }
+            fetchData();
         })();
     }, []);
-
-    useEffect(() => {
-        const updatedData = tableData2.filter((b) => b.id !== removeEntryWithId);
-
-        setTableData(updatedData);
-    }, [removeEntryWithId]);
 
     return (
         <>
@@ -63,7 +50,7 @@ export const TableContainer: React.FC<Props> = ({
                 <Table
                     actions={actions}
                     columns={columns}
-                    data={tableData?.map((item) => Object.assign({}, item)) ?? tableData2}
+                    data={tableData?.map((item) => Object.assign({}, item))}
                     title={tableTitle}
                     emptyMessage={emptyMessage}
                 />

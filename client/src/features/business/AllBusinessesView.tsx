@@ -5,11 +5,12 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useHistory} from 'react-router';
 
 import {BusinessDTO} from './Business';
+import {fetchAllBusinesses, selectAllBusinesses} from './businessSlice';
 import {Header} from '../../common/components/Texts';
+import {isLoading, State, useAppDispatch, useAppSelector} from '../../app/Store';
 import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
-import {useBusinessService} from './BusinessService';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -20,10 +21,11 @@ const useStyles = makeStyles((theme) => ({
 export const AllBusinessesView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
+    const dispatch = useAppDispatch();
 
+    const loading = useAppSelector(isLoading(State.Businesses));
+    const businesses = useAppSelector(selectAllBusinesses);
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
-
-    const businessService = useBusinessService();
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -73,24 +75,9 @@ export const AllBusinessesView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={businessService.working}
-                        fetchTableData={async () => {
-                            const businesses = await businessService.fetchAllBusinesses()
-
-                            return businesses.map((business) => {
-                                const zipSplit: string[] = business.zip.split(' ');
-                                const city =
-                                    zipSplit.length === 3
-                                        ? zipSplit[2]
-                                        : `${zipSplit[2]} ${zipSplit[3]}`;
-
-                                return {
-                                    ...business,
-                                    city,
-                                    businessHours: business.opens + ' - ' + business.closes,
-                                };
-                            });
-                        }}
+                        loading={loading}
+                        tableData={businesses}
+                        fetchData={() => dispatch(fetchAllBusinesses())}
                         tableTitle="Businesses"
                     />
                 </Col>

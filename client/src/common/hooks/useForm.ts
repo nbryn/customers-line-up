@@ -1,7 +1,6 @@
 import {useState} from 'react';
 import {ObjectSchema} from 'yup';
 import {useFormik, FormikComputedProps, FormikHandlers, FormikHelpers, FormikState} from 'formik';
-import {AsyncThunk} from '@reduxjs/toolkit';
 
 import AddressService from '../services/AddressService';
 import {ComboBoxOption} from '../components/form/ComboBox';
@@ -25,9 +24,8 @@ export type Form<T> = {
 export type FormProps<T> = {
     initialValues: T;
     validationSchema: ObjectSchema;
-    onSubmit: (data: any) => Promise<T | void>;
+    onSubmit: (values: T) => void;
     formatter?: (dto: T) => T;
-    setUser?: (user: T) => void;
 };
 
 export const useForm = <T>({
@@ -35,7 +33,6 @@ export const useForm = <T>({
     validationSchema,
     onSubmit,
     formatter,
-    setUser,
 }: FormProps<T>): Form<T> => {
     const [request, setRequest] = useState<T | null>(null);
 
@@ -46,9 +43,7 @@ export const useForm = <T>({
         onSubmit: async (values) => {
             if (formatter) values = formatter(values);
 
-            const response = await onSubmit(request || values);
-
-            if (setUser && response) setUser(response);
+            onSubmit(request || values);
         },
     });
 

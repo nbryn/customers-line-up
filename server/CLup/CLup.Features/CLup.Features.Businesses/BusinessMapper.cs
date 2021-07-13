@@ -11,7 +11,9 @@ namespace CLup.Features.Businesses
         public BusinessMapper()
         {
             CreateMap<Business, BusinessDTO>()
-                .ForMember(b => b.Type, s => s.MapFrom(m => m.Type.ToString()));
+                .ForMember(b => b.Type, s => s.MapFrom(m => m.Type.ToString()))
+                .ForMember(b => b.City, s => s.MapFrom(m => m.Zip.Substring(m.Zip.LastIndexOf(" "))))
+                .ForMember(b => b.BusinessHours, s => s.MapFrom(m => $"{m.Opens} - {m.Closes}"));
 
             CreateMap<CreateBusiness.Command, Business>()
             .ForMember(b => b.Type, s => s.MapFrom(m => BusinessType.Parse(typeof(BusinessType), m.Type)))

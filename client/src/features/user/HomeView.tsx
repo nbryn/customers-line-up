@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Badge, Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../common/components/card/CardInfo';
+import {fetchUserInsights, selectUserInsights} from '../insights/insightsSlice';
 import {HomeCard} from '../../common/components/card/HomeCard';
-import {useUserContext} from './UserContext';
-import {UserInsights} from './User';
-import {useInsightsService} from '../../common/services/InsightsService';
+import {selectCurrentUser} from './userSlice';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
+
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -46,19 +47,16 @@ const useStyles = makeStyles((theme) => ({
 // Refactor HomeCard BusinessCard into one.
 // Also look taking TextField out of TextField modal and use children instead
 export const HomeView: React.FC = () => {
-    const [userInsights, setUserInsights] = useState({} as UserInsights);
-
     const styles = useStyles();
-    const {user} = useUserContext();
-
     const history = useHistory();
-    const insightsService = useInsightsService();
+    const dispatch = useAppDispatch();
+
+    const user = useAppSelector(selectCurrentUser);
+    const userInsights = useAppSelector(selectUserInsights);
 
     useEffect(() => {
         (async () => {
-            const insights = await insightsService.fetchUserInsights();
-
-            setUserInsights(insights);
+            dispatch(fetchUserInsights());
         })();
     }, []);
 
@@ -83,17 +81,17 @@ export const HomeView: React.FC = () => {
                     >
                         <CardInfo
                             icon1={{
-                                text: `Bookings: ${userInsights.bookings}`,
+                                text: `Bookings: ${userInsights?.bookings}`,
                                 icon: 'Home',
                                 styles: styles.icon1,
                             }}
                             icon2={{
-                                text: `Next: ${userInsights.nextBookingTime}`,
+                                text: `Next: ${userInsights?.nextBookingTime}`,
                                 icon: 'Hot',
                                 styles: styles.icon2,
                             }}
                             icon3={{
-                                text: `Where: ${userInsights.nextBookingBusiness}`,
+                                text: `Where: ${userInsights?.nextBookingBusiness}`,
                                 icon: 'Grain',
                                 styles: styles.icon3,
                             }}
@@ -104,7 +102,7 @@ export const HomeView: React.FC = () => {
                     <HomeCard
                         buttonAction={() => history.push('/business')}
                         buttonText="My Businesses"
-                        primaryButtonDisabled={userInsights.businesses == 0}
+                        primaryButtonDisabled={!userInsights?.businesses}
                         secondaryAction={() => history.push('/business/new')}
                         secondaryButtonText="Create Business"
                         title="Business Info"
@@ -112,7 +110,7 @@ export const HomeView: React.FC = () => {
                     >
                         <CardInfo
                             icon1={{
-                                text: `Businesses: ${userInsights.businesses}`,
+                                text: `Businesses: ${userInsights?.businesses}`,
                                 icon: 'Home',
                                 styles: styles.icon4,
                             }}

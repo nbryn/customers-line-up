@@ -5,7 +5,6 @@ namespace CLup.Domain
 {
     public class Business : BaseEntity
     {
-        public string Id { get; set; }
 
         [Required]
         [StringLength(50)]

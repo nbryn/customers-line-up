@@ -34,10 +34,7 @@ namespace CLup.Features.Bookings
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var bookingExists = await _context.Bookings
-                                          .Include(x => x.TimeSlot)
-                                          .Include(x => x.TimeSlot.Business)
-                                          .FirstOrDefaultAsync(x =>
+                var bookingExists = await _context.Bookings.FirstOrDefaultAsync(x =>
                                                                x.TimeSlotId == command.TimeSlotId &&
                                                                x.UserEmail == command.UserEmail);
                 if (bookingExists != null)
@@ -68,6 +65,7 @@ namespace CLup.Features.Bookings
 
                 var booking = new Booking
                 {
+                    Id = Guid.NewGuid().ToString(),
                     UserEmail = command.UserEmail,
                     TimeSlotId = command.TimeSlotId,
                     BusinessId = business.Id,

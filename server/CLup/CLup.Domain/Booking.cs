@@ -13,6 +13,5 @@ namespace CLup.Domain
         public string BusinessId { get; set; }
 
         public Business Business { get; set; }
-
     }
 }

@@ -1,16 +1,21 @@
 import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import React, {useState} from 'react';
+import React from 'react';
 import {useLocation} from 'react-router-dom';
 
 import {BusinessDTO} from '../business/Business';
+import {
+    deleteTimeSlot,
+    fetchAvailableTimeSlotsByBusiness,
+    selectAvailableTimeSlotsByBusiness,
+} from '../timeslot/timeSlotSlice';
+import {State, isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
 import {TimeSlotDTO} from './TimeSlot';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
-import {useTimeSlotService} from './TimeSlotService';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -25,15 +30,16 @@ interface LocationState {
 export const TimeSlotView: React.FC = () => {
     const styles = useStyles();
     const location = useLocation<LocationState>();
-    const [removeTimeSlot, setRemoveTimeSlot] = useState<string | null>(null);
 
-    const timeSlotService = useTimeSlotService();
+    const dispatch = useAppDispatch();
+    const loading = useAppSelector(isLoading(State.TimeSlots));
 
     if (!location.state) {
         return <ErrorView />;
     }
 
     const {business} = location.state;
+    const timeSlots = useAppSelector(selectAvailableTimeSlotsByBusiness(business.id));
 
     const columns: TableColumn[] = [
         {title: 'timeSlotId', field: 'timeSlotId', hidden: true},
@@ -46,9 +52,7 @@ export const TimeSlotView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Delete Time Slot" clickable color="primary" />,
             onClick: async (event: any, rowData: TimeSlotDTO) => {
-                await timeSlotService.deleteTimeSlot(rowData.id);
-
-                setRemoveTimeSlot(rowData.id);
+                dispatch(deleteTimeSlot({businessId: business.id, timeSlotId: rowData.id}));
             },
         },
     ];
@@ -63,20 +67,11 @@ export const TimeSlotView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={timeSlotService.working}
-                        fetchTableData={async () => {
-                            const timeSlots = await timeSlotService.fetchAvailableTimeSlotsByBusiness(
-                                business.id
-                            );
-
-                            return timeSlots.map((x) => ({
-                                ...x,
-                                interval: x.start + ' - ' + x.end,
-                            }));
-                        }}
+                        loading={loading}
+                        tableData={timeSlots}
+                        fetchData={() => dispatch(fetchAvailableTimeSlotsByBusiness(business.id))}
                         tableTitle="Time Slots"
                         emptyMessage="No Time Slots Yet"
-                        removeEntryWithId={removeTimeSlot}
                     />
                 </Col>
             </Row>

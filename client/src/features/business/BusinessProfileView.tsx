@@ -8,14 +8,15 @@ import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
 import {ComboBoxOption} from '../../common/components/form/ComboBox';
 import {ErrorView} from '../../common/views/ErrorView';
+import {fetchBusinessesTypes, selectBusinessTypes, updateBusinessInfo} from './businessSlice';
 import {FormCard, FormCardData} from '../../common/components/card/FormCard';
 import {Header} from '../../common/components/Texts';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
 import {TextFieldModal} from '../../common/components/modal/TextFieldModal';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useForm} from '../../common/hooks/useForm';
-import {useBusinessService} from './BusinessService';
 
-const useStyles = makeStyles((theme) => ({
+    const useStyles = makeStyles((theme) => ({
     col: {
         marginTop: 25,
     },
@@ -31,9 +32,11 @@ interface LocationState {
 export const BusinessProfileView: React.FC = () => {
     const styles = useStyles();
     const location = useLocation<LocationState>();
+    const dispatch = useAppDispatch();
 
     const [modalKey, setModalKey] = useState('');
-    const [businessTypeOptions, setBusinessTypeOptions] = useState<string[]>([]);
+    const businessTypes = useAppSelector(selectBusinessTypes);
+
     const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
     const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
@@ -42,15 +45,12 @@ export const BusinessProfileView: React.FC = () => {
     }
 
     const business = location.state.business;
-
-    const businessService = useBusinessService();
-
-    const formValues = omit(business, ['id', 'longitude', 'latitude', 'ownerEmail']) as BusinessDTO;
+    const formValues = omit(business, ['businessHours', 'city', 'id', 'longitude', 'latitude', 'ownerEmail']) as BusinessDTO;
 
     const {addressHandler, formHandler} = useForm<BusinessDTO>({
         initialValues: formValues,
         validationSchema: businessValidationSchema,
-        onSubmit: businessService.updateBusinessInfo(business.id, business.ownerEmail!),
+        onSubmit: (business) => dispatch(updateBusinessInfo({businessId: business.id, ownerEmail: business.ownerEmail!, business})),
         formatter: (business) => {
             business.opens = business.opens.replace(':', '.');
             business.closes = business.closes.replace(':', '.');
@@ -61,9 +61,8 @@ export const BusinessProfileView: React.FC = () => {
 
     useEffect(() => {
         (async () => {
+            dispatch(fetchBusinessesTypes());
             setZips(await addressHandler.fetchZips());
-
-            setBusinessTypeOptions(await businessService.fetchBusinessTypes());
         })();
     }, []);
 
@@ -102,13 +101,13 @@ export const BusinessProfileView: React.FC = () => {
                     textFieldKey={modalKey}
                     textFieldType={TextFieldUtil.mapKeyToType(modalKey)}
                     primaryAction={async () => {
-                        await formHandler.handleSubmit();
+                        formHandler.handleSubmit();
                         setModalKey('');
                     }}
                     formHandler={formHandler}
                     initialValue={business[modalKey] as string}
                     primaryActionText="Save Changes"
-                    selectOptions={businessTypeOptions}
+                    selectOptions={businessTypes}
                 />
                 <Col sm={12} md={6} lg={12} className={styles.col}>
                     <FormCard title="Business Data" data={businessData} />

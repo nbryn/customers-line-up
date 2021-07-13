@@ -16,7 +16,7 @@ services:
       context: server
       dockerfile: Dockerfile
     volumes:
-      - ./server:/app
+      - ./server/CLup:/app
     command: ["dotnet", "watch", "run"]
     ports:
       - "5001:5001"

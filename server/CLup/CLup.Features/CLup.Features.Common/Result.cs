@@ -42,9 +42,9 @@ namespace CLup.Features.Common
             return new Result(false, message, HttpCode.NotFound);
         }
 
-        public static Result<T> NotFound<T>()
+        public static Result<T> NotFound<T>(string message = "")
         {
-            return new Result<T>(default(T), false, String.Empty, HttpCode.NotFound);
+            return new Result<T>(default(T), false, message, HttpCode.NotFound);
         }
 
         public static Result Forbidden(string message)
@@ -54,7 +54,7 @@ namespace CLup.Features.Common
 
         public static Result Conflict(string message = "")
         {
-            return new Result(true, message, HttpCode.Conflict);
+            return new Result(false, message, HttpCode.Conflict);
         }
 
         public static Result<T> Conflict<T>(string message = "")

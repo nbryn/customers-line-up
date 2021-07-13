@@ -14,14 +14,20 @@ namespace CLup.Features.Bookings
         public class Command : IRequest<Result>
         {
             public string OwnerEmail { get; set; }
-            public string UserEmail { get; set; }
-            public string TimeSlotId { get; set; }
+            public string BookingId { get; set; }
+            public string BusinessId { get; set; }
 
-            public Command(string ownerEmail, string userEmail, string timeSlotId)
+
+            public Command(
+                string ownerEmail,
+                string bookingId,
+                string businessId
+                )
             {
-                OwnerEmail = OwnerEmail;
-                UserEmail = userEmail;
-                TimeSlotId = timeSlotId;
+                OwnerEmail = ownerEmail;
+                BookingId = bookingId;
+                BusinessId = businessId;
+
             }
         }
 
@@ -33,15 +39,14 @@ namespace CLup.Features.Bookings
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.TimeSlotId == command.TimeSlotId &&
-                                                                          x.UserEmail == command.UserEmail);
+                var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == command.BookingId);
 
                 if (booking == null)
                 {
                     return Result.NotFound("Booking not found");
                 }
 
-                var business = await _context.Businesses.FirstOrDefaultAsync(x => x.OwnerEmail == command.OwnerEmail);
+                var business = await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.BusinessId);
 
                 if (business.OwnerEmail != command.OwnerEmail)
                 {

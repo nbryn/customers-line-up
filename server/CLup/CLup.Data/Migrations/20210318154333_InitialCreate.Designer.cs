@@ -25,6 +25,8 @@ namespace CLup.Migrations
 
             modelBuilder.Entity("CLup.Bookings.Booking", b =>
                 {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
                     b.Property<string>("UserEmail")
                         .HasColumnType("nvarchar(450)");
 

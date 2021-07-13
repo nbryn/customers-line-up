@@ -11,6 +11,7 @@ namespace CLup.Context.Initialiser.DataCreators
         {
             Booking booking = new Booking
             {
+                Id = Guid.NewGuid().ToString(),
                 UserEmail = userEmail,
                 BusinessId = businessId,
                 TimeSlotId = TimeSlotId,

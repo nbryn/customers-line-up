@@ -36,7 +36,7 @@ namespace CLup.Features.Employees
 
                 if (business == null)
                 {
-                    return Result.NotFound<IList<EmployeeDTO>>();
+                    return Result.NotFound<IList<EmployeeDTO>>("Business was not found");
                 }
 
                 var employees = _context.Employees

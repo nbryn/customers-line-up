@@ -8,6 +8,7 @@ namespace CLup.Features.TimeSlots
         public string Date { get; set; }
         public string Start { get; set; }
         public string End { get; set; }
+        public string Interval { get; set; }
         public string Capacity { get; set; }
     }
 }

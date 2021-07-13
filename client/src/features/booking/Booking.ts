@@ -6,7 +6,7 @@ export interface BookingDTO extends DTO {
     business: string;
     longitude: number;
     latitude: number;
-    userMail: string;
+    userEmail: string;
     date: string;
     capacity: string;
     interval: string;

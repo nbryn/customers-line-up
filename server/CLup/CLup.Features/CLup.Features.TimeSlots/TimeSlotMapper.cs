@@ -16,7 +16,8 @@ namespace CLup.Features.TimeSlots
                 .ForMember(t => t.Date, s => s.MapFrom(m => m.Start.ToString("dd/MM/yyyy")))
                 .ForMember(t => t.Start, s => s.MapFrom(m => m.Start.TimeOfDay.ToString().Substring(0, 5)))
                 .ForMember(t => t.End, s => s.MapFrom(m => m.End.TimeOfDay.ToString().Substring(0, 5)))
-                .ForMember(t => t.Capacity, s => s.MapFrom(m => m.Bookings.Count() + "/" + m.Capacity.ToString()));
+                .ForMember(t => t.Interval, s => s.MapFrom(m => $"{m.Start.TimeOfDay.ToString().Substring(0, 5)} - {m.End.TimeOfDay.ToString().Substring(0, 5)}"))
+                .ForMember(t => t.Capacity, s => s.MapFrom(m => $"{m.Bookings.Count()}/{m.Capacity.ToString()}"));
 
             CreateMap<Business, TimeSlot>()
                .ForMember(t => t.BusinessId, s => s.MapFrom(m => m.Id))

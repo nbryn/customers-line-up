@@ -2,31 +2,27 @@ import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory, useLocation} from 'react-router-dom';
-import {useSelector} from 'react-redux';
 
 import {BusinessDTO} from '../business/Business';
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
-import {createEmployee} from './employeeSlice';
-import EmployeeService from './EmployeeService';
+import {clearApiMessage, createEmployee} from './employeeSlice';
 import {employeeValidationSchema} from '../business/BusinessValidation';
 import {ErrorView} from '../../common/views/ErrorView';
 import {fetchUsersNotEmployedByBusiness, selectUsersAsComboBoxOption} from '../user/userSlice';
 import {Form} from '../../common/components/form/Form';
 import {Header} from '../../common/components/Texts';
 import {Modal} from '../../common/components/modal/Modal';
-import {NewEmployeeDTO} from './Employee';
+import {EmployeeDTO, NewEmployeeDTO} from './Employee';
 import {TextField} from '../../common/components/form/TextField';
 import {
-    clearApiMessage,
+    State,
     isLoading,
-    RootState,
     selectApiMessage,
     useAppDispatch,
     useAppSelector,
 } from '../../app/Store';
 import {useForm} from '../../common/hooks/useForm';
-import {useUserService} from '../user/UserService';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -55,39 +51,31 @@ interface LocationState {
 export const CreateEmployeeView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
+
     const location = useLocation<LocationState>();
-    
-    const loading = useAppSelector(isLoading);
     const dispatch = useAppDispatch();
 
     const [selectedUser, setSelectedUser] = useState<ComboBoxOption>({label: ''});
     const [showComboBox, setShowComBox] = useState(true);
-
-    const userService = useUserService();
+    const loading = useAppSelector(isLoading(State.Employees));
 
     if (!location.state) {
         return <ErrorView />;
     }
 
     const {business} = location.state;
-    const apiMessage = useAppSelector(selectApiMessage);
-    const usersNotEmployedByBusiness = useSelector<RootState, ComboBoxOption[] | null>((state) =>
-        selectUsersAsComboBoxOption(state, business.id)
-    );
-
-    const formValues: NewEmployeeDTO = {
-        companyEmail: '',
-    };
+    const apiMessage = useAppSelector(selectApiMessage(State.Employees));
+    const usersNotEmployedByBusiness = useAppSelector(selectUsersAsComboBoxOption(business.id));
 
     const {formHandler, ...form} = useForm<NewEmployeeDTO>({
-        initialValues: formValues,
+        initialValues: {companyEmail: ''} as NewEmployeeDTO,
         validationSchema: employeeValidationSchema,
-        onSubmit: EmployeeService.createEmployee,
+        onSubmit: (employee) => dispatch(createEmployee(employee as EmployeeDTO)),
     });
 
     useEffect(() => {
         (async () => {
-            dispatch(fetchUsersNotEmployedByBusiness({service: userService, data: business.id}));
+            dispatch(fetchUsersNotEmployedByBusiness(business.id));
         })();
     }, []);
 
@@ -110,7 +98,7 @@ export const CreateEmployeeView: React.FC = () => {
                         text={apiMessage}
                         primaryAction={() => history.push('/business/employees/manage', {business})}
                         primaryActionText="My Employees"
-                        secondaryAction={() => dispatch(clearApiMessage)}
+                        secondaryAction={() => dispatch(clearApiMessage())}
                     />
                     <Card
                         className={styles.card}

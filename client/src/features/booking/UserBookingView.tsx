@@ -4,11 +4,12 @@ import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {BookingDTO} from './Booking';
+import {deleteBookingForUser, fetchBookingsByUser, selectBookingsByUser} from './bookingSlice';
+import {State, isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {Header} from '../../common/components/Texts';
 import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
-import {useBookingService} from './BookingService';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -18,11 +19,11 @@ const useStyles = makeStyles((theme) => ({
 
 export const UserBookingView: React.FC = () => {
     const styles = useStyles();
+    const dispatch = useAppDispatch();
 
-    const [removeBookingWithId, setRemoveBookingWithId] = useState<string | null>(null);
+    const loading = useAppSelector(isLoading(State.Bookings));
+    const bookings = useAppSelector(selectBookingsByUser);
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
-
-    const bookingService = useBookingService();
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -38,16 +39,13 @@ export const UserBookingView: React.FC = () => {
             icon: () => <Chip size="small" label="Delete" clickable color="primary" />,
             tooltip: 'Delete Booking',
             onClick: async (event: any, booking: BookingDTO) => {
-                await bookingService.deleteBookingForUser(booking.timeSlotId);
-
-                setRemoveBookingWithId(booking.timeSlotId);
+                dispatch(deleteBookingForUser(booking.id));
             },
         },
         {
             icon: () => <Chip size="small" label="See on map" clickable color="secondary" />,
             tooltip: 'Show location on map',
             onClick: (event: any, booking: BookingDTO) => {
-                console.log(booking);
                 setMapModalInfo({
                     visible: true,
                     zoom: 14,
@@ -75,15 +73,9 @@ export const UserBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={bookingService.working}
-                        fetchTableData={async () => {
-                            const data = await bookingService.fetchBookingsByUser();
-                            return data.map((x) => ({
-                                ...x,
-                                id: x.timeSlotId,
-                            }));
-                        }}
-                        removeEntryWithId={removeBookingWithId}
+                        loading={loading}
+                        fetchData={() => dispatch(fetchBookingsByUser(null))}
+                        tableData={bookings}
                         tableTitle="Bookings"
                         emptyMessage="No Bookings Yet"
                     />

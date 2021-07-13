@@ -2,17 +2,27 @@ import {Col, Container, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React, {useState} from 'react';
 
-import {useAuthService} from './AuthService';
 import {Card} from '../../common/components/card/Card';
+import {
+    State,
+    isLoading,
+    selectApiMessage,
+    useAppDispatch,
+    useAppSelector,
+} from '../../app/Store';
 import {Form} from '../../common/components/form/Form';
+import {login} from './userSlice';
 import {loginValidationSchema} from './UserValidation';
 import {SignupView} from './SignupView';
 import StringUtil from '../../common/util/StringUtil';
 import {TextField} from '../../common/components/form/TextField';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
 import {useForm} from '../../common/hooks/useForm';
-import {UserDTO} from './User';
-import {useUserContext} from './UserContext';
+import {LoginDTO} from './User';
+
+
+
+
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -35,21 +45,21 @@ const useStyles = makeStyles((theme) => ({
 
 export const LoginView: React.FC = () => {
     const styles = useStyles();
-    const {setUser} = useUserContext();
+    const loading = useAppSelector(isLoading(State.Users));
 
+    const apiMessage = useAppSelector(selectApiMessage(State.Users));
+    const dispatch = useAppDispatch();
     const [renderSignUp, setRenderSignUp] = useState(false);
-    const authService = useAuthService();
 
-    const formValues: UserDTO = {
+    const formValues: LoginDTO = {
         email: '',
         password: '',
     };
 
-    const {formHandler} = useForm<UserDTO>({
+    const {formHandler} = useForm<LoginDTO>({
         initialValues: formValues,
         validationSchema: loginValidationSchema,
-        onSubmit: authService.login,
-        setUser,
+        onSubmit: (data) => dispatch(login(data)),
     });
 
     return (
@@ -72,9 +82,9 @@ export const LoginView: React.FC = () => {
                             <Form
                                 onSubmit={formHandler.handleSubmit}
                                 buttonText="Login"
-                                working={authService.working}
+                                working={loading}
                                 valid={formHandler.isValid}
-                                errorMessage={authService.requestInfo ? 'Wrong Email/Password' : ''}
+                                errorMessage={apiMessage}
                             >
                                 {Object.keys(formValues).map((key) => (
                                     <FormGroup key={key}>

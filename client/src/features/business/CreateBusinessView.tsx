@@ -8,13 +8,14 @@ import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
+import {clearApiMessage, createBusiness, fetchBusinessesTypes, selectBusinessTypes} from './businessSlice';
 import {Form} from '../../common/components/form/Form';
 import {Header} from '../../common/components/Texts';
+import {isLoading, selectApiMessage, State, useAppDispatch, useAppSelector} from '../../app/Store';
 import {Modal} from '../../common/components/modal/Modal';
 import StringUtil from '../../common/util/StringUtil';
 import {TextField} from '../../common/components/form/TextField';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
-import {useBusinessService} from './BusinessService';
 import {useForm} from '../../common/hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,17 +39,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SUCCESS_MESSAGE = 'Business Created - Go to my businesses to see your businesses';
-
 export const CreateBusinessView: React.FC = () => {
   const styles = useStyles();
   const history = useHistory();
+  const dispatch = useAppDispatch();
 
-  const [businessTypes, setBusinessTypes] = useState<string[]>([]);
+  const businessTypes = useAppSelector(selectBusinessTypes);
   const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
   const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
-  const businessService = useBusinessService(SUCCESS_MESSAGE);
+  const loading = useAppSelector(isLoading(State.Businesses));
+  const apiMessage = useAppSelector(selectApiMessage(State.Businesses));
 
   const formValues: BusinessDTO = {
     id: '',
@@ -65,7 +66,7 @@ export const CreateBusinessView: React.FC = () => {
   const {addressHandler, formHandler} = useForm<BusinessDTO>({
     initialValues: formValues,
     validationSchema: businessValidationSchema,
-    onSubmit: businessService.createBusiness,
+    onSubmit: (business) => dispatch(createBusiness(business)),
     formatter: (business) => {
       const address = addresses.find((x) => x.label === business.address);
 
@@ -81,10 +82,7 @@ export const CreateBusinessView: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const types = await businessService.fetchBusinessTypes();
-
-      setBusinessTypes(types);
-
+      dispatch(fetchBusinessesTypes());
       setZips(await addressHandler.fetchZips());
     })();
   }, []);
@@ -106,18 +104,18 @@ export const CreateBusinessView: React.FC = () => {
       <Row className={styles.wrapper}>
         <Col sm={6} lg={8}>
           <Modal
-            show={businessService.requestInfo ? true : false}
+            show={apiMessage ? true : false}
             title="Business Info"
-            text={businessService.requestInfo}
+            text={apiMessage}
             primaryAction={() => history.push('/business')}
             primaryActionText="My Businesses"
-            secondaryAction={() => businessService.setRequestInfo('')}
+            secondaryAction={() => dispatch(clearApiMessage())}
           />
           <Card className={styles.card} title="Business Data" variant="outlined">
             <Form
               onSubmit={formHandler.handleSubmit}
               buttonText="Create"
-              working={businessService.working}
+              working={loading}
               valid={formHandler.isValid}
             >
               <Row>

@@ -11,14 +11,15 @@ export interface UserDTO {
     role?: 'User' | 'Employee' | 'Owner' | 'Admin';
 }
 
+export interface LoginDTO {
+    [key: string]: string | number | undefined;
+    email: string;
+    password: string;
+}
+
 export type NotEmployedByBusiness = {
     businessId: string;
     users: UserDTO[];
 };
 
-export type UserInsights = {
-    bookings: number;
-    businesses: number;
-    nextBookingBusiness: string;
-    nextBookingTime: string;
-};
+
