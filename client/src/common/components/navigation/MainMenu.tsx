@@ -19,7 +19,6 @@ import {useAppSelector} from '../../../app/Store';
 const drawerWidth = 210;
 
 const useStyles = makeStyles((theme) => ({
-   root: {},
    drawer: {
       [theme.breakpoints.up('md')]: {
          width: drawerWidth,

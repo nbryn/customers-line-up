@@ -11,12 +11,13 @@ using MediatR;
 
 using CLup.Data;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.TimeSlots
 {
     public class AvailableTimeSlotsByBusiness
     {
-        public class Query : IRequest<Result<IList<TimeSlotDTO>>>
+        public class Query : IRequest<Result<List<TimeSlotDTO>>>
         {
 
             public string BusinessId { get; set; }
@@ -33,7 +34,7 @@ namespace CLup.Features.TimeSlots
             }
         }
 
-        public class Handler : IRequestHandler<Query, Result<IList<TimeSlotDTO>>>
+        public class Handler : IRequestHandler<Query, Result<List<TimeSlotDTO>>>
         {
             private readonly CLupContext _context;
             private readonly IMapper _mapper;
@@ -43,23 +44,16 @@ namespace CLup.Features.TimeSlots
                 _context = context;
             }
 
-            public async Task<Result<IList<TimeSlotDTO>>> Handle(Query query, CancellationToken cancellationToken)
+            public async Task<Result<List<TimeSlotDTO>>> Handle(Query query, CancellationToken cancellationToken)
             {
-                var business = _context.Businesses.FirstOrDefault(b => b.Id == query.BusinessId);
-
-                if (business == null)
-                {
-                    return Result.NotFound<IList<TimeSlotDTO>>();
-                }
-
-                var timeSlots = _context.TimeSlots
+                return await _context.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
+                        .FailureIfDiscard("Business not found.")
+                        .AndThen(() => _context.TimeSlots
                                             .Include(x => x.Bookings)
                                             .Include(x => x.Business)
-                                            .Where(x => x.BusinessId == query.BusinessId);
-
-                var result = await _mapper.ProjectTo<TimeSlotDTO>(timeSlots).ToListAsync();
-
-                return Result.Ok<IList<TimeSlotDTO>>(result);
+                                            .Where(x => x.BusinessId == query.BusinessId))
+                                            
+                        .AndThen(timeSlots => _mapper.ProjectTo<TimeSlotDTO>(timeSlots).ToListAsync());
             }
         }
     }

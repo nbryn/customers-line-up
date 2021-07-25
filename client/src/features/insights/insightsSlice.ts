@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/useApi';
+import ApiCaller from '../../common/api/ApiCaller';
 import {UserInsights} from './Insights';
 import {RootState} from '../../app/Store';
 
@@ -18,10 +18,16 @@ const initialState: InsightsState = {
     apiMessage: '',
 };
 
-export const fetchUserInsights = createAsyncThunk('insights/user', async () => {
-    const userInsights = await ApiCaller.get<UserInsights>(`${DEFAULT_INSIGHTS_ROUTE}/user`);
+export const fetchUserInsights = createAsyncThunk('insights/userBooking', async () => {
+    const bookingInsights = await ApiCaller.get<UserInsights>(
+        `${DEFAULT_INSIGHTS_ROUTE}/user/booking`
+    );
 
-    return userInsights;
+    const businessInsights = await ApiCaller.get<UserInsights>(
+        `${DEFAULT_INSIGHTS_ROUTE}/user/business`
+    );
+
+    return {userInsights: {...bookingInsights, ...businessInsights}};
 });
 
 export const insightsSlice = createSlice({
@@ -33,9 +39,9 @@ export const insightsSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchUserInsights.fulfilled, (state, action) => {
+        builder.addCase(fetchUserInsights.fulfilled, (state, {payload}) => {
             state.isLoading = false;
-            state.userInsights = action.payload;
+            state.userInsights = payload.userInsights;
         });
 
         builder.addMatcher(isAnyOf(fetchUserInsights.pending), (state) => {

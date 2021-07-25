@@ -20,14 +20,27 @@ namespace CLup.Features.Insights
         public InsightsController(IMediator mediator) => _mediator = mediator;
 
         [Authorize(Policy = Policies.User)]
-        [Route("user")]
+        [Route("user/booking")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserInsights.Model))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserBookingInsights.Model))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchUserInsights()
+        public async Task<IActionResult> FetchUserBookingInsights()
         {
             string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var result = await _mediator.Send(new UserInsights.Query(userEmail));
+            var result = await _mediator.Send(new UserBookingInsights.Query(userEmail));
+
+            return this.CreateActionResult(result);
+        }
+
+        [Authorize(Policy = Policies.User)]
+        [Route("user/business")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserBusinessInsights.Model))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> FetchUserBusinessInsights()
+        {
+            string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await _mediator.Send(new UserBusinessInsights.Query(userEmail));
 
             return this.CreateActionResult(result);
         }

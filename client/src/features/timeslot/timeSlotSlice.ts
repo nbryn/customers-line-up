@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/useApi';
+import ApiCaller from '../../common/api/ApiCaller';
 import {TimeSlotDTO} from './TimeSlot';
 import {NormalizedEntityState, RootState} from '../../app/Store';
 

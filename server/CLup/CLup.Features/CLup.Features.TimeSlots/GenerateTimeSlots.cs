@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,7 +10,7 @@ using MediatR;
 using CLup.Data;
 using CLup.Domain;
 using CLup.Features.Common;
-
+using CLup.Features.Extensions;
 
 namespace CLup.Features.TimeSlots
 {
@@ -19,11 +18,11 @@ namespace CLup.Features.TimeSlots
     {
         public class Command : IRequest<Result>
         {
-
             public string BusinessId { get; set; }
 
             public DateTime Start { get; set; }
         }
+
         public class Validator : AbstractValidator<Command>
         {
             public Validator()
@@ -37,6 +36,7 @@ namespace CLup.Features.TimeSlots
         {
             private readonly CLupContext _context;
             private readonly IMapper _mapper;
+
             public Handler(CLupContext context, IMapper mapper)
             {
                 _context = context;
@@ -45,23 +45,16 @@ namespace CLup.Features.TimeSlots
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var business = await _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId);
 
-                if (business == null)
-                {
-                    return Result.NotFound();
-                }
-
-                var existingTimeSlots = await _context.TimeSlots.Include(x => x.Bookings)
-                                                                .Include(x => x.Business)
-                                                                .Where(x => x.BusinessId == command.BusinessId && x.Start.Date == command.Start.Date)
-                                                                .ToListAsync();
-
-                if (existingTimeSlots.Any())
-                {
-                    return Result.Conflict("Time slots already generated for this date");
-                }
-
+                return await _context.TimeSlots.FirstOrDefaultAsync(x => x.BusinessId == command.BusinessId && x.Start.Date == command.Start.Date)
+                        .ToResult()
+                        .EnsureDiscard(timeSlot => timeSlot == null, "Time slots already generated for this date")
+                        .FailureIf(() => _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId), "Business not found.")
+                        .Execute(business => Generate(business, command));
+            }
+            
+            private async Task Generate(Business business, Command command)
+            {
                 var opens = command.Start.AddHours(Double.Parse(business.Opens.Substring(0, business.Opens.IndexOf("."))));
                 var closes = command.Start.AddHours(Double.Parse(business.Closes.Substring(0, business.Closes.IndexOf("."))));
 
@@ -82,11 +75,8 @@ namespace CLup.Features.TimeSlots
                     timeSlot.Start = date;
                     timeSlot.End = date.AddMinutes(business.TimeSlotLength);
 
-                    await _context.TimeSlots.AddAsync(timeSlot);
-                    await _context.SaveChangesAsync();
+                    await _context.AddAndSave(timeSlot);
                 }
-
-                return Result.Ok();
             }
         }
     }

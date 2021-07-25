@@ -13,13 +13,13 @@ namespace CLup.Errors
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
             var exception = context?.Error;
-            var code = 500; // Internal Server Error by default
+            var code = 500;
 
-            if (exception is BookingExistsException) code = 409; // Not Found
+            if (exception is BookingExistsException) code = 409;
 
-            Response.StatusCode = code; // You can use HttpStatusCode enum instead
+            Response.StatusCode = code;
 
-            return new ErrorResponse(exception); // Your error model
+            return new ErrorResponse(exception);
         }
     }
 }

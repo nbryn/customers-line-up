@@ -5,46 +5,23 @@ import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../common/components/card/CardInfo';
 import {fetchUserInsights, selectUserInsights} from '../insights/insightsSlice';
-import {HomeCard} from '../../common/components/card/HomeCard';
+import {InfoCard} from '../../common/components/card/InfoCard';
 import {selectCurrentUser} from './userSlice';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
-
 const useStyles = makeStyles((theme) => ({
-    card: {
-        textAlign: 'center',
-        float: 'none',
+    card: {       
         marginTop: 35,
+    },
+    cards: {
+        justifyContent: 'center',
     },
     headline: {
         marginTop: 10,
         textAlign: 'center',
     },
-    icon1: {
-        marginBottom: 10,
-        marginLeft: -175,
-    },
-    icon2: {
-        marginBottom: 10,
-        marginLeft: -85,
-    },
-    icon3: {
-        marginLeft: -175,
-    },
-    icon4: {
-        marginBottom: 10,
-        marginLeft: -170,
-    },
-    icon5: {
-        marginBottom: 10,
-        marginLeft: -185,
-    },
-    icon6: {
-        marginLeft: -195,
-    },
 }));
 
-// Refactor HomeCard BusinessCard into one.
 // Also look taking TextField out of TextField modal and use children instead
 export const HomeView: React.FC = () => {
     const styles = useStyles();
@@ -69,9 +46,9 @@ export const HomeView: React.FC = () => {
                     </h1>
                 </Col>
             </Row>
-            <Row>
-                <Col className={styles.card} sm={6} md={8} lg={6}>
-                    <HomeCard
+            <Row className={styles.cards}>
+                <Col className={styles.card} sm={6} md={8} lg={5}>
+                    <InfoCard
                         buttonAction={() => history.push('/user/bookings')}
                         buttonText="My Bookings"
                         secondaryAction={() => history.push('/user/business')}
@@ -80,26 +57,19 @@ export const HomeView: React.FC = () => {
                         subtitle="Summary"
                     >
                         <CardInfo
-                            icon1={{
-                                text: `Bookings: ${userInsights?.bookings}`,
-                                icon: 'Home',
-                                styles: styles.icon1,
-                            }}
-                            icon2={{
-                                text: `Next: ${userInsights?.nextBookingTime}`,
-                                icon: 'Hot',
-                                styles: styles.icon2,
-                            }}
-                            icon3={{
-                                text: `Where: ${userInsights?.nextBookingBusiness}`,
-                                icon: 'Grain',
-                                styles: styles.icon3,
-                            }}
+                            infoTexts={[
+                                {text: `Bookings: ${userInsights?.ownBookings}`, icon: 'Home'},
+                                {text: `Next: ${userInsights?.nextBookingTime}`, icon: 'Hot'},
+                                {
+                                    text: `Where: ${userInsights?.nextBookingBusiness}`,
+                                    icon: 'Grain',
+                                },
+                            ]}
                         />
-                    </HomeCard>
+                    </InfoCard>
                 </Col>
-                <Col className={styles.card} sm={6} md={8} lg={6}>
-                    <HomeCard
+                <Col className={styles.card} sm={6} md={8} lg={5}>
+                    <InfoCard
                         buttonAction={() => history.push('/business')}
                         buttonText="My Businesses"
                         primaryButtonDisabled={!userInsights?.businesses}
@@ -109,23 +79,13 @@ export const HomeView: React.FC = () => {
                         subtitle="Summary"
                     >
                         <CardInfo
-                            icon1={{
-                                text: `Businesses: ${userInsights?.businesses}`,
-                                icon: 'Home',
-                                styles: styles.icon4,
-                            }}
-                            icon2={{
-                                text: `Employees: `,
-                                icon: 'Hot',
-                                styles: styles.icon5,
-                            }}
-                            icon3={{
-                                text: `Bookings: `,
-                                icon: 'Grain',
-                                styles: styles.icon6,
-                            }}
+                            infoTexts={[
+                                {text: `Businesses: ${userInsights?.businesses}`, icon: 'Home'},
+                                {text: `Employees: ${userInsights?.employees}`, icon: 'Hot'},
+                                {text: `Bookings: ${userInsights?.businessBookings}`, icon: 'Grain'},
+                            ]}
                         />
-                    </HomeCard>
+                    </InfoCard>
                 </Col>
             </Row>
         </Container>

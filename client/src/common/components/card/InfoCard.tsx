@@ -33,7 +33,7 @@ type Props = {
     title: string;
 };
 
-export const HomeCard: React.FC<Props> = ({
+export const InfoCard: React.FC<Props> = ({
     buttonAction,
     buttonText,
     children,

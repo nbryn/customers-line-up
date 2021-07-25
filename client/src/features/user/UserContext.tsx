@@ -1,15 +1,14 @@
 import Cookies from 'js-cookie';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect} from 'react';
 
-import {UserDTO} from './User';
+import {clearCurrentUser, fetchUserInfo} from './userSlice';
+import { useAppDispatch } from '../../app/Store';
 
 export type ContextValue = {
-    user: UserDTO;
     logout: () => void;
 };
 
 export const UserContext = React.createContext<ContextValue>({
-    user: (Cookies.get('user') as unknown) as UserDTO,
     logout: () => null,
 });
 
@@ -18,21 +17,21 @@ type Props = {
 };
 
 export const UserContextProvider: React.FC<Props> = (props: Props) => {
-    const [user, setCurrentUser] = useState<UserDTO>({email: ''});
+    const dispatch = useAppDispatch();
 
     const logout = () => {
         Cookies.remove('access_token');
 
-        setCurrentUser({email: ''});
+        dispatch(clearCurrentUser());
     };
 
 
     useEffect(() => {
+        if (Cookies.get('access_token')) dispatch(fetchUserInfo());
         setTimeout(() => logout(), 7200000);
     }, []);
 
     const contextValue: ContextValue = {
-        user,
         logout,
     };
 

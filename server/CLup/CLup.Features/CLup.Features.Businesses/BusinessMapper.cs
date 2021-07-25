@@ -17,6 +17,7 @@ namespace CLup.Features.Businesses
 
             CreateMap<CreateBusiness.Command, Business>()
             .ForMember(b => b.Type, s => s.MapFrom(m => BusinessType.Parse(typeof(BusinessType), m.Type)))
+            .ForMember(b => b.Id, s => s.MapFrom(m => Guid.NewGuid().ToString()))
             .ForMember(b => b.OwnerEmail, s => s.MapFrom(m => m.OwnerEmail))
             .ForMember(u => u.CreatedAt, s => s.MapFrom(m => DateTime.Now))
             .ForMember(u => u.UpdatedAt, s => s.MapFrom(m => DateTime.Now));

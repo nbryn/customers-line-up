@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using CLup.Data;
 using CLup.Domain;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Businesses
 {
@@ -57,28 +57,11 @@ namespace CLup.Features.Businesses
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var owner = await _context.BusinessOwners.FirstOrDefaultAsync(o => o.UserEmail == command.OwnerEmail);
-
-                if (owner == null)
-                {
-                    var newOwner = new BusinessOwner
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        UserEmail = command.OwnerEmail,
-                    };
-
-                    _context.BusinessOwners.Add(newOwner);
-                }
-
-                BusinessType.TryParse(command.Type, out BusinessType type);
-
-                var newBusiness = _mapper.Map<Business>(command);
-                newBusiness.Id = Guid.NewGuid().ToString();
-                _context.Businesses.Add(newBusiness);
-
-                await _context.SaveChangesAsync();
-
-                return Result.Ok();
+                return await _context.BusinessOwners.FirstOrDefaultAsync(o => o.UserEmail == command.OwnerEmail)
+                        .ToResult()
+                        .Execute(owner => _context.CreateEntityIfNotExists(owner, new BusinessOwner { UserEmail = command.OwnerEmail }))
+                        .AndThen(() => _mapper.Map<Business>(command))
+                        .Execute(business => _context.AddAndSave(business));
             }
         }
     }

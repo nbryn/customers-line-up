@@ -21,6 +21,7 @@ namespace CLup.Features.Users
 
                 return;
             }
+            
             var isEmployee = await _context.Employees.FirstOrDefaultAsync(e => e.UserEmail == user.Email);
 
             if (isEmployee != null)

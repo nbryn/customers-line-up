@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Bookings
 {
@@ -16,7 +17,6 @@ namespace CLup.Features.Bookings
             public string OwnerEmail { get; set; }
             public string BookingId { get; set; }
             public string BusinessId { get; set; }
-
 
             public Command(
                 string ownerEmail,
@@ -39,24 +39,12 @@ namespace CLup.Features.Bookings
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == command.BookingId);
 
-                if (booking == null)
-                {
-                    return Result.NotFound("Booking not found");
-                }
-
-                var business = await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.BusinessId);
-
-                if (business.OwnerEmail != command.OwnerEmail)
-                {
-                    return Result.Forbidden("You don't have access to this business");
-                }
-
-                _context.Bookings.Remove(booking);
-                await _context.SaveChangesAsync();
-
-                return Result.Ok();
+                return await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.BusinessId)
+                        .ToResult()
+                        .EnsureDiscard(business => business.OwnerEmail == command.OwnerEmail, (HttpCode.Forbidden, "You don't have access to this business"))
+                        .FailureIf(() => _context.Bookings.FirstOrDefaultAsync(x => x.Id == command.BookingId), "Booking not found")
+                        .Execute(booking => _context.RemoveAndSave(booking));
             }
         }
 

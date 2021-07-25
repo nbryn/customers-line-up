@@ -12,7 +12,7 @@ using CLup.Features.Common;
 
 namespace CLup.Features.Insights
 {
-    public class UserInsights
+    public class UserBookingInsights
     {
         public class Query : IRequest<Result<Model>>
         {
@@ -23,8 +23,7 @@ namespace CLup.Features.Insights
 
         public class Model
         {
-            public int Bookings { get; set; }
-            public int Businesses { get; set; }
+            public int OwnBookings { get; set; }
             public string NextBookingBusiness { get; set; }
             public string NextBookingTime { get; set; }
         }
@@ -43,22 +42,17 @@ namespace CLup.Features.Insights
             public async Task<Result<Model>> Handle(Query query, CancellationToken cancellationToken)
             {
                 var bookings = await _context.Bookings
+                                        .Include(b => b.Business)
                                         .Include(b => b.TimeSlot)
                                         .Where(x => x.UserEmail == query.UserEmail)
-                                        .ToListAsync();
-
-                var businesses = await _context.Businesses
-                                        .Where(x => x.OwnerEmail == query.UserEmail)
                                         .ToListAsync();
 
 
                 var nextBooking = bookings.OrderBy(x => Math.Abs(x.TimeSlot.Start.Ticks - DateTime.Now.Ticks)).First();
 
-
                 var insights = new Model
                 {
-                    Bookings = bookings.Count,
-                    Businesses = businesses.Count,
+                    OwnBookings = bookings.Count,
                     NextBookingBusiness = nextBooking.Business.Name,
                     NextBookingTime = nextBooking.TimeSlot.Start.ToString("dd/MM/yyyy - HH:mm")
                 };

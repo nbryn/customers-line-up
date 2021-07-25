@@ -48,7 +48,7 @@ namespace CLup
                     .AddFluentValidation(fv =>
                     {
                         fv.ImplicitlyValidateChildProperties = true;
-                        fv.RegisterValidatorsFromAssemblyContaining<BookingValidator>();
+                        fv.RegisterValidatorsFromAssemblyContaining<Startup>();
                     });
         }
 

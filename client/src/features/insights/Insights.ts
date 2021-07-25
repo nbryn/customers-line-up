@@ -1,6 +1,8 @@
 export type UserInsights = {
-    bookings: number;
-    businesses: number;
+    ownBookings: number;
     nextBookingBusiness: string;
     nextBookingTime: string;
+    businessBookings: number;
+    businesses: number;
+    employees: number;
 };

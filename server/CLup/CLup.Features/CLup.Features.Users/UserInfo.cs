@@ -7,19 +7,20 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Users
 {
     public class UserInfo
     {
-        public class Query : IRequest<Result>
+        public class Query : IRequest<Result<UserDTO>>
         {
             public string Email { get; set; }
             
             public Query(string email) => Email = email;
         }
 
-        public class Handler : IRequestHandler<Query, Result>
+        public class Handler : IRequestHandler<Query, Result<UserDTO>>
         {
             private readonly IUserService _userService;
             private readonly CLupContext _context;
@@ -31,19 +32,12 @@ namespace CLup.Features.Users
                 _context = context;
                 _mapper = mapper;
             }
-            public async Task<Result> Handle(Query query, CancellationToken cancellationToken)
+            public async Task<Result<UserDTO>> Handle(Query query, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == query.Email);
-
-                if (user == null)
-                {
-                    return Result.NotFound();
-                }
-
-                await _userService.DetermineRole(user);
-                var result = _mapper.Map<UserDTO>(user);
-
-                return Result.Ok<UserDTO>(result);
+                return await _context.Users.FirstOrDefaultAsync(u => u.Email == query.Email)
+                        .FailureIf("User does not exist.")
+                        .AndThenF(user => _userService.DetermineRole(user))
+                        .AndThen(user => _mapper.Map<UserDTO>(user));
             }
         }
     }

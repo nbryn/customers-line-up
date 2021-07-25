@@ -1,37 +1,43 @@
 import React from 'react';
+import {Col, Row} from 'react-bootstrap';
+import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
 import {Icons} from '../Icons';
 
-type Icon = {
+const useStyles = makeStyles((theme) => ({
+    icon: {
+        top: -2,
+    },
+    infoText: {
+        marginBottom: 30,
+        marginLeft: 25,
+    },
+}));
+
+type InfoText = {
     text: string;
     icon: string;
-    styles: string;
 };
 
 type Props = {
-    icon1: Icon;
-    icon2: Icon;
-    icon3?: Icon;
+    infoTexts: InfoText[];
 };
 
-export const CardInfo: React.FC<Props> = ({icon1, icon2, icon3}: Props) => {
+export const CardInfo: React.FC<Props> = ({infoTexts}: Props) => {
+    const styles = useStyles();
     return (
         <>
-            <Typography className={icon1.styles}>
-                <Icons icon={icon1.icon} />
-                {icon1.text}
-            </Typography>
-            <Typography className={icon2.styles}>
-                <Icons icon={icon2.icon} />
-                {icon2.text}
-            </Typography>
-            {icon3 && (
-                <Typography className={icon3.styles}>
-                    <Icons icon={icon3.icon} />
-                    {icon3.text}
-                </Typography>
-            )}
+            {infoTexts.map((infoText) => {
+                return (
+                    <Row className={styles.infoText} key={infoText.icon}>
+                        <Typography>
+                            <Icons icon={infoText.icon}  />
+                            {infoText.text}
+                        </Typography>
+                    </Row>
+                );
+            })}
         </>
     );
 };

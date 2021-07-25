@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Bookings
 {
@@ -24,19 +25,10 @@ namespace CLup.Features.Bookings
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var booking = await _context.Bookings.FirstOrDefaultAsync(x => x.Id == command.BookingId);
-
-                if (booking == null)
-                {
-                    return Result.NotFound("Booking not found");
-                }
-
-                _context.Bookings.Remove(booking);
-                await _context.SaveChangesAsync();
-
-                return Result.Ok();
+                return await _context.Bookings.FirstOrDefaultAsync(x => x.Id == command.BookingId)
+                         .FailureIf("Booking not found.")
+                         .Execute(booking => _context.RemoveAndSave(booking));
             }
         }
-
     }
 }

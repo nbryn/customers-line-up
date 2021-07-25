@@ -25,11 +25,7 @@ namespace CLup.Features.Businesses
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> NewBusiness([FromBody] CreateBusiness.Command command)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+      
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             command.OwnerEmail = ownerEmail;
@@ -56,14 +52,8 @@ namespace CLup.Features.Businesses
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateBusinessData(string id, [FromBody] UpdateBusiness.Command command)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            command.Id = id;
+        public async Task<IActionResult> UpdateBusinessData([FromBody] UpdateBusiness.Command command)
+        {  
             var result = await _mediator.Send(command);
 
             return this.CreateActionResult(result);

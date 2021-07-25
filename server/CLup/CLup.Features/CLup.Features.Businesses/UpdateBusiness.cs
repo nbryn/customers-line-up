@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using CLup.Data;
 using CLup.Domain;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Businesses
 {
@@ -57,21 +58,10 @@ namespace CLup.Features.Businesses
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var business = await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.Id);
-
-                if (business == null)
-                {
-                    return Result.NotFound();
-                }
-
-                var updatedBusiness = _mapper.Map<Business>(command);
-                updatedBusiness.Id = business.Id;
-
-                _context.Entry(business).CurrentValues.SetValues(updatedBusiness);
-
-                await _context.SaveChangesAsync();
-
-                return Result.Ok();
+                return await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.Id)
+                        .FailureIfDiscard("Business not found.")
+                        .AndThen(() => _mapper.Map<Business>(command))
+                        .Execute(updatedBusiness => _context.UpdateEntity(command.Id, updatedBusiness));
             }
         }
     }

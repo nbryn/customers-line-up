@@ -6,16 +6,12 @@ import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../common/components/card/CardInfo';
 import {fetchBusinessesByOwner, selectBusinessesByOwner} from './businessSlice';
-import {HomeCard} from '../../common/components/card/HomeCard';
+import {InfoCard} from '../../common/components/card/InfoCard';
 import {isLoading, State, useAppDispatch, useAppSelector} from '../../app/Store';
 import PathUtil, {PathInfo} from '../../common/util/PathUtil';
 import {Header} from '../../common/components/Texts';
 
 const useStyles = makeStyles((theme) => ({
-    icon: {
-        marginBottom: 10,
-        marginLeft: -35,
-    },
     row: {
         justifyContent: 'center',
     },
@@ -26,8 +22,8 @@ export const BusinessOverview: React.FC = () => {
     const history = useHistory();
     const dispatch = useAppDispatch();
 
-    const loading = useAppSelector(isLoading(State.Businesses))
-    const businesses = useAppSelector(selectBusinessesByOwner)
+    const loading = useAppSelector(isLoading(State.Businesses));
+    const businesses = useAppSelector(selectBusinessesByOwner);
 
     const pathInfo: PathInfo = PathUtil.getPathAndTextFromURL(window.location.pathname);
 
@@ -49,7 +45,7 @@ export const BusinessOverview: React.FC = () => {
                         localStorage.setItem('business', JSON.stringify(business));
                         return (
                             <Col key={business.id} sm={6} md={8} lg={4}>
-                                <HomeCard
+                                <InfoCard
                                     title={business.name}
                                     buttonText={pathInfo.primaryButtonText}
                                     buttonAction={() =>
@@ -65,18 +61,12 @@ export const BusinessOverview: React.FC = () => {
                                     }
                                 >
                                     <CardInfo
-                                        icon1={{
-                                            text: `City: ${business.zip}`,
-                                            icon: 'City',
-                                            styles: styles.icon,
-                                        }}
-                                        icon2={{
-                                            text: `Address: ${business.address}`,
-                                            icon: 'Home',
-                                            styles: styles.icon,
-                                        }}
+                                        infoTexts={[
+                                            {text: `${business.zip}`, icon: 'City'},
+                                            {text: `${business.address}`, icon: 'Home'},
+                                        ]}
                                     />
-                                </HomeCard>
+                                </InfoCard>
                             </Col>
                         );
                     })}

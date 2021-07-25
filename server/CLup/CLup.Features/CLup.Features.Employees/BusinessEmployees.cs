@@ -9,17 +9,18 @@ using MediatR;
 
 using CLup.Data;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Employees
 {
     public class BusinessEmployees
     {
-        public class Query : IRequest<Result<IList<EmployeeDTO>>>
+        public class Query : IRequest<Result<List<EmployeeDTO>>>
         {
             public string BusinessId { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<IList<EmployeeDTO>>>
+        public class Handler : IRequestHandler<Query, Result<List<EmployeeDTO>>>
         {
             private readonly CLupContext _context;
             private readonly IMapper _mapper;
@@ -30,23 +31,17 @@ namespace CLup.Features.Employees
                 _mapper = mapper;
             }
 
-            public async Task<Result<IList<EmployeeDTO>>> Handle(Query query, CancellationToken cancellationToken)
+            public async Task<Result<List<EmployeeDTO>>> Handle(Query query, CancellationToken cancellationToken)
             {
-                var business = await _context.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId);
 
-                if (business == null)
-                {
-                    return Result.NotFound<IList<EmployeeDTO>>("Business was not found");
-                }
-
-                var employees = _context.Employees
+                return await _context.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
+                        .FailureIfDiscard("Business not found")
+                        .AndThen(() => _context.Employees
                                     .Include(e => e.Business)
                                     .Include(e => e.User)
-                                    .Where(e => e.BusinessId == query.BusinessId);
+                                    .Where(e => e.BusinessId == query.BusinessId))
 
-                var result = await _mapper.ProjectTo<EmployeeDTO>(employees).ToListAsync();
-
-                return Result.Ok<IList<EmployeeDTO>>(result);
+                        .AndThen(employees => _mapper.ProjectTo<EmployeeDTO>(employees).ToListAsync());
             }
         }
     }

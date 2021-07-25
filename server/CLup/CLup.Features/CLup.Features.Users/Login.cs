@@ -8,8 +8,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
-using CLup.Features.Auth;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Users
 {
@@ -31,35 +31,23 @@ namespace CLup.Features.Users
         }
         public class Handler : IRequestHandler<Command, Result<UserDTO>>
         {
-            private readonly IAuthService _authService;
             private readonly IUserService _userService;
             private readonly CLupContext _context;
             private readonly IMapper _mapper;
 
-            public Handler(IAuthService authService, IUserService userService, CLupContext context, IMapper mapper)
+            public Handler(IUserService userService, CLupContext context, IMapper mapper)
             {
-                _authService = authService;
                 _userService = userService;
                 _context = context;
                 _mapper = mapper;
             }
             public async Task<Result<UserDTO>> Handle(Command command, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == command.Email);
-
-                if (user == null || !BC.Verify(command.Password, user.Password))
-                {
-                    return Result.Unauthorized<UserDTO>();
-                }
-
-                var token = _authService.GenerateJWTToken(command.Email);
-
-                await _userService.DetermineRole(user);
-                
-                var response = _mapper.Map<UserDTO>(user);
-                response.Token = token;
-
-                return Result.Ok<UserDTO>(response);
+                return await _context.Users.FirstOrDefaultAsync(x => x.Email == command.Email)
+                    .FailureIf()
+                    .Ensure(user => BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
+                    .AndThenF(user => _userService.DetermineRole(user))
+                    .AndThen(user => _mapper.Map<UserDTO>(user));
             }
         }
     }

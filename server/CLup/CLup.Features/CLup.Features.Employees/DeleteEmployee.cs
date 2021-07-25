@@ -6,6 +6,7 @@ using MediatR;
 
 using CLup.Data;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Employees
 {
@@ -30,17 +31,11 @@ namespace CLup.Features.Employees
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserEmail == command.UserEmail &&
-                                                                            e.BusinessId == command.BusinessId);
-                if (employee == null)
-                {
-                    return Result.NotFound();
-                }
 
-                _context.Employees.Remove(employee);
-                await _context.SaveChangesAsync();
-
-                return Result.Ok();
+                return await _context.Employees.FirstOrDefaultAsync(e => e.UserEmail == command.UserEmail &&
+                                                                         e.BusinessId == command.BusinessId)
+                        .FailureIf("Employee not found.")
+                        .Execute(employee => _context.RemoveAndSave(employee));
             }
         }
     }

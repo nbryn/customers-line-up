@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Users
 {
+    
     public class UsersNotEmployedByBusiness
     {
         public class Query : IRequest<Result<Model>>
@@ -23,6 +25,7 @@ namespace CLup.Features.Users
             public string BusinessId { get; set; }
             public IList<UserDTO> Users { get; set; }
         }
+
         public class Handler : IRequestHandler<Query, Result<Model>>
         {
             private readonly CLupContext _context;

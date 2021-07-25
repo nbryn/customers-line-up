@@ -6,6 +6,7 @@ using MediatR;
 
 using CLup.Data;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.TimeSlots
 {
@@ -19,21 +20,15 @@ namespace CLup.Features.TimeSlots
         public class Handler : IRequestHandler<Command, Result>
         {
             private readonly CLupContext _context;
+            
             public Handler(CLupContext context) => _context = context;
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var timeSlot = await _context.TimeSlots.FirstOrDefaultAsync(t => t.Id == command.Id);
 
-                if (timeSlot == null)
-                {
-                    return Result.NotFound();
-                }
-
-                _context.TimeSlots.Remove(timeSlot);
-                await _context.SaveChangesAsync();
-
-                return Result.Ok();
+                return await _context.TimeSlots.FirstOrDefaultAsync(t => t.Id == command.Id)
+                        .FailureIf("Time slot not found")
+                        .Execute(timeSlot => _context.RemoveAndSave(timeSlot));
             }
         }
     }

@@ -1,7 +1,7 @@
 import axios, {AxiosRequestConfig} from 'axios';
 import Cookies from 'js-cookie';
 
-export const apiClient = axios.create({
+const apiClient = axios.create({
     baseURL: process.env.REACT_APP_API_URI,
     timeout: 1800000,
 });
@@ -58,3 +58,5 @@ apiClient.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+
+export default apiClient;

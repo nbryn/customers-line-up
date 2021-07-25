@@ -2,15 +2,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AutoMapper;
-using BC = BCrypt.Net.BCrypt;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Domain;
-using CLup.Features.Auth;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Users
 {
@@ -40,35 +39,22 @@ namespace CLup.Features.Users
         }
         public class Handler : IRequestHandler<Command, Result<UserDTO>>
         {
-            private readonly IAuthService _authService;
             private readonly CLupContext _context;
             private readonly IMapper _mapper;
 
-            public Handler(IAuthService authService, CLupContext context, IMapper mapper)
+            public Handler(CLupContext context, IMapper mapper)
             {
-                _authService = authService;
                 _context = context;
                 _mapper = mapper;
             }
             public async Task<Result<UserDTO>> Handle(Command command, CancellationToken cancellationToken)
             {
-                var userExists = await _context.Users.FirstOrDefaultAsync(x => x.Email == command.Email);
-
-                if (userExists != null)
-                {
-                    return Result.Conflict<UserDTO>($"An existing user with the email '{command.Email}' was found.");
-                }
-
-                string token = _authService.GenerateJWTToken(command.Email);
-                command.Password = BC.HashPassword(command.Password);
-
-                var newUser = _mapper.Map<User>(command);
-                _context.Users.Add(newUser);
-                await _context.SaveChangesAsync();
-
-                var response = _mapper.Map<UserDTO>(newUser);
-
-                return Result.Ok<UserDTO>(response);
+                return await _context.Users.FirstOrDefaultAsync(x => x.Email == command.Email)
+                        .ToResult()
+                        .EnsureDiscard(user => user == null, $"An existing user with the email '{command.Email}' was found.")
+                        .AndThen(() => _mapper.Map<User>(command))
+                        .AndThenF(newUser => _context.AddAndSave(newUser))
+                        .AndThen(newUser => _mapper.Map<UserDTO>(newUser));
             }
         }
     }

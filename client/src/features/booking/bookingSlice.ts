@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/useApi';
+import ApiCaller from '../../common/api/ApiCaller';
 import {BookingDTO} from './Booking';
 import {RootState, ThunkParam} from '../../app/Store';
 import {selectCurrentUser} from '../user/userSlice';

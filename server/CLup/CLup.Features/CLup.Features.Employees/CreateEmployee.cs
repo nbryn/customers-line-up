@@ -10,6 +10,7 @@ using MediatR;
 using CLup.Data;
 using CLup.Domain;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Employees
 {
@@ -39,30 +40,20 @@ namespace CLup.Features.Employees
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == command.PrivateEmail);
+                return await _context.Users.FirstOrDefaultAsync(u => u.Email == command.PrivateEmail)
+                        .FailureIfDiscard("User not found.")
+                        .FailureIfDiscard(() => _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId), "Business not found.")
+                        .AndThen(() => new Employee
+                        {
+                            Id = Guid.NewGuid().ToString(),
+                            BusinessId = command.BusinessId,
+                            UserEmail = command.PrivateEmail,
+                            CompanyEmail = command.CompanyEmail,
+                            CreatedAt = DateTime.Now,
+                            UpdatedAt = DateTime.Now,
 
-                var business = await _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId);
-
-                if (user == null || business == null)
-                {
-                    return Result.NotFound();
-                }
-
-                var employee = new Employee
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    BusinessId = command.BusinessId,
-                    UserEmail = command.PrivateEmail,
-                    CompanyEmail = command.CompanyEmail,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now,
-
-                };
-
-                _context.Employees.Add(employee);
-                await _context.SaveChangesAsync();
-
-                return Result.Ok();
+                        })
+                        .Execute(employee => _context.AddAndSave(employee));
             }
         }
     }

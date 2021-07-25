@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/useApi';
+import ApiCaller from '../../common/api/ApiCaller';
 import {RootState} from '../../app/Store';
 import {LoginDTO, NotEmployedByBusiness, UserDTO} from './User';
 
@@ -34,6 +34,12 @@ export const register = createAsyncThunk('user/register', async (data: UserDTO) 
     return user;
 });
 
+export const fetchUserInfo = createAsyncThunk('user/userInfo', async () => {
+    const user = await ApiCaller.get<UserDTO>(`${DEFAULT_USER_ROUTE}`);
+
+    return user;
+});
+
 export const fetchUsersNotEmployedByBusiness = createAsyncThunk(
     'user/notEmployedByBusiness',
     async (businessId: string) => {
@@ -48,7 +54,11 @@ export const fetchUsersNotEmployedByBusiness = createAsyncThunk(
 export const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        clearCurrentUser: (state) => {
+            state.currentUser = null;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchUsersNotEmployedByBusiness.fulfilled, (state, action) => {
             state.notEmployedByBusiness[action.payload.businessId] = action.payload.users;
@@ -57,6 +67,10 @@ export const userSlice = createSlice({
         builder.addCase(login.rejected, (state) => {
             state.isLoading = false;
             state.apiMessage = LOGIN_FAILED_MSG;
+        });
+
+        builder.addCase(fetchUserInfo.fulfilled, (state, action) => {
+            state.currentUser = action.payload;
         });
 
         builder.addMatcher(isAnyOf(login.fulfilled, register.fulfilled), (state, action) => {
@@ -81,6 +95,8 @@ export const userSlice = createSlice({
         );
     },
 });
+
+export const {clearCurrentUser} = userSlice.actions;
 
 export const selectUsersNotEmployedByBusiness = (state: RootState, businessId: string) =>
     state.users.notEmployedByBusiness[businessId] ?? null;

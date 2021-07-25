@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, isAnyOf, PayloadAction} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/useApi';
+import ApiCaller from '../../common/api/ApiCaller';
 import {NormalizedEntityState, RootState, ThunkParam} from '../../app/Store';
 import {EmployeeDTO} from './Employee';
 

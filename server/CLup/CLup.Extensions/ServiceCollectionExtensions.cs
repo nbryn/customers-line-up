@@ -32,6 +32,7 @@ namespace CLup.Extensions
         {
             services.AddSwaggerGen(c =>
             {
+                c.CustomSchemaIds(type => type.ToString());
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Customers Lineup Api", Version = "v1" });
 
                 c.EnableAnnotations();
