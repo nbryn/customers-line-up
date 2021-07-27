@@ -55,7 +55,7 @@ namespace CLup.Features.Bookings
                             CreatedAt = DateTime.Now,
                             UpdatedAt = DateTime.Now,
                         })
-                        .Execute(booking => _context.AddAndSave(booking));
+                        .Finally(booking => _context.AddAndSave(booking));
             }
         }
 

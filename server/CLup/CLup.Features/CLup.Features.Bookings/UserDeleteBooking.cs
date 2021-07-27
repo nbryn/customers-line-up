@@ -27,7 +27,7 @@ namespace CLup.Features.Bookings
             {
                 return await _context.Bookings.FirstOrDefaultAsync(x => x.Id == command.BookingId)
                          .FailureIf("Booking not found.")
-                         .Execute(booking => _context.RemoveAndSave(booking));
+                         .Finally(booking => _context.RemoveAndSave(booking));
             }
         }
     }

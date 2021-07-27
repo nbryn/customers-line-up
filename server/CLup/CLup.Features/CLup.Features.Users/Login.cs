@@ -47,7 +47,7 @@ namespace CLup.Features.Users
                     .FailureIf()
                     .Ensure(user => BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
                     .AndThenF(user => _userService.DetermineRole(user))
-                    .AndThen(user => _mapper.Map<UserDTO>(user));
+                    .Finally(user => _mapper.Map<UserDTO>(user));
             }
         }
     }

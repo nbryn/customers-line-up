@@ -54,7 +54,7 @@ namespace CLup.Features.Users
                         .EnsureDiscard(user => user == null, $"An existing user with the email '{command.Email}' was found.")
                         .AndThen(() => _mapper.Map<User>(command))
                         .AndThenF(newUser => _context.AddAndSave(newUser))
-                        .AndThen(newUser => _mapper.Map<UserDTO>(newUser));
+                        .Finally(newUser => _mapper.Map<UserDTO>(newUser));
             }
         }
     }

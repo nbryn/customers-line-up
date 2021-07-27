@@ -59,9 +59,9 @@ namespace CLup.Features.Businesses
             {
                 return await _context.BusinessOwners.FirstOrDefaultAsync(o => o.UserEmail == command.OwnerEmail)
                         .ToResult()
-                        .Execute(owner => _context.CreateEntityIfNotExists(owner, new BusinessOwner { UserEmail = command.OwnerEmail }))
+                        .AndThen(owner => _context.CreateEntityIfNotExists(owner, new BusinessOwner { UserEmail = command.OwnerEmail }))
                         .AndThen(() => _mapper.Map<Business>(command))
-                        .Execute(business => _context.AddAndSave(business));
+                        .Finally(business => _context.AddAndSave(business));
             }
         }
     }

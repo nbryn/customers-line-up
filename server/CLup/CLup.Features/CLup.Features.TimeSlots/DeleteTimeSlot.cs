@@ -28,7 +28,7 @@ namespace CLup.Features.TimeSlots
 
                 return await _context.TimeSlots.FirstOrDefaultAsync(t => t.Id == command.Id)
                         .FailureIf("Time slot not found")
-                        .Execute(timeSlot => _context.RemoveAndSave(timeSlot));
+                        .Finally(timeSlot => _context.RemoveAndSave(timeSlot));
             }
         }
     }

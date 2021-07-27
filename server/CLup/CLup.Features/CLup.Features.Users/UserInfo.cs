@@ -37,7 +37,7 @@ namespace CLup.Features.Users
                 return await _context.Users.FirstOrDefaultAsync(u => u.Email == query.Email)
                         .FailureIf("User does not exist.")
                         .AndThenF(user => _userService.DetermineRole(user))
-                        .AndThen(user => _mapper.Map<UserDTO>(user));
+                        .Finally(user => _mapper.Map<UserDTO>(user));
             }
         }
     }

@@ -15,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
     row: {
         justifyContent: 'center',
     },
+    spinner: {
+        justifyContent: 'center',
+        marginTop: 100,
+    },
 }));
 
 export const BusinessOverview: React.FC = () => {
@@ -38,40 +42,45 @@ export const BusinessOverview: React.FC = () => {
             <Row className={styles.row}>
                 <Header text="Choose Business" />
             </Row>
-            <Row className={styles.row}>
-                {loading && <CircularProgress />}
-                <>
-                    {businesses.map((business) => {
-                        localStorage.setItem('business', JSON.stringify(business));
-                        return (
-                            <Col key={business.id} sm={6} md={8} lg={4}>
-                                <InfoCard
-                                    title={business.name}
-                                    buttonText={pathInfo.primaryButtonText}
-                                    buttonAction={() =>
-                                        history.push(`/business/${pathInfo.primaryPath}`, {
-                                            business: business,
-                                        })
-                                    }
-                                    secondaryButtonText={pathInfo.secondaryButtonText}
-                                    secondaryAction={() =>
-                                        history.push(`/business/${pathInfo.secondaryPath}`, {
-                                            business: business,
-                                        })
-                                    }
-                                >
-                                    <CardInfo
-                                        infoTexts={[
-                                            {text: `${business.zip}`, icon: 'City'},
-                                            {text: `${business.address}`, icon: 'Home'},
-                                        ]}
-                                    />
-                                </InfoCard>
-                            </Col>
-                        );
-                    })}
-                </>
-            </Row>
+            {loading ? (
+                <Row className={styles.spinner}>
+                    <CircularProgress />
+                </Row>
+            ) : (
+                <Row className={styles.row}>
+                    <>
+                        {businesses.map((business) => {
+                            localStorage.setItem('business', JSON.stringify(business));
+                            return (
+                                <Col key={business.id} sm={6} md={8} lg={4}>
+                                    <InfoCard
+                                        title={business.name}
+                                        buttonText={pathInfo.primaryButtonText}
+                                        buttonAction={() =>
+                                            history.push(`/business/${pathInfo.primaryPath}`, {
+                                                business: business,
+                                            })
+                                        }
+                                        secondaryButtonText={pathInfo.secondaryButtonText}
+                                        secondaryAction={() =>
+                                            history.push(`/business/${pathInfo.secondaryPath}`, {
+                                                business: business,
+                                            })
+                                        }
+                                    >
+                                        <CardInfo
+                                            infoTexts={[
+                                                {text: `${business.zip}`, icon: 'City'},
+                                                {text: `${business.address}`, icon: 'Home'},
+                                            ]}
+                                        />
+                                    </InfoCard>
+                                </Col>
+                            );
+                        })}
+                    </>
+                </Row>
+            )}
         </>
     );
 };

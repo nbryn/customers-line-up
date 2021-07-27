@@ -61,7 +61,7 @@ namespace CLup.Features.Businesses
                 return await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.Id)
                         .FailureIfDiscard("Business not found.")
                         .AndThen(() => _mapper.Map<Business>(command))
-                        .Execute(updatedBusiness => _context.UpdateEntity(command.Id, updatedBusiness));
+                        .Finally(updatedBusiness => _context.UpdateEntity(command.Id, updatedBusiness));
             }
         }
     }

@@ -37,11 +37,19 @@ namespace CLup.Features.Extensions
 
         public static async Task<Result<T>> AndThen<T>(this Task<Result> task, Func<T> f)
             => (await task).Bind(task, f);
-
+            
         public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, U> f)
             => (await task).Bind(task, f);
 
         public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
+            => await (await task).Bind(f);
+
+        public static async Task<Result<U>> Finally<T, U>(this Task<Result<T>> task, Func<T, U> f)
+            => (await task).Bind(task, f);
+
+
+
+        public static async Task<Result<U>> Finally<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
             => await (await task).Bind(f);
 
         public static async Task<Result<T>> AndThenF<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
@@ -49,11 +57,16 @@ namespace CLup.Features.Extensions
 
         public static async Task<Result<T>> AndThenF<T>(this Task<Result<T>> task, Action<T> f)
             => (await task).BindF(f);
-      
-        public static async Task<Result> Execute<T>(this Task<Result<T>> task, Action<T> f)
+
+        public static async Task<Result<T>> AndThenF<T>(this Task<Result<T>> task, Func<T, Task> f)
+            => await (await task).BindF(f);
+
+        public static async Task<Result> AndThen<T>(this Task<Result<T>> task, Action<T> f)
+            => (await task).BindIgnore(f);
+        public static async Task<Result> Finally<T>(this Task<Result<T>> task, Action<T> f)
             => (await task).BindIgnore(f);
 
-        public static async Task<Result> Execute<T>(this Task<Result<T>> task, Func<T, Task> f)
+        public static async Task<Result> Finally<T>(this Task<Result<T>> task, Func<T, Task> f)
             => await (await task).BindIgnore(f);
 
         public static async Task<Result<T>> Ensure<T>(this Task<Result<T>> task, Func<T, bool> predicate, string errorMessage = "")

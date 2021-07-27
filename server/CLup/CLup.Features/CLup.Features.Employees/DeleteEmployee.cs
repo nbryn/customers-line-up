@@ -35,7 +35,7 @@ namespace CLup.Features.Employees
                 return await _context.Employees.FirstOrDefaultAsync(e => e.UserEmail == command.UserEmail &&
                                                                          e.BusinessId == command.BusinessId)
                         .FailureIf("Employee not found.")
-                        .Execute(employee => _context.RemoveAndSave(employee));
+                        .Finally(employee => _context.RemoveAndSave(employee));
             }
         }
     }

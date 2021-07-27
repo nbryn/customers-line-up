@@ -53,7 +53,7 @@ namespace CLup.Features.TimeSlots
                                             .Include(x => x.Business)
                                             .Where(x => x.BusinessId == query.BusinessId))
                                             
-                        .AndThen(timeSlots => _mapper.ProjectTo<TimeSlotDTO>(timeSlots).ToListAsync());
+                        .Finally(timeSlots => _mapper.ProjectTo<TimeSlotDTO>(timeSlots).ToListAsync());
             }
         }
     }

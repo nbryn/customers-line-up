@@ -53,7 +53,7 @@ namespace CLup.Features.Employees
                             UpdatedAt = DateTime.Now,
 
                         })
-                        .Execute(employee => _context.AddAndSave(employee));
+                        .Finally(employee => _context.AddAndSave(employee));
             }
         }
     }

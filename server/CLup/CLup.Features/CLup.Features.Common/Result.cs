@@ -117,6 +117,18 @@ namespace CLup.Features.Common
             return Ok<T>(Value);
         }
 
+        public async Task<Result<T>> BindF(Func<T, Task> f)
+        {
+            if (Failure)
+            {
+                return Fail<T>(Code, Error);
+            }
+
+            await f(Value);
+
+            return Ok<T>(Value);
+        }
+
         public async Task<Result> BindIgnore(Func<T, Task> f)
         {
             if (Success)

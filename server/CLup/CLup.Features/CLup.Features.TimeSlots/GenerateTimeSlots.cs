@@ -50,7 +50,7 @@ namespace CLup.Features.TimeSlots
                         .ToResult()
                         .EnsureDiscard(timeSlot => timeSlot == null, "Time slots already generated for this date")
                         .FailureIf(() => _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId), "Business not found.")
-                        .Execute(business => Generate(business, command));
+                        .Finally(business => Generate(business, command));
             }
             
             private async Task Generate(Business business, Command command)

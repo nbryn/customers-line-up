@@ -7,8 +7,8 @@ import {useLocation} from 'react-router-dom';
 import {BusinessDTO} from '../business/Business';
 import {
     deleteTimeSlot,
-    fetchAvailableTimeSlotsByBusiness,
-    selectAvailableTimeSlotsByBusiness,
+    fetchTimeSlotsByBusiness,
+    selectTimeSlotsByBusiness,
 } from '../timeslot/timeSlotSlice';
 import {State, isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {ErrorView} from '../../common/views/ErrorView';
@@ -39,7 +39,7 @@ export const TimeSlotView: React.FC = () => {
     }
 
     const {business} = location.state;
-    const timeSlots = useAppSelector(selectAvailableTimeSlotsByBusiness(business.id));
+    const timeSlots = useAppSelector(selectTimeSlotsByBusiness(business.id));
 
     const columns: TableColumn[] = [
         {title: 'timeSlotId', field: 'timeSlotId', hidden: true},
@@ -69,7 +69,7 @@ export const TimeSlotView: React.FC = () => {
                         columns={columns}
                         loading={loading}
                         tableData={timeSlots}
-                        fetchData={() => dispatch(fetchAvailableTimeSlotsByBusiness(business.id))}
+                        fetchData={() => dispatch(fetchTimeSlotsByBusiness(business.id))}
                         tableTitle="Time Slots"
                         emptyMessage="No Time Slots Yet"
                     />

@@ -44,7 +44,7 @@ namespace CLup.Features.Bookings
                         .ToResult()
                         .EnsureDiscard(business => business.OwnerEmail == command.OwnerEmail, (HttpCode.Forbidden, "You don't have access to this business"))
                         .FailureIf(() => _context.Bookings.FirstOrDefaultAsync(x => x.Id == command.BookingId), "Booking not found")
-                        .Execute(booking => _context.RemoveAndSave(booking));
+                        .Finally(booking => _context.RemoveAndSave(booking));
             }
         }
 

@@ -14,7 +14,7 @@ import {
     useAppSelector,
 } from '../../app/Store';
 import {ErrorView} from '../../common/views/ErrorView';
-import {fetchTimeSlotsByBusiness, selectTimeSlotsByBusiness} from '../timeslot/timeSlotSlice';
+import {fetchAvailableTimeSlotsByBusiness, selectTimeSlotsByBusiness} from '../timeslot/timeSlotSlice';
 import {Header} from '../../common/components/Texts';
 import {MapModal} from '../../common/components/modal/MapModal';
 import {Modal} from '../../common/components/modal/Modal';
@@ -90,7 +90,7 @@ export const CreateBookingView: React.FC = () => {
                         columns={columns}
                         loading={loading}
                         tableData={timeSlots}
-                        fetchData={() => dispatch(fetchTimeSlotsByBusiness(business.id))}
+                        fetchData={() => dispatch(fetchAvailableTimeSlotsByBusiness(business.id))}
                         tableTitle={
                             <>
                                 <h5 className={styles.address}>{business.address}</h5>

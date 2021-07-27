@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -28,18 +29,17 @@ namespace CLup.Features.TimeSlots
                 _mapper = mapper;
                 _context = context;
             }
-
             public async Task<Result<List<TimeSlotDTO>>> Handle(Query query, CancellationToken cancellationToken)
             {
-
                 return await _context.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
                         .FailureIfDiscard("Business not found.")
                         .AndThen(() => _context.TimeSlots
                                             .Include(x => x.Bookings)
                                             .Include(x => x.Business)
-                                            .Where(x => x.BusinessId == query.BusinessId))
+                                            .Where(x => x.BusinessId == query.BusinessId)
+                                            .OrderBy(x => x.Start))
 
-                        .AndThen(timeSlots => _mapper.ProjectTo<TimeSlotDTO>(timeSlots).ToListAsync());
+                        .Finally(timeSlots => _mapper.ProjectTo<TimeSlotDTO>(timeSlots).ToListAsync());
             }
         }
     }
