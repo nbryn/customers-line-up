@@ -20,6 +20,10 @@ import {useForm} from '../../common/hooks/useForm';
     col: {
         marginTop: 25,
     },
+    headline: {
+        marginTop: 75,
+        justifyContent: 'center',
+    },
     row: {
         justifyContent: 'center',
     },
@@ -89,7 +93,7 @@ export const BusinessProfileView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.row}>
+            <Row className={styles.headline}>
                 <Header text={`Manage ${business.name}`} />
             </Row>
             <Row className={styles.row}>

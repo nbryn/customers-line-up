@@ -15,6 +15,10 @@ import {TableContainer} from '../../common/containers/TableContainer';
 import {State, isLoading, RootState, useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
+    headline: {
+        marginTop: 75,
+        justifyContent: 'center',
+    },
     row: {
         justifyContent: 'center',
     },
@@ -64,7 +68,7 @@ export const EmployeeView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.row}>
+            <Row className={styles.headline}>
                 <Header text={business.name} />
             </Row>
             <Row className={styles.row}>

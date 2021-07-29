@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import React, {useContext, useEffect} from 'react';
 
 import {clearCurrentUser, fetchUserInfo} from './userSlice';
-import { useAppDispatch } from '../../app/Store';
+import {useAppDispatch} from '../../app/Store';
 
 export type ContextValue = {
     logout: () => void;
@@ -24,7 +24,6 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
 
         dispatch(clearCurrentUser());
     };
-
 
     useEffect(() => {
         if (Cookies.get('access_token')) dispatch(fetchUserInfo());

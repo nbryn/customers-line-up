@@ -12,9 +12,10 @@ import {
 } from '../timeslot/timeSlotSlice';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
 import DateUtil from '../../common/util/DateUtil';
-import {State, selectApiMessage, useAppDispatch, useAppSelector} from '../../app/Store';
 import {ErrorView} from '../../common/views/ErrorView';
+import {Header} from '../../common/components/Texts';
 import {Modal} from '../../common/components/modal/Modal';
+import {State, selectApiMessage, useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -22,13 +23,13 @@ const useStyles = makeStyles((theme) => ({
         width: '55%',
     },
     card: {
-        marginTop: 60,
         borderRadius: 15,
         height: 400,
         textAlign: 'center',
     },
-    col: {
-        marginTop: 25,
+    headline: {
+        marginTop: 75,
+        justifyContent: 'center',
     },
     row: {
         justifyContent: 'center',
@@ -61,56 +62,61 @@ export const GenerateTimeSlotsView: React.FC = () => {
     }, [selectedDate]);
 
     return (
-        <Row className={styles.row}>
-            <Col lg={6}>
-                <Modal
-                    show={apiMessage ? true : false}
-                    title={
-                        apiMessage !== TIMESLOTS_GENERATED_MSG
-                            ? apiMessage
-                            : selectedDate &&
-                              `Time slots added on ${selectedDate.label.substring(
-                                  selectedDate.label.indexOf(',') + 1
-                              )}`
-                    }
-                    text={apiMessage}
-                    primaryAction={() => {
-                        dispatch(clearApiMessage());
-                        history.push('/business/timeslots/manage', {business});
-                    }}
-                    primaryActionText="See time slots"
-                    secondaryAction={() => dispatch(clearApiMessage())}
-                />
-                <Card
-                    className={styles.card}
-                    title="Generate Time Slots"
-                    subtitle="This will generate time slots in opening hours on the selected date"
-                    variant="outlined"
-                    buttonText="Generate"
-                    buttonColor="primary"
-                    buttonStyle={styles.button}
-                    buttonSize="large"
-                    disableButton={!selectedDate || !dateOptions.length}
-                    buttonAction={() =>
-                        dispatch(
-                            generateTimeSlots({
-                                businessId: business.id,
-                                start: selectedDate!.value!,
-                            })
-                        )
-                    }
-                >
-                    <ComboBox
-                        style={{marginTop: 10, marginLeft: 110, width: '60%'}}
-                        label="Pick a date"
-                        defaultLabel="Time slots already generated"
-                        id="email"
-                        type="text"
-                        options={dateOptions}
-                        setFieldValue={(option: ComboBoxOption) => setSelectedDate(option)}
+        <>
+            <Row className={styles.headline}>
+                <Header text={business.name} />
+            </Row>
+            <Row className={styles.row}>
+                <Col lg={6}>
+                    <Modal
+                        show={apiMessage ? true : false}
+                        title={
+                            apiMessage !== TIMESLOTS_GENERATED_MSG
+                                ? apiMessage
+                                : selectedDate &&
+                                  `Time slots added on ${selectedDate.label.substring(
+                                      selectedDate.label.indexOf(',') + 1
+                                  )}`
+                        }
+                        text={apiMessage}
+                        primaryAction={() => {
+                            dispatch(clearApiMessage());
+                            history.push('/business/timeslots/manage', {business});
+                        }}
+                        primaryActionText="See time slots"
+                        secondaryAction={() => dispatch(clearApiMessage())}
                     />
-                </Card>
-            </Col>
-        </Row>
+                    <Card
+                        className={styles.card}
+                        title="Generate Time Slots"
+                        subtitle="This will generate time slots in opening hours on the selected date"
+                        variant="outlined"
+                        buttonText="Generate"
+                        buttonColor="primary"
+                        buttonStyle={styles.button}
+                        buttonSize="large"
+                        disableButton={!selectedDate || !dateOptions.length}
+                        buttonAction={() =>
+                            dispatch(
+                                generateTimeSlots({
+                                    businessId: business.id,
+                                    start: selectedDate!.value!,
+                                })
+                            )
+                        }
+                    >
+                        <ComboBox
+                            style={{marginTop: 10, marginLeft: 110, width: '60%'}}
+                            label="Pick a date"
+                            defaultLabel="Time slots already generated"
+                            id="email"
+                            type="text"
+                            options={dateOptions}
+                            setFieldValue={(option: ComboBoxOption) => setSelectedDate(option)}
+                        />
+                    </Card>
+                </Col>
+            </Row>
+        </>
     );
 };

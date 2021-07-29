@@ -12,6 +12,10 @@ import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 
 const useStyles = makeStyles((theme) => ({
+    headline: {
+        marginTop: 75,
+        justifyContent: 'center',
+    },
     row: {
         justifyContent: 'center',
     },
@@ -58,7 +62,7 @@ export const UserBookingView: React.FC = () => {
 
     return (
         <Container>
-            <Row className={styles.row}>
+            <Row className={styles.headline}>
                 <Header text="Your Bookings" />
             </Row>
             <MapModal

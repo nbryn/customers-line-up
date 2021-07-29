@@ -18,6 +18,10 @@ import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 
 const useStyles = makeStyles((theme) => ({
+    headline: {
+        marginTop: 75,
+        justifyContent: 'center',
+    },
     row: {
         justifyContent: 'center',
     },
@@ -59,7 +63,7 @@ export const TimeSlotView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.row}>
+            <Row className={styles.headline}>
                 <Header text={business.name} />
             </Row>
             <Row className={styles.row}>

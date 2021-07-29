@@ -12,6 +12,10 @@ import PathUtil, {PathInfo} from '../../common/util/PathUtil';
 import {Header} from '../../common/components/Texts';
 
 const useStyles = makeStyles((theme) => ({
+    headline: {
+        marginTop: 75,
+        justifyContent: 'center',
+    },
     row: {
         justifyContent: 'center',
     },
@@ -39,7 +43,7 @@ export const BusinessOverview: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.row}>
+            <Row className={styles.headline}>
                 <Header text="Choose Business" />
             </Row>
             {loading ? (

@@ -3,6 +3,7 @@ import {Container} from 'react-bootstrap';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {makeStyles} from '@material-ui/core/styles';
 
+import {Header} from '../common/components/navigation/Header';
 import {LoginView} from '../features/user/LoginView';
 import {MainMenu} from '../common/components/navigation/MainMenu';
 import {Routes} from './Routes';
@@ -22,6 +23,10 @@ export const MainView: React.FC = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const user = useAppSelector(selectCurrentUser);
 
+    const handleMenuToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
+
     const handleMenuClose = () => {
         setMobileOpen(false);
     };
@@ -33,6 +38,7 @@ export const MainView: React.FC = () => {
                 <LoginView />
             ) : (
                 <>
+                    <Header onMenuToggle={handleMenuToggle} />
                     <MainMenu mobileOpen={mobileOpen} onClose={handleMenuClose} />
                     <Container className={styles.root}>
                         <Routes />

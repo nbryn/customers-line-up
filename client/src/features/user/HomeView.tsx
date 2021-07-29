@@ -5,24 +5,24 @@ import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../common/components/card/CardInfo';
 import {fetchUserInsights, selectUserInsights} from '../insights/insightsSlice';
+import {Header} from '../../common/components/Texts';
 import {InfoCard} from '../../common/components/card/InfoCard';
 import {selectCurrentUser} from './userSlice';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
-    card: {       
-        marginTop: 35,
+    card: {
+        marginTop: 25,
     },
     cards: {
         justifyContent: 'center',
     },
     headline: {
-        marginTop: 10,
+        marginTop: 75,
         textAlign: 'center',
     },
 }));
 
-// Also look taking TextField out of TextField modal and use children instead
 export const HomeView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
@@ -32,7 +32,7 @@ export const HomeView: React.FC = () => {
     const userInsights = useAppSelector(selectUserInsights);
 
     useEffect(() => {
-        (async () => {
+        (() => {
             dispatch(fetchUserInsights());
         })();
     }, []);
@@ -41,9 +41,7 @@ export const HomeView: React.FC = () => {
         <Container>
             <Row>
                 <Col className={styles.headline}>
-                    <h1>
-                        <Badge variant="primary">Welcome {user?.name}</Badge>
-                    </h1>
+                    <Header text={`Welcome ${user?.name}`} />
                 </Col>
             </Row>
             <Row className={styles.cards}>
@@ -82,7 +80,10 @@ export const HomeView: React.FC = () => {
                             infoTexts={[
                                 {text: `Businesses: ${userInsights?.businesses}`, icon: 'Home'},
                                 {text: `Employees: ${userInsights?.employees}`, icon: 'Hot'},
-                                {text: `Bookings: ${userInsights?.businessBookings}`, icon: 'Grain'},
+                                {
+                                    text: `Bookings: ${userInsights?.businessBookings}`,
+                                    icon: 'Grain',
+                                },
                             ]}
                         />
                     </InfoCard>

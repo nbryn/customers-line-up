@@ -33,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
     formGroup: {
         marginBottom: 30,
     },
+    headline: {
+        marginTop: 75,
+        justifyContent: 'center',
+    },
     helperText: {
         color: 'red',
     },
@@ -87,7 +91,7 @@ export const CreateEmployeeView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.wrapper}>
+            <Row className={styles.headline}>
                 <Header text={business.name} />
             </Row>
             <Row className={styles.wrapper}>
