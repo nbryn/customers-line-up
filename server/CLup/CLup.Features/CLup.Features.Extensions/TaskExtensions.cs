@@ -41,13 +41,14 @@ namespace CLup.Features.Extensions
         public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, U> f)
             => (await task).Bind(task, f);
 
+        public static async Task<Result<T, U>> AndThenDouble<T, U>(this Task<Result<T>> task, Func<Task<U>> f)
+            => await (await task).BindDouble(f);
+
         public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
             => await (await task).Bind(f);
 
         public static async Task<Result<U>> Finally<T, U>(this Task<Result<T>> task, Func<T, U> f)
             => (await task).Bind(task, f);
-
-
 
         public static async Task<Result<U>> Finally<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
             => await (await task).Bind(f);
@@ -70,6 +71,9 @@ namespace CLup.Features.Extensions
             => await (await task).BindIgnore(f);
 
         public static async Task<Result<T>> Ensure<T>(this Task<Result<T>> task, Func<T, bool> predicate, string errorMessage = "")
+            => await (await task).Ensure(task, predicate, errorMessage);
+
+        public static async Task<Result<T>> Ensure<T, U>(this Task<Result<T, U>> task, Func<U, bool> predicate, string errorMessage = "")
             => await (await task).Ensure(task, predicate, errorMessage);
 
         public static async Task<Result<T>> Ensure<T>(this Task<Result<T>> task, Func<T, bool> predicate, (HttpCode code, string message) errorInfo)

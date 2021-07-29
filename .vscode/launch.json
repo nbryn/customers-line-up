@@ -10,7 +10,7 @@
       "request": "launch",
       "preLaunchTask": "build",
       // If you have changed target frameworks, make sure to update the program path.
-      "program": "${workspaceFolder}/server/bin/Debug/netcoreapp5.0/CLup.dll",
+      "program": "${workspaceFolder}/server/CLup/bin/Debug/netcoreapp5.0/CLup.dll",
       "args": [],
       "cwd": "${workspaceFolder}/server",
       "stopAtEntry": false,

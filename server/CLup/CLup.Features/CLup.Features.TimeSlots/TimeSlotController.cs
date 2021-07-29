@@ -21,7 +21,7 @@ namespace CLup.Features.TimeSlots
         public TimeSlotController(IMediator mediator) =>  _mediator = mediator;
 
         [HttpPost]
-        [Route("")]
+        [Route("generate")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]

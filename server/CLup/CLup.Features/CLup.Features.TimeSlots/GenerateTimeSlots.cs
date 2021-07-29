@@ -19,7 +19,6 @@ namespace CLup.Features.TimeSlots
         public class Command : IRequest<Result>
         {
             public string BusinessId { get; set; }
-
             public DateTime Start { get; set; }
         }
 
@@ -45,11 +44,10 @@ namespace CLup.Features.TimeSlots
 
             public async Task<Result> Handle(Command command, CancellationToken cancellationToken)
             {
-
-                return await _context.TimeSlots.FirstOrDefaultAsync(x => x.BusinessId == command.BusinessId && x.Start.Date == command.Start.Date)
-                        .ToResult()
-                        .EnsureDiscard(timeSlot => timeSlot == null, "Time slots already generated for this date")
-                        .FailureIf(() => _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId), "Business not found.")
+                return await _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId)
+                        .FailureIf("Business not found.")
+                        .AndThenDouble(() => _context.TimeSlots.FirstOrDefaultAsync(x => x.BusinessId == command.BusinessId && x.Start.Date == command.Start.Date))
+                        .Ensure(timeSlot => timeSlot == null, "Time slots already generated for this date.")
                         .Finally(business => Generate(business, command));
             }
             

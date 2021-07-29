@@ -51,7 +51,8 @@ namespace CLup.Features.TimeSlots
                         .AndThen(() => _context.TimeSlots
                                             .Include(x => x.Bookings)
                                             .Include(x => x.Business)
-                                            .Where(x => x.BusinessId == query.BusinessId))
+                                            .Where(x => x.BusinessId == query.BusinessId)
+                                            .OrderBy(x => x.Start))
                                             
                         .Finally(timeSlots => _mapper.ProjectTo<TimeSlotDTO>(timeSlots).ToListAsync());
             }

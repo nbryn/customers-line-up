@@ -74,7 +74,10 @@ export const GenerateTimeSlotsView: React.FC = () => {
                               )}`
                     }
                     text={apiMessage}
-                    primaryAction={() => history.push('/business/timeslots/manage', {business})}
+                    primaryAction={() => {
+                        dispatch(clearApiMessage());
+                        history.push('/business/timeslots/manage', {business});
+                    }}
                     primaryActionText="See time slots"
                     secondaryAction={() => dispatch(clearApiMessage())}
                 />
@@ -87,7 +90,7 @@ export const GenerateTimeSlotsView: React.FC = () => {
                     buttonColor="primary"
                     buttonStyle={styles.button}
                     buttonSize="large"
-                    disableButton={!selectedDate || !dateOptions.length ? true : false}
+                    disableButton={!selectedDate || !dateOptions.length}
                     buttonAction={() =>
                         dispatch(
                             generateTimeSlots({

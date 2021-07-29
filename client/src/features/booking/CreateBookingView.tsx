@@ -6,15 +6,12 @@ import {useLocation, useHistory} from 'react-router-dom';
 
 import {BusinessDTO} from '../business/Business';
 import {clearApiMessage, createBooking} from './bookingSlice';
-import {
-    State,
-    isLoading,
-    selectApiMessage,
-    useAppDispatch,
-    useAppSelector,
-} from '../../app/Store';
+import {State, isLoading, selectApiMessage, useAppDispatch, useAppSelector} from '../../app/Store';
 import {ErrorView} from '../../common/views/ErrorView';
-import {fetchAvailableTimeSlotsByBusiness, selectTimeSlotsByBusiness} from '../timeslot/timeSlotSlice';
+import {
+    fetchAvailableTimeSlotsByBusiness,
+    selectTimeSlotsByBusiness,
+} from '../timeslot/timeSlotSlice';
 import {Header} from '../../common/components/Texts';
 import {MapModal} from '../../common/components/modal/MapModal';
 import {Modal} from '../../common/components/modal/Modal';
@@ -112,7 +109,10 @@ export const CreateBookingView: React.FC = () => {
                         title="Booking Info"
                         text={apiMessage}
                         secondaryAction={() => dispatch(clearApiMessage())}
-                        primaryAction={() => history.push('/user/bookings')}
+                        primaryAction={() => {
+                            dispatch(clearApiMessage());
+                            history.push('/user/bookings');
+                        }}
                         primaryActionText="My Bookings"
                     />
                 </Col>

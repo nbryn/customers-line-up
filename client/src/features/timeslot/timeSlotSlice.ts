@@ -62,7 +62,7 @@ export const fetchTimeSlotsByBusiness = createAsyncThunk(
 export const generateTimeSlots = createAsyncThunk(
     'timeSlot/generate',
     async (data: {businessId: string; start: string}) => {
-        await ApiCaller.post(DEFAULT_TIMESLOT_ROUTE, data);
+        await ApiCaller.post(`${DEFAULT_TIMESLOT_ROUTE}/generate`, data);
     }
 );
 

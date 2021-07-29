@@ -53,9 +53,13 @@ namespace CLup.Features.Common
 
         public static Result<T> Ok<T>(T value) => new Result<T>(value, true, String.Empty, HttpCode.Ok);
 
+        public static Result<T, U> Ok<T, U>(T value, U extraValue) => new Result<T, U>(value, extraValue, true, String.Empty, HttpCode.Ok);
+
         public static Result Fail(HttpCode code, string message) => new Result(false, message, code);
 
         public static Result<T> Fail<T>(HttpCode code, string message) => new Result<T>(default(T), false, message, code);
+
+        public static Result<T, U> Fail<T, U>(HttpCode code, string message) => new Result<T, U>(default(T), default(U), false, message, code);
 
         public static Result NotFound(string message = "") => new Result(false, message, HttpCode.NotFound);
 
@@ -211,6 +215,44 @@ namespace CLup.Features.Common
             }
 
             return Ok();
+        }
+
+        public async Task<Result<T, U>> BindDouble<U>(Func<Task<U>> f)
+        {
+            if (Failure)
+            {
+                return Fail<T, U>(Code, Error);
+            }
+
+            var maybe = await f();
+
+            return Ok<T, U>(Value, maybe);
+        }
+    }
+
+    public class Result<T, U> : Result<T>
+    {
+        public U ExtraValue { get; set; }
+
+        protected internal Result(T value, U extraValue, bool success, string error, HttpCode code)
+            : base(value, success, error, code)
+        {
+            ExtraValue = extraValue;
+        }
+
+        public async Task<Result<T>> Ensure(Task<Result<T, U>> task, Func<U, bool> predicate, string errorMessage)
+        {
+            if (Failure)
+            {
+                return Fail<T>(Code, Error);
+            }
+
+            if (!predicate(ExtraValue))
+            {
+                return Conflict<T>(errorMessage);
+            }
+
+            return await task;
         }
     }
 }
