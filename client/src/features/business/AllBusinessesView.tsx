@@ -7,16 +7,13 @@ import {useHistory} from 'react-router';
 import {BusinessDTO} from './Business';
 import {fetchAllBusinesses, selectAllBusinesses} from './businessSlice';
 import {Header} from '../../common/components/Texts';
-import {isLoading, State, useAppDispatch, useAppSelector} from '../../app/Store';
+import {isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
+import {State} from '../../app/AppTypes';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 
 const useStyles = makeStyles((theme) => ({
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
-    },
     row: {
         justifyContent: 'center',
     },
@@ -64,7 +61,7 @@ export const AllBusinessesView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.headline}>
+            <Row className={styles.row}>
                 <Header text="Available Businesses" />
             </Row>
             <MapModal

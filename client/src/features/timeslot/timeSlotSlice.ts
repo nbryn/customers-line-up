@@ -1,8 +1,10 @@
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../common/api/ApiCaller';
+import {apiError, defaultApiInfo} from '../../common/api/ApiInfo';
+import {NormalizedEntityState, State} from '../../app/AppTypes';
+import {RootState} from '../../app/Store';
 import {TimeSlotDTO} from './TimeSlot';
-import {NormalizedEntityState, RootState} from '../../app/Store';
 
 const DEFAULT_TIMESLOT_ROUTE = 'timeslot';
 
@@ -16,8 +18,7 @@ const initialState: TimeSlotState = {
     byId: {},
     availableByBusiness: {},
     allIds: [],
-    isLoading: false,
-    apiMessage: '',
+    apiInfo: defaultApiInfo(State.TimeSlots),
 };
 
 export const deleteTimeSlot = createAsyncThunk(
@@ -70,26 +71,27 @@ export const timeSlotSlice = createSlice({
     name: 'timeSlot',
     initialState,
     reducers: {
-        clearApiMessage: (state) => {
-            state.apiMessage = '';
+        clearTimeSlotsApiInfo: (state) => {
+            state.apiInfo = defaultApiInfo(State.TimeSlots);
         },
     },
     extraReducers: (builder) => {
         builder.addCase(deleteTimeSlot.fulfilled, (state, {payload}) => {
-            state.isLoading = false;
+            state.apiInfo.isLoading = false;
+
             state.availableByBusiness[payload.businessId] = state.availableByBusiness[
                 payload.businessId
             ].filter((t) => t.id !== payload.timeSlotId);
         });
 
         builder.addCase(fetchAvailableTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
-            state.isLoading = false;
+            state.apiInfo.isLoading = false;
             state.availableByBusiness[payload.businessId] = payload.timeSlots;
-
         });
 
         builder.addCase(fetchTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
-            state.isLoading = false;
+            state.apiInfo.isLoading = false;
+
             const newState = {...state.byId};
             payload.forEach((timeSlot) => (newState[timeSlot.id] = timeSlot));
 
@@ -97,8 +99,8 @@ export const timeSlotSlice = createSlice({
         });
 
         builder.addCase(generateTimeSlots.fulfilled, (state) => {
-            state.isLoading = false;
-            state.apiMessage = TIMESLOTS_GENERATED_MSG;
+            state.apiInfo.isLoading = false;
+            state.apiInfo.message = TIMESLOTS_GENERATED_MSG;
         });
 
         builder.addMatcher(
@@ -109,7 +111,7 @@ export const timeSlotSlice = createSlice({
                 generateTimeSlots.pending
             ),
             (state) => {
-                state.isLoading = true;
+                state.apiInfo.isLoading = true;
             }
         );
 
@@ -121,14 +123,13 @@ export const timeSlotSlice = createSlice({
                 generateTimeSlots.rejected
             ),
             (state, action) => {
-                state.isLoading = false;
-                state.apiMessage = action.error.message!;
+                state.apiInfo = apiError({state: State.TimeSlots, message: action.error.message!});
             }
         );
     },
 });
 
-export const {clearApiMessage} = timeSlotSlice.actions;
+export const {clearTimeSlotsApiInfo} = timeSlotSlice.actions;
 
 export const selectTimeSlotsByBusiness = (businessId: string) => (state: RootState) =>
     Object.values(state.timeSlots.byId).filter((t) => t.businessId === businessId);

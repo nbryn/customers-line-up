@@ -1,21 +1,22 @@
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../common/api/ApiCaller';
-import {UserInsights} from './Insights';
+import {ApiInfo} from '../../common/api/ApiInfo';
+import {apiError, defaultApiInfo} from '../../common/api/ApiInfo';
 import {RootState} from '../../app/Store';
+import {State} from '../../app/AppTypes';
+import {UserInsights} from './Insights';
 
 const DEFAULT_INSIGHTS_ROUTE = 'insights';
 
 interface InsightsState {
     userInsights: UserInsights | null;
-    isLoading: boolean;
-    apiMessage: string;
+    apiInfo: ApiInfo;
 }
 
 const initialState: InsightsState = {
     userInsights: null,
-    isLoading: false,
-    apiMessage: '',
+    apiInfo: defaultApiInfo(State.Insights),
 };
 
 export const fetchUserInsights = createAsyncThunk('insights/userBooking', async () => {
@@ -34,28 +35,27 @@ export const insightsSlice = createSlice({
     name: 'insights',
     initialState,
     reducers: {
-        clearApiMessage: (state) => {
-            state.apiMessage = '';
+        clearInsightsApiInfo: (state) => {
+            state.apiInfo = defaultApiInfo(State.Insights);
         },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUserInsights.fulfilled, (state, {payload}) => {
-            state.isLoading = false;
+            state.apiInfo.isLoading = false;
             state.userInsights = payload.userInsights;
         });
 
         builder.addMatcher(isAnyOf(fetchUserInsights.pending), (state) => {
-            state.isLoading = true;
+            state.apiInfo.isLoading = true;
         });
 
         builder.addMatcher(isAnyOf(fetchUserInsights.rejected), (state, action) => {
-            state.isLoading = false;
-            state.apiMessage = action.error.message!;
+            state.apiInfo = apiError({state: State.Insights, message: action.error.message!});
         });
     },
 });
 
-export const {clearApiMessage} = insightsSlice.actions;
+export const {clearInsightsApiInfo} = insightsSlice.actions;
 
 export const selectUserInsights = (state: RootState) => state.insights.userInsights;
 

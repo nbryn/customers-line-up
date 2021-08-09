@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 type Props = {
    buttonText?: string;
    label: string | undefined;
-   key: string;
+   id: string;
    color?: 'primary' | 'secondary';
    variant?: 'outlined';
    type?: TextFieldType;
@@ -46,7 +46,7 @@ type Props = {
 };
 
 export const TextFieldCardRow: React.FC<Props> = ({
-   key,
+   id: key,
    label,
    type,
    buttonText,

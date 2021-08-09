@@ -8,26 +8,7 @@ import insightsReducer from '../features/insights/insightsSlice';
 import timeSlotReducer from '../features/timeslot/timeSlotSlice';
 import userReducer from '../features/user/userSlice';
 
-export enum State {
-    Bookings = 'Bookings',
-    Businesses = 'Businesses',
-    Employees = 'Employees',
-    Insights = 'Insights',
-    TimeSlots = 'timeSlots',
-    Users = 'users',
-}
-
-export interface NormalizedEntityState<T> {
-    byId: {[id: string]: T};
-    allIds: string[];
-    isLoading: boolean;
-    apiMessage: string;
-}
-
-export type ThunkParam<T1> = {
-    id: string;
-    data: T1;
-};
+import {State} from './AppTypes';
 
 export const store = configureStore({
     reducer: {
@@ -43,52 +24,57 @@ export const store = configureStore({
 export const isLoading = (entity: State) => (state: RootState) => {
     switch (entity) {
         case State.Bookings:
-            return state.bookings.isLoading;
+            return state.bookings.apiInfo.isLoading;
 
         case State.Businesses:
-            return state.businesses.isLoading;
+            return state.businesses.apiInfo.isLoading;
 
         case State.Employees:
-            return state.employees.isLoading;
+            return state.employees.apiInfo.isLoading;
 
         case State.Insights:
-            return state.insights.isLoading;
+            return state.insights.apiInfo.isLoading;
 
         case State.TimeSlots:
-            return state.timeSlots.isLoading;
+            return state.timeSlots.apiInfo.isLoading;
 
         case State.Users:
-            return state.users.isLoading;
+            return state.users.apiInfo.isLoading;
 
         default:
             return false;
     }
 };
 
-export const selectApiMessage = (entity: State) => (state: RootState) => {
+export const selectApiInfo = (entity: State) => (state: RootState) => {
     switch (entity) {
         case State.Bookings:
-            return state.bookings.apiMessage;
+            return state.bookings.apiInfo;
 
         case State.Businesses:
-            return state.businesses.apiMessage;
+            return state.businesses.apiInfo;
 
         case State.Employees:
-            return state.employees.apiMessage;
+            return state.employees.apiInfo;
 
         case State.Insights:
-            return state.insights.apiMessage;
+            return state.insights.apiInfo;
 
         case State.TimeSlots:
-            return state.timeSlots.apiMessage;
+            return state.timeSlots.apiInfo;
 
         case State.Users:
-            return state.users.apiMessage;
+            return state.users.apiInfo;
 
         default:
-            return '';
+            return {isError: false, isLoading: false, message: '', state: State.Users};
     }
 };
+
+export const selectGeneralApiInfo = (state: RootState) =>
+    Object.values(State)
+        .map((key) => selectApiInfo(key)(state))
+        .find((apiInfo) => apiInfo.message);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

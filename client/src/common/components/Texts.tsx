@@ -4,9 +4,8 @@ import React from 'react';
 
 const useStyles = makeStyles((theme) => ({
    header: {
-      marginTop: 15,
-      marginBottom: 25,
-      textAlign: 'center',
+      marginTop: 85,
+      marginBottom: 35,
    },
 }));
 

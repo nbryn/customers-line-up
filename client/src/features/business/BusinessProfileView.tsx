@@ -8,7 +8,11 @@ import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
 import {ComboBoxOption} from '../../common/components/form/ComboBox';
 import {ErrorView} from '../../common/views/ErrorView';
-import {fetchBusinessesTypes, selectBusinessTypes, updateBusinessInfo} from './businessSlice';
+import {
+    fetchBusinessesTypes,
+    selectBusinessTypes,
+    updateBusinessInfo,
+} from './businessSlice';
 import {FormCard, FormCardData} from '../../common/components/card/FormCard';
 import {Header} from '../../common/components/Texts';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
@@ -16,13 +20,9 @@ import {TextFieldModal} from '../../common/components/modal/TextFieldModal';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useForm} from '../../common/hooks/useForm';
 
-    const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
     col: {
         marginTop: 25,
-    },
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
     },
     row: {
         justifyContent: 'center',
@@ -38,29 +38,43 @@ export const BusinessProfileView: React.FC = () => {
     const location = useLocation<LocationState>();
     const dispatch = useAppDispatch();
 
+    const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
+    const [zips, setZips] = useState<ComboBoxOption[]>([]);
     const [modalKey, setModalKey] = useState('');
     const businessTypes = useAppSelector(selectBusinessTypes);
 
-    const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
-    const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
     if (!location.state) {
         return <ErrorView />;
     }
 
     const business = location.state.business;
-    const formValues = omit(business, ['businessHours', 'city', 'id', 'longitude', 'latitude', 'ownerEmail']) as BusinessDTO;
+    const formValues = omit(business, [
+        'businessHours',
+        'city',
+        'id',
+        'longitude',
+        'latitude',
+        'ownerEmail',
+    ]) as BusinessDTO;
 
     const {addressHandler, formHandler} = useForm<BusinessDTO>({
         initialValues: formValues,
         validationSchema: businessValidationSchema,
-        onSubmit: (business) => dispatch(updateBusinessInfo({businessId: business.id, ownerEmail: business.ownerEmail!, business})),
+        onSubmit: (b) =>
+            dispatch(
+                updateBusinessInfo({
+                    businessId: business.id,
+                    ownerEmail: business.ownerEmail!,
+                    business: b,
+                })
+            ),
         formatter: (business) => {
             business.opens = business.opens.replace(':', '.');
             business.closes = business.closes.replace(':', '.');
 
             return business;
-        }
+        },
     });
 
     useEffect(() => {
@@ -93,7 +107,7 @@ export const BusinessProfileView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.headline}>
+            <Row className={styles.row}>
                 <Header text={`Manage ${business.name}`} />
             </Row>
             <Row className={styles.row}>

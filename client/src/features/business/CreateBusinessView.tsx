@@ -9,15 +9,16 @@ import {businessValidationSchema} from './BusinessValidation';
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
 import {
-    clearApiMessage,
+    clearBusinessApiInfo,
     createBusiness,
     fetchBusinessesTypes,
     selectBusinessTypes,
 } from './businessSlice';
 import {Form} from '../../common/components/form/Form';
 import {Header} from '../../common/components/Texts';
-import {isLoading, selectApiMessage, State, useAppDispatch, useAppSelector} from '../../app/Store';
+import {isLoading, selectApiInfo, useAppDispatch, useAppSelector} from '../../app/Store';
 import {Modal} from '../../common/components/modal/Modal';
+import {State} from '../../app/AppTypes';
 import StringUtil from '../../common/util/StringUtil';
 import {TextField} from '../../common/components/form/TextField';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
@@ -32,10 +33,6 @@ const useStyles = makeStyles((theme) => ({
     },
     formGroup: {
         marginBottom: 30,
-    },
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
     },
     helperText: {
         color: 'red',
@@ -58,7 +55,7 @@ export const CreateBusinessView: React.FC = () => {
     const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
     const loading = useAppSelector(isLoading(State.Businesses));
-    const apiMessage = useAppSelector(selectApiMessage(State.Businesses));
+    const apiInfo = useAppSelector(selectApiInfo(State.Businesses));
 
     const formValues: BusinessDTO = {
         id: '',
@@ -107,18 +104,18 @@ export const CreateBusinessView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.headline}>
+            <Row className={styles.wrapper}>
                 <Header text="New Business" />
             </Row>
             <Row className={styles.wrapper}>
                 <Col sm={6} lg={8}>
                     <Modal
-                        show={apiMessage ? true : false}
+                        show={apiInfo.message ? true : false}
                         title="Business Info"
-                        text={apiMessage}
+                        text={apiInfo.message}
                         primaryAction={() => history.push('/business')}
                         primaryActionText="My Businesses"
-                        secondaryAction={() => dispatch(clearApiMessage())}
+                        secondaryAction={() => dispatch(clearBusinessApiInfo())}
                     />
                     <Card className={styles.card} title="Business Data" variant="outlined">
                         <Form

@@ -10,15 +10,12 @@ import {deleteEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} fro
 import {EmployeeDTO} from './Employee';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
+import {isLoading, RootState, useAppDispatch, useAppSelector} from '../../app/Store';
+import {State} from '../../app/AppTypes';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
-import {State, isLoading, RootState, useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
-    },
     row: {
         justifyContent: 'center',
     },
@@ -68,7 +65,7 @@ export const EmployeeView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.headline}>
+            <Row className={styles.row}>
                 <Header text={business.name} />
             </Row>
             <Row className={styles.row}>

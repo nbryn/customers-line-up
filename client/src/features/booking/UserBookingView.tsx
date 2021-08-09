@@ -5,17 +5,14 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {BookingDTO} from './Booking';
 import {deleteBookingForUser, fetchBookingsByUser, selectBookingsByUser} from './bookingSlice';
-import {State, isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {Header} from '../../common/components/Texts';
+import {isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
+import {State} from '../../app/AppTypes';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 
 const useStyles = makeStyles((theme) => ({
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
-    },
     row: {
         justifyContent: 'center',
     },
@@ -62,7 +59,7 @@ export const UserBookingView: React.FC = () => {
 
     return (
         <Container>
-            <Row className={styles.headline}>
+            <Row className={styles.row}>
                 <Header text="Your Bookings" />
             </Row>
             <MapModal

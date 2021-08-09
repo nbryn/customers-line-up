@@ -10,18 +10,15 @@ import {
     fetchTimeSlotsByBusiness,
     selectTimeSlotsByBusiness,
 } from '../timeslot/timeSlotSlice';
-import {State, isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
+import {isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
+import {State} from '../../app/AppTypes';
 import {TimeSlotDTO} from './TimeSlot';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 
 const useStyles = makeStyles((theme) => ({
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
-    },
     row: {
         justifyContent: 'center',
     },
@@ -63,7 +60,7 @@ export const TimeSlotView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.headline}>
+            <Row className={styles.row}>
                 <Header text={business.name} />
             </Row>
             <Row className={styles.row}>

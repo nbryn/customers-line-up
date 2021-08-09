@@ -6,7 +6,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {BusinessDTO} from '../business/Business';
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
-import {clearApiMessage, createEmployee} from './employeeSlice';
+import {clearEmployeeApiInfo, createEmployee} from './employeeSlice';
 import {employeeValidationSchema} from '../business/BusinessValidation';
 import {ErrorView} from '../../common/views/ErrorView';
 import {fetchUsersNotEmployedByBusiness, selectUsersAsComboBoxOption} from '../user/userSlice';
@@ -14,11 +14,11 @@ import {Form} from '../../common/components/form/Form';
 import {Header} from '../../common/components/Texts';
 import {Modal} from '../../common/components/modal/Modal';
 import {EmployeeDTO, NewEmployeeDTO} from './Employee';
+import {State} from '../../app/AppTypes';
 import {TextField} from '../../common/components/form/TextField';
 import {
-    State,
     isLoading,
-    selectApiMessage,
+    selectApiInfo,
     useAppDispatch,
     useAppSelector,
 } from '../../app/Store';
@@ -32,10 +32,6 @@ const useStyles = makeStyles((theme) => ({
     },
     formGroup: {
         marginBottom: 30,
-    },
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
     },
     helperText: {
         color: 'red',
@@ -68,7 +64,7 @@ export const CreateEmployeeView: React.FC = () => {
     }
 
     const {business} = location.state;
-    const apiMessage = useAppSelector(selectApiMessage(State.Employees));
+    const apiInfo = useAppSelector(selectApiInfo(State.Employees));
     const usersNotEmployedByBusiness = useAppSelector(selectUsersAsComboBoxOption(business.id));
 
     const {formHandler, ...form} = useForm<NewEmployeeDTO>({
@@ -91,18 +87,18 @@ export const CreateEmployeeView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.headline}>
+            <Row className={styles.wrapper}>
                 <Header text={business.name} />
             </Row>
             <Row className={styles.wrapper}>
                 <Col sm={6} lg={6}>
                     <Modal
-                        show={apiMessage ? true : false}
+                        show={apiInfo.message ? true : false}
                         title="Employee Info"
-                        text={apiMessage}
+                        text={apiInfo.message}
                         primaryAction={() => history.push('/business/employees/manage', {business})}
                         primaryActionText="My Employees"
-                        secondaryAction={() => dispatch(clearApiMessage())}
+                        secondaryAction={() => dispatch(clearEmployeeApiInfo())}
                     />
                     <Card
                         className={styles.card}

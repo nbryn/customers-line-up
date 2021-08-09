@@ -1,18 +1,18 @@
 import {createAsyncThunk, createSlice, isAnyOf, PayloadAction} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../common/api/ApiCaller';
-import {NormalizedEntityState, RootState, ThunkParam} from '../../app/Store';
+import {apiError, apiSuccess, defaultApiInfo} from '../../common/api/ApiInfo';
 import {EmployeeDTO} from './Employee';
+import {NormalizedEntityState, State, ThunkParam} from '../../app/AppTypes';
+import {RootState} from '../../app/Store';
 
 const DEFAULT_EMPLOYEE_ROUTE = 'employee';
 const EMPLOYEE_CREATED_MSG = 'Employee Created - Go to my employees to see your employees';
 
-// Generic slice: https://redux-toolkit.js.org/usage/usage-with-typescript
 const initialState: NormalizedEntityState<EmployeeDTO> = {
     byId: {},
     allIds: [],
-    isLoading: false,
-    apiMessage: '',
+    apiInfo: defaultApiInfo(State.Employees),
 };
 
 export const createEmployee = createAsyncThunk('employee/create', async (data: EmployeeDTO) => {
@@ -43,18 +43,17 @@ export const employeeSlice = createSlice({
     name: 'employee',
     initialState,
     reducers: {
-        clearApiMessage: (state) => {
-            state.apiMessage = '';
+        clearEmployeeApiInfo: (state) => {
+            state.apiInfo = defaultApiInfo(State.Employees);
         },
     },
     extraReducers: (builder) => {
         builder.addCase(createEmployee.fulfilled, (state) => {
-            state.isLoading = false;
-            state.apiMessage = EMPLOYEE_CREATED_MSG;
+            state.apiInfo = apiSuccess({state: State.Employees, message: EMPLOYEE_CREATED_MSG});
         });
 
         builder.addCase(deleteEmployee.fulfilled, (state, action) => {
-            state.isLoading = false;
+            state.apiInfo.isLoading = false;
             delete state.byId[action.payload];
         });
 
@@ -65,7 +64,7 @@ export const employeeSlice = createSlice({
                 action.payload.forEach((employee) => (newState[employee.id] = employee));
 
                 state.byId = newState;
-                state.isLoading = false;
+                state.apiInfo.isLoading = false;
             }
         );
         builder.addMatcher(
@@ -75,7 +74,7 @@ export const employeeSlice = createSlice({
                 fetchEmployeesByBusiness.pending
             ),
             (state) => {
-                state.isLoading = true;
+                state.apiInfo.isLoading = true;
             }
         );
         builder.addMatcher(
@@ -85,14 +84,13 @@ export const employeeSlice = createSlice({
                 fetchEmployeesByBusiness.rejected
             ),
             (state, action) => {
-                state.isLoading = false;
-                state.apiMessage = action.error.message!;
+                state.apiInfo = apiError({state: State.Employees, message: action.error.message!});
             }
         );
     },
 });
 
-export const {clearApiMessage} = employeeSlice.actions;
+export const {clearEmployeeApiInfo} = employeeSlice.actions;
 
 export const selectEmployeesByBusiness = (state: RootState, businessId: string) =>
     Object.values(state.employees.byId).filter((employee) => employee.businessId === businessId);

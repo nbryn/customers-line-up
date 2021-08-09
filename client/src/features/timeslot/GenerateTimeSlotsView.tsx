@@ -6,7 +6,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {BusinessDTO} from '../business/Business';
 import {Card} from '../../common/components/card/Card';
 import {
-    clearApiMessage,
+    clearTimeSlotsApiInfo,
     generateTimeSlots,
     TIMESLOTS_GENERATED_MSG,
 } from '../timeslot/timeSlotSlice';
@@ -15,7 +15,8 @@ import DateUtil from '../../common/util/DateUtil';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
 import {Modal} from '../../common/components/modal/Modal';
-import {State, selectApiMessage, useAppDispatch, useAppSelector} from '../../app/Store';
+import {selectApiInfo, useAppDispatch, useAppSelector} from '../../app/Store';
+import {State} from '../../app/AppTypes';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -26,10 +27,6 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 15,
         height: 400,
         textAlign: 'center',
-    },
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
     },
     row: {
         justifyContent: 'center',
@@ -46,7 +43,7 @@ export const GenerateTimeSlotsView: React.FC = () => {
     const location = useLocation<LocationState>();
 
     const dispatch = useAppDispatch();
-    const apiMessage = useAppSelector(selectApiMessage(State.TimeSlots));
+    const apiInfo = useAppSelector(selectApiInfo(State.TimeSlots));
 
     const [dateOptions, setDateOptions] = useState<ComboBoxOption[]>(DateUtil.getNext7Days());
     const [selectedDate, setSelectedDate] = useState<ComboBoxOption>();
@@ -63,28 +60,28 @@ export const GenerateTimeSlotsView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.headline}>
+            <Row className={styles.row}>
                 <Header text={business.name} />
             </Row>
             <Row className={styles.row}>
                 <Col lg={6}>
                     <Modal
-                        show={apiMessage ? true : false}
+                        show={apiInfo.message ? true : false}
                         title={
-                            apiMessage !== TIMESLOTS_GENERATED_MSG
-                                ? apiMessage
+                            apiInfo.message !== TIMESLOTS_GENERATED_MSG
+                                ? apiInfo.message
                                 : selectedDate &&
                                   `Time slots added on ${selectedDate.label.substring(
                                       selectedDate.label.indexOf(',') + 1
                                   )}`
                         }
-                        text={apiMessage}
+                        text={apiInfo.message}
                         primaryAction={() => {
-                            dispatch(clearApiMessage());
+                            dispatch(clearTimeSlotsApiInfo());
                             history.push('/business/timeslots/manage', {business});
                         }}
                         primaryActionText="See time slots"
-                        secondaryAction={() => dispatch(clearApiMessage())}
+                        secondaryAction={() => dispatch(clearTimeSlotsApiInfo())}
                     />
                     <Card
                         className={styles.card}

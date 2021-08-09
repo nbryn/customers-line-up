@@ -11,17 +11,14 @@ import {
     fetchBookingsByBusiness,
     selectBookingsByBusiness,
 } from './bookingSlice';
-import {State, isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
+import {isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
+import {State} from '../../app/AppTypes';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 
 const useStyles = makeStyles((theme) => ({
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
-    },
     row: {
         justifyContent: 'center',
     },
@@ -73,7 +70,7 @@ export const BusinessBookingView: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.headline}>
+            <Row className={styles.row}>
                 <Header text={`Bookings For ${business.name}`} />
             </Row>
             <Row className={styles.row}>

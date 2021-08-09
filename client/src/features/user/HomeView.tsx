@@ -14,12 +14,8 @@ const useStyles = makeStyles((theme) => ({
     card: {
         marginTop: 25,
     },
-    cards: {
+    center: {
         justifyContent: 'center',
-    },
-    headline: {
-        marginTop: 75,
-        textAlign: 'center',
     },
 }));
 
@@ -39,12 +35,10 @@ export const HomeView: React.FC = () => {
 
     return (
         <Container>
-            <Row>
-                <Col className={styles.headline}>
-                    <Header text={`Welcome ${user?.name}`} />
-                </Col>
+            <Row className={styles.center}>
+                <Header text={`Welcome ${user?.name}`} />
             </Row>
-            <Row className={styles.cards}>
+            <Row className={styles.center}>
                 <Col className={styles.card} sm={6} md={8} lg={5}>
                     <InfoCard
                         buttonAction={() => history.push('/user/bookings')}

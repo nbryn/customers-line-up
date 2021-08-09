@@ -4,24 +4,21 @@ import React, {useState} from 'react';
 
 import {Card} from '../../common/components/card/Card';
 import {
-    State,
     isLoading,
-    selectApiMessage,
+    selectApiInfo,
     useAppDispatch,
     useAppSelector,
 } from '../../app/Store';
 import {Form} from '../../common/components/form/Form';
 import {login} from './userSlice';
+import {LoginDTO} from './User';
 import {loginValidationSchema} from './UserValidation';
+import {State} from '../../app/AppTypes';
 import {SignupView} from './SignupView';
 import StringUtil from '../../common/util/StringUtil';
 import {TextField} from '../../common/components/form/TextField';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
 import {useForm} from '../../common/hooks/useForm';
-import {LoginDTO} from './User';
-
-
-
 
 
 const useStyles = makeStyles((theme) => ({
@@ -47,7 +44,7 @@ export const LoginView: React.FC = () => {
     const styles = useStyles();
     const loading = useAppSelector(isLoading(State.Users));
 
-    const apiMessage = useAppSelector(selectApiMessage(State.Users));
+    const apiInfo = useAppSelector(selectApiInfo(State.Users));
     const dispatch = useAppDispatch();
     const [renderSignUp, setRenderSignUp] = useState(false);
 
@@ -84,7 +81,7 @@ export const LoginView: React.FC = () => {
                                 buttonText="Login"
                                 working={loading}
                                 valid={formHandler.isValid}
-                                errorMessage={apiMessage}
+                                errorMessage={apiInfo.message}
                             >
                                 {Object.keys(formValues).map((key) => (
                                     <FormGroup key={key}>

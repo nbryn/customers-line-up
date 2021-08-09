@@ -1,20 +1,21 @@
 import React, {useState} from 'react';
 import Chip from '@material-ui/core/Chip';
-import {Col, Container, Row} from 'react-bootstrap';
+import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import {BusinessDTO} from '../business/Business';
-import {clearApiMessage, createBooking} from './bookingSlice';
-import {State, isLoading, selectApiMessage, useAppDispatch, useAppSelector} from '../../app/Store';
+import {clearBookingApiInfo, createBooking} from './bookingSlice';
 import {ErrorView} from '../../common/views/ErrorView';
 import {
     fetchAvailableTimeSlotsByBusiness,
-    selectTimeSlotsByBusiness,
+    selectAvailableTimeSlotsByBusiness,
 } from '../timeslot/timeSlotSlice';
 import {Header} from '../../common/components/Texts';
+import {isLoading, selectApiInfo, useAppDispatch, useAppSelector} from '../../app/Store';
 import {MapModal} from '../../common/components/modal/MapModal';
 import {Modal} from '../../common/components/modal/Modal';
+import {State} from '../../app/AppTypes';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 import {TimeSlotDTO} from '../timeslot/TimeSlot';
@@ -43,7 +44,7 @@ export const CreateBookingView: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const loading = useAppSelector(isLoading(State.TimeSlots));
-    const apiMessage = useAppSelector(selectApiMessage(State.Bookings));
+    const apiInfo = useAppSelector(selectApiInfo(State.Bookings));
     const [showMapModal, setShowMapModal] = useState<boolean>(false);
 
     if (!location.state) {
@@ -51,7 +52,7 @@ export const CreateBookingView: React.FC = () => {
     }
 
     const {business} = location.state;
-    const timeSlots = useAppSelector(selectTimeSlotsByBusiness(business.id));
+    const timeSlots = useAppSelector(selectAvailableTimeSlotsByBusiness(business.id));
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -68,7 +69,7 @@ export const CreateBookingView: React.FC = () => {
         },
     ];
     return (
-        <Container>
+        <>
             <Row className={styles.row}>
                 <Header text={`Available Time Slots For ${business.name}`} />
             </Row>
@@ -104,19 +105,19 @@ export const CreateBookingView: React.FC = () => {
                         emptyMessage="No Time Slots Available"
                     />
 
-                    <Modal
-                        show={apiMessage ? true : false}
+                  {/*   <Modal
+                        show={apiInfo?.message ? true : false}
                         title="Booking Info"
-                        text={apiMessage}
-                        secondaryAction={() => dispatch(clearApiMessage())}
+                        text={apiInfo.message}
+                        secondaryAction={() => dispatch(clearBookingApiInfo())}
                         primaryAction={() => {
-                            dispatch(clearApiMessage());
+                            dispatch(clearBookingApiInfo());
                             history.push('/user/bookings');
                         }}
                         primaryActionText="My Bookings"
-                    />
+                    /> */}
                 </Col>
             </Row>
-        </Container>
+        </>
     );
 };

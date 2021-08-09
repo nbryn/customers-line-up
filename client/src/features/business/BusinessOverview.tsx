@@ -6,16 +6,13 @@ import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../common/components/card/CardInfo';
 import {fetchBusinessesByOwner, selectBusinessesByOwner} from './businessSlice';
-import {InfoCard} from '../../common/components/card/InfoCard';
-import {isLoading, State, useAppDispatch, useAppSelector} from '../../app/Store';
-import PathUtil, {PathInfo} from '../../common/util/PathUtil';
 import {Header} from '../../common/components/Texts';
+import {InfoCard} from '../../common/components/card/InfoCard';
+import {isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
+import PathUtil, {PathInfo} from '../../common/util/PathUtil';
+import {State} from '../../app/AppTypes';
 
 const useStyles = makeStyles((theme) => ({
-    headline: {
-        marginTop: 75,
-        justifyContent: 'center',
-    },
     row: {
         justifyContent: 'center',
     },
@@ -43,7 +40,7 @@ export const BusinessOverview: React.FC = () => {
 
     return (
         <>
-            <Row className={styles.headline}>
+            <Row className={styles.row}>
                 <Header text="Choose Business" />
             </Row>
             {loading ? (

@@ -5,15 +5,15 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
 import {
-    State,
     isLoading,
-    selectApiMessage,
+    selectApiInfo,
     useAppDispatch,
     useAppSelector,
 } from '../../app/Store';
 import {Form} from '../../common/components/form/Form';
 import {signupValidationSchema} from './UserValidation';
 import {register} from './userSlice';
+import {State} from '../../app/AppTypes';
 import StringUtil from '../../common/util/StringUtil';
 import {TextField} from '../../common/components/form/TextField';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
@@ -44,7 +44,7 @@ export const SignupView: React.FC = () => {
     const styles = useStyles();
     const loading = useAppSelector(isLoading(State.Users));
 
-    const apiMessage = useAppSelector(selectApiMessage(State.Users));
+    const apiInfo = useAppSelector(selectApiInfo(State.Users));
     const dispatch = useAppDispatch();
 
     const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
@@ -94,7 +94,7 @@ export const SignupView: React.FC = () => {
                             buttonText="Signup"
                             working={loading}
                             valid={formHandler.isValid}
-                            errorMessage={apiMessage}
+                            errorMessage={apiInfo.message}
                         >
                             {Object.keys(formValues).map((key) => {
                                 if (key === 'zip' || key === 'address') {
