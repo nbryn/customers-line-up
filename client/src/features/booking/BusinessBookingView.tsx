@@ -13,10 +13,10 @@ import {
 } from './bookingSlice';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
-import {isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
-import {State} from '../../app/AppTypes';
+import { selectApiState } from '../../common/api/apiSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -39,7 +39,7 @@ export const BusinessBookingView: React.FC = () => {
 
     const {business} = location.state;
 
-    const loading = useAppSelector(isLoading(State.Bookings));
+    const apiState = useAppSelector(selectApiState);
     const bookings = useAppSelector(selectBookingsByBusiness(business.id));
 
     const columns: TableColumn[] = [
@@ -78,7 +78,7 @@ export const BusinessBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={loading}
+                        loading={apiState.loading}
                         fetchData={() => dispatch(fetchBookingsByBusiness(business.id))}
                         tableTitle="Bookings"
                         emptyMessage="No Bookings Yet"

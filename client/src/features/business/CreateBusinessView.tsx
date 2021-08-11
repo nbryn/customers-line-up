@@ -2,26 +2,19 @@ import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {MenuItem} from '@material-ui/core';
-import {useHistory} from 'react-router-dom';
 
 import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
-import {
-    clearBusinessApiInfo,
-    createBusiness,
-    fetchBusinessesTypes,
-    selectBusinessTypes,
-} from './businessSlice';
+import {createBusiness, fetchBusinessesTypes, selectBusinessTypes} from './businessSlice';
 import {Form} from '../../common/components/form/Form';
 import {Header} from '../../common/components/Texts';
-import {isLoading, selectApiInfo, useAppDispatch, useAppSelector} from '../../app/Store';
-import {Modal} from '../../common/components/modal/Modal';
-import {State} from '../../app/AppTypes';
+import {selectApiState} from '../../common/api/apiSlice';
 import StringUtil from '../../common/util/StringUtil';
 import {TextField} from '../../common/components/form/TextField';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useForm} from '../../common/hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
@@ -47,15 +40,13 @@ const useStyles = makeStyles((theme) => ({
 
 export const CreateBusinessView: React.FC = () => {
     const styles = useStyles();
-    const history = useHistory();
     const dispatch = useAppDispatch();
 
-    const businessTypes = useAppSelector(selectBusinessTypes);
     const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
     const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
-    const loading = useAppSelector(isLoading(State.Businesses));
-    const apiInfo = useAppSelector(selectApiInfo(State.Businesses));
+    const businessTypes = useAppSelector(selectBusinessTypes);
+    const apiState = useAppSelector(selectApiState);
 
     const formValues: BusinessDTO = {
         id: '',
@@ -109,19 +100,11 @@ export const CreateBusinessView: React.FC = () => {
             </Row>
             <Row className={styles.wrapper}>
                 <Col sm={6} lg={8}>
-                    <Modal
-                        show={apiInfo.message ? true : false}
-                        title="Business Info"
-                        text={apiInfo.message}
-                        primaryAction={() => history.push('/business')}
-                        primaryActionText="My Businesses"
-                        secondaryAction={() => dispatch(clearBusinessApiInfo())}
-                    />
                     <Card className={styles.card} title="Business Data" variant="outlined">
                         <Form
                             onSubmit={formHandler.handleSubmit}
                             buttonText="Create"
-                            working={loading}
+                            working={apiState.loading}
                             valid={formHandler.isValid}
                         >
                             <Row>

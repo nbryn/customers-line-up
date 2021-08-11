@@ -8,9 +8,9 @@ import {CardInfo} from '../../common/components/card/CardInfo';
 import {fetchBusinessesByOwner, selectBusinessesByOwner} from './businessSlice';
 import {Header} from '../../common/components/Texts';
 import {InfoCard} from '../../common/components/card/InfoCard';
-import {isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import PathUtil, {PathInfo} from '../../common/util/PathUtil';
-import {State} from '../../app/AppTypes';
+import {selectApiState} from '../../common/api/apiSlice';
+import {useAppDispatch, useAppSelector} from '../../app/Store'
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -27,7 +27,7 @@ export const BusinessOverview: React.FC = () => {
     const history = useHistory();
     const dispatch = useAppDispatch();
 
-    const loading = useAppSelector(isLoading(State.Businesses));
+    const apiState = useAppSelector(selectApiState);
     const businesses = useAppSelector(selectBusinessesByOwner);
 
     const pathInfo: PathInfo = PathUtil.getPathAndTextFromURL(window.location.pathname);
@@ -43,7 +43,7 @@ export const BusinessOverview: React.FC = () => {
             <Row className={styles.row}>
                 <Header text="Choose Business" />
             </Row>
-            {loading ? (
+            {apiState.loading ? (
                 <Row className={styles.spinner}>
                     <CircularProgress />
                 </Row>

@@ -1,22 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import {useHistory, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 
 import {BusinessDTO} from '../business/Business';
 import {Card} from '../../common/components/card/Card';
-import {
-    clearTimeSlotsApiInfo,
-    generateTimeSlots,
-    TIMESLOTS_GENERATED_MSG,
-} from '../timeslot/timeSlotSlice';
+import {generateTimeSlots} from '../timeslot/timeSlotSlice';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
 import DateUtil from '../../common/util/DateUtil';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
-import {Modal} from '../../common/components/modal/Modal';
-import {selectApiInfo, useAppDispatch, useAppSelector} from '../../app/Store';
-import {State} from '../../app/AppTypes';
+import {selectApiState} from '../../common/api/apiSlice';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -39,11 +34,10 @@ interface LocationState {
 
 export const GenerateTimeSlotsView: React.FC = () => {
     const styles = useStyles();
-    const history = useHistory();
     const location = useLocation<LocationState>();
 
     const dispatch = useAppDispatch();
-    const apiInfo = useAppSelector(selectApiInfo(State.TimeSlots));
+    const apiState = useAppSelector(selectApiState);
 
     const [dateOptions, setDateOptions] = useState<ComboBoxOption[]>(DateUtil.getNext7Days());
     const [selectedDate, setSelectedDate] = useState<ComboBoxOption>();
@@ -65,7 +59,7 @@ export const GenerateTimeSlotsView: React.FC = () => {
             </Row>
             <Row className={styles.row}>
                 <Col lg={6}>
-                    <Modal
+                    {/*      <Modal
                         show={apiInfo.message ? true : false}
                         title={
                             apiInfo.message !== TIMESLOTS_GENERATED_MSG
@@ -82,7 +76,7 @@ export const GenerateTimeSlotsView: React.FC = () => {
                         }}
                         primaryActionText="See time slots"
                         secondaryAction={() => dispatch(clearTimeSlotsApiInfo())}
-                    />
+                    /> */}
                     <Card
                         className={styles.card}
                         title="Generate Time Slots"

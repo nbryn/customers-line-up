@@ -1,16 +1,12 @@
-import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../common/api/ApiCaller';
-import {apiError, apiSuccess, defaultApiInfo} from '../../common/api/ApiInfo';
 import {BusinessDTO} from './Business';
-import {NormalizedEntityState, State} from '../../app/AppTypes';
+import {NormalizedEntityState} from '../../app/AppTypes';
 import {RootState} from '../../app/Store';
 import {selectCurrentUser} from '../user/userSlice';
 
 const DEFAULT_BUSINESS_ROUTE = 'business';
-const BUSINESS_CREATED_MSG = 'Business Created - Go to my businesses to see your businesses';
-const BUSINESS_UPDATED_MSG = 'Business Updated';
-
 interface BusinessState extends NormalizedEntityState<BusinessDTO> {
     businessTypes: string[];
 }
@@ -19,7 +15,6 @@ const initialState: BusinessState = {
     byId: {},
     allIds: [],
     businessTypes: [],
-    apiInfo: defaultApiInfo(State.Businesses),
 };
 
 export const createBusiness = createAsyncThunk('business/create', async (data: BusinessDTO) => {
@@ -58,18 +53,9 @@ export const updateBusinessInfo = createAsyncThunk(
 export const bookingSlice = createSlice({
     name: 'business',
     initialState,
-    reducers: {
-        clearBusinessApiInfo: (state) => {
-            state.apiInfo = defaultApiInfo(State.Businesses);
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(createBusiness.fulfilled, (state) => {
-            state.apiInfo = apiSuccess({state: State.Users, message: BUSINESS_CREATED_MSG});
-        });
-
         builder.addCase(fetchAllBusinesses.fulfilled, (state, {payload}) => {
-            state.apiInfo.isLoading = false;
             const newState = {...state.byId};
             payload.forEach((business) => (newState[business.id] = business));
 
@@ -77,7 +63,6 @@ export const bookingSlice = createSlice({
         });
 
         builder.addCase(fetchBusinessesByOwner.fulfilled, (state, {payload}) => {
-            state.apiInfo.isLoading = false;
             const newState = {...state.byId};
             payload.forEach((business) => (newState[business.id] = business));
 
@@ -85,43 +70,10 @@ export const bookingSlice = createSlice({
         });
 
         builder.addCase(fetchBusinessesTypes.fulfilled, (state, {payload}) => {
-            state.apiInfo.isLoading = false;
             state.businessTypes = payload;
         });
-
-        builder.addCase(updateBusinessInfo.fulfilled, (state) => {
-            state.apiInfo = apiSuccess({state: State.Businesses, message: BUSINESS_UPDATED_MSG});
-        });
-
-        builder.addMatcher(
-            isAnyOf(
-                createBusiness.pending,
-                fetchAllBusinesses.pending,
-                fetchBusinessesByOwner.pending,
-                fetchBusinessesTypes.pending,
-                updateBusinessInfo.pending
-            ),
-            (state) => {
-                state.apiInfo.isLoading = true;
-            }
-        );
-
-        builder.addMatcher(
-            isAnyOf(
-                createBusiness.rejected,
-                fetchAllBusinesses.rejected,
-                fetchBusinessesByOwner.rejected,
-                fetchBusinessesTypes.rejected,
-                updateBusinessInfo.rejected
-            ),
-            (state, action) => {
-                state.apiInfo = apiError({state: State.Businesses, message: action.error.message!});
-            }
-        );
     },
 });
-
-export const {clearBusinessApiInfo} = bookingSlice.actions;
 
 export const selectAllBusinesses = (state: RootState) => Object.values(state.businesses.byId);
 

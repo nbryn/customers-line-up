@@ -4,19 +4,14 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
-import {
-    isLoading,
-    selectApiInfo,
-    useAppDispatch,
-    useAppSelector,
-} from '../../app/Store';
 import {Form} from '../../common/components/form/Form';
-import {signupValidationSchema} from './UserValidation';
 import {register} from './userSlice';
-import {State} from '../../app/AppTypes';
+import {selectApiState} from '../../common/api/apiSlice';
+import {signupValidationSchema} from './UserValidation';
 import StringUtil from '../../common/util/StringUtil';
 import {TextField} from '../../common/components/form/TextField';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useForm} from '../../common/hooks/useForm';
 import {UserDTO} from './User';
 
@@ -42,10 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 export const SignupView: React.FC = () => {
     const styles = useStyles();
-    const loading = useAppSelector(isLoading(State.Users));
-
-    const apiInfo = useAppSelector(selectApiInfo(State.Users));
     const dispatch = useAppDispatch();
+    const apiState = useAppSelector(selectApiState);
 
     const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
     const [zips, setZips] = useState<ComboBoxOption[]>([]);
@@ -92,9 +85,9 @@ export const SignupView: React.FC = () => {
                         <Form
                             onSubmit={formHandler.handleSubmit}
                             buttonText="Signup"
-                            working={loading}
+                            working={apiState.loading}
                             valid={formHandler.isValid}
-                            errorMessage={apiInfo.message}
+                            errorMessage={apiState.message}
                         >
                             {Object.keys(formValues).map((key) => {
                                 if (key === 'zip' || key === 'address') {

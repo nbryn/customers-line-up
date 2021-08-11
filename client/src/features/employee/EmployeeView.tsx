@@ -10,8 +10,8 @@ import {deleteEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} fro
 import {EmployeeDTO} from './Employee';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
-import {isLoading, RootState, useAppDispatch, useAppSelector} from '../../app/Store';
-import {State} from '../../app/AppTypes';
+import {RootState, useAppDispatch, useAppSelector} from '../../app/Store';
+import {selectApiState} from '../../common/api/apiSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 
@@ -30,7 +30,7 @@ export const EmployeeView: React.FC = () => {
     const location = useLocation<LocationState>();
 
     const dispatch = useAppDispatch();
-    const loading = useAppSelector(isLoading(State.Employees));
+    const apiState = useAppSelector(selectApiState);
 
     if (!location.state) {
         return <ErrorView />;
@@ -73,7 +73,7 @@ export const EmployeeView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={loading}
+                        loading={apiState.loading}
                         fetchData={() => dispatch(fetchEmployeesByBusiness(business.id))}
                         tableTitle="Employees"
                         tableData={employees}

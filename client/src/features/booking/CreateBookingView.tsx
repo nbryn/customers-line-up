@@ -5,17 +5,16 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import {BusinessDTO} from '../business/Business';
-import {clearBookingApiInfo, createBooking} from './bookingSlice';
+import {createBooking} from './bookingSlice';
 import {ErrorView} from '../../common/views/ErrorView';
 import {
     fetchAvailableTimeSlotsByBusiness,
     selectAvailableTimeSlotsByBusiness,
 } from '../timeslot/timeSlotSlice';
 import {Header} from '../../common/components/Texts';
-import {isLoading, selectApiInfo, useAppDispatch, useAppSelector} from '../../app/Store';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {MapModal} from '../../common/components/modal/MapModal';
-import {Modal} from '../../common/components/modal/Modal';
-import {State} from '../../app/AppTypes';
+import {selectApiState} from '../../common/api/apiSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 import {TimeSlotDTO} from '../timeslot/TimeSlot';
@@ -39,12 +38,10 @@ interface LocationState {
 
 export const CreateBookingView: React.FC = () => {
     const styles = useStyles();
-    const history = useHistory();
     const location = useLocation<LocationState>();
     const dispatch = useAppDispatch();
 
-    const loading = useAppSelector(isLoading(State.TimeSlots));
-    const apiInfo = useAppSelector(selectApiInfo(State.Bookings));
+    const apiState = useAppSelector(selectApiState);
     const [showMapModal, setShowMapModal] = useState<boolean>(false);
 
     if (!location.state) {
@@ -86,7 +83,7 @@ export const CreateBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={loading}
+                        loading={apiState.loading}
                         tableData={timeSlots}
                         fetchData={() => dispatch(fetchAvailableTimeSlotsByBusiness(business.id))}
                         tableTitle={
@@ -104,18 +101,6 @@ export const CreateBookingView: React.FC = () => {
                         }
                         emptyMessage="No Time Slots Available"
                     />
-
-                  {/*   <Modal
-                        show={apiInfo?.message ? true : false}
-                        title="Booking Info"
-                        text={apiInfo.message}
-                        secondaryAction={() => dispatch(clearBookingApiInfo())}
-                        primaryAction={() => {
-                            dispatch(clearBookingApiInfo());
-                            history.push('/user/bookings');
-                        }}
-                        primaryActionText="My Bookings"
-                    /> */}
                 </Col>
             </Row>
         </>

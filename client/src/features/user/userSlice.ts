@@ -2,25 +2,19 @@ import Cookies from 'js-cookie';
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../common/api/ApiCaller';
-import {ApiInfo} from '../../common/api/ApiInfo';
-import {apiError, defaultApiInfo} from '../../common/api/ApiInfo';
 import {LoginDTO, NotEmployedByBusiness, UserDTO} from './User';
 import {RootState} from '../../app/Store';
-import {State} from '../../app/AppTypes';
 
 const DEFAULT_USER_ROUTE = 'user';
-const LOGIN_FAILED_MSG = 'Wrong Email/Password';
 
 export interface UserState {
     notEmployedByBusiness: {[businessId: string]: UserDTO[]};
     currentUser: UserDTO | null;
-    apiInfo: ApiInfo;
 }
 
 const initialState: UserState = {
     notEmployedByBusiness: {},
     currentUser: null,
-    apiInfo: defaultApiInfo(State.Users),
 };
 
 export const login = createAsyncThunk('user/login', async (data: LoginDTO) => {
@@ -59,17 +53,10 @@ export const userSlice = createSlice({
         clearCurrentUser: (state) => {
             state.currentUser = null;
         },
-        clearUserApiInfo: (state) => {
-            state.apiInfo = defaultApiInfo(State.Users);
-        },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUsersNotEmployedByBusiness.fulfilled, (state, action) => {
             state.notEmployedByBusiness[action.payload.businessId] = action.payload.users;
-        });
-
-        builder.addCase(login.rejected, (state) => {
-            state.apiInfo = apiError({state: State.Users, message: LOGIN_FAILED_MSG});
         });
 
         builder.addCase(fetchUserInfo.fulfilled, (state, action) => {
@@ -77,28 +64,14 @@ export const userSlice = createSlice({
         });
 
         builder.addMatcher(isAnyOf(login.fulfilled, register.fulfilled), (state, action) => {
-            state.apiInfo.isLoading = true;
             state.currentUser = action.payload;
             Cookies.set('access_token', action.payload.token!);
         });
 
-        builder.addMatcher(
-            isAnyOf(login.pending, register.pending, fetchUsersNotEmployedByBusiness.pending),
-            (state) => {
-                state.apiInfo.isLoading = true;
-            }
-        );
-
-        builder.addMatcher(
-            isAnyOf(register.rejected, fetchUsersNotEmployedByBusiness.rejected),
-            (state, action) => {
-                state.apiInfo = apiError({state: State.Users, message: action.error.message!});
-            }
-        );
     },
 });
 
-export const {clearCurrentUser, clearUserApiInfo} = userSlice.actions;
+export const {clearCurrentUser} = userSlice.actions;
 
 export const selectUsersNotEmployedByBusiness = (state: RootState, businessId: string) =>
     state.users.notEmployedByBusiness[businessId] ?? null;

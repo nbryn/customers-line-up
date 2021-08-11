@@ -7,11 +7,11 @@ import {useHistory} from 'react-router';
 import {BusinessDTO} from './Business';
 import {fetchAllBusinesses, selectAllBusinesses} from './businessSlice';
 import {Header} from '../../common/components/Texts';
-import {isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
-import {State} from '../../app/AppTypes';
+import {selectApiState} from '../../common/api/apiSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -24,7 +24,7 @@ export const AllBusinessesView: React.FC = () => {
     const history = useHistory();
     const dispatch = useAppDispatch();
 
-    const loading = useAppSelector(isLoading(State.Businesses));
+    const apiState = useAppSelector(selectApiState);
     const businesses = useAppSelector(selectAllBusinesses);
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
 
@@ -76,7 +76,7 @@ export const AllBusinessesView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={loading}
+                        loading={apiState.loading}
                         tableData={businesses}
                         fetchData={() => dispatch(fetchAllBusinesses())}
                         tableTitle="Businesses"

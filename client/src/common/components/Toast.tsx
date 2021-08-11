@@ -54,7 +54,7 @@ export const ToastMessage = ({message, severity, onClose}: ToastProps) => {
             <Snackbar
                 anchorOrigin={{vertical: 'top', horizontal: 'center'}}
                 open={message ? true : false}
-                autoHideDuration={5000}
+                autoHideDuration={6000}
                 onClose={onClose}
             >
                 <Alert onClose={onClose} severity={severity}>
@@ -83,7 +83,7 @@ export const ExtendedToastMessage = ({
             <Snackbar
                 anchorOrigin={{vertical: 'top', horizontal: 'center'}}
                 open={message ? true : false}
-                autoHideDuration={50000}
+                autoHideDuration={10000}
                 onClose={onClose}
             >
                 <Alert className={styles.alert} onClose={onClose} severity="success">

@@ -6,11 +6,11 @@ import {makeStyles} from '@material-ui/core/styles';
 import {BookingDTO} from './Booking';
 import {deleteBookingForUser, fetchBookingsByUser, selectBookingsByUser} from './bookingSlice';
 import {Header} from '../../common/components/Texts';
-import {isLoading, useAppDispatch, useAppSelector} from '../../app/Store';
 import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
-import {State} from '../../app/AppTypes';
+import {selectApiState} from '../../common/api/apiSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -22,7 +22,7 @@ export const UserBookingView: React.FC = () => {
     const styles = useStyles();
     const dispatch = useAppDispatch();
 
-    const loading = useAppSelector(isLoading(State.Bookings));
+    const apiState = useAppSelector(selectApiState);
     const bookings = useAppSelector(selectBookingsByUser);
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
 
@@ -74,7 +74,7 @@ export const UserBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={loading}
+                        loading={apiState.loading}
                         fetchData={() => dispatch(fetchBookingsByUser(null))}
                         tableData={bookings}
                         tableTitle="Bookings"
