@@ -2,19 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {omit} from 'lodash-es';
-import {useLocation} from 'react-router-dom';
 
 import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
 import {ComboBoxOption} from '../../common/components/form/ComboBox';
 import {ErrorView} from '../../common/views/ErrorView';
-import {
-    fetchBusinessesTypes,
-    selectBusinessTypes,
-    updateBusinessInfo,
-} from './businessSlice';
+import {fetchBusinessesTypes, selectBusinessTypes, updateBusinessInfo} from './businessSlice';
 import {FormCard, FormCardData} from '../../common/components/card/FormCard';
 import {Header} from '../../common/components/Texts';
+import {selectCurrentBusiness} from './businessSlice';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
 import {TextFieldModal} from '../../common/components/modal/TextFieldModal';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
@@ -29,26 +25,21 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface LocationState {
-    business: BusinessDTO;
-}
-
 export const BusinessProfileView: React.FC = () => {
     const styles = useStyles();
-    const location = useLocation<LocationState>();
     const dispatch = useAppDispatch();
 
     const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
     const [zips, setZips] = useState<ComboBoxOption[]>([]);
     const [modalKey, setModalKey] = useState('');
+
+    const business = useAppSelector(selectCurrentBusiness);
     const businessTypes = useAppSelector(selectBusinessTypes);
 
-
-    if (!location.state) {
+    if (!business) {
         return <ErrorView />;
     }
 
-    const business = location.state.business;
     const formValues = omit(business, [
         'businessHours',
         'city',

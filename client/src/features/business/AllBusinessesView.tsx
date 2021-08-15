@@ -8,7 +8,6 @@ import {BusinessDTO} from './Business';
 import {fetchAllBusinesses, selectAllBusinesses} from './businessSlice';
 import {Header} from '../../common/components/Texts';
 import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
-import {selectApiState} from '../../common/api/apiSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
@@ -24,7 +23,6 @@ export const AllBusinessesView: React.FC = () => {
     const history = useHistory();
     const dispatch = useAppDispatch();
 
-    const apiState = useAppSelector(selectApiState);
     const businesses = useAppSelector(selectAllBusinesses);
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
 
@@ -76,7 +74,6 @@ export const AllBusinessesView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={apiState.loading}
                         tableData={businesses}
                         fetchData={() => dispatch(fetchAllBusinesses())}
                         tableTitle="Businesses"

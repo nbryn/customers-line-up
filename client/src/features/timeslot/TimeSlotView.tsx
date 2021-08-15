@@ -12,7 +12,6 @@ import {
 } from '../timeslot/timeSlotSlice';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
-import {selectApiState} from '../../common/api/apiSlice';
 import {TimeSlotDTO} from './TimeSlot';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
@@ -31,9 +30,7 @@ interface LocationState {
 export const TimeSlotView: React.FC = () => {
     const styles = useStyles();
     const location = useLocation<LocationState>();
-
     const dispatch = useAppDispatch();
-    const apiState = useAppSelector(selectApiState);
 
     if (!location.state) {
         return <ErrorView />;
@@ -68,7 +65,6 @@ export const TimeSlotView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={apiState.loading}
                         tableData={timeSlots}
                         fetchData={() => dispatch(fetchTimeSlotsByBusiness(business.id))}
                         tableTitle="Time Slots"

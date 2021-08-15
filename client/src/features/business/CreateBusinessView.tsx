@@ -10,7 +10,6 @@ import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
 import {createBusiness, fetchBusinessesTypes, selectBusinessTypes} from './businessSlice';
 import {Form} from '../../common/components/form/Form';
 import {Header} from '../../common/components/Texts';
-import {selectApiState} from '../../common/api/apiSlice';
 import StringUtil from '../../common/util/StringUtil';
 import {TextField} from '../../common/components/form/TextField';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
@@ -44,9 +43,8 @@ export const CreateBusinessView: React.FC = () => {
 
     const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
     const [zips, setZips] = useState<ComboBoxOption[]>([]);
-
     const businessTypes = useAppSelector(selectBusinessTypes);
-    const apiState = useAppSelector(selectApiState);
+
 
     const formValues: BusinessDTO = {
         id: '',
@@ -104,7 +102,6 @@ export const CreateBusinessView: React.FC = () => {
                         <Form
                             onSubmit={formHandler.handleSubmit}
                             buttonText="Create"
-                            working={apiState.loading}
                             valid={formHandler.isValid}
                         >
                             <Row>

@@ -1,10 +1,12 @@
-import React, {ReactElement, useEffect, useState} from 'react';
+import React, {ReactElement, useEffect} from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {DTO} from '../models/General';
+import {selectApiState} from '../api/apiSlice';
 import {Table, TableColumn} from '../components/Table';
+import {useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     spinner: {
@@ -16,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
 export type Props = {
     actions: any;
     columns: TableColumn[];
-    loading: boolean;
     tableData: DTO[];
     tableTitle: string | ReactElement;
     emptyMessage?: string;
@@ -27,12 +28,12 @@ export const TableContainer: React.FC<Props> = ({
     actions,
     columns,
     tableTitle,
-    loading,
     tableData,
     emptyMessage,
     fetchData,
 }: Props) => {
     const styles = useStyles();
+    const apiState = useAppSelector(selectApiState);
 
     useEffect(() => {
         (async () => {
@@ -42,7 +43,7 @@ export const TableContainer: React.FC<Props> = ({
 
     return (
         <>
-            {loading ? (
+            {apiState.loading ? (
                 <Row className={styles.spinner}>
                     <CircularProgress />
                 </Row>

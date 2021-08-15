@@ -2,9 +2,7 @@ import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import {useLocation} from 'react-router-dom';
 
-import {BusinessDTO} from '../business/Business';
 import {BookingDTO} from './Booking';
 import {
     deleteBookingForBusiness,
@@ -13,7 +11,7 @@ import {
 } from './bookingSlice';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
-import { selectApiState } from '../../common/api/apiSlice';
+import {selectCurrentBusiness} from '../business/businessSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
@@ -24,22 +22,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface LocationState {
-    business: BusinessDTO;
-}
-
 export const BusinessBookingView: React.FC = () => {
     const styles = useStyles();
-    const location = useLocation<LocationState>();
     const dispatch = useAppDispatch();
+    const business = useAppSelector(selectCurrentBusiness);
 
-    if (!location.state) {
-        <ErrorView />;
+    if (!business) {
+        return <ErrorView />;
     }
 
-    const {business} = location.state;
-
-    const apiState = useAppSelector(selectApiState);
     const bookings = useAppSelector(selectBookingsByBusiness(business.id));
 
     const columns: TableColumn[] = [
@@ -61,9 +52,7 @@ export const BusinessBookingView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Delete Booking" clickable color="secondary" />,
             onClick: async (event: React.ChangeEvent, rowData: BookingDTO) => {
-                dispatch(
-                    deleteBookingForBusiness({id: business.id, data: rowData.id})
-                );
+                dispatch(deleteBookingForBusiness({id: business.id, data: rowData.id}));
             },
         },
     ];
@@ -78,7 +67,6 @@ export const BusinessBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={apiState.loading}
                         fetchData={() => dispatch(fetchBookingsByBusiness(business.id))}
                         tableTitle="Bookings"
                         emptyMessage="No Bookings Yet"

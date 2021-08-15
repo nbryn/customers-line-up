@@ -2,16 +2,14 @@ import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import {useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 
-import {BusinessDTO} from '../business/Business';
 import {deleteEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} from './employeeSlice';
 import {EmployeeDTO} from './Employee';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
+import {selectCurrentBusiness} from '../business/businessSlice';
 import {RootState, useAppDispatch, useAppSelector} from '../../app/Store';
-import {selectApiState} from '../../common/api/apiSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 
@@ -21,21 +19,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface LocationState {
-    business: BusinessDTO;
-}
-
 export const EmployeeView: React.FC = () => {
     const styles = useStyles();
-    const location = useLocation<LocationState>();
-
     const dispatch = useAppDispatch();
-    const apiState = useAppSelector(selectApiState);
+    const business = useAppSelector(selectCurrentBusiness);
 
-    if (!location.state) {
+    if (!business) {
         return <ErrorView />;
     }
-    const {business} = location.state;
 
     const employees = useSelector<RootState, EmployeeDTO[]>((state) =>
         selectEmployeesByBusiness(state, business.id)
@@ -73,7 +64,6 @@ export const EmployeeView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={apiState.loading}
                         fetchData={() => dispatch(fetchEmployeesByBusiness(business.id))}
                         tableTitle="Employees"
                         tableData={employees}

@@ -7,15 +7,12 @@ import {Form} from '../../common/components/form/Form';
 import {login} from './userSlice';
 import {LoginDTO} from './User';
 import {loginValidationSchema} from './UserValidation';
-import {selectApiState} from '../../common/api/apiSlice';
 import {SignupView} from './SignupView';
 import StringUtil from '../../common/util/StringUtil';
 import {TextField} from '../../common/components/form/TextField';
 import TextFieldUtil from '../../common/util/TextFieldUtil';
-import {useAppDispatch, useAppSelector} from '../../app/Store';
+import {useAppDispatch} from '../../app/Store';
 import {useForm} from '../../common/hooks/useForm';
-
-import { clearApiState } from '../../common/api/apiSlice';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -39,8 +36,6 @@ const useStyles = makeStyles((theme) => ({
 export const LoginView: React.FC = () => {
     const styles = useStyles();
     const dispatch = useAppDispatch();
-    
-    const apiState = useAppSelector(selectApiState);
     const [renderSignUp, setRenderSignUp] = useState(false);
 
     const formValues: LoginDTO = {
@@ -74,9 +69,7 @@ export const LoginView: React.FC = () => {
                             <Form
                                 onSubmit={formHandler.handleSubmit}
                                 buttonText="Login"
-                                working={apiState.loading}
                                 valid={formHandler.isValid}
-                                errorMessage={apiState.message}
                             >
                                 {Object.keys(formValues).map((key) => (
                                     <FormGroup key={key}>

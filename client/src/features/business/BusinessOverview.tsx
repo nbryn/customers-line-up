@@ -10,7 +10,8 @@ import {Header} from '../../common/components/Texts';
 import {InfoCard} from '../../common/components/card/InfoCard';
 import PathUtil, {PathInfo} from '../../common/util/PathUtil';
 import {selectApiState} from '../../common/api/apiSlice';
-import {useAppDispatch, useAppSelector} from '../../app/Store'
+import {setCurrentBusiness} from './businessSlice';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     row: {
@@ -51,23 +52,20 @@ export const BusinessOverview: React.FC = () => {
                 <Row className={styles.row}>
                     <>
                         {businesses.map((business) => {
-                            localStorage.setItem('business', JSON.stringify(business));
                             return (
                                 <Col key={business.id} sm={6} md={8} lg={4}>
                                     <InfoCard
                                         title={business.name}
                                         buttonText={pathInfo.primaryButtonText}
-                                        buttonAction={() =>
-                                            history.push(`/business/${pathInfo.primaryPath}`, {
-                                                business: business,
-                                            })
-                                        }
+                                        buttonAction={() => {
+                                            dispatch(setCurrentBusiness(business));
+                                            history.push(`/business/${pathInfo.primaryPath}`);
+                                        }}
                                         secondaryButtonText={pathInfo.secondaryButtonText}
-                                        secondaryAction={() =>
-                                            history.push(`/business/${pathInfo.secondaryPath}`, {
-                                                business: business,
-                                            })
-                                        }
+                                        secondaryAction={() => {
+                                            dispatch(setCurrentBusiness(business));
+                                            history.push(`/business/${pathInfo.secondaryPath}`);
+                                        }}
                                     >
                                         <CardInfo
                                             infoTexts={[

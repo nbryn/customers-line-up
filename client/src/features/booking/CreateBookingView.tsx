@@ -2,9 +2,7 @@ import React, {useState} from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import {useLocation, useHistory} from 'react-router-dom';
 
-import {BusinessDTO} from '../business/Business';
 import {createBooking} from './bookingSlice';
 import {ErrorView} from '../../common/views/ErrorView';
 import {
@@ -12,12 +10,13 @@ import {
     selectAvailableTimeSlotsByBusiness,
 } from '../timeslot/timeSlotSlice';
 import {Header} from '../../common/components/Texts';
-import {useAppDispatch, useAppSelector} from '../../app/Store';
+
 import {MapModal} from '../../common/components/modal/MapModal';
-import {selectApiState} from '../../common/api/apiSlice';
+import {selectCurrentBusiness} from '../business/businessSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 import {TimeSlotDTO} from '../timeslot/TimeSlot';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     address: {
@@ -32,23 +31,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface LocationState {
-    business: BusinessDTO;
-}
-
 export const CreateBookingView: React.FC = () => {
     const styles = useStyles();
-    const location = useLocation<LocationState>();
     const dispatch = useAppDispatch();
 
-    const apiState = useAppSelector(selectApiState);
+    const business = useAppSelector(selectCurrentBusiness);
     const [showMapModal, setShowMapModal] = useState<boolean>(false);
 
-    if (!location.state) {
+    if (!business) {
         return <ErrorView />;
     }
 
-    const {business} = location.state;
     const timeSlots = useAppSelector(selectAvailableTimeSlotsByBusiness(business.id));
 
     const columns: TableColumn[] = [
@@ -83,7 +76,6 @@ export const CreateBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={apiState.loading}
                         tableData={timeSlots}
                         fetchData={() => dispatch(fetchAvailableTimeSlotsByBusiness(business.id))}
                         tableTitle={

@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import {useHistory, useLocation} from 'react-router-dom';
 
-import {BusinessDTO} from '../business/Business';
 import {Card} from '../../common/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
 import {createEmployee} from './employeeSlice';
@@ -13,7 +11,7 @@ import {fetchUsersNotEmployedByBusiness, selectUsersAsComboBoxOption} from '../u
 import {Form} from '../../common/components/form/Form';
 import {Header} from '../../common/components/Texts';
 import {EmployeeDTO, NewEmployeeDTO} from './Employee';
-import {selectApiState} from '../../common/api/apiSlice';
+import {selectCurrentBusiness} from '../business/businessSlice';
 import {TextField} from '../../common/components/form/TextField';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useForm} from '../../common/hooks/useForm';
@@ -38,25 +36,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface LocationState {
-    business: BusinessDTO;
-}
-
 export const CreateEmployeeView: React.FC = () => {
     const styles = useStyles();
-    const location = useLocation<LocationState>();
-
     const dispatch = useAppDispatch();
-    const apiState = useAppSelector(selectApiState);
 
     const [selectedUser, setSelectedUser] = useState<ComboBoxOption>({label: ''});
     const [showComboBox, setShowComBox] = useState(true);
-    
-    if (!location.state) {
+    const business = useAppSelector(selectCurrentBusiness);
+
+    if (!business) {
         return <ErrorView />;
     }
 
-    const {business} = location.state;
     const usersNotEmployedByBusiness = useAppSelector(selectUsersAsComboBoxOption(business.id));
 
     const {formHandler, ...form} = useForm<NewEmployeeDTO>({
@@ -116,7 +107,6 @@ export const CreateEmployeeView: React.FC = () => {
                                         formHandler.handleSubmit();
                                     }}
                                     buttonText="Create"
-                                    working={apiState.loading}
                                     valid={formHandler.isValid}
                                 >
                                     <FormGroup className={styles.formGroup}>

@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../common/api/ApiCaller';
 import {BusinessDTO} from './Business';
@@ -9,12 +9,14 @@ import {selectCurrentUser} from '../user/userSlice';
 const DEFAULT_BUSINESS_ROUTE = 'business';
 interface BusinessState extends NormalizedEntityState<BusinessDTO> {
     businessTypes: string[];
+    currentBusiness: BusinessDTO | null;
 }
 
 const initialState: BusinessState = {
     byId: {},
     allIds: [],
     businessTypes: [],
+    currentBusiness: null,
 };
 
 export const createBusiness = createAsyncThunk('business/create', async (data: BusinessDTO) => {
@@ -50,10 +52,14 @@ export const updateBusinessInfo = createAsyncThunk(
     }
 );
 
-export const bookingSlice = createSlice({
+export const businessSlice = createSlice({
     name: 'business',
     initialState,
-    reducers: {},
+    reducers: {
+        setCurrentBusiness: (state, action: PayloadAction<BusinessDTO>) => {
+            state.currentBusiness = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchAllBusinesses.fulfilled, (state, {payload}) => {
             const newState = {...state.byId};
@@ -75,11 +81,14 @@ export const bookingSlice = createSlice({
     },
 });
 
+export const {setCurrentBusiness} = businessSlice.actions;
+
 export const selectAllBusinesses = (state: RootState) => Object.values(state.businesses.byId);
+export const selectCurrentBusiness = (state: RootState) => state.businesses.currentBusiness;
 
 export const selectBusinessesByOwner = (state: RootState) =>
     selectAllBusinesses(state).filter((b) => b.ownerEmail === selectCurrentUser(state)?.email);
 
 export const selectBusinessTypes = (state: RootState) => state.businesses.businessTypes;
 
-export default bookingSlice.reducer;
+export default businessSlice.reducer;

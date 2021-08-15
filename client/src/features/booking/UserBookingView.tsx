@@ -7,7 +7,6 @@ import {BookingDTO} from './Booking';
 import {deleteBookingForUser, fetchBookingsByUser, selectBookingsByUser} from './bookingSlice';
 import {Header} from '../../common/components/Texts';
 import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
-import {selectApiState} from '../../common/api/apiSlice';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
@@ -22,7 +21,6 @@ export const UserBookingView: React.FC = () => {
     const styles = useStyles();
     const dispatch = useAppDispatch();
 
-    const apiState = useAppSelector(selectApiState);
     const bookings = useAppSelector(selectBookingsByUser);
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
 
@@ -74,7 +72,6 @@ export const UserBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        loading={apiState.loading}
                         fetchData={() => dispatch(fetchBookingsByUser(null))}
                         tableData={bookings}
                         tableTitle="Bookings"
