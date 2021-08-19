@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using CLup.Features.Auth;
 using CLup.Features.Extensions;
+using CLup.Features.TimeSlots.Commands;
+using CLup.Features.TimeSlots.Queries;
 
 namespace CLup.Features.TimeSlots
 {
@@ -25,7 +27,7 @@ namespace CLup.Features.TimeSlots
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> GenerateTimeSlots([FromBody] GenerateTimeSlotsCommand.Command command)
+        public async Task<IActionResult> GenerateTimeSlots([FromBody] GenerateTimeSlotsCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -36,7 +38,7 @@ namespace CLup.Features.TimeSlots
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteTimeSlot([FromRoute] DeleteTimeSlotCommand.Command command)
+        public async Task<IActionResult> DeleteTimeSlot([FromRoute] DeleteTimeSlotCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -47,7 +49,7 @@ namespace CLup.Features.TimeSlots
         [Route("business/{businessId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TimeSlotDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> TimeSlotsByBusiness([FromRoute] TimeSlotsByBusinessQuery.Query query)
+        public async Task<IActionResult> TimeSlotsByBusiness([FromRoute] TimeSlotsByBusinessQuery query)
         {
             var result = await _mediator.Send(query);
 
@@ -58,7 +60,7 @@ namespace CLup.Features.TimeSlots
         [Route("available")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TimeSlotDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> AvailableTimeSlotsByBusiness([FromQuery] AvailableTimeSlotsByBusinessQuery.Query query)
+        public async Task<IActionResult> AvailableTimeSlotsByBusiness([FromQuery] AvailableTimeSlotsByBusinessQuery query)
         {
             var result = await _mediator.Send(query);
 

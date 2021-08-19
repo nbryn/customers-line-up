@@ -23,6 +23,6 @@ namespace CLup.Domain
         [Required]
         public DateTime End { get; set; }
 
-        public IEnumerable<Booking>? Bookings { get; set; }
+        public IEnumerable<Booking> Bookings { get; set; }
     }
 }

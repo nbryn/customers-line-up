@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using CLup.Features.Auth;
+using CLup.Features.Bookings.Commands;
+using CLup.Features.Bookings.Queries;
 using CLup.Features.Extensions;
 
 namespace CLup.Features.Bookings
@@ -28,7 +30,7 @@ namespace CLup.Features.Bookings
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var response = await _mediator.Send(new CreateBookingCommand.Command(userMail, timeSlotId));
+            var response = await _mediator.Send(new CreateBookingCommand(userMail, timeSlotId));
 
             return this.CreateActionResult(response);
         }
@@ -37,7 +39,7 @@ namespace CLup.Features.Bookings
         [Route("user/{bookingId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UserDeleteBooking([FromRoute] UserDeleteBookingCommand.Command command)
+        public async Task<IActionResult> UserDeleteBooking([FromRoute] UserDeleteBookingCommand command)
         {
             var response = await _mediator.Send(command);
 
@@ -52,7 +54,7 @@ namespace CLup.Features.Bookings
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
  
-            var response = await _mediator.Send(new BusinessDeleteBookingCommand.Command(ownerEmail, bookingId, businessId));
+            var response = await _mediator.Send(new BusinessDeleteBookingCommand(ownerEmail, bookingId, businessId));
 
             return this.CreateActionResult(response);
         }
@@ -65,7 +67,7 @@ namespace CLup.Features.Bookings
         {
             string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var response = await _mediator.Send(new UserBookingsQuery.Query(userMail));
+            var response = await _mediator.Send(new UserBookingsQuery(userMail));
 
             return Ok(response);
         }
@@ -74,7 +76,7 @@ namespace CLup.Features.Bookings
         [Route("business/{businessId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BookingDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> BusinessBookings([FromRoute] BusinessBookingsQuery.Query query)
+        public async Task<IActionResult> BusinessBookings([FromRoute] BusinessBookingsQuery query)
         {
             var response = await _mediator.Send(query);
 

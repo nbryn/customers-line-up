@@ -10,9 +10,8 @@ namespace CLup.Features.Users
         private readonly IAuthService _authService;
 
         public AuthTokenResolver(IAuthService authService) => _authService = authService;
-        
-        public string Resolve(User user, UserDTO dto, string token, ResolutionContext context)
-            => _authService.GenerateJWTToken(user.Email);    
-    }
 
+        public string Resolve(User user, UserDTO dto, string token, ResolutionContext context)
+            => _authService.GenerateJWTToken(user.Email);
+    }
 }

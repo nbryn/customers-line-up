@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using CLup.Features.Auth;
 using CLup.Features.Extensions;
+using CLup.Features.Users.Queries;
+using CLup.Features.Users.Commands;
 
 namespace CLup.Features.Users
 {
@@ -24,7 +26,7 @@ namespace CLup.Features.Users
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
-        public async Task<IActionResult> Register([FromBody] RegisterUserCommand.Command command)
+        public async Task<IActionResult> Register([FromBody] RegisterCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -36,7 +38,7 @@ namespace CLup.Features.Users
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDTO))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> Login([FromBody] LoginCommand.Command command)
+        public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -52,7 +54,7 @@ namespace CLup.Features.Users
         {
             string userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var result = await _mediator.Send(new UserInfoQuery.Query(userEmail));
+            var result = await _mediator.Send(new UserInfoQuery(userEmail));
 
             return this.CreateActionResult(result);
         }
@@ -62,7 +64,7 @@ namespace CLup.Features.Users
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UserDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] UsersNotEmployedByBusinessQuery.Query query)
+        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] UsersNotEmployedByBusinessQuery query)
         {
             var result = await _mediator.Send(query);
 
@@ -76,7 +78,7 @@ namespace CLup.Features.Users
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllUsers()
         {
-            var result = await _mediator.Send(new AllUsersQuery.Query());
+            var result = await _mediator.Send(new FetchAllUsersQuery());
 
             return this.CreateActionResult(result);
         }

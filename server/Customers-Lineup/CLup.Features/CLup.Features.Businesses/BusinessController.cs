@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using CLup.Features.Auth;
+using CLup.Features.Businesses.Commands;
+using CLup.Features.Businesses.Queries;
 using CLup.Features.Extensions;
 
 namespace CLup.Features.Businesses
@@ -23,9 +25,9 @@ namespace CLup.Features.Businesses
         [HttpPost]
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> NewBusiness([FromBody] CreateBusinessCommand.Command command)
+        public async Task<IActionResult> NewBusiness([FromBody] CreateBusinessCommand command)
         {
-      
+
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             command.OwnerEmail = ownerEmail;
@@ -43,7 +45,7 @@ namespace CLup.Features.Businesses
         {
             string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            var result = await _mediator.Send(new BusinessesByOwnerQuery.Query(ownerEmail));
+            var result = await _mediator.Send(new BusinessesByOwnerQuery(ownerEmail));
 
             return this.CreateActionResult(result);
         }
@@ -52,8 +54,8 @@ namespace CLup.Features.Businesses
         [Route("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateBusinessData([FromBody] UpdateBusinessCommand.Command command)
-        {  
+        public async Task<IActionResult> UpdateBusinessData([FromBody] UpdateBusinessCommand command)
+        {
             var result = await _mediator.Send(command);
 
             return this.CreateActionResult(result);
@@ -65,7 +67,7 @@ namespace CLup.Features.Businesses
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAll()
         {
-            var result = await _mediator.Send(new AllBusinessesQuery.Query());
+            var result = await _mediator.Send(new AllBusinessesQuery());
 
             return this.CreateActionResult(result);
         }
@@ -75,7 +77,7 @@ namespace CLup.Features.Businesses
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> FetchBusinessTypes()
         {
-            return Ok(await _mediator.Send(new BusinessTypes.Query()));
+            return Ok(await _mediator.Send(new BusinessTypesQuery()));
         }
     }
 }

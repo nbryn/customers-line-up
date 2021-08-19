@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using CLup.Features.Auth;
+using CLup.Features.Employees.Commands;
+using CLup.Features.Employees.Queries;
 using CLup.Features.Extensions;
 
 namespace CLup.Features.Employees
@@ -23,8 +25,8 @@ namespace CLup.Features.Employees
         [Route("business/{businessId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<EmployeeDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> EmployeesByBusiness([FromRoute] BusinessEmployees.Query query)
-        {  
+        public async Task<IActionResult> EmployeesByBusiness([FromRoute] FetchEmployeesQuery query)
+        {
             var result = await _mediator.Send(query);
 
             return this.CreateActionResult(result);
@@ -34,7 +36,7 @@ namespace CLup.Features.Employees
         [Route("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> NewEmployee(CreateEmployeeCommand.Command command)
+        public async Task<IActionResult> NewEmployee(CreateEmployeeCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -47,9 +49,9 @@ namespace CLup.Features.Employees
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RemoveEmployee(string email, [FromQuery] string businessId)
         {
-            var result = await _mediator.Send(new DeleteEmployeeCommand.Command(businessId, email));
+            var result = await _mediator.Send(new DeleteEmployeeCommand(businessId, email));
 
             return this.CreateActionResult(result);
-       }
+        }
     }
 }

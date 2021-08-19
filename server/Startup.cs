@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 using CLup.Features.Auth;
-using CLup.Features.Bookings;
 using CLup.Extensions;
 
 namespace CLup
@@ -17,7 +16,7 @@ namespace CLup
     {
         internal IConfiguration _config { get; private set; }
         public IWebHostEnvironment Environment { get; }
-        readonly string CorsApi = "CorsApi";
+
         public Startup(IConfiguration config, IWebHostEnvironment environment)
         {
             _config = config;
