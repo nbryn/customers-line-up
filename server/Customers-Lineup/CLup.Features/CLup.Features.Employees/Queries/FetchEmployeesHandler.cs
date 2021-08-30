@@ -9,10 +9,9 @@ using MediatR;
 
 using CLup.Data;
 using CLup.Features.Common;
-using CLup.Features.Employees.Queries;
 using CLup.Features.Extensions;
 
-namespace CLup.Features.Employees
+namespace CLup.Features.Employees.Queries
 {
 
     public class FetchEmployeesHandler : IRequestHandler<FetchEmployeesQuery, Result<List<EmployeeDTO>>>

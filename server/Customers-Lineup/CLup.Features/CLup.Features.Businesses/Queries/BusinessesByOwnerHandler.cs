@@ -9,10 +9,9 @@ using FluentValidation;
 using MediatR;
 
 using CLup.Data;
-using CLup.Features.Businesses.Queries;
 using CLup.Features.Common;
 
-namespace CLup.Features.Businesses
+namespace CLup.Features.Businesses.Queries
 {
     public class BusinessesByOwnerHandler : IRequestHandler<BusinessesByOwnerQuery, Result<IList<BusinessDTO>>>
     {

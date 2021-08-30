@@ -5,7 +5,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useHistory} from 'react-router';
 
 import {BusinessDTO} from './Business';
-import {fetchAllBusinesses, selectAllBusinesses} from './businessSlice';
+import {fetchAllBusinesses, selectAllBusinesses, setCurrentBusiness} from './businessSlice';
 import {Header} from '../../common/components/Texts';
 import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
 import {TableColumn} from '../../common/components/Table';
@@ -40,6 +40,7 @@ export const AllBusinessesView: React.FC = () => {
             icon: () => <Chip size="small" label="Go to business" clickable color="primary" />,
             tooltip: 'See available time slots',
             onClick: (event: any, business: BusinessDTO) => {
+                dispatch(setCurrentBusiness(business));
                 history.push('/booking/new', {business});
             },
         },

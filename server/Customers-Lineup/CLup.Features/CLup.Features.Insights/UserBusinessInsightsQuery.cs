@@ -60,9 +60,9 @@ namespace CLup.Features.Insights
 
                 var insights = new Model
                 {
-                    BusinessBookings = bookings.Count,
-                    Businesses = businesses.Count,
-                    Employees = employees.Count
+                    BusinessBookings = bookings?.Count ?? 0,
+                    Businesses = businesses?.Count ?? 0,
+                    Employees = employees?.Count ?? 0
                 };
 
                 return Result.Ok<Model>(insights);

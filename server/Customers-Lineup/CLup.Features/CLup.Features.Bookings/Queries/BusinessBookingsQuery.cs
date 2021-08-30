@@ -6,7 +6,7 @@ using CLup.Features.Common;
 
 namespace CLup.Features.Bookings.Queries
 {
-    public class BusinessBookingsQuery : IRequest<Result<IList<BookingDTO>>>
+    public class BusinessBookingsQuery : IRequest<Result<List<BookingDTO>>>
     {
         public string BusinessId { get; set; }
     }

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Features.Common;
+using CLup.Features.Extensions;
 
 namespace CLup.Features.Insights
 {
@@ -41,23 +42,19 @@ namespace CLup.Features.Insights
 
             public async Task<Result<Model>> Handle(Query query, CancellationToken cancellationToken)
             {
-                var bookings = await _context.Bookings
-                                        .Include(b => b.Business)
-                                        .Include(b => b.TimeSlot)
-                                        .Where(x => x.UserEmail == query.UserEmail)
-                                        .ToListAsync();
 
-
-                var nextBooking = bookings.OrderBy(x => Math.Abs(x.TimeSlot.Start.Ticks - DateTime.Now.Ticks)).First();
-
-                var insights = new Model
-                {
-                    OwnBookings = bookings.Count,
-                    NextBookingBusiness = nextBooking.Business.Name,
-                    NextBookingTime = nextBooking.TimeSlot.Start.ToString("dd/MM/yyyy - HH:mm")
-                };
-
-                return Result.Ok<Model>(insights);
+                return await _context.Bookings.Include(b => b.Business)
+                        .Include(b => b.TimeSlot)
+                        .Where(x => x.UserEmail == query.UserEmail)
+                        .ToListAsync()
+                        .ToResult()
+                        .AndThenDouble(bookings => bookings?.OrderBy(x => Math.Abs(x.TimeSlot.Start.Ticks - DateTime.Now.Ticks)).FirstOrDefault())
+                        .Finally((bookings, nextBooking) => new Model
+                        {
+                            OwnBookings = bookings?.Count ?? 0,
+                            NextBookingBusiness = nextBooking?.Business.Name ?? "You don't have any bookings.",
+                            NextBookingTime = nextBooking?.TimeSlot.Start.ToString("dd/MM/yyyy - HH:mm") ?? "You don't have any bookings."
+                        });
             }
         }
     }

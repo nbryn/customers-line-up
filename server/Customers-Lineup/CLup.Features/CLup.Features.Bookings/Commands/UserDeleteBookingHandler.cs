@@ -5,11 +5,10 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
-using CLup.Features.Bookings.Commands;
 using CLup.Features.Common;
 using CLup.Features.Extensions;
 
-namespace CLup.Features.Bookings
+namespace CLup.Features.Bookings.Commands
 {
     public class UserDeleteBookingHandler : IRequestHandler<UserDeleteBookingCommand, Result>
     {

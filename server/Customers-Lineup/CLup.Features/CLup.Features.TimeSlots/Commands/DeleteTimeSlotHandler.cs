@@ -7,9 +7,8 @@ using MediatR;
 using CLup.Data;
 using CLup.Features.Common;
 using CLup.Features.Extensions;
-using CLup.Features.TimeSlots.Commands;
 
-namespace CLup.Features.TimeSlots
+namespace CLup.Features.TimeSlots.Commands
 {
     public class DeleteTimeSlotHandler : IRequestHandler<DeleteTimeSlotCommand, Result>
     {

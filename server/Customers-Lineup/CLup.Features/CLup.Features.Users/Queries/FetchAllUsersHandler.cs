@@ -8,9 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Features.Common;
-using CLup.Features.Users.Queries;
 
-namespace CLup.Features.Users
+namespace CLup.Features.Users.Queries
 {
     public class Handler : IRequestHandler<FetchAllUsersQuery, Result<IList<UserDTO>>>
     {

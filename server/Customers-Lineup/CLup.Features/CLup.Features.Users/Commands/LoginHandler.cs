@@ -9,9 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using CLup.Data;
 using CLup.Features.Common;
 using CLup.Features.Extensions;
-using CLup.Features.Users.Commands;
 
-namespace CLup.Features.Users
+namespace CLup.Features.Users.Commands
 {
     public class LoginHandler : IRequestHandler<LoginCommand, Result<UserDTO>>
     {
@@ -28,7 +27,7 @@ namespace CLup.Features.Users
         public async Task<Result<UserDTO>> Handle(LoginCommand command, CancellationToken cancellationToken)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Email == command.Email)
-                .FailureIf()
+                .ToResult()
                 .Ensure(user => BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
                 .AndThenF(user => _userService.DetermineRole(user))
                 .Finally(user => _mapper.Map<UserDTO>(user));

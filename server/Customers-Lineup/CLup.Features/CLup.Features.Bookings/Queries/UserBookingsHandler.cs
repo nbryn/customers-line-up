@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 
-namespace CLup.Features.Bookings
+namespace CLup.Features.Bookings.Queries
 {
     
     public class UserBookingsHandler : IRequestHandler<UserBookingsQuery, IList<BookingDTO>>

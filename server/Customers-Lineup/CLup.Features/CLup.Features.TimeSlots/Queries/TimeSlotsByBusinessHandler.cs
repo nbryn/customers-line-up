@@ -1,31 +1,29 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 using AutoMapper;
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 
 using CLup.Data;
 using CLup.Features.Common;
 using CLup.Features.Extensions;
-using CLup.Features.TimeSlots.Queries;
 
-namespace CLup.Features.TimeSlots
+namespace CLup.Features.TimeSlots.Queries
 {
-    public class AvailableTimeSlotsByBusinessHandler : IRequestHandler<AvailableTimeSlotsByBusinessQuery, Result<List<TimeSlotDTO>>>
+    public class Handler : IRequestHandler<TimeSlotsByBusinessQuery, Result<List<TimeSlotDTO>>>
     {
         private readonly CLupContext _context;
         private readonly IMapper _mapper;
-        public AvailableTimeSlotsByBusinessHandler(CLupContext context, IMapper mapper)
+        public Handler(CLupContext context, IMapper mapper)
         {
             _mapper = mapper;
             _context = context;
         }
-
-        public async Task<Result<List<TimeSlotDTO>>> Handle(AvailableTimeSlotsByBusinessQuery query, CancellationToken cancellationToken)
+        public async Task<Result<List<TimeSlotDTO>>> Handle(TimeSlotsByBusinessQuery query, CancellationToken cancellationToken)
         {
             return await _context.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
                     .FailureIfDiscard("Business not found.")

@@ -7,10 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 
 using CLup.Data;
-using CLup.Features.Businesses.Queries;
 using CLup.Features.Common;
 
-namespace CLup.Features.Businesses
+namespace CLup.Features.Businesses.Queries
 {
 
     public class AllBusinessesHandler : IRequestHandler<AllBusinessesQuery, Result<IList<BusinessDTO>>>

@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 export const GenerateTimeSlotsView: React.FC = () => {
     const styles = useStyles();
     const dispatch = useAppDispatch();
@@ -50,24 +49,6 @@ export const GenerateTimeSlotsView: React.FC = () => {
             </Row>
             <Row className={styles.row}>
                 <Col lg={6}>
-                    {/*      <Modal
-                        show={apiInfo.message ? true : false}
-                        title={
-                            apiInfo.message !== TIMESLOTS_GENERATED_MSG
-                                ? apiInfo.message
-                                : selectedDate &&
-                                  `Time slots added on ${selectedDate.label.substring(
-                                      selectedDate.label.indexOf(',') + 1
-                                  )}`
-                        }
-                        text={apiInfo.message}
-                        primaryAction={() => {
-                            dispatch(clearTimeSlotsApiInfo());
-                            history.push('/business/timeslots/manage', {business});
-                        }}
-                        primaryActionText="See time slots"
-                        secondaryAction={() => dispatch(clearTimeSlotsApiInfo())}
-                    /> */}
                     <Card
                         className={styles.card}
                         title="Generate Time Slots"

@@ -9,9 +9,8 @@ using CLup.Data;
 using CLup.Domain;
 using CLup.Features.Common;
 using CLup.Features.Extensions;
-using CLup.Features.Users.Commands;
 
-namespace CLup.Features.Users
+namespace CLup.Features.Users.Commands
 {
     public class RegisterHandler : IRequestHandler<RegisterCommand, Result<UserDTO>>
     {

@@ -44,6 +44,9 @@ namespace CLup.Features.Extensions
         public static async Task<Result<T, U>> AndThenDouble<T, U>(this Task<Result<T>> task, Func<Task<U>> f)
             => await (await task).BindDouble(f);
 
+        public static async Task<Result<T, U>> AndThenDouble<T, U>(this Task<Result<T>> task, Func<T, U> f)
+            => (await task).BindDouble(f);
+
         public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
             => await (await task).Bind(f);
 
@@ -69,6 +72,12 @@ namespace CLup.Features.Extensions
 
         public static async Task<Result> Finally<T>(this Task<Result<T>> task, Func<T, Task> f)
             => await (await task).BindIgnore(f);
+
+        public static async Task<Result<T>> Finally<T>(this Task<Result> task, Func<Task<T>> f)
+            => await (await task).Bind(f);
+
+        public static async Task<Result<V>> Finally<T, U, V>(this Task<Result<T, U>> task, Func<T, U, V> f)
+            => (await task).Bind(f);
 
         public static async Task<Result<T>> Ensure<T>(this Task<Result<T>> task, Func<T, bool> predicate, string errorMessage = "")
             => await (await task).Ensure(task, predicate, errorMessage);

@@ -31,6 +31,18 @@ namespace CLup.Features.Common
             return Success ? Ok<T>(maybe) : Fail<T>(Code, Error);
         }
 
+        public async Task<Result<T>> Bind<T>(Func<Task<T>> f)
+        {
+            if (Failure)
+            {
+                return Fail<T>(Code, Error);
+            }
+
+            var maybe = await f();
+
+            return Ok<T>(maybe);
+        }
+
         public async Task<Result> BindIgnore<T>(Func<Task<T>> f, string errorMessage)
         {
             if (Success)
@@ -228,6 +240,18 @@ namespace CLup.Features.Common
 
             return Ok<T, U>(Value, maybe);
         }
+
+        public Result<T, U> BindDouble<U>(Func<T, U> f)
+        {
+            if (Failure)
+            {
+                return Fail<T, U>(Code, Error);
+            }
+
+            var maybe = f(Value);
+
+            return Ok<T, U>(Value, maybe);
+        }
     }
 
     public class Result<T, U> : Result<T>
@@ -238,6 +262,18 @@ namespace CLup.Features.Common
             : base(value, success, error, code)
         {
             ExtraValue = extraValue;
+        }
+
+        public Result<V> Bind<V>(Func<T, U, V> f)
+        {
+            if (Failure)
+            {
+                return Fail<V>(Code, Error);
+            }
+
+            var maybe = f(Value, ExtraValue);
+
+            return Ok<V>(maybe);
         }
 
         public async Task<Result<T>> Ensure(Task<Result<T, U>> task, Func<U, bool> predicate, string errorMessage)

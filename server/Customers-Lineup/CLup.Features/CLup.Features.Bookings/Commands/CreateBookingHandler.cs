@@ -8,11 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Domain;
-using CLup.Features.Bookings.Commands;
 using CLup.Features.Common;
 using CLup.Features.Extensions;
 
-namespace CLup.Features.Bookings
+namespace CLup.Features.Bookings.Commands
 {
     public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Result>
     {

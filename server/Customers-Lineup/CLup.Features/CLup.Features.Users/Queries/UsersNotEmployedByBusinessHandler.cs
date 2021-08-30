@@ -10,9 +10,8 @@ using CLup.Data;
 using CLup.Features.Common;
 using CLup.Features.Extensions;
 using CLup.Features.Users.Responses;
-using CLup.Features.Users.Queries;
 
-namespace CLup.Features.Users
+namespace CLup.Features.Users.Queries
 {
     public class UsersNotEmployedByBusinessHandler : IRequestHandler<UsersNotEmployedByBusinessQuery, Result<UsersNotEmployedByBusinessResponse>>
     {

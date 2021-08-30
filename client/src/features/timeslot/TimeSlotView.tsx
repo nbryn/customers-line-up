@@ -2,9 +2,7 @@ import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
-import {useLocation} from 'react-router-dom';
 
-import {BusinessDTO} from '../business/Business';
 import {
     deleteTimeSlot,
     fetchTimeSlotsByBusiness,
@@ -12,6 +10,7 @@ import {
 } from '../timeslot/timeSlotSlice';
 import {ErrorView} from '../../common/views/ErrorView';
 import {Header} from '../../common/components/Texts';
+import {selectCurrentBusiness} from '../business/businessSlice';
 import {TimeSlotDTO} from './TimeSlot';
 import {TableColumn} from '../../common/components/Table';
 import {TableContainer} from '../../common/containers/TableContainer';
@@ -23,20 +22,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-interface LocationState {
-    business: BusinessDTO;
-}
-
 export const TimeSlotView: React.FC = () => {
     const styles = useStyles();
-    const location = useLocation<LocationState>();
+    const business = useAppSelector(selectCurrentBusiness);
     const dispatch = useAppDispatch();
 
-    if (!location.state) {
+    if (!business) {
         return <ErrorView />;
     }
 
-    const {business} = location.state;
     const timeSlots = useAppSelector(selectTimeSlotsByBusiness(business.id));
 
     const columns: TableColumn[] = [

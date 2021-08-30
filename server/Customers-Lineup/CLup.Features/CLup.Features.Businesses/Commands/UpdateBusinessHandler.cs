@@ -7,11 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Domain;
-using CLup.Features.Businesses.Commands;
 using CLup.Features.Common;
 using CLup.Features.Extensions;
 
-namespace CLup.Features.Businesses
+namespace CLup.Features.Businesses.Commands
 {
     public class UpdateBusinessHandler : IRequestHandler<UpdateBusinessCommand, Result>
     {

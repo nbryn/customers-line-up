@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using MediatR;
 
 using CLup.Domain;
-using CLup.Features.Businesses.Queries;
 using CLup.Features.Util;
 
-namespace CLup.Features.Businesses
+namespace CLup.Features.Businesses.Queries
 {
 
     public class BusinessTypesHandler : IRequestHandler<BusinessTypesQuery, IList<string>>

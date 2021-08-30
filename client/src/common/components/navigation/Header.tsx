@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 'auto',
     },
     paper: {
-        width: '150px',
+        width: '130px',
         height: '100px',
         padding: theme.spacing(2),
     },
@@ -83,16 +83,16 @@ const useStyles = makeStyles((theme) => ({
 
 export const Header: React.FC<Props> = (props: Props) => {
     const styles = useStyles();
-    const scrollY = useWindowScroll(60 /*fps*/);
+    const scrollY = useWindowScroll(60);
     const isUltraDense = scrollY > 10;
     const {logout} = useUserContext();
     const [userAccountEl, setUserAccountEl] = useState<HTMLElement | null>(null);
 
     const handleUserAccountToggle = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        setUserAccountEl(userAccountEl === null ? event.currentTarget : null);
+        setUserAccountEl(!userAccountEl ? event.currentTarget : null);
     };
 
-    const showUserAccount = Boolean(userAccountEl);
+    const showUserAccount = !!userAccountEl;
 
     const menuButtonClasses = classNames({
         [styles.smooth]: true,

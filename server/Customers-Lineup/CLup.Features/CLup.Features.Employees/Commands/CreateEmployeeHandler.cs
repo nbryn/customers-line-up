@@ -9,10 +9,9 @@ using MediatR;
 using CLup.Data;
 using CLup.Domain;
 using CLup.Features.Common;
-using CLup.Features.Employees.Commands;
 using CLup.Features.Extensions;
 
-namespace CLup.Features.Employees
+namespace CLup.Features.Employees.Commands
 {
     public class CreateEmployeeHandler : IRequestHandler<CreateEmployeeCommand, Result>
     {
