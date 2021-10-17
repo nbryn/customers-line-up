@@ -1,9 +1,10 @@
 import StringUtil from './StringUtil';
 import {TextFieldType} from '../components/form/TextField';
 
-function mapKeyToLabel(key: string): string {
+function mapKeyToLabel(key: string, address = false): string {
    if (key === 'timeSlotLength') return 'Visit Length';
 
+   if (address) return 'Address';
    return StringUtil.capitalize(key);
 }
 

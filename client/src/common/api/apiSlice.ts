@@ -31,6 +31,7 @@ import {
     register,
     fetchUserInfo,
     fetchUsersNotEmployedByBusiness,
+    updateUserInfo,
 } from '../../features/user/userSlice';
 import {RootState} from '../../app/Store';
 
@@ -44,6 +45,8 @@ const EMPLOYEE_CREATED_MSG = 'Employee Created - Go to my employees to see your 
 
 const TIMESLOT_DELETED_MSG = 'Timeslot Deleted';
 const TIMESLOTS_GENERATED_MSG = 'Success! Press see time slots to manage time slots.';
+
+const USER_UPDATED_MSG = 'Info Updated.';
 
 const LOGIN_FAILED_MSG = 'Wrong Email/Password';
 
@@ -130,6 +133,12 @@ export const apiSlice = createSlice({
             state.message = TIMESLOT_DELETED_MSG;
         });
 
+        builder.addCase(updateUserInfo.fulfilled, (state) => {
+            state.loading = false;
+            state.error = false;
+            state.message = USER_UPDATED_MSG;
+        });
+
         builder.addMatcher(
             isAnyOf(
                 deleteBookingForBusiness.fulfilled,
@@ -179,7 +188,8 @@ export const apiSlice = createSlice({
                 fetchUsersNotEmployedByBusiness.pending,
                 login.pending,
                 register.pending,
-                fetchUserInfo.pending
+                fetchUserInfo.pending,
+                updateUserInfo.pending
             ),
             (state) => {
                 state.loading = true;
@@ -209,7 +219,8 @@ export const apiSlice = createSlice({
                 generateTimeSlots.rejected,
                 fetchUsersNotEmployedByBusiness.rejected,
                 fetchUserInfo.rejected,
-                register.rejected
+                register.rejected,
+                updateUserInfo.rejected
             ),
             (state, action) => {
                 state.loading = false;

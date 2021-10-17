@@ -7,12 +7,12 @@ namespace CLup.Context.Initialiser.DataCreators
     public static class BookingCreator
     {
 
-        public static Booking Create(string userEmail, string businessId, string TimeSlotId)
+        public static Booking Create(string userId, string businessId, string TimeSlotId)
         {
             Booking booking = new Booking
             {
                 Id = Guid.NewGuid().ToString(),
-                UserEmail = userEmail,
+                UserId = userId,
                 BusinessId = businessId,
                 TimeSlotId = TimeSlotId,
                 CreatedAt = DateTime.Now,

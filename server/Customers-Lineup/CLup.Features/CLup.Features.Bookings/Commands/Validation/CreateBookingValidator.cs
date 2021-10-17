@@ -6,7 +6,7 @@ namespace CLup.Features.Bookings.Commands.Validation
     {
         public CreateBookingValidator()
         {
-            RuleFor(b => b.UserEmail).NotNull();
+            RuleFor(b => b.UserId).NotNull();
             RuleFor(b => b.TimeSlotId).NotNull();           
         }
     }

@@ -36,6 +36,8 @@ export const BusinessProfileView: React.FC = () => {
     const business = useAppSelector(selectCurrentBusiness);
     const businessTypes = useAppSelector(selectBusinessTypes);
 
+    console.log(business);
+
     if (!business) {
         return <ErrorView />;
     }
@@ -52,19 +54,23 @@ export const BusinessProfileView: React.FC = () => {
     const {addressHandler, formHandler} = useForm<BusinessDTO>({
         initialValues: formValues,
         validationSchema: businessValidationSchema,
-        onSubmit: (b) =>
+        onSubmit: (updatedBusinessInfo) =>
             dispatch(
                 updateBusinessInfo({
                     businessId: business.id,
                     ownerEmail: business.ownerEmail!,
-                    business: b,
+                    business: updatedBusinessInfo,
                 })
             ),
-        formatter: (business) => {
-            business.opens = business.opens.replace(':', '.');
-            business.closes = business.closes.replace(':', '.');
+        beforeSubmit: (updatedBusiness) => {
+            const address = addresses.find((x) => x.label === updatedBusiness.address);
+            updatedBusiness.longitude = address?.longitude ?? business.longitude;
+            updatedBusiness.latitude = address?.latitude ?? business.latitude;
 
-            return business;
+            updatedBusiness.opens = updatedBusiness.opens.replace(':', '.');
+            updatedBusiness.closes = updatedBusiness.closes.replace(':', '.');
+
+            return updatedBusiness;
         },
     });
 
@@ -93,7 +99,7 @@ export const BusinessProfileView: React.FC = () => {
                 ? `${formHandler.values[key]} minutes`
                 : (formHandler.values[key] as any),
         buttonAction: () => setModalKey(key),
-        buttonText: 'Edit',
+        buttonText: 'Update',
     }));
 
     return (
@@ -104,8 +110,9 @@ export const BusinessProfileView: React.FC = () => {
             <Row className={styles.row}>
                 <TextFieldModal
                     show={modalKey ? true : false}
-                    isComboBox={modalKey === 'zip' || modalKey === 'address' ? true : false}
-                    comboBoxOptions={modalKey === 'zip' ? zips : addresses}
+                    isComboBox={modalKey === 'zip' || modalKey === 'address'}
+                    addressOptions={addresses}
+                    zipOptions={zips}
                     showModal={setModalKey}
                     textFieldKey={modalKey}
                     textFieldType={TextFieldUtil.mapKeyToType(modalKey)}

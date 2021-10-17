@@ -17,18 +17,6 @@ const initialState: UserState = {
     currentUser: null,
 };
 
-export const login = createAsyncThunk('user/login', async (data: LoginDTO) => {
-    const user = await ApiCaller.post<UserDTO, LoginDTO>(`${DEFAULT_USER_ROUTE}/login`, data);
-
-    return user;
-});
-
-export const register = createAsyncThunk('user/register', async (data: UserDTO) => {
-    const user = await ApiCaller.post<UserDTO, UserDTO>(`${DEFAULT_USER_ROUTE}/register`, data);
-
-    return user;
-});
-
 export const fetchUserInfo = createAsyncThunk('user/userInfo', async () => {
     const user = await ApiCaller.get<UserDTO>(`${DEFAULT_USER_ROUTE}`);
 
@@ -45,6 +33,26 @@ export const fetchUsersNotEmployedByBusiness = createAsyncThunk(
         return notEmployedByBusiness;
     }
 );
+
+export const login = createAsyncThunk('user/login', async (data: LoginDTO) => {
+    const user = await ApiCaller.post<UserDTO, LoginDTO>(`${DEFAULT_USER_ROUTE}/login`, data);
+
+    return user;
+});
+
+export const register = createAsyncThunk('user/register', async (data: UserDTO) => {
+    const user = await ApiCaller.post<UserDTO, UserDTO>(`${DEFAULT_USER_ROUTE}/register`, data);
+
+    return user;
+});
+
+export const updateUserInfo = createAsyncThunk('user/update', async (data: UserDTO) => {
+    const user = await ApiCaller.put<UserDTO, UserDTO>(`${DEFAULT_USER_ROUTE}/update`, data);
+
+    return user;
+});
+
+
 
 export const userSlice = createSlice({
     name: 'user',

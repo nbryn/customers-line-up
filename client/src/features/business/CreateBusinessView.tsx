@@ -62,7 +62,7 @@ export const CreateBusinessView: React.FC = () => {
         initialValues: formValues,
         validationSchema: businessValidationSchema,
         onSubmit: (business) => dispatch(createBusiness(business)),
-        formatter: (business) => {
+        beforeSubmit: (business) => {
             const address = addresses.find((x) => x.label === business.address);
 
             business.longitude = address?.longitude;

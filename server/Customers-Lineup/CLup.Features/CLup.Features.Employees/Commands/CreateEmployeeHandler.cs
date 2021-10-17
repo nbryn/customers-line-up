@@ -21,14 +21,14 @@ namespace CLup.Features.Employees.Commands
 
         public async Task<Result> Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == command.PrivateEmail)
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == command.UserId)
                     .FailureIfDiscard("User not found.")
                     .FailureIfDiscard(() => _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId), "Business not found.")
                     .AndThen(() => new Employee
                     {
                         Id = Guid.NewGuid().ToString(),
                         BusinessId = command.BusinessId,
-                        UserEmail = command.PrivateEmail,
+                        UserId = command.UserId,
                         CompanyEmail = command.CompanyEmail,
                         CreatedAt = DateTime.Now,
                         UpdatedAt = DateTime.Now,

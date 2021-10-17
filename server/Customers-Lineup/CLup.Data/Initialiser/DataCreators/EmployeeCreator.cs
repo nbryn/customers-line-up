@@ -8,14 +8,14 @@ namespace CLup.Context.Initialiser.DataCreators
     {
         public static Employee Create(
             DateTime createdAt, string businessId,
-            string userEmail, string companyEmail)
+            string userId, string companyEmail)
         {
             Employee Employee = new Employee
             {
                 Id = Guid.NewGuid().ToString(),
                 CreatedAt = createdAt,
                 BusinessId = businessId,
-                UserEmail = userEmail,
+                UserId = userId,
                 CompanyEmail = companyEmail,
                 UpdatedAt = DateTime.Now
             };

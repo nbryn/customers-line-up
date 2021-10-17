@@ -7,7 +7,7 @@ namespace CLup.Features.Employees.Commands.Validation
         public DeleteEmployeeValidator()
         {
             RuleFor(x => x.BusinessId).NotEmpty();
-            RuleFor(x => x.UserEmail).EmailAddress();
+            RuleFor(x => x.UserId).NotEmpty();
         }
     }
 }

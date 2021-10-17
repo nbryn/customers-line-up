@@ -20,6 +20,8 @@ namespace CLup.Features.Users
                 .ForMember(u => u.Password, s => s.MapFrom<HashPasswordResolver>())
                 .ForMember(u => u.CreatedAt, s => s.MapFrom(m => DateTime.Now))
                 .ForMember(u => u.UpdatedAt, s => s.MapFrom(m => DateTime.Now));
+
+            CreateMap<UpdateUserInfoCommand, User>().ConvertUsing<UpdateUserInfoConverter>();
         }
     }
 }

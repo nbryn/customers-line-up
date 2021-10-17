@@ -2,7 +2,7 @@ namespace CLup.Domain
 {
     public class Booking : BaseEntity
     {
-        public string UserEmail { get; set; }
+        public string UserId { get; set; }
 
         public User User { get; set; }
 

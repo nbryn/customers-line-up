@@ -10,7 +10,6 @@ namespace CLup.Features.Businesses.Commands.Validation
         {
             RuleFor(x => x.Id).NotEmpty();
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.OwnerEmail).EmailAddress();
             RuleFor(x => x.Zip).NotEmpty();
             RuleFor(x => x.Address).NotEmpty();
             RuleFor(x => x.Opens).NotEmpty();

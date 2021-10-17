@@ -7,7 +7,7 @@ namespace CLup.Features.Employees.Commands.Validation
         public CreateEmployeeValidator()
         {
             RuleFor(x => x.BusinessId).NotEmpty();
-            RuleFor(x => x.PrivateEmail).EmailAddress();
+            RuleFor(x => x.UserId).NotEmpty();
         }
     }
 }

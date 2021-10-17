@@ -1,6 +1,7 @@
 export interface UserDTO {
     [key: string]: string | number | undefined;
     email: string;
+    id?: string;
     name?: string;
     zip?: string;
     address?: string;

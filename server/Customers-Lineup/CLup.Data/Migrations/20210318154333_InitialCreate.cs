@@ -25,10 +25,10 @@ namespace CLup.Migrations
                 name: "Users",
                 columns: table => new
                 {
+                    Id = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    Id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(nullable: false),
                     Zip = table.Column<string>(nullable: false),
@@ -39,7 +39,7 @@ namespace CLup.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Email);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -78,15 +78,15 @@ namespace CLup.Migrations
                 columns: table => new
                 {
                     BusinessId = table.Column<string>(nullable: false),
-                    UserEmail = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     Id = table.Column<string>(nullable: false),
-                    CompanyEmail = table.Column<string>(nullable: true)
+                    CompanyEmail = table.Column<string>(nullable: true),
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => new { x.UserEmail, x.BusinessId });
+                    table.PrimaryKey("PK_Employees", x => new { x.UserId, x.BusinessId });
                     table.ForeignKey(
                         name: "FK_Employees_Businesses_BusinessId",
                         column: x => x.BusinessId,
@@ -94,10 +94,10 @@ namespace CLup.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Employees_Users_UserEmail",
-                        column: x => x.UserEmail,
+                        name: "FK_Employees_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Email",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -130,7 +130,7 @@ namespace CLup.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    UserEmail = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     TimeSlotId = table.Column<string>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
@@ -138,7 +138,7 @@ namespace CLup.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bookings", x => new { x.UserEmail, x.TimeSlotId });
+                    table.PrimaryKey("PK_Bookings", x => new { x.UserId, x.TimeSlotId });
                     table.ForeignKey(
                         name: "FK_Bookings_TimeSlots_TimeSlotId",
                         column: x => x.TimeSlotId,
@@ -146,10 +146,10 @@ namespace CLup.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Bookings_Users_UserEmail",
-                        column: x => x.UserEmail,
+                        name: "FK_Bookings_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Email",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 

@@ -82,5 +82,17 @@ namespace CLup.Features.Users
 
             return this.CreateActionResult(result);
         }
+
+        [Authorize(Policy = Policies.User)]
+        [Route("update")]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UserDTO>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> UpdateUserInfo([FromBody] UpdateUserInfoCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            return this.CreateActionResult(result);
+        }
     }
 }

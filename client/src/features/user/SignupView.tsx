@@ -53,7 +53,7 @@ export const SignupView: React.FC = () => {
         initialValues: formValues,
         validationSchema: signupValidationSchema,
         onSubmit: (data) => dispatch(register(data)),
-        formatter: (user: UserDTO) => {
+        beforeSubmit: (user: UserDTO) => {
             const address = addresses.find((x) => x.label === user.address);
 
             user.longitude = address?.longitude;

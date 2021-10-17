@@ -8,12 +8,12 @@ namespace CLup.Features.Employees.Commands
     {
 
         public string BusinessId { get; set; }
-        public string UserEmail { get; set; }
+        public string UserId { get; set; }
 
-        public DeleteEmployeeCommand(string businessId, string userEmail)
+        public DeleteEmployeeCommand(string businessId, string userId)
         {
             businessId = BusinessId;
-            UserEmail = UserEmail;
+            UserId = UserId;
         }
 
     }

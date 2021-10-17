@@ -19,7 +19,7 @@ namespace CLup.Features.Employees.Commands
 
         public async Task<Result> Handle(DeleteEmployeeCommand command, CancellationToken cancellationToken)
         {
-            return await _context.Employees.FirstOrDefaultAsync(e => e.UserEmail == command.UserEmail &&
+            return await _context.Employees.FirstOrDefaultAsync(e => e.UserId == command.UserId &&
                                                                      e.BusinessId == command.BusinessId)
                     .FailureIf("Employee not found.")
                     .Finally(employee => _context.RemoveAndSave(employee));

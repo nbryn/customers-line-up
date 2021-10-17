@@ -1,7 +1,6 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
 
-
 import {CreateBookingView} from '../features/booking/CreateBookingView';
 import {BusinessBookingView} from '../features/booking/BusinessBookingView';
 import {UserBookingView} from '../features/booking/UserBookingView';
@@ -15,13 +14,14 @@ import {TimeSlotView} from '../features/timeslot/TimeSlotView';
 import {GenerateTimeSlotsView} from '../features/timeslot/GenerateTimeSlotsView';
 import {ErrorView} from '../common/views/ErrorView';
 import {NotFoundView} from '../common/views/NotFoundView';
-//import {ProfileView} from './user/ProfileView';
 import {HomeView} from '../features/user/HomeView';
+import {ProfileView} from '../features/user/ProfileView';
 
 export const Routes: React.FC = () => {
     return (
         <Switch>
             <Route exact path="/" component={HomeView} />
+            <Route exact path="/user/profile" component={ProfileView} />
             <Route exact path="/user/bookings" component={UserBookingView} />
             <Route exact path="/user/business" component={AllBusinessesView} />
 

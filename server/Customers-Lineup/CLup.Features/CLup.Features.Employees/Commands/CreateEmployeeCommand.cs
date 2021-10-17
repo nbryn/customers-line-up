@@ -8,7 +8,7 @@ namespace CLup.Features.Employees.Commands
     {
 
         public string BusinessId { get; set; }
-        public string PrivateEmail { get; set; }
+        public string UserId { get; set; }
         public string CompanyEmail { get; set; }
     }
 }

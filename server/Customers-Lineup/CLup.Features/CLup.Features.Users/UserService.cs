@@ -22,7 +22,7 @@ namespace CLup.Features.Users
                 return;
             }
             
-            var isEmployee = await _context.Employees.FirstOrDefaultAsync(e => e.UserEmail == user.Email);
+            var isEmployee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id);
 
             if (isEmployee != null)
             {

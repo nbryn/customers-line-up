@@ -6,12 +6,12 @@ namespace CLup.Features.Bookings.Commands
 {
     public class CreateBookingCommand : IRequest<Result>
     {
-        public string UserEmail { get; set; }
+        public string UserId { get; set; }
         public string TimeSlotId { get; set; }
 
-        public CreateBookingCommand(string userEmail, string timeSlotId)
+        public CreateBookingCommand(string userId, string timeSlotId)
         {
-            UserEmail = userEmail;
+            UserId = userId;
             TimeSlotId = timeSlotId;
         }
     }

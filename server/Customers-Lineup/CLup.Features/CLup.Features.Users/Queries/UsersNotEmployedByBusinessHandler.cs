@@ -30,7 +30,7 @@ namespace CLup.Features.Users.Queries
 
             foreach (var user in await _context.Users.ToListAsync())
             {
-                var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserEmail == user.Email &&
+                var employee = await _context.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id &&
                                                                             e.BusinessId == query.BusinessId);
                 if (employee == null)
                 {

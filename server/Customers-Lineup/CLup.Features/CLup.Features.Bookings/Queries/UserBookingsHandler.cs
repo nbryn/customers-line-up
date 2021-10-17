@@ -29,7 +29,7 @@ namespace CLup.Features.Bookings.Queries
             var bookings = _context.Bookings
                                     .Include(x => x.TimeSlot)
                                     .Include(x => x.TimeSlot.Business)
-                                    .Where(x => x.UserEmail == query.UserEmail)
+                                    .Where(x => x.UserId == query.UserId)
                                     .OrderBy(x => x.TimeSlot.Start);
 
             return await _mapper.ProjectTo<BookingDTO>(bookings).ToListAsync();

@@ -23,7 +23,7 @@ namespace CLup.Features.Bookings.Commands
         {
             return await _context.Bookings.FirstOrDefaultAsync(x =>
                                                            x.TimeSlotId == command.TimeSlotId &&
-                                                           x.UserEmail == command.UserEmail)
+                                                           x.UserId == command.UserId)
                     .ToResult()
                     .EnsureDiscard(booking => booking == null, "You already have a booking for this time slot.")
                     .FailureIf(() => _context.TimeSlots
@@ -35,7 +35,7 @@ namespace CLup.Features.Bookings.Commands
                     .AndThen(business => new Booking
                     {
                         Id = Guid.NewGuid().ToString(),
-                        UserEmail = command.UserEmail,
+                        UserId = command.UserId,
                         TimeSlotId = command.TimeSlotId,
                         BusinessId = business.Id,
                         CreatedAt = DateTime.Now,

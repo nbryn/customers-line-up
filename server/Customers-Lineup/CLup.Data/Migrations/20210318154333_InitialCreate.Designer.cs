@@ -27,7 +27,7 @@ namespace CLup.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
-                    b.Property<string>("UserEmail")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TimeSlotId")
@@ -42,7 +42,7 @@ namespace CLup.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
-                    b.HasKey("UserEmail", "TimeSlotId");
+                    b.HasKey("UserId", "TimeSlotId");
 
                     b.HasIndex("TimeSlotId");
 
@@ -142,7 +142,7 @@ namespace CLup.Migrations
 
             modelBuilder.Entity("CLup.Employees.Employee", b =>
                 {
-                    b.Property<string>("UserEmail")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BusinessId")
@@ -160,7 +160,7 @@ namespace CLup.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
-                    b.HasKey("UserEmail", "BusinessId");
+                    b.HasKey("UserId", "BusinessId");
 
                     b.HasIndex("BusinessId");
 
@@ -216,7 +216,9 @@ namespace CLup.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(450)")
+                        .HasAnnotation("MySql:ValueGeneratedOnAdd", true)
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
@@ -243,7 +245,7 @@ namespace CLup.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Email");
+                    b.HasKey("Id");
 
                     b.HasIndex("Email")
                         .IsUnique();

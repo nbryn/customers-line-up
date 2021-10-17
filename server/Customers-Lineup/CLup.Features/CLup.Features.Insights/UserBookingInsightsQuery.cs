@@ -45,7 +45,8 @@ namespace CLup.Features.Insights
 
                 return await _context.Bookings.Include(b => b.Business)
                         .Include(b => b.TimeSlot)
-                        .Where(x => x.UserEmail == query.UserEmail)
+                        .Include(b => b.User)
+                        .Where(x => x.User.Email == query.UserEmail)
                         .ToListAsync()
                         .ToResult()
                         .AndThenDouble(bookings => bookings?.OrderBy(x => Math.Abs(x.TimeSlot.Start.Ticks - DateTime.Now.Ticks)).FirstOrDefault())

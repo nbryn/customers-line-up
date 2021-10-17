@@ -25,14 +25,14 @@ export type FormProps<T> = {
     initialValues: T;
     validationSchema: ObjectSchema;
     onSubmit: (values: T) => void;
-    formatter?: (dto: T) => T;
+    beforeSubmit?: (dto: T) => T;
 };
 
 export const useForm = <T>({
     initialValues,
     validationSchema,
     onSubmit,
-    formatter,
+    beforeSubmit,
 }: FormProps<T>): Form<T> => {
     const [request, setRequest] = useState<T | null>(null);
 
@@ -41,7 +41,7 @@ export const useForm = <T>({
         validationSchema,
         isInitialValid: false,
         onSubmit: async (values) => {
-            if (formatter) values = formatter(values);
+            if (beforeSubmit) values = beforeSubmit(values);
 
             onSubmit(request || values);
         },

@@ -30,6 +30,5 @@ namespace CLup.Domain
         public IEnumerable<TimeSlot> TimeSlots { get; set; }
 
         public IEnumerable<Employee> Employees { get; set; }
-
     }
 }

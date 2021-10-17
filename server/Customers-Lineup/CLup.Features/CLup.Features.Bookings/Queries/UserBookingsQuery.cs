@@ -6,8 +6,8 @@ namespace CLup.Features.Bookings
 {
     public class UserBookingsQuery : IRequest<IList<BookingDTO>>
     {
-        public string UserEmail { get; set; }
+        public string UserId { get; set; }
 
-        public UserBookingsQuery(string userEmail) => UserEmail = userEmail;
+        public UserBookingsQuery(string userId) => UserId = userId;
     }
 }

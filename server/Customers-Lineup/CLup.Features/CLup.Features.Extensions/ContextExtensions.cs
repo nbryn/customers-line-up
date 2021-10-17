@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
 using CLup.Data;
 using CLup.Domain;
 
@@ -32,9 +34,12 @@ namespace CLup.Features.Extensions
 
         public static async Task<int> UpdateEntity<T>(this CLupContext context, string id, T updatedEntity) where T : BaseEntity
         {
-            var entity = (BaseEntity) await context.FindAsync(typeof(T), id);
-            updatedEntity.Id = entity.Id;
+            var entity = (BaseEntity)await context.FindAsync(typeof(T), id);
 
+            Console.WriteLine(updatedEntity.Id);
+            Console.WriteLine(id);
+
+            updatedEntity.Id = entity.Id;
             context.Entry(entity).CurrentValues.SetValues(updatedEntity);
 
             return await context.SaveChangesAsync();

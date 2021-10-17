@@ -50,9 +50,9 @@ namespace CLup.Data
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Booking>().HasKey(c => new { c.UserEmail, c.TimeSlotId });
+            modelBuilder.Entity<Booking>().HasKey(c => new { c.UserId, c.TimeSlotId });
 
-            modelBuilder.Entity<Employee>().HasKey(e => new { e.UserEmail, e.BusinessId });
+            modelBuilder.Entity<Employee>().HasKey(e => new { e.UserId, e.BusinessId });
 
             modelBuilder.Entity<Business>()
                        .Property(b => b.Type)
@@ -62,10 +62,6 @@ namespace CLup.Data
             modelBuilder.Entity<User>()
                         .HasIndex(c => c.Email)
                         .IsUnique();
-
-            modelBuilder.Entity<User>()
-                        .HasKey(u => u.Email);
-
 
              modelBuilder.Entity<BusinessOwner>()
                         .HasMany(c => c.Businesses);

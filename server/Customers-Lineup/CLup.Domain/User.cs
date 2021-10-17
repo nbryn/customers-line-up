@@ -18,7 +18,7 @@ namespace CLup.Domain
         public double Longitude { get; set; }
 
         public double Latitude { get; set; }
-        
+
         public Role Role { get; set; }
 
         public IList<Booking> Bookings { get; set; }
