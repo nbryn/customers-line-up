@@ -4,16 +4,17 @@ using System.Linq;
 
 using BC = BCrypt.Net.BCrypt;
 
-using CLup.Context.Initialiser.DataCreators;
+using CLup.Data.Initializer.DataCreators;
 using CLup.Domain;
+using CLup.Domain.ValueObjects;
 
-namespace CLup.Data.Initialiser
+namespace CLup.Data.Initializer
 {
-    public class DataInitialiser
+    public class DataInitializer
     {
         private readonly CLupContext _context;
 
-        public DataInitialiser(CLupContext context) => _context = context;
+        public DataInitializer(CLupContext context) => _context = context;
         
         public void InitializeSeed()
         {
@@ -55,15 +56,15 @@ namespace CLup.Data.Initialiser
                 return;
             }
 
-            _context.Add(BusinessCreator.Create(ids[0], "Super Brugsen", "test@test.com", "Ryttergårdsvej 10", "3520 - Farum",
+            _context.Add(BusinessCreator.Create(ids[0], "Super Brugsen", "test@test.com", new Address("Ryttergårdsvej 10", "3520", "Farum"),
                                          55.8137419, 12.3935222, 50, "10.00", "16.00", 30,
                                          BusinessType.Supermarket));
 
-            _context.Add(BusinessCreator.Create(ids[1], "Farum Museum", "test@test.com", "Farum Hovedgade 100", "3520 - Farum",
+            _context.Add(BusinessCreator.Create(ids[1], "Farum Museum", "test@test.com", new Address("Farum Hovedgade 100", "3520", "Farum"),
                                          55.809127, 12.3544073, 40, "09.00", "14.00", 20,
                                         BusinessType.Museum));
 
-            _context.Add(BusinessCreator.Create(ids[2], "Kvick Kiosk", "test@test.com", "Vermlandsgade 30", "2300 - København S",
+            _context.Add(BusinessCreator.Create(ids[2], "Kvick Kiosk", "test@test.com", new Address("Vermlandsgade 30", "2300", "København S"),
                                 55.668442, 12.5988833, 30, "08.30", "15.30", 10,
                                   BusinessType.Kiosk));
 

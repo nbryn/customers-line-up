@@ -13,7 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 using CLup.Data;
-using CLup.Data.Initialiser;
+using CLup.Data.Initializer;
 using CLup.Features.Auth;
 using CLup.Features.Users;
 
@@ -67,7 +67,7 @@ namespace CLup.Extensions
             IConfiguration configuration,
             IWebHostEnvironment environment)
         {
-            services.AddTransient<DataInitialiser>();
+            services.AddTransient<DataInitializer>();
 
             if (environment.IsDevelopment())
             {

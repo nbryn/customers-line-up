@@ -1,31 +1,28 @@
 using System;
 
 using CLup.Domain;
+using CLup.Domain.ValueObjects;
 
-namespace CLup.Context.Initialiser.DataCreators
+using TimeSpan = CLup.Domain.ValueObjects.TimeSpan;
+
+namespace CLup.Data.Initializer.DataCreators
 {
     public static class BusinessCreator
     {
 
         public static Business Create(
-            string id, string name, string ownerEmail,
-            string address, string zip, double longitude,
-            double latitude, int capacity, string opens,
-            string closes, int TimeSlotLength, BusinessType type)
+            string id, string ownerEmail,
+            BusinessData businessData, Coords coords, TimeSpan businessHours,
+            Address address, double longitude, BusinessType type)
         {
             Business business = new Business
             {
                 Id = id,
-                Name = name,
                 OwnerEmail = ownerEmail,
-                Zip = zip,
+                BusinessData = businessData,
+                
                 Address = address,
-                Longitude = longitude,
-                Latitude = latitude,
-                Capacity = capacity,
-                Opens = opens,
-                Closes = closes,
-                TimeSlotLength = TimeSlotLength,
+          
                 Type = type,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now

@@ -2,7 +2,7 @@ using System;
 
 using CLup.Domain;
 
-namespace CLup.Context.Initialiser.DataCreators
+namespace CLup.Data.Initializer.DataCreators
 {
 
     public static class TimeSlotCreator

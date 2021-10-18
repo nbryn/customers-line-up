@@ -1,15 +1,18 @@
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Microsoft.EntityFrameworkCore;
+
+using CLup.Data.EntityConfigurations;
 using CLup.Domain;
 
 namespace CLup.Data
 {
     public class CLupContext : DbContext
     {
+        public const string DEFAULT_SCHEMA = "CLup";
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BusinessOwner> BusinessOwners { get; set; }
         public DbSet<Business> Businesses { get; set; }
@@ -50,14 +53,11 @@ namespace CLup.Data
 
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfiguration(new BusinessEntityTypeConfiguration());
+
             modelBuilder.Entity<Booking>().HasKey(c => new { c.UserId, c.TimeSlotId });
 
             modelBuilder.Entity<Employee>().HasKey(e => new { e.UserId, e.BusinessId });
-
-            modelBuilder.Entity<Business>()
-                       .Property(b => b.Type)
-                       .HasConversion(b => b.ToString("G"),
-                       b => Enum.Parse<BusinessType>(b));
 
             modelBuilder.Entity<User>()
                         .HasIndex(c => c.Email)
@@ -70,13 +70,6 @@ namespace CLup.Data
                         .HasIndex(c => c.UserEmail)
                         .IsUnique();
 
-            modelBuilder.Entity<Business>()
-                        .HasMany(x => x.TimeSlots)
-                        .WithOne(x => x.Business);
-
-            modelBuilder.Entity<Business>()
-                        .HasMany(x => x.Employees)
-                        .WithOne(x => x.Business);
 
             modelBuilder.Entity<TimeSlot>()
                         .HasMany(t => t.Bookings)

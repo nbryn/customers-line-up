@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using CLup.Data;
-using CLup.Data.Initialiser;
+using CLup.Data.Initializer;
 
 namespace CLup.Extensions
 {
@@ -16,7 +16,7 @@ namespace CLup.Extensions
             CLupContext context = scope.ServiceProvider.GetRequiredService<CLupContext>();
 
             context.Database.EnsureCreated();
-            var dataInitializer = scope.ServiceProvider.GetService<DataInitialiser>();
+            var dataInitializer = scope.ServiceProvider.GetService<DataInitializer>();
 
             dataInitializer.InitializeSeed();
         }
