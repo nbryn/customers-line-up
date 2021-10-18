@@ -4,7 +4,7 @@ using CLup.Features.Common;
 
 namespace CLup.Features.Users.Commands
 {
-    public class UpdateUserInfoCommand : IRequest<Result<UserDTO>>
+    public class UpdateUserInfoCommand : IRequest<Result>
     {
         public string Id { get; set; }
         public string Email { get; set; }

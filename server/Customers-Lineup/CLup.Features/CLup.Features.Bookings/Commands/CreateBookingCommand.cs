@@ -6,13 +6,15 @@ namespace CLup.Features.Bookings.Commands
 {
     public class CreateBookingCommand : IRequest<Result>
     {
-        public string UserId { get; set; }
-        public string TimeSlotId { get; set; }
 
-        public CreateBookingCommand(string userId, string timeSlotId)
+        public string TimeSlotId { get; set; }
+        public string UserId { get; set; }
+        
+
+        public CreateBookingCommand(string timeSlotId, string userId)
         {
-            UserId = userId;
             TimeSlotId = timeSlotId;
+            UserId = userId;       
         }
     }
 }

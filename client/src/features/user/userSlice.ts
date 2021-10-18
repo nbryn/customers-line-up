@@ -47,11 +47,10 @@ export const register = createAsyncThunk('user/register', async (data: UserDTO) 
 });
 
 export const updateUserInfo = createAsyncThunk('user/update', async (data: UserDTO) => {
-    const user = await ApiCaller.put<UserDTO, UserDTO>(`${DEFAULT_USER_ROUTE}/update`, data);
+    await ApiCaller.put<UserDTO, UserDTO>(`${DEFAULT_USER_ROUTE}/update`, data);
 
-    return user;
+    return data;
 });
-
 
 
 export const userSlice = createSlice({
@@ -68,6 +67,10 @@ export const userSlice = createSlice({
         });
 
         builder.addCase(fetchUserInfo.fulfilled, (state, action) => {
+            state.currentUser = action.payload;
+        });
+
+        builder.addCase(updateUserInfo.fulfilled, (state, action) => {
             state.currentUser = action.payload;
         });
 

@@ -15,14 +15,14 @@ namespace CLup.Data.Initialiser
 
         public DataInitialiser(CLupContext context) => _context = context;
         
-        public void InitialiseSeed()
+        public void InitializeSeed()
         {
             var userGuids = GuidHelper(4);
             var businessGuids = GuidHelper(4);
             var timeSlotGuids = GuidHelper(3);
             
             AddUsers(userGuids);
-            AddBusinesses(businessGuids, userGuids);
+            AddBusinesses(businessGuids);
             AddTimeSlots(timeSlotGuids, businessGuids[0]);
             AddBookings(businessGuids, timeSlotGuids, userGuids);
             AddEmployees(businessGuids, userGuids);
@@ -48,22 +48,22 @@ namespace CLup.Data.Initialiser
             _context.Add(UserCreator.Create(ids[3], "Emil", "emil@live.com", BC.HashPassword("1234"), "3520 - Farum",
                           "Farum Hovedgade 15", 55.8200342, 12.3591325));
         }
-        private void AddBusinesses(List<string> ids, List<string> userIds)
+        private void AddBusinesses(List<string> ids)
         {
             if (_context.Businesses.Any())
             {
                 return;
             }
 
-            _context.Add(BusinessCreator.Create(ids[0], "Cool", userIds[0], "Ryttergårdsvej 10", "3520 - Farum",
+            _context.Add(BusinessCreator.Create(ids[0], "Super Brugsen", "test@test.com", "Ryttergårdsvej 10", "3520 - Farum",
                                          55.8137419, 12.3935222, 50, "10.00", "16.00", 30,
                                          BusinessType.Supermarket));
 
-            _context.Add(BusinessCreator.Create(ids[1], "Shop", userIds[0], "Farum Hovedgade 100", "3520 - Farum",
+            _context.Add(BusinessCreator.Create(ids[1], "Farum Museum", "test@test.com", "Farum Hovedgade 100", "3520 - Farum",
                                          55.809127, 12.3544073, 40, "09.00", "14.00", 20,
                                         BusinessType.Museum));
 
-            _context.Add(BusinessCreator.Create(ids[2], "1337", userIds[0], "Vermlandsgade 30", "2300 - København S",
+            _context.Add(BusinessCreator.Create(ids[2], "Kvick Kiosk", "test@test.com", "Vermlandsgade 30", "2300 - København S",
                                 55.668442, 12.5988833, 30, "08.30", "15.30", 10,
                                   BusinessType.Kiosk));
 
@@ -77,9 +77,9 @@ namespace CLup.Data.Initialiser
                 return;
             }
 
-            _context.Add(TimeSlotCreator.Create(ids[0], businessId, "Cool", 50, DateTime.Now.AddHours(3), DateTime.Now.AddHours(4)));
-            _context.Add(TimeSlotCreator.Create(ids[1], businessId, "Cool", 50, DateTime.Now.AddHours(4), DateTime.Now.AddHours(5)));
-            _context.Add(TimeSlotCreator.Create(ids[2], businessId, "Cool", 50, DateTime.Now.AddHours(5), DateTime.Now.AddHours(6)));
+            _context.Add(TimeSlotCreator.Create(ids[0], businessId, "Super Brugsen", 50, DateTime.Now.AddHours(3), DateTime.Now.AddHours(4)));
+            _context.Add(TimeSlotCreator.Create(ids[1], businessId, "Super Brugsen", 50, DateTime.Now.AddHours(4), DateTime.Now.AddHours(5)));
+            _context.Add(TimeSlotCreator.Create(ids[2], businessId, "Super Brugsen", 50, DateTime.Now.AddHours(5), DateTime.Now.AddHours(6)));
 
         }
         private void AddBookings(List<string> businessIds, List<string> timeSlotIds, List<string> userIds)
@@ -100,8 +100,8 @@ namespace CLup.Data.Initialiser
                 return;
             }
 
-            _context.Add(EmployeeCreator.Create(DateTime.Now, businessIds[0], userIds[0], "cool@cool.com"));
-            _context.Add(EmployeeCreator.Create(DateTime.Now, businessIds[1], userIds[1], "shop@shop.com"));
+            _context.Add(EmployeeCreator.Create(DateTime.Now, businessIds[0], userIds[0], "info@brugsen.dk"));
+            _context.Add(EmployeeCreator.Create(DateTime.Now, businessIds[1], userIds[1], "info@farum.dk"));
         }
 
         private List<string> GuidHelper(int amount)

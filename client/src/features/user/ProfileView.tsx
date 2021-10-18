@@ -64,6 +64,7 @@ export const ProfileView: React.FC = () => {
             const address = addresses.find((x) => x.label === user.address);
             updatedUser.longitude = address?.longitude ?? user.longitude;
             updatedUser.latitude = address?.latitude ?? user.latitude;
+            updatedUser.role = user.role;
             updatedUser.id = user.id;
 
             return updatedUser;

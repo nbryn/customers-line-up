@@ -38,8 +38,6 @@ export const CreateBookingView: React.FC = () => {
     const business = useAppSelector(selectCurrentBusiness);
     const [showMapModal, setShowMapModal] = useState<boolean>(false);
 
-    console.log(business)
-
     if (!business) {
         return <ErrorView />;
     }

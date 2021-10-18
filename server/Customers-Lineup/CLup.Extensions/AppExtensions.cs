@@ -15,10 +15,10 @@ namespace CLup.Extensions
             using IServiceScope scope = app.ApplicationServices.CreateScope();
             CLupContext context = scope.ServiceProvider.GetRequiredService<CLupContext>();
 
-            context.Database.Migrate();
+            context.Database.EnsureCreated();
             var dataInitializer = scope.ServiceProvider.GetService<DataInitialiser>();
 
-            dataInitializer.InitialiseSeed();
+            dataInitializer.InitializeSeed();
         }
     }
 }

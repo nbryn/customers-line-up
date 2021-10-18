@@ -12,7 +12,7 @@ using CLup.Features.Extensions;
 
 namespace CLup.Features.Users.Commands
 {
-    public class UpdateUserInfoHandler : IRequestHandler<UpdateUserInfoCommand, Result<UserDTO>>
+    public class UpdateUserInfoHandler : IRequestHandler<UpdateUserInfoCommand, Result>
     {
         private readonly CLupContext _context;
         private readonly IMapper _mapper;
@@ -22,14 +22,14 @@ namespace CLup.Features.Users.Commands
             _context = context;
             _mapper = mapper;
         }
-        public async Task<Result<UserDTO>> Handle(UpdateUserInfoCommand command, CancellationToken cancellationToken)
+
+        public async Task<Result> Handle(UpdateUserInfoCommand command, CancellationToken cancellationToken)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == command.Id)
-                    .ToResult()
-                    .EnsureDiscard(user => user != null, $"User with the email '{command.Email}' was not found.")
+                    .FailureIfDiscard($"User with the email '{command.Email}' was not found.")
+                    //.EnsureDiscard(user => user != null, $"User with the email '{command.Email}' was not found.")
                     .AndThen(() => _mapper.Map<User>(command))
-                    .AndThenF(updatedUser => _context.UpdateEntity<User>(updatedUser.Id, updatedUser))
-                    .Finally(updatedUser => _mapper.Map<UserDTO>(updatedUser));
+                    .Finally(updatedUser => _context.UpdateEntity(updatedUser.Id, updatedUser));
         }
     }
 }

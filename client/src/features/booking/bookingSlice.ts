@@ -19,9 +19,12 @@ const initialState: BookingState = {
     byUser: {},
 };
 
-export const createBooking = createAsyncThunk('booking/create', async (timeSlotId: string) => {
-    await ApiCaller.post(`${DEFAULT_BOOKING_ROUTE}/${timeSlotId}`);
-});
+export const createBooking = createAsyncThunk<any, any, {state: RootState}>(
+    'booking/create',
+    async (timeSlotId: string, {getState}) => {
+        await ApiCaller.post(`${DEFAULT_BOOKING_ROUTE}/${timeSlotId}?bookingId=${selectCurrentUser(getState())?.id}`);
+    }
+);
 
 export const deleteBookingForBusiness = createAsyncThunk(
     'booking/deleteForBusiness',
@@ -55,9 +58,10 @@ export const fetchBookingsByBusiness = createAsyncThunk(
 export const fetchBookingsByUser = createAsyncThunk<any, any, {state: RootState}>(
     'booking/byUser',
     async (_: void, {getState}) => {
-        const bookings = await ApiCaller.get<BookingDTO[]>(`${DEFAULT_BOOKING_ROUTE}/user`);
+        const currentUser = selectCurrentUser(getState());
+        const bookings = await ApiCaller.get<BookingDTO[]>(`${DEFAULT_BOOKING_ROUTE}/user/${currentUser?.id}`);
 
-        return {userEmail: selectCurrentUser(getState())?.email, bookings};
+        return {userEmail: currentUser?.email, bookings};
     }
 );
 

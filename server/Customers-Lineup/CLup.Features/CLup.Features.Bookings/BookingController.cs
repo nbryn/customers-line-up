@@ -26,11 +26,9 @@ namespace CLup.Features.Bookings
         [Route("{timeSlotId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(string timeSlotId)
+        public async Task<IActionResult> Create(string timeSlotId, [FromQuery] string userId)
         {
-            string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var response = await _mediator.Send(new CreateBookingCommand(userMail, timeSlotId));
+            var response = await _mediator.Send(new CreateBookingCommand(timeSlotId, userId));
 
             return this.CreateActionResult(response);
         }
@@ -60,14 +58,12 @@ namespace CLup.Features.Bookings
         }
 
         [HttpGet]
-        [Route("user")]
+        [Route("user/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BookingDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UserBookings()
+        public async Task<IActionResult> UserBookings([FromRoute] UserBookingsQuery query)
         {
-            string userMail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var response = await _mediator.Send(new UserBookingsQuery(userMail));
+            var response = await _mediator.Send(query);
 
             return Ok(response);
         }

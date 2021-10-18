@@ -36,9 +36,6 @@ namespace CLup.Features.Extensions
         {
             var entity = (BaseEntity)await context.FindAsync(typeof(T), id);
 
-            Console.WriteLine(updatedEntity.Id);
-            Console.WriteLine(id);
-
             updatedEntity.Id = entity.Id;
             context.Entry(entity).CurrentValues.SetValues(updatedEntity);
 

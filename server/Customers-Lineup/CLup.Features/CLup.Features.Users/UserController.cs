@@ -86,7 +86,7 @@ namespace CLup.Features.Users
         [Authorize(Policy = Policies.User)]
         [Route("update")]
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UserDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateUserInfo([FromBody] UpdateUserInfoCommand command)
         {
