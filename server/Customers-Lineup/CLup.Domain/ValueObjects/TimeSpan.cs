@@ -4,22 +4,21 @@ namespace CLup.Domain.ValueObjects
 {
     public class TimeSpan : ValueObject
     {
-        public string Opens { get; private set; }
-        public string Closes { get; private set; }
+        public string Start { get; private set; }
+        public string End { get; private set; }
 
         public TimeSpan() { }
 
-        public TimeSpan(string opens, string closes)
+        public TimeSpan(string start, string end)
         {
-            Opens = opens;
-            Closes = closes;
+            Start = start;
+            End = end;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            // Using a yield return statement to return each element one at a time
-            yield return Opens;
-            yield return Closes;
+            yield return Start;
+            yield return End;
         }
     }
 }

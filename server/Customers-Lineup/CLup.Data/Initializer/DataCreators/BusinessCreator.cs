@@ -12,17 +12,15 @@ namespace CLup.Data.Initializer.DataCreators
 
         public static Business Create(
             string id, string ownerEmail,
-            BusinessData businessData, Coords coords, TimeSpan businessHours,
-            Address address, double longitude, BusinessType type)
+            BusinessData businessData, TimeSpan businessHours,
+            Address address, Coords coords, BusinessType type)
         {
             Business business = new Business
             {
                 Id = id,
                 OwnerEmail = ownerEmail,
                 BusinessData = businessData,
-                
                 Address = address,
-          
                 Type = type,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now

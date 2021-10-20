@@ -4,12 +4,12 @@ namespace CLup.Domain.ValueObjects
 {
     public class Coords : ValueObject
     {
-        public string Latitude { get; private set; }
-        public string Longitude { get; private set; }
+        public double Latitude { get; private set; }
+        public double Longitude { get; private set; }
 
         public Coords() { }
 
-        public Coords(string latitude, string longitude)
+        public Coords(double latitude, double longitude)
         {
             Latitude = latitude;
             Longitude = longitude;

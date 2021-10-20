@@ -1,6 +1,7 @@
 using System;
 
 using CLup.Domain;
+using CLup.Domain.ValueObjects;
 
 namespace CLup.Data.Initializer.DataCreators
 {
@@ -8,19 +9,15 @@ namespace CLup.Data.Initializer.DataCreators
     {
 
         public static User Create(
-            string id, string name, string email, string password,
-            string zip, string address, double longitude, double latitude)
+            string id, UserData userData,
+            Address address, Coords coords)
         {
             User user = new User
             {
                 Id = id,
-                Name = name,
-                Email = email,
-                Password = password,
-                Zip = zip,
+                UserData = userData,
                 Address = address,
-                Longitude = longitude,
-                Latitude = latitude,
+                Coords = coords,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };

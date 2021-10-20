@@ -8,6 +8,8 @@ using CLup.Data.Initializer.DataCreators;
 using CLup.Domain;
 using CLup.Domain.ValueObjects;
 
+using TimeSpan = CLup.Domain.ValueObjects.TimeSpan;
+
 namespace CLup.Data.Initializer
 {
     public class DataInitializer
@@ -37,17 +39,17 @@ namespace CLup.Data.Initializer
                 return;
             }
 
-            _context.Add(UserCreator.Create(ids[0],"Peter", "test@test.com", BC.HashPassword("1234"), "3520 - Farum",
-                          "Farum Hovedgade 15", 55.8122540, 12.3706760));
+            _context.Add(UserCreator.Create(ids[0], new UserData("Peter", "test@test.com", BC.HashPassword("1234")), 
+                                            new Address("Farum Hovedgade 15", "3520", "Farum"), new Coords(55.8122540, 12.3706760)));
 
-            _context.Add(UserCreator.Create(ids[1], "Jens", "h@h.com", BC.HashPassword("1234"), "3520 - Farum",
-                        "Farum Hovedgade 50", 55.810706, 12.3640744));
+            _context.Add(UserCreator.Create(ids[1], new UserData("Jens", "h@h.com", BC.HashPassword("1234")), 
+                                            new Address("Farum Hovedgade 50", "3520", "Farum"), new Coords(55.810706, 12.3640744)));
 
-            _context.Add(UserCreator.Create(ids[2], "Mads", "mads@hotmail.com", BC.HashPassword("1234"), "3520 - Farum",
-                          "Gedevasevej 15", 55.8075915, 12.3467888));
+            _context.Add(UserCreator.Create(ids[2], new UserData("Mads", "mads@hotmail.com", BC.HashPassword("1234")), 
+                                            new Address("Gedevasevej 15", "3520", "Farum"), new Coords(55.8075915, 12.3467888)));
 
-            _context.Add(UserCreator.Create(ids[3], "Emil", "emil@live.com", BC.HashPassword("1234"), "3520 - Farum",
-                          "Farum Hovedgade 15", 55.8200342, 12.3591325));
+            _context.Add(UserCreator.Create(ids[3], new UserData("Emil", "emil@live.com", BC.HashPassword("1234")), 
+                                            new Address("Farum Hovedgade 15", "3520", "Farum"), new Coords(55.8200342, 12.3591325)));
         }
         private void AddBusinesses(List<string> ids)
         {
@@ -56,17 +58,14 @@ namespace CLup.Data.Initializer
                 return;
             }
 
-            _context.Add(BusinessCreator.Create(ids[0], "Super Brugsen", "test@test.com", new Address("Ryttergårdsvej 10", "3520", "Farum"),
-                                         55.8137419, 12.3935222, 50, "10.00", "16.00", 30,
-                                         BusinessType.Supermarket));
+            _context.Add(BusinessCreator.Create(ids[0], "test@test.com", new BusinessData("Super Brugsen", 50, 30), new TimeSpan("10.00", "16.00"),
+                                                new Address("Ryttergårdsvej 10", "3520", "Farum"), new Coords(55.8137419, 12.3935222), BusinessType.Supermarket));
 
-            _context.Add(BusinessCreator.Create(ids[1], "Farum Museum", "test@test.com", new Address("Farum Hovedgade 100", "3520", "Farum"),
-                                         55.809127, 12.3544073, 40, "09.00", "14.00", 20,
-                                        BusinessType.Museum));
+            _context.Add(BusinessCreator.Create(ids[1], "test@test.com", new BusinessData("Farum Museum", 40, 20), new TimeSpan("09.00", "14.00"), 
+                                                new Address("Farum Hovedgade 100", "3520", "Farum"), new Coords(55.809127, 12.3544073), BusinessType.Museum));
 
-            _context.Add(BusinessCreator.Create(ids[2], "Kvick Kiosk", "test@test.com", new Address("Vermlandsgade 30", "2300", "København S"),
-                                55.668442, 12.5988833, 30, "08.30", "15.30", 10,
-                                  BusinessType.Kiosk));
+            _context.Add(BusinessCreator.Create(ids[2], "test@test.com", new BusinessData("Kvick Kiosk", 30, 10), new TimeSpan("08.30", "15.30"),
+                                                new Address("Vermlandsgade 30", "2300", "København S"), new Coords(55.668442, 12.5988833), BusinessType.Kiosk));
 
             _context.Add(BusinessCreator.CreateOwner(ids[3], "test@test.com"));
         }

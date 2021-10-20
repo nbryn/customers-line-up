@@ -1,23 +1,16 @@
 using System.Collections.Generic;
 
+using CLup.Domain.ValueObjects;
+
 namespace CLup.Domain
 {
     public class User : BaseEntity
     {
+        public UserData UserData { get; set; }
 
-        public string Name { get; set; }
+        public Address Address { get; set; }
 
-        public string Email { get; set; }
-
-        public string Password { get; set; }
-
-        public string Zip { get; set; }
-
-        public string Address { get; set; }
-
-        public double Longitude { get; set; }
-
-        public double Latitude { get; set; }
+        public Coords Coords { get; set; }
 
         public Role Role { get; set; }
 

@@ -54,14 +54,11 @@ namespace CLup.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new BusinessEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
 
             modelBuilder.Entity<Booking>().HasKey(c => new { c.UserId, c.TimeSlotId });
 
             modelBuilder.Entity<Employee>().HasKey(e => new { e.UserId, e.BusinessId });
-
-            modelBuilder.Entity<User>()
-                        .HasIndex(c => c.Email)
-                        .IsUnique();
 
              modelBuilder.Entity<BusinessOwner>()
                         .HasMany(c => c.Businesses);
