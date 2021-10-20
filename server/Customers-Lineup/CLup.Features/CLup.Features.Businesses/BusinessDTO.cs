@@ -6,7 +6,7 @@ namespace CLup.Features.Businesses
         public string Name { get; set; }
         public string Zip { get; set; }
         public string City { get; set; }
-        public string Address { get; set; }
+        public string Street { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public string Opens { get; set; }

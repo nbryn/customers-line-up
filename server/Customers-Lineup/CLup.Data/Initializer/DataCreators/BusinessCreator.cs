@@ -1,5 +1,3 @@
-using System;
-
 using CLup.Domain;
 using CLup.Domain.ValueObjects;
 
@@ -11,35 +9,14 @@ namespace CLup.Data.Initializer.DataCreators
     {
 
         public static Business Create(
-            string id, string ownerEmail,
-            BusinessData businessData, TimeSpan businessHours,
-            Address address, Coords coords, BusinessType type)
+            string ownerEmail,
+            BusinessData businessData, 
+            TimeSpan businessHours,
+            Address address, 
+            Coords coords, 
+            BusinessType type)
         {
-            Business business = new Business
-            {
-                Id = id,
-                OwnerEmail = ownerEmail,
-                BusinessData = businessData,
-                Address = address,
-                Type = type,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-
-            return business;
-        }
-
-        public static BusinessOwner CreateOwner(string id, string userEmail)
-        {
-            BusinessOwner owner = new BusinessOwner
-            {   
-                Id = id,
-                UserEmail = userEmail,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-
-            return owner;
+            return new Business(ownerEmail, businessData, address, coords, businessHours, type);
         }
     }
 }

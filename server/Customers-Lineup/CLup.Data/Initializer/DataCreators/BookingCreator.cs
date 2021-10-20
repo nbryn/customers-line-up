@@ -1,5 +1,3 @@
-using System;
-
 using CLup.Domain;
 
 namespace CLup.Data.Initializer.DataCreators
@@ -7,19 +5,9 @@ namespace CLup.Data.Initializer.DataCreators
     public static class BookingCreator
     {
 
-        public static Booking Create(string userId, string businessId, string TimeSlotId)
+        public static Booking Create(string userId, string businessId, string timeSlotId)
         {
-            Booking booking = new Booking
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserId = userId,
-                BusinessId = businessId,
-                TimeSlotId = TimeSlotId,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-
-            return booking;
+            return new Booking(userId, timeSlotId, businessId);            
         }
     }
 }

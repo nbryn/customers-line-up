@@ -27,7 +27,7 @@ namespace CLup.Features.Businesses.Commands
         {
             return await _context.BusinessOwners.FirstOrDefaultAsync(o => o.UserEmail == command.OwnerEmail)
                     .ToResult()
-                    .AndThen(owner => _context.CreateEntityIfNotExists(owner, new BusinessOwner { UserEmail = command.OwnerEmail }))
+                    .AndThen(owner => _context.CreateEntityIfNotExists(owner, new BusinessOwner(command.OwnerEmail)))
                     .AndThen(() => _mapper.Map<Business>(command))
                     .Finally(business => _context.AddAndSave(business));
         }

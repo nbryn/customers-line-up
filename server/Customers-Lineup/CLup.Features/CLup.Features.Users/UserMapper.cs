@@ -1,8 +1,7 @@
-using System;
-
 using AutoMapper;
 
 using CLup.Domain;
+using CLup.Domain.ValueObjects;
 using CLup.Features.Users.Commands;
 
 namespace CLup.Features.Users
@@ -13,15 +12,21 @@ namespace CLup.Features.Users
         {
             CreateMap<User, UserDTO>()
                 .ForMember(u => u.Role, s => s.MapFrom(m => m.Role.ToString()))
+                .ForMember(u => u.Email, s => s.MapFrom(m => m.Email))
+                .ForMember(u => u.Name, s => s.MapFrom(m => m.UserData.Name))
+                .ForMember(u => u.Street, s => s.MapFrom(m => m.Address.Street))
+                .ForMember(u => u.City, s => s.MapFrom(m => m.Address.City))
+                .ForMember(u => u.Zip, s => s.MapFrom(m => m.Address.Zip))
+                .ForMember(u => u.Latitude, s => s.MapFrom(m => m.Coords.Latitude))
+                .ForMember(u => u.Longitude, s => s.MapFrom(m => m.Coords.Longitude))
                 .ForMember(u => u.Token, s => s.MapFrom<AuthTokenResolver>());
 
             CreateMap<RegisterCommand, User>()
-                .ForMember(u => u.Id, s => s.MapFrom(m => Guid.NewGuid().ToString()))
                 .ForMember(u => u.Password, s => s.MapFrom<HashPasswordResolver>())
-                .ForMember(u => u.CreatedAt, s => s.MapFrom(m => DateTime.Now))
-                .ForMember(u => u.UpdatedAt, s => s.MapFrom(m => DateTime.Now));
+                .ForMember(u => u.UserData, s => s.MapFrom(s => new UserData(s.Name, s.Email, s.Password)))
+                .ForMember(u => u.Address, s => s.MapFrom(s => new Address(s.Street, s.Zip, s.City)))
+                .ForMember(u => u.Coords, s => s.MapFrom(s => new Coords(s.Latitude, s.Longitude)));
 
-            CreateMap<UpdateUserInfoCommand, User>().ConvertUsing<UpdateUserInfoConverter>();
         }
     }
 }

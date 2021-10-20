@@ -7,14 +7,17 @@ namespace CLup.Features.Bookings.Commands
     public class CreateBookingCommand : IRequest<Result>
     {
 
-        public string TimeSlotId { get; set; }
         public string UserId { get; set; }
-        
 
-        public CreateBookingCommand(string timeSlotId, string userId)
+        public string TimeSlotId { get; set; }
+        
+        public string BusinessId { get; set; }
+
+        public CreateBookingCommand(string userId, string timeSlotId, string businessId)
         {
-            TimeSlotId = timeSlotId;
-            UserId = userId;       
+            UserId = userId;   
+            TimeSlotId = timeSlotId; 
+            BusinessId = businessId;
         }
     }
 }

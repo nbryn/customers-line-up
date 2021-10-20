@@ -24,6 +24,19 @@ namespace CLup.Data
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new BookingEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new BusinessEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new TimeSlotEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
+        }
+
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
                                                    CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -46,31 +59,6 @@ namespace CLup.Data
             });
 
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.ApplyConfiguration(new BusinessEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
-
-            modelBuilder.Entity<Booking>().HasKey(c => new { c.UserId, c.TimeSlotId });
-
-            modelBuilder.Entity<Employee>().HasKey(e => new { e.UserId, e.BusinessId });
-
-             modelBuilder.Entity<BusinessOwner>()
-                        .HasMany(c => c.Businesses);
-
-            modelBuilder.Entity<BusinessOwner>()
-                        .HasIndex(c => c.UserEmail)
-                        .IsUnique();
-
-
-            modelBuilder.Entity<TimeSlot>()
-                        .HasMany(t => t.Bookings)
-                        .WithOne(b => b.TimeSlot);
         }
     }
 }

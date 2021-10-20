@@ -46,14 +46,14 @@ namespace CLup.Features.Insights
                 return await _context.Bookings.Include(b => b.Business)
                         .Include(b => b.TimeSlot)
                         .Include(b => b.User)
-                        .Where(x => x.User.Email == query.UserEmail)
+                        .Where(x => x.User.UserData.Email == query.UserEmail)
                         .ToListAsync()
                         .ToResult()
                         .AndThenDouble(bookings => bookings?.OrderBy(x => Math.Abs(x.TimeSlot.Start.Ticks - DateTime.Now.Ticks)).FirstOrDefault())
                         .Finally((bookings, nextBooking) => new Model
                         {
                             OwnBookings = bookings?.Count ?? 0,
-                            NextBookingBusiness = nextBooking?.Business.Name ?? "You don't have any bookings.",
+                            NextBookingBusiness = nextBooking?.Business.BusinessData.Name ?? "You don't have any bookings.",
                             NextBookingTime = nextBooking?.TimeSlot.Start.ToString("dd/MM/yyyy - HH:mm") ?? "You don't have any bookings."
                         });
             }

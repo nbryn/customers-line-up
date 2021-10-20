@@ -38,7 +38,7 @@ namespace CLup.Features.TimeSlots.Commands
             var opens = command.Start.AddHours(Double.Parse(business.Opens.Substring(0, business.Opens.IndexOf("."))));
             var closes = command.Start.AddHours(Double.Parse(business.Closes.Substring(0, business.Closes.IndexOf("."))));
 
-            for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(business.TimeSlotLength))
+            for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(business.BusinessData.TimeSlotLength))
             {
                 // Only add TimeSlots when shop is open
                 /*         if (date.Equals(closingTime))
@@ -53,7 +53,7 @@ namespace CLup.Features.TimeSlots.Commands
                 var timeSlot = _mapper.Map<TimeSlot>(business);
 
                 timeSlot.Start = date;
-                timeSlot.End = date.AddMinutes(business.TimeSlotLength);
+                timeSlot.End = date.AddMinutes(business.BusinessData.TimeSlotLength);
 
                 await _context.AddAndSave(timeSlot);
             }

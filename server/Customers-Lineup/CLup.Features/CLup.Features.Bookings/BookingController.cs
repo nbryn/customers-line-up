@@ -26,9 +26,9 @@ namespace CLup.Features.Bookings
         [Route("{timeSlotId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Create(string timeSlotId, [FromQuery] string userId)
+        public async Task<IActionResult> Create(string timeSlotId, [FromQuery] string userId, [FromQuery] string businessId)
         {
-            var response = await _mediator.Send(new CreateBookingCommand(timeSlotId, userId));
+            var response = await _mediator.Send(new CreateBookingCommand(userId, timeSlotId, businessId));
 
             return this.CreateActionResult(response);
         }

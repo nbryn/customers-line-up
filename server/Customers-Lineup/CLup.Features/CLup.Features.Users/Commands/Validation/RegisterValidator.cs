@@ -6,11 +6,12 @@ namespace CLup.Features.Users.Commands.Validation
     {
         public RegisterValidator()
         {
-            RuleFor(x => x.Email).NotEmpty();
+            RuleFor(x => x.Email).EmailAddress();
             RuleFor(x => x.Password).NotEmpty();
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Zip).NotEmpty();
-            RuleFor(x => x.Address).NotEmpty();
+            RuleFor(x => x.Street).NotEmpty();
+            RuleFor(x => x.City).NotEmpty();
         }
     }
 }

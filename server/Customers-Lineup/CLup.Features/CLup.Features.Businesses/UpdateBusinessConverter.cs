@@ -23,14 +23,16 @@ namespace CLup.Features.Businesses
 
             foreach (var prop in updateBusinessCommand.GetType().GetProperties())
             {
+                var propInfo = business.GetType().GetProperty(prop.Name);
                 if (prop.Name != "Type")
-                {
-                    var propInfo = business.GetType().GetProperty(prop.Name);
+                {            
                     propInfo.SetValue(business, Converter.ChangeType(prop.GetValue(updateBusinessCommand), propInfo.PropertyType), null);
                 }
+                else 
+                {
+                    propInfo.SetValue(business, Converter.ChangeType(prop.GetValue((BusinessType)BusinessType.Parse(typeof(BusinessType), (string)prop.GetValue(updateBusinessCommand))), propInfo.PropertyType), null);
+                }
             }
-
-            business.Type = (BusinessType)BusinessType.Parse(typeof(BusinessType), updateBusinessCommand.Type);
 
             return business;
         }

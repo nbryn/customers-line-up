@@ -1,8 +1,8 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,8 +16,13 @@ namespace CLup.Features.Bookings.Commands
     public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Result>
     {
         private readonly CLupContext _context;
+        private readonly IMapper _mapper;
 
-        public CreateBookingHandler(CLupContext context) => _context = context;
+        public CreateBookingHandler(CLupContext context, IMapper mapper) 
+        {
+            _context = context;
+            _mapper = mapper;
+        }
 
         public async Task<Result> Handle(CreateBookingCommand command, CancellationToken cancellationToken)
         {
@@ -30,17 +35,8 @@ namespace CLup.Features.Bookings.Commands
                                         .Include(x => x.Bookings)
                                         .FirstOrDefaultAsync(x => x.Id == command.TimeSlotId), "Time Slot does not exists.")
 
-                    .Ensure(timeSlot => timeSlot.Bookings.Count() < timeSlot.Capacity, "This time slot is full.")
-                    .AndThen(timeSlot => _context.Businesses.FirstOrDefaultAsync(x => x.Id == timeSlot.BusinessId))
-                    .AndThen(business => new Booking
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        UserId = command.UserId,
-                        TimeSlotId = command.TimeSlotId,
-                        BusinessId = business.Id,
-                        CreatedAt = DateTime.Now,
-                        UpdatedAt = DateTime.Now,
-                    })
+                    .EnsureDiscard(timeSlot => timeSlot.Bookings.Count() < timeSlot.Capacity, "This time slot is full.")
+                    .AndThen(() => _mapper.Map<Booking>(command))
                     .Finally(booking => _context.AddAndSave(booking));
         }
     }

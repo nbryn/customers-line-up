@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,24 +15,19 @@ namespace CLup.Features.Employees.Commands
     public class CreateEmployeeHandler : IRequestHandler<CreateEmployeeCommand, Result>
     {
         private readonly CLupContext _context;
+        private readonly IMapper _mapper;
 
-        public CreateEmployeeHandler(CLupContext context, IMapper mapper) => _context = context;
-
+        public CreateEmployeeHandler(CLupContext context, IMapper mapper) 
+        { 
+            _context = context;
+            _mapper = mapper;
+        }
         public async Task<Result> Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == command.UserId)
                     .FailureIfDiscard("User not found.")
                     .FailureIfDiscard(() => _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId), "Business not found.")
-                    .AndThen(() => new Employee
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        BusinessId = command.BusinessId,
-                        UserId = command.UserId,
-                        CompanyEmail = command.CompanyEmail,
-                        CreatedAt = DateTime.Now,
-                        UpdatedAt = DateTime.Now,
-
-                    })
+                    .AndThen(() => _mapper.Map<Employee>(command))
                     .Finally(employee => _context.AddAndSave(employee));
         }
     }

@@ -21,8 +21,8 @@ const initialState: BookingState = {
 
 export const createBooking = createAsyncThunk<any, any, {state: RootState}>(
     'booking/create',
-    async (timeSlotId: string, {getState}) => {
-        await ApiCaller.post(`${DEFAULT_BOOKING_ROUTE}/${timeSlotId}?bookingId=${selectCurrentUser(getState())?.id}`);
+    async ({id, data}: ThunkParam<string>, {getState}) => {
+        await ApiCaller.post(`${DEFAULT_BOOKING_ROUTE}/${id}?userId=${selectCurrentUser(getState())?.id}&businessId=${data}`);
     }
 );
 

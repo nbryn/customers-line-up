@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Domain;
+using CLup.Domain.ValueObjects;
 using CLup.Features.Common;
 using CLup.Features.Extensions;
 
@@ -26,10 +27,15 @@ namespace CLup.Features.Users.Commands
         public async Task<Result> Handle(UpdateUserInfoCommand command, CancellationToken cancellationToken)
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == command.Id)
-                    .FailureIfDiscard($"User with the email '{command.Email}' was not found.")
-                    //.EnsureDiscard(user => user != null, $"User with the email '{command.Email}' was not found.")
-                    .AndThen(() => _mapper.Map<User>(command))
+                    .FailureIf($"User with the email '{command.Email}' was not found.")
+                    .AndThen((user) => user.Update(user.Email, user.Name, Convert(command)))
+                    // Validation of domain model here
                     .Finally(updatedUser => _context.UpdateEntity(updatedUser.Id, updatedUser));
+        }
+
+        private (Address, Coords) Convert(UpdateUserInfoCommand command)
+        {
+            return (new Address(command.Street, command.Zip, command.City), new Coords(command.Latitude, command.Longitude));
         }
     }
 }
