@@ -26,7 +26,7 @@ namespace CLup.Features.Users.Queries
         }
         public async Task<Result<UserDTO>> Handle(UserInfoQuery query, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == query.Email)
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserData.Email == query.Email)
                     .FailureIf("User does not exist.")
                     .AndThenF(user => _userService.DetermineRole(user))
                     .Finally(user => _mapper.Map<UserDTO>(user));

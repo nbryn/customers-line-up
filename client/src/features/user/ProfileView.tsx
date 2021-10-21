@@ -3,7 +3,6 @@ import {pick} from 'lodash-es';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {ComboBoxOption} from '../../common/components/form/ComboBox';
 import {ErrorView} from '../../common/views/ErrorView';
 import {FormCard, FormCardData} from '../../common/components/card/FormCard';
 import {Header} from '../../common/components/Texts';
@@ -44,26 +43,27 @@ const useStyles = makeStyles((theme) => ({
 export const ProfileView: React.FC = () => {
     const styles = useStyles();
     const user = useAppSelector(selectCurrentUser);
-    const dispatch = useAppDispatch();
 
+    const dispatch = useAppDispatch();
     const [modalKey, setModalKey] = useState('');
-    const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
-    const [zips, setZips] = useState<ComboBoxOption[]>([]);
 
     if (!user) {
         return <ErrorView />;
     }
 
-    const formValues = pick(user, ['name', 'email', 'zip', 'address']) as UserDTO;
+    const formValues = pick(user, ['name', 'email', 'zip', 'street']) as UserDTO;
 
     const {addressHandler, formHandler} = useForm<UserDTO>({
         initialValues: formValues,
         validationSchema: userValidationSchema,
         onSubmit: (updatedUserInfo) => dispatch(updateUserInfo(updatedUserInfo)),
         beforeSubmit: (updatedUser) => {
-            const address = addresses.find((x) => x.label === user.address);
-            updatedUser.longitude = address?.longitude ?? user.longitude;
-            updatedUser.latitude = address?.latitude ?? user.latitude;
+            const address = addressHandler.addresses.find((x) => x.zipCity === user.address);
+
+            updatedUser.longitude = address?.longitude;
+            updatedUser.latitude = address?.latitude;
+            updatedUser.city = address?.city ?? '';
+            updatedUser.zip = address?.zip ?? '';
             updatedUser.role = user.role;
             updatedUser.id = user.id;
 
@@ -71,24 +71,11 @@ export const ProfileView: React.FC = () => {
         },
     });
 
-    useEffect(() => {
-        (async () => {
-            setZips(await addressHandler.fetchZips());
-        })();
-    }, []);
-
-    useEffect(() => {
-        (async () => {
-            const {zip} = formHandler.values;
-            setAddresses(await addressHandler.fetchAddresses(zip?.substring(0, 4)));
-        })();
-    }, [formHandler.values.zip]);
-
     const profileData: FormCardData[] = Object.keys(formValues).map((key) => ({
         key,
         label: StringUtil.capitalize(key),
         type: TextFieldUtil.mapKeyToType(key),
-        value: formHandler.values[key] as string,
+        value: TextFieldUtil.mapKeyToValue(key, formHandler.values, addressHandler.addresses),
         buttonAction: () => setModalKey(key),
         buttonText: 'Update',
     }));
@@ -102,9 +89,9 @@ export const ProfileView: React.FC = () => {
                 <Col sm={6} lg={6}>
                     <TextFieldModal
                         show={modalKey ? true : false}
-                        isComboBox={modalKey === 'zip' || modalKey === 'address'}
-                        addressOptions={addresses}
-                        zipOptions={zips}
+                        isComboBox={modalKey === 'zip' || modalKey === 'street'}
+                        streetOptions={addressHandler.getLabels('street')}
+                        zipOptions={addressHandler.getLabels('zip')}
                         showModal={setModalKey}
                         textFieldKey={modalKey}
                         textFieldType={TextFieldUtil.mapKeyToType(modalKey)}

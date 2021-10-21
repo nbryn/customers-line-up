@@ -39,6 +39,8 @@ export const MainView: React.FC = () => {
         setMobileOpen(false);
     };
 
+    console.log(apiState);
+
     return (
         <div className={styles.root}>
             <CssBaseline />

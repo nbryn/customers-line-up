@@ -28,11 +28,16 @@ namespace CLup.Features.Businesses
                 .ForMember(b => b.Id, s => s.Ignore())
                 .ForMember(b => b.BusinessData, s => s.MapFrom(c => new BusinessData(c.Name, c.Capacity, c.TimeSlotLength)))
                 .ForMember(b => b.Address, s => s.MapFrom(c => new Address(c.Street, c.Zip, c.City)))
-                .ForMember(b => b.Coords, s => s.MapFrom(c => new Coords(c.Latitude, c.Longitude)))
-                .ForMember(b => b.BusinessHours, s => s.MapFrom(c => new Coords(c.Latitude, c.Longitude)))
+                .ForMember(b => b.Coords, s => s.MapFrom(c => new Coords(c.Longitude, c.Latitude)))
+                .ForMember(b => b.BusinessHours, s => s.MapFrom(c => new TimeSpan(c.Opens, c.Closes)))
                 .ForMember(b => b.Type, s => s.MapFrom(m => BusinessType.Parse(typeof(BusinessType), m.Type)));
 
-            CreateMap<UpdateBusinessCommand, Business>().ConvertUsing<UpdateBusinessConverter>();
+            CreateMap<UpdateBusinessCommand, Business>()
+                .ForMember(b => b.BusinessData, s => s.MapFrom(c => new BusinessData(c.Name, c.Capacity, c.TimeSlotLength)))
+                .ForMember(b => b.Address, s => s.MapFrom(c => new Address(c.Street, c.Zip, c.City)))
+                .ForMember(b => b.Coords, s => s.MapFrom(c => new Coords(c.Longitude, c.Latitude)))
+                .ForMember(b => b.BusinessHours, s => s.MapFrom(c => new TimeSpan(c.Opens, c.Closes)))
+                .ForMember(b => b.Type, s => s.MapFrom(m => BusinessType.Parse(typeof(BusinessType), m.Type)));
         }
     }
 }

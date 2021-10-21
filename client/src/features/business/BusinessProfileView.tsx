@@ -5,7 +5,6 @@ import {omit} from 'lodash-es';
 
 import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
-import {ComboBoxOption} from '../../common/components/form/ComboBox';
 import {ErrorView} from '../../common/views/ErrorView';
 import {fetchBusinessesTypes, selectBusinessTypes, updateBusinessInfo} from './businessSlice';
 import {FormCard, FormCardData} from '../../common/components/card/FormCard';
@@ -25,18 +24,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const getIndex = (key: string) => {
+    if (key === 'name') return 1;
+    if (key === 'zip') return 2;
+    if (key === 'street') return 3;
+    if (key === 'type') return 4;
+    if (key === 'capacity') return 5;
+    if (key === 'timeSlotLength') return 6;
+    if (key === 'opens') return 7;
+    if (key === 'closes') return 8; 
+} 
+
 export const BusinessProfileView: React.FC = () => {
     const styles = useStyles();
     const dispatch = useAppDispatch();
 
-    const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
-    const [zips, setZips] = useState<ComboBoxOption[]>([]);
     const [modalKey, setModalKey] = useState('');
-
     const business = useAppSelector(selectCurrentBusiness);
     const businessTypes = useAppSelector(selectBusinessTypes);
-
-    console.log(business);
 
     if (!business) {
         return <ErrorView />;
@@ -63,9 +68,11 @@ export const BusinessProfileView: React.FC = () => {
                 })
             ),
         beforeSubmit: (updatedBusiness) => {
-            const address = addresses.find((x) => x.label === updatedBusiness.address);
+            const address = addressHandler.addresses.find((x) => x.street === updatedBusiness.street);
             updatedBusiness.longitude = address?.longitude ?? business.longitude;
             updatedBusiness.latitude = address?.latitude ?? business.latitude;
+            updatedBusiness.city = address?.city ?? business.city;
+            updatedBusiness.zip = address?.zip ?? business.zip;
 
             updatedBusiness.opens = updatedBusiness.opens.replace(':', '.');
             updatedBusiness.closes = updatedBusiness.closes.replace(':', '.');
@@ -77,30 +84,20 @@ export const BusinessProfileView: React.FC = () => {
     useEffect(() => {
         (async () => {
             dispatch(fetchBusinessesTypes());
-            setZips(await addressHandler.fetchZips());
         })();
     }, []);
 
-    useEffect(() => {
-        (async () => {
-            const {zip} = formHandler.values;
-            const addresses = await addressHandler.fetchAddresses(zip?.substring(0, 4));
-
-            setAddresses(addresses);
-        })();
-    }, [formHandler.values.zip]);
-
     const businessData: FormCardData[] = Object.keys(formValues).map((key) => ({
         key,
+        index: getIndex(key),
         label: TextFieldUtil.mapKeyToLabel(key),
         type: 'text',
-        value:
-            key === 'timeSlotLength'
-                ? `${formHandler.values[key]} minutes`
-                : (formHandler.values[key] as any),
+        value: TextFieldUtil.mapKeyToValue(key, formHandler.values, addressHandler.addresses),
         buttonAction: () => setModalKey(key),
         buttonText: 'Update',
     }));
+
+    console.log(businessData);
 
     return (
         <>
@@ -110,9 +107,9 @@ export const BusinessProfileView: React.FC = () => {
             <Row className={styles.row}>
                 <TextFieldModal
                     show={modalKey ? true : false}
-                    isComboBox={modalKey === 'zip' || modalKey === 'address'}
-                    addressOptions={addresses}
-                    zipOptions={zips}
+                    isComboBox={modalKey === 'zip' || modalKey === 'street'}
+                    streetOptions={addressHandler.getLabels('street')}
+                    zipOptions={addressHandler.getLabels('zip')}
                     showModal={setModalKey}
                     textFieldKey={modalKey}
                     textFieldType={TextFieldUtil.mapKeyToType(modalKey)}

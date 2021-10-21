@@ -1,19 +1,16 @@
-export interface UserDTO {
+import { HasAddress, Index } from "../../common/models/General";
+
+export interface UserDTO extends HasAddress {
     [key: string]: string | number | undefined;
     email: string;
     id?: string;
     name?: string;
-    zip?: string;
-    address?: string;
     password?: string;
     token?: string;
-    longitude?: number;
-    latitude?: number;
     role?: 'User' | 'Employee' | 'Owner' | 'Admin';
 }
 
-export interface LoginDTO {
-    [key: string]: string | number | undefined;
+export interface LoginDTO extends Index {
     email: string;
     password: string;
 }

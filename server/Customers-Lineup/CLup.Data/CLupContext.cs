@@ -27,11 +27,12 @@ namespace CLup.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new BookingEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BusinessEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new BusinessOwnerEntityTypeConfiguration());
+
             modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TimeSlotEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
@@ -46,7 +47,10 @@ namespace CLup.Data
 
             AddedEntities.ForEach(E =>
             {
-                E.Property("CreatedAt").CurrentValue = DateTime.Now;
+                if (E.Entity.ToString() != "ValueObject")
+                {
+                    E.Property("CreatedAt").CurrentValue = DateTime.Now;
+                }
             });
 
             var EditedEntities = ChangeTracker.Entries()
@@ -55,7 +59,10 @@ namespace CLup.Data
 
             EditedEntities.ForEach(E =>
             {
-                E.Property("UpdatedAt").CurrentValue = DateTime.Now;
+                if (E.Entity.ToString() != "ValueObject")
+                {
+                    E.Property("UpdatedAt").CurrentValue = DateTime.Now;
+                }
             });
 
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);

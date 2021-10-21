@@ -4,6 +4,8 @@ using CLup.Domain;
 using CLup.Domain.ValueObjects;
 using CLup.Features.Users.Commands;
 
+using BC = BCrypt.Net.BCrypt;
+
 namespace CLup.Features.Users
 {
     public class UserMapper : Profile
@@ -22,10 +24,9 @@ namespace CLup.Features.Users
                 .ForMember(u => u.Token, s => s.MapFrom<AuthTokenResolver>());
 
             CreateMap<RegisterCommand, User>()
-                .ForMember(u => u.Password, s => s.MapFrom<HashPasswordResolver>())
-                .ForMember(u => u.UserData, s => s.MapFrom(s => new UserData(s.Name, s.Email, s.Password)))
+                .ForMember(u => u.UserData, s => s.MapFrom(s => new UserData(s.Name, s.Email, BC.HashPassword(s.Password))))
                 .ForMember(u => u.Address, s => s.MapFrom(s => new Address(s.Street, s.Zip, s.City)))
-                .ForMember(u => u.Coords, s => s.MapFrom(s => new Coords(s.Latitude, s.Longitude)));
+                .ForMember(u => u.Coords, s => s.MapFrom(s => new Coords(s.Longitude, s.Latitude)));
 
         }
     }

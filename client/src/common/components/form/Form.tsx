@@ -6,6 +6,7 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {selectApiState} from '../../api/apiSlice';
 import {useAppSelector} from '../../../app/Store';
+import { boolean } from 'yup';
 
 const useStyles = makeStyles((theme) => ({
     alert: {
@@ -36,8 +37,9 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
     children?: React.ReactNode;
     buttonText: string;
-    image?: number;
     valid: boolean;
+    showMessage?: boolean;
+    image?: number;
     style?: any;
     onSubmit: (e: FormEvent<HTMLFormElement>) => void;
 };
@@ -46,6 +48,7 @@ export const Form: React.FC<Props> = ({
     children,
     buttonText,
     valid,
+    showMessage = false,
     style,
     onSubmit,
 }) => {
@@ -55,7 +58,7 @@ export const Form: React.FC<Props> = ({
     return (
         <>
             <form style={style} noValidate onSubmit={onSubmit}>
-                {apiState.message && (
+                {showMessage && apiState.message && (
                     <Alert className={styles.alert} variant="danger">
                         {apiState.message}
                     </Alert>

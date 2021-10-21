@@ -33,6 +33,8 @@ export const UserBookingView: React.FC = () => {
         {title: 'Interval', field: 'interval'},
     ];
 
+    console.log(bookings);
+
     const actions = [
         {
             icon: () => <Chip size="small" label="Delete" clickable color="primary" />,

@@ -1,3 +1,5 @@
+using System;
+
 using CLup.Domain;
 using CLup.Domain.ValueObjects;
 
@@ -16,7 +18,10 @@ namespace CLup.Data.Initializer.DataCreators
             Coords coords, 
             BusinessType type)
         {
-            return new Business(ownerEmail, businessData, address, coords, businessHours, type);
+            var business = new Business(ownerEmail, businessData, address, coords, businessHours, type);
+            business.UpdatedAt = DateTime.Now;
+
+            return business;
         }
     }
 }

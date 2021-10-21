@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 using BC = BCrypt.Net.BCrypt;
 
@@ -18,7 +19,7 @@ namespace CLup.Data.Initializer
 
         public DataInitializer(CLupContext context) => _context = context;
         
-        public void InitializeSeed()
+        public async Task InitializeSeed()
         {
             var userIds = AddUsers();
             var businessIds = AddBusinesses();
@@ -26,7 +27,7 @@ namespace CLup.Data.Initializer
             AddBookings(businessIds, timeSlotIds, userIds);
             AddEmployees(businessIds, userIds);
 
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
         }
         
         private IList<string> AddUsers()
@@ -85,7 +86,9 @@ namespace CLup.Data.Initializer
             _context.Add(business3);
             ids.Add(business3.Id);
 
-            _context.Add(new BusinessOwner("test@test.com"));
+            var owner = new BusinessOwner("test@test.com");
+            owner.UpdatedAt = DateTime.Now;
+            _context.Add(owner);
 
             return ids;
         }

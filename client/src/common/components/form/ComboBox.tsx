@@ -24,8 +24,6 @@ const useStyles = makeStyles((theme) => ({
 export type ComboBoxOption = {
     label: string;
     value?: string;
-    longitude?: number;
-    latitude?: number;
 };
 
 export type Props = {
@@ -58,7 +56,7 @@ export const ComboBox: React.FC<Props> = ({
     const styles = useStyles();
 
     const filterOptions = createFilterOptions<ComboBoxOption>({
-        limit: 10,
+        limit: options[0]?.label === 'Choose zip first' ? 1 : 10,
         matchFrom: 'start',
     });
 

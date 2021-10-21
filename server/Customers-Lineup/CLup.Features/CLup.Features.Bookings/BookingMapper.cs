@@ -22,7 +22,7 @@ namespace CLup.Features.Bookings
                     m => m.TimeSlot.Bookings.Count().ToString() + "/" + m.TimeSlot.Capacity))
                 .ForMember(b => b.Latitude, s => s.MapFrom(m => m.Business.Coords.Latitude))
                 .ForMember(b => b.Longitude, s => s.MapFrom(m => m.Business.Coords.Longitude))
-                .ForMember(b => b.Address, s => s.MapFrom(m => m.Business.Address));
+                .ForMember(b => b.Address, s => s.MapFrom(m => m.Business.Address.Street));
 
             CreateMap<CreateBookingCommand, Booking>();
         }

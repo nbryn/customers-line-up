@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -38,14 +38,11 @@ export const SignupView: React.FC = () => {
     const styles = useStyles();
     const dispatch = useAppDispatch();
 
-    const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
-    const [zips, setZips] = useState<ComboBoxOption[]>([]);
-
     const formValues: UserDTO = {
         email: '',
         name: '',
         zip: '',
-        address: '',
+        street: '',
         password: '',
     };
 
@@ -54,26 +51,15 @@ export const SignupView: React.FC = () => {
         validationSchema: signupValidationSchema,
         onSubmit: (data) => dispatch(register(data)),
         beforeSubmit: (user: UserDTO) => {
-            const address = addresses.find((x) => x.label === user.address);
+            const address = addressHandler.addresses.find((x) => x.street === user.street);
 
             user.longitude = address?.longitude;
             user.latitude = address?.latitude;
+            user.city = address?.city ?? ''
+            user.zip = address?.zip ?? '';
             return user;
         },
     });
-
-    useEffect(() => {
-        (async () => {
-            setZips(await addressHandler.fetchZips());
-        })();
-    }, []);
-
-    useEffect(() => {
-        (async () => {
-            const {zip} = formHandler.values;
-            setAddresses(await addressHandler.fetchAddresses(zip?.substring(0, 4)));
-        })();
-    }, [formHandler.values.zip]);
 
     return (
         <>
@@ -84,9 +70,10 @@ export const SignupView: React.FC = () => {
                             onSubmit={formHandler.handleSubmit}
                             buttonText="Signup"
                             valid={formHandler.isValid}
+                            showMessage
                         >
                             {Object.keys(formValues).map((key) => {
-                                if (key === 'zip' || key === 'address') {
+                                if (key === 'zip' || key === 'street') {
                                     return (
                                         <FormGroup key={key}>
                                             <ComboBox
@@ -98,7 +85,7 @@ export const SignupView: React.FC = () => {
                                                 }}
                                                 label={StringUtil.capitalize(key)}
                                                 type="text"
-                                                options={key === 'zip' ? zips : addresses}
+                                                options={addressHandler.getLabels(key)}
                                                 onBlur={formHandler.handleBlur}
                                                 setFieldValue={(
                                                     option: ComboBoxOption,
@@ -118,8 +105,8 @@ export const SignupView: React.FC = () => {
                                                     formHandler.errors[key]
                                                 }
                                                 defaultLabel={
-                                                    key === 'address'
-                                                        ? 'Address - After Zip'
+                                                    key === 'street'
+                                                        ? 'street - After Zip'
                                                         : 'Zip'
                                                 }
                                             />

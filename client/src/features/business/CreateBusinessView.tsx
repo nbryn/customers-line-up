@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {MenuItem} from '@material-ui/core';
@@ -40,17 +40,13 @@ const useStyles = makeStyles((theme) => ({
 export const CreateBusinessView: React.FC = () => {
     const styles = useStyles();
     const dispatch = useAppDispatch();
-
-    const [addresses, setAddresses] = useState<ComboBoxOption[]>([]);
-    const [zips, setZips] = useState<ComboBoxOption[]>([]);
     const businessTypes = useAppSelector(selectBusinessTypes);
-
 
     const formValues: BusinessDTO = {
         id: '',
         name: '',
         zip: '',
-        address: '',
+        street: '',
         type: '',
         capacity: '',
         timeSlotLength: '',
@@ -63,33 +59,26 @@ export const CreateBusinessView: React.FC = () => {
         validationSchema: businessValidationSchema,
         onSubmit: (business) => dispatch(createBusiness(business)),
         beforeSubmit: (business) => {
-            const address = addresses.find((x) => x.label === business.address);
+            const address = addressHandler.addresses.find((x) => x.street === business.street)!;
+            const newBusiness = {...business};
 
-            business.longitude = address?.longitude;
-            business.latitude = address?.latitude;
+            newBusiness.longitude = address.longitude;
+            newBusiness.latitude = address.latitude;
+            newBusiness.city = address.city;
+            newBusiness.zip = address.zip;
 
-            business.opens = business.opens.replace(':', '.');
-            business.closes = business.closes.replace(':', '.');
+            newBusiness.opens = business.opens.replace(':', '.');
+            newBusiness.closes = business.closes.replace(':', '.');
 
-            return business;
+            return newBusiness;
         },
     });
 
     useEffect(() => {
         (async () => {
             dispatch(fetchBusinessesTypes());
-            setZips(await addressHandler.fetchZips());
         })();
     }, []);
-
-    useEffect(() => {
-        (async () => {
-            const {zip} = formHandler.values;
-            if (!zip) return;
-
-            setAddresses(await addressHandler.fetchAddresses(zip.substring(0, 4)));
-        })();
-    }, [formHandler.values.zip]);
 
     return (
         <>
@@ -109,7 +98,7 @@ export const CreateBusinessView: React.FC = () => {
                                     {Object.keys(formValues)
                                         .slice(1, 5)
                                         .map((key) => {
-                                            if (key === 'zip' || key === 'address') {
+                                            if (key === 'zip' || key === 'street') {
                                                 return (
                                                     <FormGroup
                                                         key={key}
@@ -124,9 +113,7 @@ export const CreateBusinessView: React.FC = () => {
                                                             }}
                                                             label={StringUtil.capitalize(key)}
                                                             type="text"
-                                                            options={
-                                                                key === 'zip' ? zips : addresses
-                                                            }
+                                                            options={addressHandler.getLabels(key)}
                                                             onBlur={formHandler.handleBlur}
                                                             setFieldValue={(
                                                                 option: ComboBoxOption,
@@ -146,8 +133,8 @@ export const CreateBusinessView: React.FC = () => {
                                                                 formHandler.errors[key]
                                                             }
                                                             defaultLabel={
-                                                                key === 'address'
-                                                                    ? 'Address - After Zip'
+                                                                key === 'street'
+                                                                    ? 'Street - After Zip'
                                                                     : ''
                                                             }
                                                         />
@@ -198,6 +185,7 @@ export const CreateBusinessView: React.FC = () => {
                                                     value={formHandler.values[key]}
                                                     onChange={formHandler.handleChange}
                                                     onBlur={formHandler.handleBlur}
+                                                    step={TextFieldUtil.mapKeyToStep(key)}
                                                     error={
                                                         formHandler.touched[key] &&
                                                         Boolean(formHandler.errors[key])
@@ -210,9 +198,6 @@ export const CreateBusinessView: React.FC = () => {
                                                         shrink: TextFieldUtil.shouldInputLabelShrink(
                                                             key
                                                         ),
-                                                    }}
-                                                    inputProps={{
-                                                        step: 1800,
                                                     }}
                                                 />
                                             </FormGroup>

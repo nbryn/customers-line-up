@@ -17,30 +17,42 @@ type DawaAddress = {
     y: number;
 };
 
-type Address = {
-    address: string;
-    longitude: number;
-    latitude: number;
+export type Address = {
+    city: string;
+    zip: string;
+    zipCity: string;
+    street?: string;
+    longitude?: number;
+    latitude?: number;
 };
 
-export async function fetchZips(): Promise<string[]> {
+export async function fetchZips(): Promise<Address[]> {
     const dawaZips = await ApiCaller.get<DawaZip[]>(DAWA_ZIP_URL);
 
-    const zips = dawaZips.map((x) => `${x.nr} - ${x.navn}`);
+    const zips = dawaZips.map((x) => ({
+        city: x.navn,
+        zip: x.nr,
+        zipCity: `${x.nr} - ${x.navn}`,
+    }));
 
     return zips;
 }
 
-export async function fetchAddresses(zip: string): Promise<Address[]> {
-    const dawaAddresses = await ApiCaller.get<DawaAddress[]>(getAddressUrl(zip));
+export async function fetchAddresses(address: Address | undefined): Promise<Address[]> {
+    if (address) {
+        const dawaAddresses = await ApiCaller.get<DawaAddress[]>(getAddressUrl(address.zip));
 
-    const addresses: Address[] = dawaAddresses.map((x) => ({
-        address: `${x.vejnavn} ${x.husnr}`,
-        longitude: x.y,
-        latitude: x.x,
-    }));
+        const addresses: Address[] = dawaAddresses.map((x) => ({
+            ...address,
+            street: `${x.vejnavn} ${x.husnr}`,
+            longitude: x.y,
+            latitude: x.x,
+        }));
 
-    return addresses;
+        return addresses;
+    }
+    
+    return [];
 }
 
 export default {

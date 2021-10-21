@@ -26,7 +26,7 @@ namespace CLup.Features.Users.Commands
         }
         public async Task<Result<UserDTO>> Handle(LoginCommand command, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Email == command.Email)
+            return await _context.Users.FirstOrDefaultAsync(x => x.UserData.Email == command.Email)
                 .ToResult()
                 .Ensure(user => BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
                 .AndThenF(user => _userService.DetermineRole(user))

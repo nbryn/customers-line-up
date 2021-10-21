@@ -39,5 +39,7 @@ namespace CLup.Domain.ValueObjects
                 .Select(x => x != null ? x.GetHashCode() : 0)
                 .Aggregate((x, y) => x ^ y);
         }
+
+        public override string ToString() => "ValueObject";
     }
 }

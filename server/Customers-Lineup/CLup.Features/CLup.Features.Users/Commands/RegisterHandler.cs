@@ -24,9 +24,9 @@ namespace CLup.Features.Users.Commands
         }
         public async Task<Result<UserDTO>> Handle(RegisterCommand command, CancellationToken cancellationToken)
         {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Email == command.Email)
+            return await _context.Users.FirstOrDefaultAsync(x => x.UserData.Email == command.Email)
                     .ToResult()
-                    .EnsureDiscard(user => user == null, $"An existing user with the email '{command.Email}' was found.")
+                    .EnsureDiscard(user => user == null, $"The email '{command.Email}' is already in use.")
                     .AndThen(() => _mapper.Map<User>(command))
                     .AndThenF(newUser => _context.AddAndSave(newUser))
                     .Finally(newUser => _mapper.Map<UserDTO>(newUser));

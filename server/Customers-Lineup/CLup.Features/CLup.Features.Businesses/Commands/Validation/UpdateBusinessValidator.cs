@@ -11,7 +11,10 @@ namespace CLup.Features.Businesses.Commands.Validation
             RuleFor(x => x.Id).NotEmpty();
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Zip).NotEmpty();
-            RuleFor(x => x.Address).NotEmpty();
+            RuleFor(x => x.Street).NotEmpty();
+            RuleFor(x => x.City).NotEmpty();
+            RuleFor(x => x.Longitude).NotEmpty();
+            RuleFor(x => x.Latitude).NotEmpty();
             RuleFor(x => x.Opens).NotEmpty();
             RuleFor(x => x.Closes).NotEmpty();
             RuleFor(x => x.Capacity).NotEmpty();

@@ -23,6 +23,8 @@ namespace CLup.Domain
 
         public IEnumerable<Employee> Employees { get; private set; }
 
+        public Business() {}
+
         public Business(
                 string ownerEmail, 
                 BusinessData businessData,
@@ -40,12 +42,10 @@ namespace CLup.Domain
             Type = type;
         }
 
-        
         public string Opens => BusinessHours.Start;
 
         public string Closes => BusinessHours.End;
         
         public string Name => BusinessData.Name;
     }
-
 }

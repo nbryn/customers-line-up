@@ -11,7 +11,10 @@ namespace CLup.Data.Initializer.DataCreators
             string userId, 
             string companyEmail)
         {
-            return new Employee(userId, businessId, companyEmail);
+            var employee = new Employee(userId, businessId, companyEmail);
+            employee.UpdatedAt = DateTime.Now;
+
+            return employee;
         }
     }
 }

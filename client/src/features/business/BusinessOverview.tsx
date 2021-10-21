@@ -70,7 +70,7 @@ export const BusinessOverview: React.FC = () => {
                                         <CardInfo
                                             infoTexts={[
                                                 {text: `${business.zip}`, icon: 'City'},
-                                                {text: `${business.address}`, icon: 'Home'},
+                                                {text: `${business.street}`, icon: 'Home'},
                                             ]}
                                         />
                                     </InfoCard>

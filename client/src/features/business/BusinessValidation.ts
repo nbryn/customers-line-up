@@ -8,7 +8,7 @@ export const businessValidationSchema: yup.ObjectSchema = yup.object({
     .max(50, 'Maximum 50 characters'),
     zip: yup.string()
         .required('Zip is required'),
-    address: yup.string()
+    street: yup.string()
         .min(4, 'Minimum 4 characters')
         .max(50, 'Maximum 50 characters')
         .required('Address is required'),

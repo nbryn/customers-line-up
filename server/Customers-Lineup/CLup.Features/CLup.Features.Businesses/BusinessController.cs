@@ -56,6 +56,8 @@ namespace CLup.Features.Businesses
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateBusinessData([FromBody] UpdateBusinessCommand command)
         {
+            command.OwnerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
             var result = await _mediator.Send(command);
 
             return this.CreateActionResult(result);

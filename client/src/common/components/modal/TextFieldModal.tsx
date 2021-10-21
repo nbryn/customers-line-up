@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
     show: boolean;
     isComboBox?: boolean;
-    addressOptions?: ComboBoxOption[];
+    streetOptions?: ComboBoxOption[];
     zipOptions?: ComboBoxOption[];
     textFieldKey: string;
     formHandler: FormHandler<any>;
@@ -33,7 +33,7 @@ type Props = {
 export const TextFieldModal: React.FC<Props> = ({
     show,
     isComboBox = false,
-    addressOptions,
+    streetOptions,
     zipOptions,
     textFieldKey,
     initialValue,
@@ -66,14 +66,14 @@ export const TextFieldModal: React.FC<Props> = ({
             {updating && <CircularProgress />}
             {isComboBox ? (
                 <>
-                    {['zip', 'address'].map((entry) => {
+                    {['zip', 'street'].map((entry) => {
                         return (
                             <ComboBox
                                 id={entry}
                                 style={{width: '100%', marginLeft: 0}}
                                 label={TextFieldUtil.mapKeyToLabel(entry)}
                                 type="text"
-                                options={(entry === 'zip' ? zipOptions : addressOptions) ?? []}
+                                options={(entry === 'zip' ? zipOptions : streetOptions) ?? []}
                                 onBlur={formHandler.handleBlur}
                                 setFieldValue={(option: ComboBoxOption, formFieldId: string) =>
                                     formHandler.setFieldValue(formFieldId, option.label)
@@ -82,7 +82,7 @@ export const TextFieldModal: React.FC<Props> = ({
                                 helperText={
                                     formHandler.touched[entry] && (formHandler.errors[entry] as any)
                                 }
-                                defaultLabel={entry == 'address' ? 'Zip before address' : ''}
+                                defaultLabel={entry === 'street' ? 'Zip before street' : ''}
                             />
                         );
                     })}
@@ -107,9 +107,7 @@ export const TextFieldModal: React.FC<Props> = ({
                                 ? true
                                 : undefined,
                     }}
-                    inputProps={{
-                        step: 1800,
-                    }}
+                    step={TextFieldUtil.mapKeyToStep(textFieldKey)}
                 >
                     {selectOptions &&
                         selectOptions.map((x, index) => (

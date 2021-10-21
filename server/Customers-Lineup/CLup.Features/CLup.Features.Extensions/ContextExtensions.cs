@@ -1,8 +1,6 @@
 using System;
 using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-
 using CLup.Data;
 using CLup.Domain;
 
@@ -25,6 +23,7 @@ namespace CLup.Features.Extensions
                 context.Add(newEntity);
             }
         }
+
         public static async Task<int> RemoveAndSave(this CLupContext context, BaseEntity value)
         {
             context.Remove(value);

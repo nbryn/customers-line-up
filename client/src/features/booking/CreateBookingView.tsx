@@ -80,7 +80,7 @@ export const CreateBookingView: React.FC = () => {
                         fetchData={() => dispatch(fetchAvailableTimeSlotsByBusiness(business.id))}
                         tableTitle={
                             <>
-                                <h5 className={styles.address}>{business.address}</h5>
+                                <h5 className={styles.address}>{business.street}</h5>
                                 <Chip
                                     className={styles.badge}
                                     size="small"

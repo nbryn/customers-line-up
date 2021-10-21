@@ -9,7 +9,7 @@ namespace CLup.Domain.ValueObjects
 
         public Coords() { }
 
-        public Coords(double latitude, double longitude)
+        public Coords(double longitude, double latitude)
         {
             Latitude = latitude;
             Longitude = longitude;

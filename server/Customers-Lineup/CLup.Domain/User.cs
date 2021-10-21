@@ -16,20 +16,21 @@ namespace CLup.Domain
 
         public IList<Booking> Bookings { get; private set; }
 
-         public User(
+        public User() {}
+
+        public User(
                 UserData userData,
                 Address address,
                 Coords coords)
             : base()
         {
             UserData = userData;
-            Address = Address;
+            Address = address;
             Coords = coords;             
         }
 
         public string Name => UserData.Name;
         public string Email => UserData.Email;
-
         public string Password => UserData.Password;
 
         public User Update(string email, string name, (Address address, Coords coords) info)

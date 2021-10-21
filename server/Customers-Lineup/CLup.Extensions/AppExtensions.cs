@@ -1,5 +1,6 @@
+using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 using CLup.Data;
@@ -10,7 +11,7 @@ namespace CLup.Extensions
     public static class AppExtensions
     {
 
-        public static void ConfigureDataInitialiser(this IApplicationBuilder app)
+        public static async Task ConfigureDataInitialiser(this IApplicationBuilder app)
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();
             CLupContext context = scope.ServiceProvider.GetRequiredService<CLupContext>();
@@ -18,7 +19,7 @@ namespace CLup.Extensions
             context.Database.EnsureCreated();
             var dataInitializer = scope.ServiceProvider.GetService<DataInitializer>();
 
-            dataInitializer.InitializeSeed();
+            await dataInitializer.InitializeSeed();
         }
     }
 }

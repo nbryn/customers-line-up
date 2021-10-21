@@ -19,7 +19,7 @@ export const userValidationSchema: yup.ObjectSchema = yup.object({
       .required('Name is required')
       .max(50, 'Maximum 50 characters'),
    zip: yup.string().required('Zip is required'),
-   address: yup.string().min(4, 'Address should be 4 characters').required('Address is required'),
+   street: yup.string().min(4, 'Address should be 4 characters').required('Address is required'),
 });
 
 export const signupValidationSchema = userValidationSchema.concat(passwordValidationObject);

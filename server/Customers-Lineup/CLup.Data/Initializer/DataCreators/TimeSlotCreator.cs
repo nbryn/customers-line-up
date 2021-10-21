@@ -15,7 +15,10 @@ namespace CLup.Data.Initializer.DataCreators
             DateTime start, 
             DateTime end)
         {
-            return new TimeSlot(businessId, businessName, capacity, start, end);
+            var timeSlot = new TimeSlot(businessId, businessName, capacity, start, end);
+            timeSlot.UpdatedAt = DateTime.Now;
+
+            return timeSlot;
         }
     }
 }

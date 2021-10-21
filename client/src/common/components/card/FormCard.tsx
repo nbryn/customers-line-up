@@ -23,12 +23,13 @@ const useStyles = makeStyles({
 });
 
 export type FormCardData = {
+    index?: number;
     label: string | undefined;
     key: string;
+    value: string;
     color?: 'primary' | 'secondary';
     variant?: 'outlined';
     type?: TextFieldType;
-    value: string;
     buttonAction?: () => void;
     buttonText?: string;
 };
@@ -43,6 +44,7 @@ type Props = {
 export const FormCard: React.FC<Props> = ({buttonAction, buttonText, title, data}: Props) => {
     const styles = useStyles();
 
+    if (data[0].index) data = data.sort((a, b) => a.index! - b.index!); 
     return (
         <Card
             className={styles.card}
