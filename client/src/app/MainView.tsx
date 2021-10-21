@@ -4,13 +4,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory} from 'react-router-dom';
 
-import { clearApiState } from '../common/api/apiSlice';
+import {clearApiState} from '../common/api/apiSlice';
 import {ExtendedToastMessage, ToastMessage} from '../common/components/Toast';
 import {Header} from '../common/components/navigation/Header';
 import {LoginView} from '../features/user/LoginView';
 import {MainMenu} from '../common/components/navigation/MainMenu';
 import {Routes} from './Routes';
-import { selectApiState } from '../common/api/apiSlice';
+import {selectApiState} from '../common/api/apiSlice';
 import {selectCurrentUser} from '../features/user/userSlice';
 import {useAppSelector, useAppDispatch} from '../app/Store';
 
@@ -39,8 +39,6 @@ export const MainView: React.FC = () => {
         setMobileOpen(false);
     };
 
-    console.log(apiState);
-
     return (
         <div className={styles.root}>
             <CssBaseline />
@@ -64,7 +62,9 @@ export const MainView: React.FC = () => {
                                 onClose={() => dispatch(clearApiState())}
                                 message={apiState.message}
                                 primaryButtonText={apiState.toastInfo.buttonText}
-                                primaryAction={() => history.push(apiState.toastInfo?.navigateTo ?? '/home')}
+                                primaryAction={() =>
+                                    history.push(apiState.toastInfo?.navigateTo ?? '/home')
+                                }
                             />
                         )}
                         <Routes />

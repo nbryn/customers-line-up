@@ -26,12 +26,12 @@ namespace CLup.Domain
         public Business() {}
 
         public Business(
-                string ownerEmail, 
-                BusinessData businessData,
-                Address address,
-                Coords coords,
-                TimeSpan businessHours,
-                BusinessType type)
+            string ownerEmail, 
+            BusinessData businessData,
+            Address address,
+            Coords coords,
+            TimeSpan businessHours,
+            BusinessType type)
             : base()
         {
             OwnerEmail = ownerEmail;

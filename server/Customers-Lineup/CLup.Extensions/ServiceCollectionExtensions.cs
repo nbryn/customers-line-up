@@ -27,7 +27,7 @@ namespace CLup.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
         }
-
+        
         public static void ConfigureSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>

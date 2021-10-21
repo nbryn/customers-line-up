@@ -12,6 +12,5 @@ namespace CLup.Domain
         {
             UserEmail = userEmail;
         }
-
     }
 }

@@ -21,11 +21,11 @@ namespace CLup.Domain
         public IEnumerable<Booking> Bookings { get; private set; }
 
         public TimeSlot(
-                string businessId,
-                string businessName,
-                int capacity,
-                DateTime start,
-                DateTime end)
+            string businessId,
+            string businessName,
+            int capacity,
+            DateTime start,
+            DateTime end)
             : base()
         {
             BusinessId = businessId;
