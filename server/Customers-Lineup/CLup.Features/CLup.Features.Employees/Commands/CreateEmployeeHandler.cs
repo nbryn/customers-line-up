@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AutoMapper;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 
@@ -14,11 +15,16 @@ namespace CLup.Features.Employees.Commands
 {
     public class CreateEmployeeHandler : IRequestHandler<CreateEmployeeCommand, Result>
     {
+        private readonly IValidator<Employee> _validator;
         private readonly CLupContext _context;
         private readonly IMapper _mapper;
 
-        public CreateEmployeeHandler(CLupContext context, IMapper mapper) 
+        public CreateEmployeeHandler(
+            IValidator<Employee> validator,
+            CLupContext context, 
+            IMapper mapper) 
         { 
+            _validator = validator;
             _context = context;
             _mapper = mapper;
         }
@@ -28,6 +34,7 @@ namespace CLup.Features.Employees.Commands
                     .FailureIfDiscard("User not found.")
                     .FailureIfDiscard(() => _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId), "Business not found.")
                     .AndThen(() => _mapper.Map<Employee>(command))
+                    .Validate(_validator)
                     .Finally(employee => _context.AddAndSave(employee));
         }
     }

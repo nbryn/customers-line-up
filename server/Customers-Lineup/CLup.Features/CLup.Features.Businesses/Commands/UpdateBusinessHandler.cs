@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,11 +15,16 @@ namespace CLup.Features.Businesses.Commands
 {
     public class UpdateBusinessHandler : IRequestHandler<UpdateBusinessCommand, Result>
     {
+        private readonly IValidator<Business> _businessValidator;
         private readonly CLupContext _context;
         private readonly IMapper _mapper;
 
-        public UpdateBusinessHandler(CLupContext context, IMapper mapper)
+        public UpdateBusinessHandler(
+            IValidator<Business> businessValidator,
+            CLupContext context, 
+            IMapper mapper)
         {
+            _businessValidator = businessValidator;
             _context = context;
             _mapper = mapper;
         }
@@ -28,6 +34,7 @@ namespace CLup.Features.Businesses.Commands
             return await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.Id)
                     .FailureIfDiscard("Business not found.")
                     .AndThen(() => _mapper.Map<Business>(command))
+                    .Validate(_businessValidator)
                     .Finally(updatedBusiness => _context.UpdateEntity(command.Id, updatedBusiness));
         }
     }

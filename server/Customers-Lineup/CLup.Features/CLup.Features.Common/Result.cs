@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
+using FluentValidation;
+
 namespace CLup.Features.Common
 {
     public class Result
@@ -12,6 +14,7 @@ namespace CLup.Features.Common
         {
             get { return !Success; }
         }
+
         protected Result(bool success, string error, HttpCode code)
         {
             Success = success;
@@ -82,6 +85,8 @@ namespace CLup.Features.Common
         public static Result Conflict(string message = "") => new Result(false, message, HttpCode.Conflict);
 
         public static Result<T> Conflict<T>(string message = "") => new Result<T>(default(T), false, message, HttpCode.Conflict);
+
+        public static Result<T> BadRequest<T>(string message = "") => new Result<T>(default(T), false, message, HttpCode.BadRequest);
 
         public static Result<T> Unauthorized<T>() => new Result<T>(default(T), false, String.Empty, HttpCode.Unauthorized);
     }
@@ -251,6 +256,23 @@ namespace CLup.Features.Common
             var maybe = f(Value);
 
             return Ok<T, U>(Value, maybe);
+        }
+
+        
+        public Result<T> Validate(IValidator<T> validator)
+        {
+            if (Failure)
+            {
+                return Fail<T>(Code, Error);
+            }
+
+            var validationResult = validator.Validate(Value);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest<T>(validationResult.Errors[0].ErrorMessage);
+            }
+
+            return Ok<T>(Value);
         }
     }
 

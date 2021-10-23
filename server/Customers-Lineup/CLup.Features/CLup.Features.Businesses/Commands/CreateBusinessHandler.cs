@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,11 +15,16 @@ namespace CLup.Features.Businesses.Commands
 {
     public class CreateBusinessHandler : IRequestHandler<CreateBusinessCommand, Result>
     {
+        private readonly IValidator<Business> _validator;
         private readonly CLupContext _context;
         private readonly IMapper _mapper;
 
-        public CreateBusinessHandler(CLupContext context, IMapper mapper)
+        public CreateBusinessHandler(
+            IValidator<Business> validator,
+            CLupContext context, 
+            IMapper mapper)
         {
+            _validator = validator;
             _context = context;
             _mapper = mapper;
         }
@@ -29,6 +35,7 @@ namespace CLup.Features.Businesses.Commands
                     .ToResult()
                     .AndThen(owner => _context.CreateEntityIfNotExists(owner, new BusinessOwner(command.OwnerEmail)))
                     .AndThen(() => _mapper.Map<Business>(command))
+                    .Validate(_validator)
                     .Finally(business => _context.AddAndSave(business));
         }
     }

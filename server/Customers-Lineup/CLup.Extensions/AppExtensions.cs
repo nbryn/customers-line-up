@@ -17,7 +17,7 @@ namespace CLup.Extensions
             CLupContext context = scope.ServiceProvider.GetRequiredService<CLupContext>();
 
             context.Database.EnsureCreated();
-            var dataInitializer = scope.ServiceProvider.GetService<DataInitializer>();
+            var dataInitializer = scope.ServiceProvider.GetRequiredService<DataInitializer>();
 
             await dataInitializer.InitializeSeed();
         }

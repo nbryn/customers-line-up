@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +16,16 @@ namespace CLup.Features.Bookings.Commands
 {
     public class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Result>
     {
+        private readonly IValidator<Booking> _validator;
         private readonly CLupContext _context;
         private readonly IMapper _mapper;
 
-        public CreateBookingHandler(CLupContext context, IMapper mapper) 
+        public CreateBookingHandler(
+            IValidator<Booking> validator,
+            CLupContext context, 
+            IMapper mapper) 
         {
+            _validator = validator;
             _context = context;
             _mapper = mapper;
         }
@@ -37,6 +43,7 @@ namespace CLup.Features.Bookings.Commands
 
                     .EnsureDiscard(timeSlot => timeSlot.Bookings.Count() < timeSlot.Capacity, "This time slot is full.")
                     .AndThen(() => _mapper.Map<Booking>(command))
+                    .Validate(_validator)
                     .Finally(booking => _context.AddAndSave(booking));
         }
     }

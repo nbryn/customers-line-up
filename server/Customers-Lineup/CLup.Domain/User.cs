@@ -19,9 +19,9 @@ namespace CLup.Domain
         public User() {}
 
         public User(
-                UserData userData,
-                Address address,
-                Coords coords)
+            UserData userData,
+            Address address,
+            Coords coords)
             : base()
         {
             UserData = userData;

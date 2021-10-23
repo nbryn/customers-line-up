@@ -1,6 +1,8 @@
 using System;
 using System.Threading.Tasks;
 
+using FluentValidation;
+
 using CLup.Features.Common;
 
 namespace CLup.Features.Extensions
@@ -28,6 +30,9 @@ namespace CLup.Features.Extensions
 
             return Result.ToResultIgnore<T>(maybe, errorMessage);
         }
+
+        public static async Task<Result<T>> Validate<T>(this Task<Result<T>> task, IValidator<T> validator)
+            => (await task).Validate(validator);
 
         public static async Task<Result<T>> FailureIf<T>(this Task<Result> task, Func<Task<T>> f, string errorMessage = "")
             => await (await task).Bind(task, f, errorMessage);

@@ -8,10 +8,13 @@ namespace CLup.Features.Extensions
 {
     public static class ContextExtensions
     {
-        public static async Task<int> AddAndSave(this CLupContext context, BaseEntity value)
+        public static async Task<int> AddAndSave(this CLupContext context, params BaseEntity[] entities)
         {
-            context.Add(value);
-
+            foreach (var entity in entities)
+            {
+                context.Add(entity);
+            }
+            
             return await context.SaveChangesAsync();
         }
 
