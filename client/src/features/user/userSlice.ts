@@ -84,19 +84,8 @@ export const userSlice = createSlice({
 
 export const {clearCurrentUser} = userSlice.actions;
 
-export const selectUsersNotEmployedByBusiness = (state: RootState, businessId: string) =>
+export const selectUsersNotEmployedByBusiness =  (businessId: string) => (state: RootState) => 
     state.users.notEmployedByBusiness[businessId] ?? null;
-
-export const selectUsersAsComboBoxOption = (businessId: string) => (state: RootState) => {
-    const usersNotEmployed = selectUsersNotEmployedByBusiness(state, businessId);
-
-    if (!usersNotEmployed) return null;
-
-    return Object.values(usersNotEmployed).map((user) => ({
-        label: user.email,
-        value: user.name,
-    }));
-};
 
 export const selectCurrentUser = (state: RootState) => state.users.currentUser;
 

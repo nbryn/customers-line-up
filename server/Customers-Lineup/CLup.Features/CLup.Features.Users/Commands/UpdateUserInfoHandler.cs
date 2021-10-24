@@ -20,8 +20,12 @@ namespace CLup.Features.Users.Commands
         private readonly CLupContext _context;
         private readonly IMapper _mapper;
 
-        public UpdateUserInfoHandler(CLupContext context, IMapper mapper)
+        public UpdateUserInfoHandler(
+            IValidator<User> validator,
+            CLupContext context, 
+            IMapper mapper)
         {
+            _validator = validator;
             _context = context;
             _mapper = mapper;
         }

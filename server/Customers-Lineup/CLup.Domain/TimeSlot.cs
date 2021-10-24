@@ -35,7 +35,7 @@ namespace CLup.Domain
             End = end;
         }
 
-        public static IList<TimeSlot> GenerateTimeSlots(Business business, DateTime start, Func<Business, TimeSlot> mapper)
+        public static IList<TimeSlot> GenerateTimeSlots(Business business, DateTime start)
         {
             var opens = start.AddHours(Double.Parse(business.Opens.Substring(0, business.Opens.IndexOf("."))));
             var closes = start.AddHours(Double.Parse(business.Closes.Substring(0, business.Closes.IndexOf("."))));
@@ -43,10 +43,8 @@ namespace CLup.Domain
             var timeSlots = new List<TimeSlot>();
             for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(business.BusinessData.TimeSlotLength))
             {
-                var timeSlot = mapper(business);
-
-                timeSlot.Start = date;
-                timeSlot.End = date.AddMinutes(business.BusinessData.TimeSlotLength);
+                var end = date.AddMinutes(business.BusinessData.TimeSlotLength);
+                var timeSlot = new TimeSlot(business.Id, business.Name, business.BusinessData.Capacity, date, end);
 
                 timeSlots.Add(timeSlot);
             }

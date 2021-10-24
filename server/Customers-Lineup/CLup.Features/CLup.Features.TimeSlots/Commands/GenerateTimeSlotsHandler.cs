@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,10 +30,8 @@ namespace CLup.Features.TimeSlots.Commands
                     .FailureIf("Business not found.")
                     .AndThenDouble(() => _context.TimeSlots.FirstOrDefaultAsync(x => x.BusinessId == command.BusinessId && x.Start.Date == command.Start.Date))
                     .Ensure(timeSlot => timeSlot == null, "Time slots already generated for this date.")
-                    .AndThen(business => TimeSlot.GenerateTimeSlots(business, command.Start, Map()))
+                    .AndThen(business => TimeSlot.GenerateTimeSlots(business, command.Start))
                     .Finally(timeSlots => _context.AddAndSave(timeSlots.ToArray()));
         }
-
-        private Func<Business, TimeSlot> Map() => (Business business) => _mapper.Map<TimeSlot>(business);
     }
 }

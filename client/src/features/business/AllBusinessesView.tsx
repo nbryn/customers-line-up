@@ -30,7 +30,7 @@ export const AllBusinessesView: React.FC = () => {
         {title: 'id', field: 'id', hidden: true},
         {title: 'Name', field: 'name'},
         {title: 'City', field: 'city'},
-        {title: 'Address', field: 'address'},
+        {title: 'Street', field: 'street'},
         {title: 'Business Hours', field: 'businessHours'},
         {title: 'Type', field: 'type'},
     ];

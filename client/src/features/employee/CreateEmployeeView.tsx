@@ -7,7 +7,7 @@ import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
 import {createEmployee} from './employeeSlice';
 import {employeeValidationSchema} from '../business/BusinessValidation';
 import {ErrorView} from '../../common/views/ErrorView';
-import {fetchUsersNotEmployedByBusiness, selectUsersAsComboBoxOption} from '../user/userSlice';
+import {fetchUsersNotEmployedByBusiness, selectUsersNotEmployedByBusiness} from '../user/userSlice';
 import {Form} from '../../common/components/form/Form';
 import {Header} from '../../common/components/Texts';
 import {EmployeeDTO, NewEmployeeDTO} from './Employee';
@@ -15,6 +15,7 @@ import {selectCurrentBusiness} from '../business/businessSlice';
 import {TextField} from '../../common/components/form/TextField';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useForm} from '../../common/hooks/useForm';
+import {UserDTO} from '../user/User';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -40,7 +41,7 @@ export const CreateEmployeeView: React.FC = () => {
     const styles = useStyles();
     const dispatch = useAppDispatch();
 
-    const [selectedUser, setSelectedUser] = useState<ComboBoxOption>({label: ''});
+    const [selectedUser, setSelectedUser] = useState<UserDTO>();
     const [showComboBox, setShowComBox] = useState(true);
     const business = useAppSelector(selectCurrentBusiness);
 
@@ -48,7 +49,7 @@ export const CreateEmployeeView: React.FC = () => {
         return <ErrorView />;
     }
 
-    const usersNotEmployedByBusiness = useAppSelector(selectUsersAsComboBoxOption(business.id));
+    const usersNotEmployedByBusiness = useAppSelector(selectUsersNotEmployedByBusiness(business.id));
 
     const {formHandler, ...form} = useForm<NewEmployeeDTO>({
         initialValues: {companyEmail: ''} as NewEmployeeDTO,
@@ -87,8 +88,17 @@ export const CreateEmployeeView: React.FC = () => {
                                 label="Email"
                                 id="email"
                                 type="text"
-                                options={usersNotEmployedByBusiness}
-                                setFieldValue={(option: ComboBoxOption) => setSelectedUser(option)}
+                                options={usersNotEmployedByBusiness.map((user) => ({
+                                    label: user.email,
+                                    value: user.name,
+                                }))}
+                                setFieldValue={(option: ComboBoxOption) =>
+                                    setSelectedUser(
+                                        usersNotEmployedByBusiness.find(
+                                            (u) => u.email === option.label
+                                        )
+                                    )
+                                }
                                 partOfForm={false}
                             />
                         )}
@@ -100,7 +110,7 @@ export const CreateEmployeeView: React.FC = () => {
                                         e.preventDefault();
                                         form.setRequest({
                                             businessId: business.id,
-                                            privateEmail: selectedUser?.label,
+                                            userId: selectedUser?.id,
                                             companyEmail: formHandler.values.companyEmail,
                                         });
 
@@ -115,7 +125,7 @@ export const CreateEmployeeView: React.FC = () => {
                                             id="name"
                                             label="Name"
                                             type="text"
-                                            value={selectedUser.value}
+                                            value={selectedUser?.name}
                                             disabled={true}
                                         />
                                     </FormGroup>
@@ -125,7 +135,7 @@ export const CreateEmployeeView: React.FC = () => {
                                             id="privateEmail"
                                             label="Private Email"
                                             type="email"
-                                            value={selectedUser.label}
+                                            value={selectedUser?.email}
                                             disabled={true}
                                         />
                                     </FormGroup>

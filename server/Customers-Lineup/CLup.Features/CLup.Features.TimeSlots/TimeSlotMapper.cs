@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 
 using AutoMapper;
@@ -18,14 +17,6 @@ namespace CLup.Features.TimeSlots
                 .ForMember(t => t.End, s => s.MapFrom(m => m.End.TimeOfDay.ToString().Substring(0, 5)))
                 .ForMember(t => t.Interval, s => s.MapFrom(m => $"{m.Start.TimeOfDay.ToString().Substring(0, 5)} - {m.End.TimeOfDay.ToString().Substring(0, 5)}"))
                 .ForMember(t => t.Capacity, s => s.MapFrom(m => $"{m.Bookings.Count()}/{m.Capacity.ToString()}"));
-
-            CreateMap<Business, TimeSlot>()
-               .ForMember(t => t.BusinessId, s => s.MapFrom(m => m.Id))
-               .ForMember(t => t.BusinessName, s => s.MapFrom(m => m.Name))
-               .ForMember(t => t.BusinessName, s => s.MapFrom(m => m.Name))
-               .ForMember(t => t.Id, s => s.MapFrom(m => Guid.NewGuid().ToString()))
-               .ForMember(u => u.CreatedAt, s => s.MapFrom(m => DateTime.Now))
-               .ForMember(u => u.UpdatedAt, s => s.MapFrom(m => DateTime.Now));
         }
     }
 }

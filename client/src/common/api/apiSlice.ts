@@ -43,7 +43,7 @@ const BUSINESS_UPDATED_MSG = 'Business Updated';
 
 const EMPLOYEE_CREATED_MSG = 'Employee Created - Go to my employees to see your employees';
 
-const TIMESLOT_DELETED_MSG = 'Timeslot Deleted';
+const TIMESLOT_DELETED_MSG = 'Time slot Deleted';
 const TIMESLOTS_GENERATED_MSG = 'Success! Press see time slots to manage time slots.';
 
 const USER_UPDATED_MSG = 'Info Updated.';
@@ -150,7 +150,6 @@ export const apiSlice = createSlice({
                 deleteEmployee.fulfilled,
                 fetchEmployeesByBusiness.fulfilled,
                 fetchUserInsights.fulfilled,
-                deleteTimeSlot.fulfilled,
                 fetchAvailableTimeSlotsByBusiness.fulfilled,
                 fetchTimeSlotsByBusiness.fulfilled,
                 fetchUsersNotEmployedByBusiness.fulfilled,
