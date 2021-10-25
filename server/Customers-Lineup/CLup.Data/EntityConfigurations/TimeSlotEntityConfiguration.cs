@@ -9,7 +9,7 @@ namespace CLup.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<TimeSlot> timeSlotConfiguration)
         {
-            timeSlotConfiguration.ToTable("timeslots", CLupContext.DEFAULT_SCHEMA);
+            timeSlotConfiguration.ToTable("timeslots");
             timeSlotConfiguration.HasKey(b => b.Id);
 
             timeSlotConfiguration

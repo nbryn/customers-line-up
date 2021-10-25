@@ -9,7 +9,7 @@ namespace CLup.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Employee> employeeConfiguration)
         {
-            employeeConfiguration.ToTable("employees", CLupContext.DEFAULT_SCHEMA);
+            employeeConfiguration.ToTable("employees");
             employeeConfiguration.HasKey(b => b.Id);
         }
     }

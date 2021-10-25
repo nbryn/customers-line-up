@@ -79,7 +79,6 @@ namespace CLup.Extensions
             }
             else
             {
-
                 var connectionString = configuration.GetConnectionString("localdb");
                 services.AddDbContext<CLupContext>(options =>
                                   options.UseMySQL(NormalizeConnString(connectionString)),

@@ -11,41 +11,72 @@ namespace CLup.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Business> businessConfiguration)
         {
-            businessConfiguration.ToTable("businesses", CLupContext.DEFAULT_SCHEMA);
+            businessConfiguration.ToTable("businesses");
             businessConfiguration.HasKey(b => b.Id);
 
-            businessConfiguration.OwnsOne(b => b.Address, b =>
+            businessConfiguration.OwnsOne(b => b.Address, a =>
             {
-                b.Property<int>("BusinessId");
+                a.Property(a => a.Street)
+                    .HasColumnName("Street")
+                    .HasDefaultValue("");
+
+                a.Property(a => a.Zip)
+                    .HasColumnName("Zip")
+                    .HasDefaultValue("");
+
+                a.Property(a => a.City)
+                    .HasColumnName("City")
+                    .HasDefaultValue("");
             });
 
             businessConfiguration.OwnsOne(b => b.BusinessData, b =>
             {
-                b.Property<int>("BusinessId");
+                b.Property(b => b.Name)
+                    .HasColumnName("Name")
+                    .HasDefaultValue("");
+
+                b.Property(b => b.Capacity)
+                    .HasColumnName("Capacity")
+                .HasDefaultValue(0);
+
+                b.Property(b => b.TimeSlotLength)
+                    .HasColumnName("TimeSlotLength")
+                    .HasDefaultValue(0);
             });
 
-            businessConfiguration.OwnsOne(b => b.Coords, b =>
+            businessConfiguration.OwnsOne(b => b.Coords, c =>
             {
-                b.Property<int>("BusinessId");
+                c.Property(c => c.Latitude)
+                    .HasColumnName("Latitude")
+                    .HasDefaultValue(0.00);
+
+                c.Property(c => c.Longitude)
+                    .HasColumnName("Longitude")
+                    .HasDefaultValue(0.00);
             });
 
-            businessConfiguration.OwnsOne(b => b.BusinessHours, b =>
+            businessConfiguration.OwnsOne(b => b.BusinessHours, t =>
             {
-                b.Property<int>("BusinessId");
+                t.Property(t => t.Start)
+                    .HasColumnName("Start")
+                .HasDefaultValue("");
+
+                t.Property(t => t.End)
+                    .HasColumnName("End")
+                    .HasDefaultValue("");
             });
 
             businessConfiguration
-                       .Property(b => b.Type)
-                       .HasConversion(b => b.ToString("G"),
-                       b => Enum.Parse<BusinessType>(b));
+                    .Property(b => b.Type)
+                    .HasConversion(b => b.ToString("G"), b => Enum.Parse<BusinessType>(b));
 
             businessConfiguration
-                        .HasMany(x => x.TimeSlots)
-                        .WithOne(x => x.Business);
+                    .HasMany(x => x.TimeSlots)
+                    .WithOne(x => x.Business);
 
             businessConfiguration
-                        .HasMany(x => x.Employees)
-                        .WithOne(x => x.Business);
+                    .HasMany(x => x.Employees)
+                    .WithOne(x => x.Business);
         }
     }
 }

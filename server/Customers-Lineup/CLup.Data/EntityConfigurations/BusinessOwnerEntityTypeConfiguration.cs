@@ -9,7 +9,7 @@ namespace CLup.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<BusinessOwner> businessOwnerConfiguration)
         {
-            businessOwnerConfiguration.ToTable("businessowners", CLupContext.DEFAULT_SCHEMA);
+            businessOwnerConfiguration.ToTable("businessowners");
             businessOwnerConfiguration.HasKey(b => b.Id);
             
             businessOwnerConfiguration.HasMany(c => c.Businesses);

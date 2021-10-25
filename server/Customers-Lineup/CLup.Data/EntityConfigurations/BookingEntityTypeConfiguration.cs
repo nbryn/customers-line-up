@@ -9,7 +9,7 @@ namespace CLup.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Booking> bookingConfiguration)
         {
-            bookingConfiguration.ToTable("bookings", CLupContext.DEFAULT_SCHEMA);
+            bookingConfiguration.ToTable("bookings");
             bookingConfiguration.HasKey(b => b.Id);
         }
     }

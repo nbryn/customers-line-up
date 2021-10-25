@@ -9,27 +9,45 @@ namespace CLup.Data.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<User> userConfiguration)
         {
-            userConfiguration.ToTable("users", CLupContext.DEFAULT_SCHEMA);
+            userConfiguration.ToTable("users");
             userConfiguration.HasKey(b => b.Id);
 
-            userConfiguration.OwnsOne(b => b.Address, b =>
+            userConfiguration.OwnsOne(b => b.Address, a =>
             {
-                b.Property<int>("UserId");
+                a.Property(a => a.Street)
+                    .HasColumnName("Street");
+
+                a.Property(p => p.Zip)
+                    .HasColumnName("Zip");
+
+                a.Property(a => a.City)
+                    .HasColumnName("City");
             });
 
-            userConfiguration.OwnsOne(b => b.UserData, b =>
+            userConfiguration.OwnsOne(b => b.UserData, u =>
             {
-                b.Property<int>("UserId");
+                u.Property(u => u.Name)
+                   .HasColumnName("Name");
+
+
+                u.Property(u => u.Email)
+                    .HasColumnName("Email");
+
+                u.Property(u => u.Password)
+                    .HasColumnName("Password");
             });
 
-            userConfiguration.OwnsOne(b => b.Coords, b =>
+            userConfiguration.OwnsOne(b => b.Coords, c =>
             {
-                b.Property<int>("UserId");
+                c.Property(c => c.Latitude)
+                    .HasColumnName("Latitude");
+                c.Property(c => c.Longitude)
+                    .HasColumnName("Longitude");
             });
 
             userConfiguration
-                        .HasMany(x => x.Bookings)
-                        .WithOne(x => x.User);
+                    .HasMany(x => x.Bookings)
+                    .WithOne(x => x.User);
         }
     }
 }

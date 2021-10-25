@@ -41,5 +41,4 @@ services:
       - server
     links:
       - server
-# docker-compose build --no-cache server client
 

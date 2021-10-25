@@ -54,7 +54,7 @@ namespace CLup.Data.Initializer
             ids.Add(user3.Id);
 
             var user4 = UserCreator.Create(new UserData("Emil", "emil@live.com", BC.HashPassword("1234")),
-                                            new Address("Farum Hovedgade 15", "3520", "Farum"), new Coords(55.8200342, 12.3591325));
+                                            new Address("Farum Hovedgade 20", "3520", "Farum"), new Coords(55.8200342, 12.3591325));
             _context.Add(user4);
             ids.Add(user4.Id);
 
