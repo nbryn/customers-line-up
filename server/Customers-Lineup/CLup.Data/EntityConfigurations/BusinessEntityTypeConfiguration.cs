@@ -17,53 +17,43 @@ namespace CLup.Data.EntityConfigurations
             businessConfiguration.OwnsOne(b => b.Address, a =>
             {
                 a.Property(a => a.Street)
-                    .HasColumnName("Street")
-                    .HasDefaultValue("");
+                    .HasColumnName("Street");
 
                 a.Property(a => a.Zip)
-                    .HasColumnName("Zip")
-                    .HasDefaultValue("");
+                    .HasColumnName("Zip");
 
                 a.Property(a => a.City)
-                    .HasColumnName("City")
-                    .HasDefaultValue("");
+                    .HasColumnName("City");
             });
 
             businessConfiguration.OwnsOne(b => b.BusinessData, b =>
             {
                 b.Property(b => b.Name)
-                    .HasColumnName("Name")
-                    .HasDefaultValue("");
+                    .HasColumnName("Name");
 
                 b.Property(b => b.Capacity)
-                    .HasColumnName("Capacity")
-                .HasDefaultValue(0);
+                    .HasColumnName("Capacity");
 
                 b.Property(b => b.TimeSlotLength)
-                    .HasColumnName("TimeSlotLength")
-                    .HasDefaultValue(0);
+                    .HasColumnName("TimeSlotLength");
             });
 
             businessConfiguration.OwnsOne(b => b.Coords, c =>
             {
                 c.Property(c => c.Latitude)
-                    .HasColumnName("Latitude")
-                    .HasDefaultValue(0.00);
+                    .HasColumnName("Latitude");
 
                 c.Property(c => c.Longitude)
-                    .HasColumnName("Longitude")
-                    .HasDefaultValue(0.00);
+                    .HasColumnName("Longitude");
             });
 
             businessConfiguration.OwnsOne(b => b.BusinessHours, t =>
             {
                 t.Property(t => t.Start)
-                    .HasColumnName("Start")
-                .HasDefaultValue("");
+                    .HasColumnName("Start");
 
                 t.Property(t => t.End)
-                    .HasColumnName("End")
-                    .HasDefaultValue("");
+                    .HasColumnName("End");
             });
 
             businessConfiguration

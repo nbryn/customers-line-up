@@ -26,14 +26,15 @@ namespace CLup.Features.Bookings.Queries
 
         public async Task<IList<BookingDTO>> Handle(UserBookingsQuery query, CancellationToken cancellationToken)
         {
-            var bookings = _context.Bookings
+            var bookings = await _context.Bookings
                                     .Include(x => x.TimeSlot)
                                     .Include(x => x.TimeSlot.Business)
                                     .Where(x => x.UserId == query.UserId)
                                     .OrderBy(x => x.TimeSlot.Start)
-                                    .AsNoTracking();
+                                    .AsNoTracking()
+                                    .ToListAsync();
 
-            return await _mapper.ProjectTo<BookingDTO>(bookings).ToListAsync();
+            return bookings.Select(_mapper.Map<BookingDTO>).ToList();
         }
     }
 }

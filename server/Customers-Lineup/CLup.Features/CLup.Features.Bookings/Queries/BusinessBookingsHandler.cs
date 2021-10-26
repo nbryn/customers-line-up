@@ -34,12 +34,13 @@ namespace CLup.Features.Bookings.Queries
                     .EnsureDiscard(business => business != null)
                     .Finally(async () =>
                     {
-                        var bookings = _context.Bookings
-                                    .Include(x => x.TimeSlot)
-                                    .Include(x => x.TimeSlot.Business)
-                                    .Where(x => x.BusinessId == query.BusinessId);
+                        var bookings = await _context.Bookings
+                                        .Include(x => x.TimeSlot)
+                                        .Include(x => x.TimeSlot.Business)
+                                        .Where(x => x.BusinessId == query.BusinessId)
+                                        .OrderBy(x => x.TimeSlot.Start).ToListAsync();
 
-                        return await _mapper.ProjectTo<BookingDTO>(bookings).ToListAsync();
+                        return bookings.Select(_mapper.Map<BookingDTO>).ToList();
                     });
         }
     }

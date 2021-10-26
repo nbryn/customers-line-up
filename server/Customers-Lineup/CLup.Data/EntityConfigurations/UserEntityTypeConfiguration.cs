@@ -41,6 +41,7 @@ namespace CLup.Data.EntityConfigurations
             {
                 c.Property(c => c.Latitude)
                     .HasColumnName("Latitude");
+                    
                 c.Property(c => c.Longitude)
                     .HasColumnName("Longitude");
             });

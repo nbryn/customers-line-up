@@ -21,13 +21,15 @@ namespace CLup.Data.Initializer
 
         public async Task InitializeSeed()
         {
-            var userIds = AddUsers();
-            var businesses = AddBusinesses();
-            var businessTimeSlots = AddTimeSlots(businesses);
-            AddBookings(businessTimeSlots, businesses.Select(b => b.Id).ToList(), userIds);
-            AddEmployees(businesses.Select(b => b.Id).ToList(), userIds);
+            {
+                var userIds = AddUsers();
+                var businesses = AddBusinesses();
+                var businessTimeSlots = AddTimeSlots(businesses);
+                AddBookings(businessTimeSlots, businesses.Select(b => b.Id).ToList(), userIds);
+                AddEmployees(businesses.Select(b => b.Id).ToList(), userIds);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+            }
         }
 
         private IList<string> AddUsers()

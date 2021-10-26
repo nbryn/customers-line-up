@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -80,9 +81,14 @@ namespace CLup.Extensions
             else
             {
                 var connectionString = configuration.GetConnectionString("localdb");
+                var normalizedConnString = NormalizeConnString(connectionString);
                 services.AddDbContext<CLupContext>(options =>
-                                  options.UseMySQL(NormalizeConnString(connectionString)),
-                       ServiceLifetime.Transient);
+                                  options.UseMySQL(normalizedConnString)                             
+                                        .LogTo(Console.WriteLine, LogLevel.Information)
+                                        .EnableSensitiveDataLogging()
+                                        .EnableDetailedErrors()
+                                  , ServiceLifetime.Transient);
+
 
                 string NormalizeConnString(string raw)
                 {
@@ -96,11 +102,12 @@ namespace CLup.Extensions
                                  .ToDictionary(kvp => kvp[0].Trim(), kvp => kvp[1].Trim(), StringComparer.InvariantCultureIgnoreCase);
                         var ds = dict["Data Source"];
                         var dsa = ds.Split(":");
+                        //conn = $"server=127.0.0.1;userid=azure;password=;{dict["Password"]};database=localdb;Port={dsa[1]}";
                         conn = $"Server={dsa[0]};Port={dsa[1]};Database={dict["Database"]};Uid={dict["User Id"]};Pwd={dict["Password"]};";
                     }
                     catch
                     {
-                        throw new Exception("unexpected connection string: datasource is empty or null");
+                        throw new Exception("Unexpected connection string: datasource is empty or null");
                     }
                     
                     return conn;
