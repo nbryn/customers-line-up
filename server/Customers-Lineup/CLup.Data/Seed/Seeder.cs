@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using BC = BCrypt.Net.BCrypt;
 
 using CLup.Data.Seed.Builders;
-using CLup.Domain;
+using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.TimeSlots;
 
 namespace CLup.Data.Seed
 {

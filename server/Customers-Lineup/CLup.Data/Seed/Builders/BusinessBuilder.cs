@@ -1,7 +1,5 @@
-using CLup.Domain;
-using CLup.Domain.ValueObjects;
-
-using TimeSpan = CLup.Domain.ValueObjects.TimeSpan;
+using CLup.Domain.Businesses;
+using CLup.Domain.Shared.ValueObjects;
 
 namespace CLup.Data.Seed.Builders
 {

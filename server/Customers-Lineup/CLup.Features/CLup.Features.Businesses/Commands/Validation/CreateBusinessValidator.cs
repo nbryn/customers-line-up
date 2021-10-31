@@ -1,6 +1,6 @@
 using FluentValidation;
 
-using CLup.Domain;
+using CLup.Domain.Businesses;
 
 namespace CLup.Features.Businesses.Commands.Validation
 {

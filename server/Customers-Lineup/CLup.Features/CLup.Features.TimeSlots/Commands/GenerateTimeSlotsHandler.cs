@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 
 using CLup.Data;
-using CLup.Domain;
+using CLup.Domain.Businesses.TimeSlots;
 using CLup.Features.Shared;
 using CLup.Features.Extensions;
 

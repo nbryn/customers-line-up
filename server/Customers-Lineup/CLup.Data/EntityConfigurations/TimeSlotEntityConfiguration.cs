@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using CLup.Domain;
+using CLup.Domain.Businesses.TimeSlots;
 
 namespace CLup.Data.EntityConfigurations
 {
@@ -14,7 +14,8 @@ namespace CLup.Data.EntityConfigurations
 
             timeSlotConfiguration
                         .HasMany(t => t.Bookings)
-                        .WithOne(b => b.TimeSlot);
+                        .WithOne(b => b.TimeSlot)
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

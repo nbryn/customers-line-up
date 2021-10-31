@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using CLup.Domain;
+using CLup.Domain.Businesses.Employees;
 
 namespace CLup.Data.EntityConfigurations
 {

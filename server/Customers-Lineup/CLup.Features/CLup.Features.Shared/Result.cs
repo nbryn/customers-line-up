@@ -102,6 +102,18 @@ namespace CLup.Features.Shared
 
         public Result<U> Bind<U>(Task<Result<T>> result, Func<T, U> f) => Success ? Ok<U>(f(Value)) : Fail<U>(Code, Error);
 
+        public Result<T> AddDomainEvent(Action<T> f)
+        {
+            if (Failure)
+            {
+                return Fail<T>(Code, Error);
+            }
+
+            f(Value);
+
+            return Ok(Value);
+        }
+
         public async Task<Result<U>> Bind<U>(Func<T, Task<U>> f)
         {
             if (Failure)
@@ -258,7 +270,7 @@ namespace CLup.Features.Shared
             return Ok<T, U>(Value, maybe);
         }
 
-        
+
         public Result<T> Validate(IValidator<T> validator)
         {
             if (Failure)

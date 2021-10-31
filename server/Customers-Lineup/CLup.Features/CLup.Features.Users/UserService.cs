@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
-using CLup.Domain;
+using CLup.Domain.Users;
 
 namespace CLup.Features.Users
 {

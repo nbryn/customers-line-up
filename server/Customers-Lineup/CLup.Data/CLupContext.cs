@@ -3,10 +3,16 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using CLup.Data.EntityConfigurations;
-using CLup.Domain;
+using CLup.Domain.Bookings;
+using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.Employees;
+using CLup.Domain.Businesses.TimeSlots;
+using CLup.Domain.Users;
+using CLup.Extensions;
 
 namespace CLup.Data
 {
@@ -20,9 +26,12 @@ namespace CLup.Data
         public DbSet<TimeSlot> TimeSlots { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public CLupContext(DbContextOptions<CLupContext> options)
+        private readonly IMediator _mediator;
+
+        public CLupContext(DbContextOptions<CLupContext> options, IMediator mediator)
             : base(options)
         {
+            _mediator = mediator;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,12 +47,21 @@ namespace CLup.Data
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess,
-                                                   CancellationToken cancellationToken = default(CancellationToken))
+        public async override Task<int> SaveChangesAsync(
+            bool acceptAllChangesOnSuccess,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await _mediator.DispatchDomainEventsAsync(this);
+            MarkEntitiesAsUpdated();
+
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void MarkEntitiesAsUpdated()
         {
             var AddedEntities = ChangeTracker.Entries()
-                .Where(E => E.State == EntityState.Added)
-                .ToList();
+                            .Where(E => E.State == EntityState.Added)
+                            .ToList();
 
             AddedEntities.ForEach(E =>
             {
@@ -64,8 +82,6 @@ namespace CLup.Data
                     E.Property("UpdatedAt").CurrentValue = DateTime.Now;
                 }
             });
-
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
     }
 }

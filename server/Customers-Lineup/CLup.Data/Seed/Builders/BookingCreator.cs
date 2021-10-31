@@ -1,6 +1,6 @@
 using System;
 
-using CLup.Domain;
+using CLup.Domain.Bookings;
 
 namespace CLup.Data.Seed.Builders
 {

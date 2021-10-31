@@ -2,7 +2,7 @@ using System.Linq;
 
 using AutoMapper;
 
-using CLup.Domain;
+using CLup.Domain.Businesses.TimeSlots;
 
 namespace CLup.Features.TimeSlots
 {

@@ -1,6 +1,6 @@
 using AutoMapper;
 
-using CLup.Domain;
+using CLup.Domain.Businesses.Employees;
 using CLup.Features.Employees.Commands;
 
 namespace CLup.Features.Employees

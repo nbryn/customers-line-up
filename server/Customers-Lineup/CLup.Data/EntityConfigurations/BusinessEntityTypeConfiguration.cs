@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using CLup.Domain;
+using CLup.Domain.Businesses;
 
 namespace CLup.Data.EntityConfigurations
 {

@@ -1,7 +1,7 @@
 using AutoMapper;
 
-using CLup.Domain;
-using CLup.Domain.ValueObjects;
+using CLup.Domain.Businesses;
+using CLup.Domain.Shared.ValueObjects;
 using CLup.Features.Businesses.Commands;
 
 namespace CLup.Features.Businesses

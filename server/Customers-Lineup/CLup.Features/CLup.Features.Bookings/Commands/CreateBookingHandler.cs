@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
-using CLup.Domain;
+using CLup.Domain.Bookings;
 using CLup.Features.Shared;
 using CLup.Features.Extensions;
 

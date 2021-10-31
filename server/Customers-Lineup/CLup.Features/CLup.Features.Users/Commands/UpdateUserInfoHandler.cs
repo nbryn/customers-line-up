@@ -7,8 +7,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
-using CLup.Domain;
-using CLup.Domain.ValueObjects;
+using CLup.Domain.Users;
+using CLup.Domain.Shared.ValueObjects;
 using CLup.Features.Shared;
 using CLup.Features.Extensions;
 

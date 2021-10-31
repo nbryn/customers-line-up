@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-using CLup.Domain;
+using CLup.Domain.Users;
 
 namespace CLup.Features.Users
 {

@@ -1,5 +1,5 @@
-using CLup.Domain;
-using CLup.Domain.ValueObjects;
+using CLup.Domain.Shared.ValueObjects;
+using CLup.Domain.Users;
 
 namespace CLup.Data.Seed.Builders
 {

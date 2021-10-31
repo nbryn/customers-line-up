@@ -1,6 +1,6 @@
 using AutoMapper;
 
-using CLup.Domain;
+using CLup.Domain.Users;
 using CLup.Features.Auth;
 
 namespace CLup.Features.Users

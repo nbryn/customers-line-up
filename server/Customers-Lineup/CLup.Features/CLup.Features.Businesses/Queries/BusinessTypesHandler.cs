@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 using MediatR;
 
-using CLup.Domain;
+using CLup.Domain.Businesses;
 using CLup.Features.Util;
 
 namespace CLup.Features.Businesses.Queries

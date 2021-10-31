@@ -31,6 +31,9 @@ namespace CLup.Features.Extensions
             return Result.ToResultIgnore<T>(maybe, errorMessage);
         }
 
+        public static async Task<Result<T>> AddDomainEvent<T>(this Task<Result<T>> task, Action<T> f)
+            => (await task).AddDomainEvent(f);
+
         public static async Task<Result<T>> Validate<T>(this Task<Result<T>> task, IValidator<T> validator)
             => (await task).Validate(validator);
 

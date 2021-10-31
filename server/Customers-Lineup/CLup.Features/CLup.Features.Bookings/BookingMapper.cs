@@ -2,7 +2,7 @@ using System.Linq;
 
 using AutoMapper;
 
-using CLup.Domain;
+using CLup.Domain.Bookings;
 using CLup.Features.Bookings.Commands;
 
 namespace CLup.Features.Bookings

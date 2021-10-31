@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 
 using CLup.Data;
+using CLup.Domain.Businesses.TimeSlots;
 using CLup.Features.Shared;
 using CLup.Features.Extensions;
 
@@ -18,9 +19,10 @@ namespace CLup.Features.TimeSlots.Commands
 
         public async Task<Result> Handle(DeleteTimeSlotCommand command, CancellationToken cancellationToken)
         {
-
             return await _context.TimeSlots.FirstOrDefaultAsync(t => t.Id == command.Id)
                     .FailureIf("Time slot not found")
+                    // Check if TimeSlot has bookings: Eg
+                    .AddDomainEvent(timeSlot => timeSlot.AddDomainEvent(new TimeSlotDeletedEvent(timeSlot)))
                     .Finally(timeSlot => _context.RemoveAndSave(timeSlot));
         }
     }
