@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 
 using CLup.Data;
-using CLup.Features.Common;
+using CLup.Features.Shared;
 
 namespace CLup.Features.Businesses.Queries
 {

@@ -1,4 +1,4 @@
-namespace CLup.Features.Common
+namespace CLup.Features.Shared
 {
     public enum HttpCode
     {

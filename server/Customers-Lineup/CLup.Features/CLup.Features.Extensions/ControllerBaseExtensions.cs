@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net;
 
-using CLup.Features.Common;
+using CLup.Features.Shared;
 
 namespace CLup.Features.Extensions
 {

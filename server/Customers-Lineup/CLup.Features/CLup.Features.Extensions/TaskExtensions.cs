@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using FluentValidation;
 
-using CLup.Features.Common;
+using CLup.Features.Shared;
 
 namespace CLup.Features.Extensions
 {

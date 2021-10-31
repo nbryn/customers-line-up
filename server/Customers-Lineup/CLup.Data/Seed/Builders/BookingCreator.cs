@@ -2,11 +2,10 @@ using System;
 
 using CLup.Domain;
 
-namespace CLup.Data.Initializer.DataCreators
+namespace CLup.Data.Seed.Builders
 {
-    public static class BookingCreator
+    public class BookingCreator
     {
-
         public static Booking Create(string userId, string businessId, string timeSlotId)
         {
             var booking = new Booking(userId, timeSlotId, businessId);

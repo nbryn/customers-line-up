@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
 using CLup.Data;
-using CLup.Data.Initializer;
+using CLup.Data.Seed;
 
 namespace CLup.Extensions
 {
@@ -17,9 +17,9 @@ namespace CLup.Extensions
             CLupContext context = scope.ServiceProvider.GetRequiredService<CLupContext>();
 
             context.Database.EnsureCreated();
-            var dataInitializer = scope.ServiceProvider.GetRequiredService<DataInitializer>();
+            var seeder = scope.ServiceProvider.GetRequiredService<Seeder>();
 
-            await dataInitializer.InitializeSeed();
+            await seeder.Seed();
         }
     }
 }

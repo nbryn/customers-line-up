@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Domain;
-using CLup.Features.Common;
+using CLup.Features.Shared;
 using CLup.Features.Extensions;
 
 namespace CLup.Features.Businesses.Commands

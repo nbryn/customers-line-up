@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using FluentValidation;
 
-namespace CLup.Features.Common
+namespace CLup.Features.Shared
 {
     public class Result
     {

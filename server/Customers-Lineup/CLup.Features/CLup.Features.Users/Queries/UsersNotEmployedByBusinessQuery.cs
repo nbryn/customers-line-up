@@ -1,6 +1,6 @@
 using MediatR;
 
-using CLup.Features.Common;
+using CLup.Features.Shared;
 using CLup.Features.Users.Responses;
 
 namespace CLup.Features.Users.Queries

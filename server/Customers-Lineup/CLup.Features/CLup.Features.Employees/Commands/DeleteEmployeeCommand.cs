@@ -1,6 +1,6 @@
 using MediatR;
 
-using CLup.Features.Common;
+using CLup.Features.Shared;
 
 namespace CLup.Features.Employees.Commands
 {

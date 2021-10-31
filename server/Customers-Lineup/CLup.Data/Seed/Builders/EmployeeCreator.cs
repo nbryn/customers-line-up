@@ -2,7 +2,7 @@ using System;
 
 using CLup.Domain;
 
-namespace CLup.Data.Initializer.DataCreators
+namespace CLup.Data.Seed.Builders
 {
     public static class EmployeeCreator
     {

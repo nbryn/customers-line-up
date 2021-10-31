@@ -14,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 using CLup.Data;
-using CLup.Data.Initializer;
+using CLup.Data.Seed;
 using CLup.Features.Auth;
 using CLup.Features.Users;
 
@@ -28,7 +28,7 @@ namespace CLup.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
         }
-        
+
         public static void ConfigureSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(c =>
@@ -68,7 +68,7 @@ namespace CLup.Extensions
             IConfiguration configuration,
             IWebHostEnvironment environment)
         {
-            services.AddTransient<DataInitializer>();
+            services.AddTransient<Seeder>();
 
             if (environment.IsDevelopment())
             {
@@ -83,7 +83,7 @@ namespace CLup.Extensions
                 var connectionString = configuration.GetConnectionString("localdb");
                 var normalizedConnString = NormalizeConnString(connectionString);
                 services.AddDbContext<CLupContext>(options =>
-                                  options.UseMySQL(normalizedConnString)                             
+                                  options.UseMySQL(normalizedConnString)
                                         .LogTo(Console.WriteLine, LogLevel.Information)
                                         .EnableSensitiveDataLogging()
                                         .EnableDetailedErrors()
@@ -109,7 +109,7 @@ namespace CLup.Extensions
                     {
                         throw new Exception("Unexpected connection string: datasource is empty or null");
                     }
-                    
+
                     return conn;
                 }
             }
@@ -143,16 +143,15 @@ namespace CLup.Extensions
         public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddCors(options =>
-                             {
-                                 options.AddPolicy("CorsApi",
-                                                     builder =>
-                                                     {
-                                                         builder.WithOrigins("http://localhost:3000")
-                                                             .AllowAnyMethod()
-                                                             .AllowAnyHeader()
-                                                             .AllowCredentials();
-                                                     });
-                             });
+            {
+                options.AddPolicy("CorsApi", builder =>
+                                {
+                                    builder.WithOrigins("http://localhost:3000")
+                                        .AllowAnyMethod()
+                                        .AllowAnyHeader()
+                                        .AllowCredentials();
+                                });
+            });
         }
     }
 }

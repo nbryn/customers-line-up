@@ -13,7 +13,7 @@ namespace CLup.Domain
 
         public Address Address { get; private set; }
 
-        public Coords Coords {get; private set; }
+        public Coords Coords { get; private set; }
 
         public TimeSpan BusinessHours { get; private set; }
 
@@ -23,10 +23,13 @@ namespace CLup.Domain
 
         public IEnumerable<Employee> Employees { get; private set; }
 
-        public Business() {}
+        public Business()
+        {
+
+        }
 
         public Business(
-            string ownerEmail, 
+            string ownerEmail,
             BusinessData businessData,
             Address address,
             Coords coords,
@@ -45,7 +48,7 @@ namespace CLup.Domain
         public string Opens => BusinessHours.Start;
 
         public string Closes => BusinessHours.End;
-        
+
         public string Name => BusinessData.Name;
     }
 }

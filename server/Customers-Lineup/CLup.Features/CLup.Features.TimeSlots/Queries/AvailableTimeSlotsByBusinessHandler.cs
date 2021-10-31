@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 
 using CLup.Data;
-using CLup.Features.Common;
+using CLup.Features.Shared;
 using CLup.Features.Extensions;
 
 namespace CLup.Features.TimeSlots.Queries
