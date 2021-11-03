@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 
 using CLup.Domain.Bookings;
+using CLup.Domain.Businesses;
+using CLup.Domain.Messages;
 using CLup.Domain.Shared;
 using CLup.Domain.Shared.ValueObjects;
 
 namespace CLup.Domain.Users
 {
-    public class User : Entity
+    public class User : Entity, IHaveMessages
     {
         public UserData UserData { get; private set; }
 
@@ -17,6 +19,10 @@ namespace CLup.Domain.Users
         public Role Role { get; internal set; }
 
         public IList<Booking> Bookings { get; private set; }
+
+        public IList<Message<User, Business>> SentMessages { get; private set; }
+
+        public IList<Message<Business, User>> ReceivedMessages { get; private set; }
 
         public User() {}
 

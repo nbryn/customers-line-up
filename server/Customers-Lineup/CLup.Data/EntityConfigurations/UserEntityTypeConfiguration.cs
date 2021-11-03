@@ -49,6 +49,14 @@ namespace CLup.Data.EntityConfigurations
             userConfiguration
                     .HasMany(x => x.Bookings)
                     .WithOne(x => x.User);
+
+            userConfiguration
+                    .HasMany(x => x.SentMessages)
+                    .WithOne(x => x.Sender);
+
+            userConfiguration
+                    .HasMany(x => x.ReceivedMessages)
+                    .WithOne(x => x.Receiver);
         }
     }
 }

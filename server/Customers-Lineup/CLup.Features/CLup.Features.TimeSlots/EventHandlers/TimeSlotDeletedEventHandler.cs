@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
 using CLup.Domain.Businesses.TimeSlots;
+using CLup.Domain.Messages;
 
 namespace CLup.Features.TimeSlots.EventHandlers
 {
@@ -18,11 +19,14 @@ namespace CLup.Features.TimeSlots.EventHandlers
 
         public async Task Handle(TimeSlotDeletedEvent timeSlotDeletedEvent, CancellationToken cancellationToken)
         {
-            var users = _context.Users
+            var users = await _context.Users
                 .Include(u => u.Bookings)
-                .Where(u => u.Bookings.Any(b => b.TimeSlotId == timeSlotDeletedEvent.TimeSlot.Id));
+                .Where(u => u.Bookings.Any(b => b.TimeSlotId == timeSlotDeletedEvent.TimeSlot.Id))
+                .ToListAsync();
 
-            // Notify user of deleted booking
+            var messages = users.Select(u => MessageFactory.BookingDeletedMessage(timeSlotDeletedEvent.TimeSlot.Business, u.Id));
+
+            await _context.AddRangeAsync(messages);
         }
     }
 }

@@ -67,6 +67,14 @@ namespace CLup.Data.EntityConfigurations
             businessConfiguration
                     .HasMany(x => x.Employees)
                     .WithOne(x => x.Business);
+
+            businessConfiguration
+                    .HasMany(x => x.SentMessages)
+                    .WithOne(x => x.Sender);
+
+            businessConfiguration
+                    .HasMany(x => x.ReceivedMessages)
+                    .WithOne(x => x.Receiver);
         }
     }
 }

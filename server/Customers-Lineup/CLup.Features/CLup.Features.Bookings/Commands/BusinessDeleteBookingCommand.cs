@@ -8,7 +8,9 @@ namespace CLup.Features.Bookings.Commands
     {
 
         public string OwnerEmail { get; set; }
+
         public string BookingId { get; set; }
+        
         public string BusinessId { get; set; }
 
         public BusinessDeleteBookingCommand(
