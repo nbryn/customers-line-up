@@ -25,6 +25,8 @@ namespace CLup.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<TimeSlot> TimeSlots { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<BusinessMessage> BusinessMessages { get; set; }
+        public DbSet<UserMessage> UserMessages { get; set; }
 
         private readonly IMediator _mediator;
 

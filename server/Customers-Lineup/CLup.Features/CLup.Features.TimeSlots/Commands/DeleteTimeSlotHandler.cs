@@ -19,7 +19,7 @@ namespace CLup.Features.TimeSlots.Commands
 
         public async Task<Result> Handle(DeleteTimeSlotCommand command, CancellationToken cancellationToken)
         {
-            return await _context.TimeSlots.FirstOrDefaultAsync(t => t.Id == command.Id)
+            return await _context.TimeSlots.Include(t => t.Business).FirstOrDefaultAsync(t => t.Id == command.Id)
                     .FailureIf("Time slot not found")
                     // Check if TimeSlot has bookings -> Alert before deleting?
                     .AddDomainEvent(timeSlot => timeSlot.AddDomainEvent(new TimeSlotDeletedEvent(timeSlot)))

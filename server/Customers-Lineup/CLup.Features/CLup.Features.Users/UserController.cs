@@ -9,8 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 
 using CLup.Features.Auth;
 using CLup.Features.Extensions;
-using CLup.Features.Users.Queries;
 using CLup.Features.Users.Commands;
+using CLup.Features.Users.Queries;
+using CLup.Features.Users.Responses;
+
 
 namespace CLup.Features.Users
 {
@@ -62,7 +64,7 @@ namespace CLup.Features.Users
         [Authorize(Policy = Policies.User)]
         [Route("all/{businessId}")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<UserDTO>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusinessResponse))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] UsersNotEmployedByBusinessQuery query)
         {
@@ -91,6 +93,19 @@ namespace CLup.Features.Users
         public async Task<IActionResult> UpdateUserInfo([FromBody] UpdateUserInfoCommand command)
         {
             var result = await _mediator.Send(command);
+
+            return this.CreateActionResult(result);
+        }
+
+        [Authorize(Policy = Policies.User)]
+        [Route("{userId}/messages")]
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FetchMessagesResponse))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetMessages([FromRoute] FetchMessagesQuery query)
+        {
+            query.UserEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await _mediator.Send(query);
 
             return this.CreateActionResult(result);
         }

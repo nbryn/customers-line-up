@@ -28,7 +28,6 @@ namespace CLup.Features.Bookings.Queries
 
         public async Task<Result<List<BookingDTO>>> Handle(BusinessBookingsQuery query, CancellationToken cancellationToken)
         {
-
             return await _context.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
                     .ToResult()
                     .EnsureDiscard(business => business != null)
@@ -36,7 +35,8 @@ namespace CLup.Features.Bookings.Queries
                     {
                         var bookings = await _context.Bookings
                                         .Include(x => x.TimeSlot)
-                                        .Include(x => x.TimeSlot.Business)
+                                        .ThenInclude(x => x.Business)
+                                        .Include(x => x.User)
                                         .Where(x => x.BusinessId == query.BusinessId)
                                         .OrderBy(x => x.TimeSlot.Start).ToListAsync();
 

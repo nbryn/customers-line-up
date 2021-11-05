@@ -26,7 +26,6 @@ namespace CLup.Features.Insights
             public int BusinessBookings { get; set; }
             public int Businesses { get; set; }
             public int Employees { get; set; }
-
         }
 
         public class Handler : IRequestHandler<Query, Result<Model>>

@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using CLup.Data;
+using CLup.Domain.Bookings;
 using CLup.Features.Shared;
 using CLup.Features.Extensions;
 
@@ -18,8 +19,9 @@ namespace CLup.Features.Bookings.Commands
 
         public async Task<Result> Handle(UserDeleteBookingCommand command, CancellationToken cancellationToken)
         {
-            return await _context.Bookings.FirstOrDefaultAsync(x => x.Id == command.BookingId)
+            return await _context.Bookings.Include(b => b.User).Include(b => b.Business).Include(b => b.TimeSlot).FirstOrDefaultAsync(x => x.Id == command.BookingId)
                      .FailureIf("Booking not found.")
+                     .AddDomainEvent(booking => booking.AddDomainEvent(new UserDeletedBookingEvent(booking)))
                      .Finally(booking => _context.RemoveAndSave(booking));
         }
     }
