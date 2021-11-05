@@ -21,7 +21,7 @@ namespace CLup.Features.TimeSlots.Commands
         {
             return await _context.TimeSlots.FirstOrDefaultAsync(t => t.Id == command.Id)
                     .FailureIf("Time slot not found")
-                    // Check if TimeSlot has bookings: Eg
+                    // Check if TimeSlot has bookings -> Alert before deleting?
                     .AddDomainEvent(timeSlot => timeSlot.AddDomainEvent(new TimeSlotDeletedEvent(timeSlot)))
                     .Finally(timeSlot => _context.RemoveAndSave(timeSlot));
         }

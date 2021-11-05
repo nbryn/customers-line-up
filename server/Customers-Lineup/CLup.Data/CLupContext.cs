@@ -45,6 +45,9 @@ namespace CLup.Data
             modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TimeSlotEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new UserEntityTypeConfiguration());
+
+            modelBuilder.ApplyConfiguration(new BusinessMessageEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new UserMessageEntityTypeConfiguration());
         }
 
         public async override Task<int> SaveChangesAsync(

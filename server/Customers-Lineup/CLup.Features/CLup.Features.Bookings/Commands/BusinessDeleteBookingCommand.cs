@@ -6,7 +6,6 @@ namespace CLup.Features.Bookings.Commands
 {
     public class BusinessDeleteBookingCommand : IRequest<Result>
     {
-
         public string OwnerEmail { get; set; }
 
         public string BookingId { get; set; }
@@ -21,7 +20,6 @@ namespace CLup.Features.Bookings.Commands
             OwnerEmail = ownerEmail;
             BookingId = bookingId;
             BusinessId = businessId;
-
         }
     }
 }

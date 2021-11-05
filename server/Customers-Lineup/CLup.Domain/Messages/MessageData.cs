@@ -10,6 +10,11 @@ namespace CLup.Domain.Messages
 
         public string Content { get; private set; }
 
+        public MessageData()
+        {
+
+        }
+
         public MessageData(
             string title,
             string content)

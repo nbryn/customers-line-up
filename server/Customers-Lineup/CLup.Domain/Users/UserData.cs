@@ -10,20 +10,23 @@ namespace CLup.Domain.Users
         public string Email { get; private set; }
         public string Password { get; private set; }
 
-        public UserData() { }
+        public UserData()
+        {
+            
+        }
 
         public UserData(string name, string email, string password)
         {
             Name = name;
             Email = email;
-            Password = password;        
+            Password = password;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Name;
             yield return Email;
-            yield return Password;          
+            yield return Password;
         }
     }
 }

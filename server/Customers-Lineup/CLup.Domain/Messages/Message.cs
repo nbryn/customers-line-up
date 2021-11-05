@@ -2,9 +2,9 @@ using CLup.Domain.Shared;
 
 namespace CLup.Domain.Messages
 {
-    public class Message<TSender, TReceiver> : Entity
-        where TSender : IHaveMessages
-        where TReceiver : IHaveMessages
+    public abstract class Message<TSender, TReceiver> : Entity
+        where TSender : Entity
+        where TReceiver : Entity
     {
         public MessageData MessageData { get; private set; }
 
@@ -12,11 +12,11 @@ namespace CLup.Domain.Messages
 
         public string SenderId { get; private set; }
 
-        public TSender Sender { get; private set; }
+        public TSender Sender { get; }
 
         public string ReceiverId { get; private set; }
 
-        public TReceiver Receiver { get; private set; }
+        public TReceiver Receiver { get; }
 
         public Message(
             string senderId,

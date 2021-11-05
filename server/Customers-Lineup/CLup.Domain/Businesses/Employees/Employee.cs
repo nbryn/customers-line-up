@@ -23,6 +23,5 @@ namespace CLup.Domain.Businesses.Employees
             BusinessId = businessId;
             CompanyEmail = companyEmail;
         }
-
     }
 }

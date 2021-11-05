@@ -2,14 +2,13 @@ using System.Collections.Generic;
 
 using CLup.Domain.Businesses.Employees;
 using CLup.Domain.Businesses.TimeSlots;
-using CLup.Domain.Messages;
 using CLup.Domain.Shared;
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users;
 
 namespace CLup.Domain.Businesses
 {
-    public class Business : Entity, IHaveMessages
+    public class Business : Entity
     {
 
         public string OwnerEmail { get; private set; }
@@ -28,11 +27,11 @@ namespace CLup.Domain.Businesses
 
         public IEnumerable<Employee> Employees { get; private set; }
 
-        public IList<Message<Business, User>> SentMessages { get; private set; }
+        public IList<BusinessMessage> SentMessages { get; private set; }
 
-        public IList<Message<User, Business>> ReceivedMessages { get; private set; }
+        public IList<UserMessage> ReceivedMessages { get; private set; }
 
-        public Business()
+        protected Business()
         {
 
         }

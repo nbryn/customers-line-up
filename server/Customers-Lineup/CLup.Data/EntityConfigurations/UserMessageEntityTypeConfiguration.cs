@@ -3,18 +3,26 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using CLup.Domain.Businesses;
 using CLup.Domain.Messages;
 using CLup.Domain.Users;
 
 namespace CLup.Data.EntityConfigurations
 {
-    class UserMessageEntityTypeConfiguration : IEntityTypeConfiguration<Message<User, Business>>
+    class UserMessageEntityTypeConfiguration : IEntityTypeConfiguration<UserMessage>
     {
-        public void Configure(EntityTypeBuilder<Message<User, Business>> userMessageConfiguration)
+        public void Configure(EntityTypeBuilder<UserMessage> userMessageConfiguration)
         {
             userMessageConfiguration.ToTable("userMessages");
             userMessageConfiguration.HasKey(b => b.Id);
+
+            userMessageConfiguration.OwnsOne(m => m.MessageData, md =>
+            {
+                md.Property(md => md.Title)
+                    .HasColumnName("Title");
+                    
+                md.Property(md => md.Content)
+                    .HasColumnName("Content");
+            });
 
             userMessageConfiguration
                     .Property(b => b.Type)
