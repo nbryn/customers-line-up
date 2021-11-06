@@ -7,7 +7,7 @@ import {
     deleteTimeSlot,
     fetchTimeSlotsByBusiness,
     selectTimeSlotsByBusiness,
-} from './timeSlotSlice';
+} from './timeSlotState';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
 import {selectCurrentBusiness} from '../businessSlice';

@@ -29,7 +29,7 @@ namespace CLup.Application.Auth
                 .ToResult()
                 .Ensure(user => BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
                 .AndThenF(user => _userService.DetermineRole(user))
-                .Finally(user => _mapper.Map<UserDto>(user));
+                .Finally(_mapper.Map<UserDto>);
         }
     }
 }

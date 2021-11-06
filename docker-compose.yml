@@ -13,7 +13,7 @@ services:
   server:
     container_name: clup_server
     build:
-      context: server
+      context: server/src/CLup.Application
       dockerfile: Dockerfile
     volumes:
       - ./server/CLup:/app

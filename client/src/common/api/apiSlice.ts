@@ -18,14 +18,14 @@ import {
     createEmployee,
     deleteEmployee,
     fetchEmployeesByBusiness,
-} from '../../features/employee/employeeSlice';
+} from '../../features/business/employee/employeeState';
 import {fetchUserInsights} from '../../features/insights/insightsSlice';
 import {
     deleteTimeSlot,
     fetchAvailableTimeSlotsByBusiness,
     fetchTimeSlotsByBusiness,
     generateTimeSlots,
-} from '../../features/timeslot/timeSlotSlice';
+} from '../../features/business/timeslot/timeSlotState';
 import {
     login,
     register,

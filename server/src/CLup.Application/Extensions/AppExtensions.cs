@@ -9,7 +9,7 @@ namespace CLup.Application.Extensions
     public static class AppExtensions
     {
         
-        public static async Task ConfigureSeeder(this IApplicationBuilder app)
+        public static async Task ConfigureSeed(this IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<CLupContext>();

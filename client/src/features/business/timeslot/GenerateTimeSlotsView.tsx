@@ -3,7 +3,7 @@ import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {Card} from '../../../shared/components/card/Card';
-import {generateTimeSlots} from './timeSlotSlice';
+import {generateTimeSlots} from './timeSlotState';
 import {ComboBox, ComboBoxOption} from '../../../shared/components/form/ComboBox';
 import DateUtil from '../../../shared/util/DateUtil';
 import {ErrorView} from '../../../shared/views/ErrorView';

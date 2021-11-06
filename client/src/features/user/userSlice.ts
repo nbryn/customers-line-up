@@ -34,13 +34,13 @@ export const fetchUsersNotEmployedByBusiness = createAsyncThunk(
     }
 );
 
-export const login = createAsyncThunk('user/login', async (data: LoginDTO) => {
+export const login = createAsyncThunk('auth/login', async (data: LoginDTO) => {
     const user = await ApiCaller.post<UserDTO, LoginDTO>(`auth/login`, data);
 
     return user;
 });
 
-export const register = createAsyncThunk('user/register', async (data: UserDTO) => {
+export const register = createAsyncThunk('auth/register', async (data: UserDTO) => {
     const user = await ApiCaller.post<UserDTO, UserDTO>(`auth/register`, data);
 
     return user;

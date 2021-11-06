@@ -24,7 +24,6 @@ namespace CLup.Application
         }
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddRouting(options => options.LowercaseUrls = true);
             services.ConfigureCors(_config);
 
@@ -60,7 +59,7 @@ namespace CLup.Application
                 app.UseDeveloperExceptionPage();
             }
 
-            await app.ConfigureSeeder();
+            await app.ConfigureSeed();
             app.UseHttpsRedirection();
             
             app.UseSwagger();

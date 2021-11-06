@@ -8,7 +8,7 @@ import {ErrorView} from '../../shared/views/ErrorView';
 import {
     fetchAvailableTimeSlotsByBusiness,
     selectAvailableTimeSlotsByBusiness,
-} from '../business/timeslot/timeSlotSlice';
+} from '../business/timeslot/timeSlotState';
 import {Header} from '../../shared/components/Texts';
 
 import {MapModal} from '../../shared/components/modal/MapModal';
