@@ -2,16 +2,16 @@ import React from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {Card} from '../../common/components/card/Card';
-import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
-import {Form} from '../../common/components/form/Form';
+import {Card} from '../../shared/components/card/Card';
+import {ComboBox, ComboBoxOption} from '../../shared/components/form/ComboBox';
+import {Form} from '../../shared/components/form/Form';
 import {register} from './userSlice';
 import {signupValidationSchema} from './UserValidation';
-import StringUtil from '../../common/util/StringUtil';
-import {TextField} from '../../common/components/form/TextField';
-import TextFieldUtil from '../../common/util/TextFieldUtil';
+import StringUtil from '../../shared/util/StringUtil';
+import {TextField} from '../../shared/components/form/TextField';
+import TextFieldUtil from '../../shared/util/TextFieldUtil';
 import {useAppDispatch} from '../../app/Store';
-import {useForm} from '../../common/hooks/useForm';
+import {useForm} from '../../shared/hooks/useForm';
 import {UserDTO} from './User';
 
 const useStyles = makeStyles((theme) => ({

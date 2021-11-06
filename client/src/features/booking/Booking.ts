@@ -1,4 +1,4 @@
-import {DTO} from '../../common/models/General';
+import {DTO} from '../../shared/models/General';
 
 export interface BookingDTO extends DTO {
     timeSlotId: string;

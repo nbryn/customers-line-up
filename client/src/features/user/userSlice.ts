@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/ApiCaller';
+import ApiCaller from '../../shared/api/ApiCaller';
 import {LoginDTO, NotEmployedByBusiness, UserDTO} from './User';
 import {RootState} from '../../app/Store';
 
@@ -35,13 +35,13 @@ export const fetchUsersNotEmployedByBusiness = createAsyncThunk(
 );
 
 export const login = createAsyncThunk('user/login', async (data: LoginDTO) => {
-    const user = await ApiCaller.post<UserDTO, LoginDTO>(`${DEFAULT_USER_ROUTE}/login`, data);
+    const user = await ApiCaller.post<UserDTO, LoginDTO>(`auth/login`, data);
 
     return user;
 });
 
 export const register = createAsyncThunk('user/register', async (data: UserDTO) => {
-    const user = await ApiCaller.post<UserDTO, UserDTO>(`${DEFAULT_USER_ROUTE}/register`, data);
+    const user = await ApiCaller.post<UserDTO, UserDTO>(`auth/register`, data);
 
     return user;
 });
@@ -51,7 +51,6 @@ export const updateUserInfo = createAsyncThunk('user/update', async (data: UserD
 
     return data;
 });
-
 
 export const userSlice = createSlice({
     name: 'user',
@@ -64,27 +63,26 @@ export const userSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchUsersNotEmployedByBusiness.fulfilled, (state, action) => {
             state.notEmployedByBusiness[action.payload.businessId] = action.payload.users;
-        });
+        })
 
-        builder.addCase(fetchUserInfo.fulfilled, (state, action) => {
+        .addCase(fetchUserInfo.fulfilled, (state, action) => {
             state.currentUser = action.payload;
-        });
+        })
 
-        builder.addCase(updateUserInfo.fulfilled, (state, action) => {
+        .addCase(updateUserInfo.fulfilled, (state, action) => {
             state.currentUser = action.payload;
-        });
+        })
 
-        builder.addMatcher(isAnyOf(login.fulfilled, register.fulfilled), (state, action) => {
+        .addMatcher(isAnyOf(login.fulfilled, register.fulfilled), (state, action) => {
             state.currentUser = action.payload;
             Cookies.set('access_token', action.payload.token!);
         });
-
     },
 });
 
 export const {clearCurrentUser} = userSlice.actions;
 
-export const selectUsersNotEmployedByBusiness =  (businessId: string) => (state: RootState) => 
+export const selectUsersNotEmployedByBusiness = (businessId: string) => (state: RootState) =>
     state.users.notEmployedByBusiness[businessId] ?? null;
 
 export const selectCurrentUser = (state: RootState) => state.users.currentUser;

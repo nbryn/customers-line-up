@@ -4,12 +4,12 @@ import {makeStyles} from '@material-ui/core/styles';
 import React, {useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 
-import {CardInfo} from '../../common/components/card/CardInfo';
+import {CardInfo} from '../../shared/components/card/CardInfo';
 import {fetchBusinessesByOwner, selectBusinessesByOwner} from './businessSlice';
-import {Header} from '../../common/components/Texts';
-import {InfoCard} from '../../common/components/card/InfoCard';
-import PathUtil, {PathInfo} from '../../common/util/PathUtil';
-import {selectApiState} from '../../common/api/apiSlice';
+import {Header} from '../../shared/components/Texts';
+import {InfoCard} from '../../shared/components/card/InfoCard';
+import PathUtil, {PathInfo} from '../../shared/util/PathUtil';
+import {selectApiState} from '../../shared/api/apiSlice';
 import {setCurrentBusiness} from './businessSlice';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 

@@ -9,11 +9,11 @@ import {
     fetchBookingsByBusiness,
     selectBookingsByBusiness,
 } from './bookingSlice';
-import {ErrorView} from '../../common/views/ErrorView';
-import {Header} from '../../common/components/Texts';
+import {ErrorView} from '../../shared/views/ErrorView';
+import {Header} from '../../shared/components/Texts';
 import {selectCurrentBusiness} from '../business/businessSlice';
-import {TableColumn} from '../../common/components/Table';
-import {TableContainer} from '../../common/containers/TableContainer';
+import {TableColumn} from '../../shared/components/Table';
+import {TableContainer} from '../../shared/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({

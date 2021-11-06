@@ -1,5 +1,5 @@
-import {DTO, HasAddress} from '../../common/models/General';
-import {Address} from '../../common/services/AddressService';
+import {DTO, HasAddress} from '../../shared/models/General';
+import {Address} from '../../shared/services/AddressService';
 
 export interface BusinessDTO extends DTO, HasAddress {
     name: string;

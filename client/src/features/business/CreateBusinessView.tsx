@@ -5,16 +5,16 @@ import {MenuItem} from '@material-ui/core';
 
 import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
-import {Card} from '../../common/components/card/Card';
-import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
+import {Card} from '../../shared/components/card/Card';
+import {ComboBox, ComboBoxOption} from '../../shared/components/form/ComboBox';
 import {createBusiness, fetchBusinessesTypes, selectBusinessTypes} from './businessSlice';
-import {Form} from '../../common/components/form/Form';
-import {Header} from '../../common/components/Texts';
-import StringUtil from '../../common/util/StringUtil';
-import {TextField} from '../../common/components/form/TextField';
-import TextFieldUtil from '../../common/util/TextFieldUtil';
+import {Form} from '../../shared/components/form/Form';
+import {Header} from '../../shared/components/Texts';
+import StringUtil from '../../shared/util/StringUtil';
+import {TextField} from '../../shared/components/form/TextField';
+import TextFieldUtil from '../../shared/util/TextFieldUtil';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
-import {useForm} from '../../common/hooks/useForm';
+import {useForm} from '../../shared/hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
     card: {

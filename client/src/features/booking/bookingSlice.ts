@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/ApiCaller';
+import ApiCaller from '../../shared/api/ApiCaller';
 import {BookingDTO} from './Booking';
 import {RootState} from '../../app/Store';
 import {selectCurrentUser} from '../user/userSlice';
@@ -74,19 +74,19 @@ export const bookingSlice = createSlice({
             state.byBusiness[payload.businessId] = Object.values(
                 state.byBusiness[payload.businessId]
             ).filter((b) => b.id !== payload.bookingId);
-        });
+        })
 
-        builder.addCase(deleteBookingForUser.fulfilled, (state, {payload}) => {
+        .addCase(deleteBookingForUser.fulfilled, (state, {payload}) => {
             state.byUser[payload.userEmail] = Object.values(state.byUser[payload.userEmail]).filter(
                 (b) => b.id !== payload.bookingId
             );
-        });
+        })
 
-        builder.addCase(fetchBookingsByBusiness.fulfilled, (state, {payload}) => {
+        .addCase(fetchBookingsByBusiness.fulfilled, (state, {payload}) => {
             state.byBusiness[payload.businessId] = payload.bookings;
-        });
+        })
 
-        builder.addCase(fetchBookingsByUser.fulfilled, (state, {payload}) => {
+        .addCase(fetchBookingsByUser.fulfilled, (state, {payload}) => {
             state.byUser[payload.userEmail] = payload.bookings;
         });
     },

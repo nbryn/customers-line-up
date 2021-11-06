@@ -1,4 +1,4 @@
-import { HasAddress, Index } from "../../common/models/General";
+import { HasAddress, Index } from "../../shared/models/General";
 
 export interface UserDTO extends HasAddress {
     [key: string]: string | number | undefined;

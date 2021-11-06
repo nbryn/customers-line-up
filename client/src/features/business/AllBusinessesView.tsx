@@ -6,10 +6,10 @@ import {useHistory} from 'react-router';
 
 import {BusinessDTO} from './Business';
 import {fetchAllBusinesses, selectAllBusinesses, setCurrentBusiness} from './businessSlice';
-import {Header} from '../../common/components/Texts';
-import {MapModal, MapModalProps, defaultMapProps} from '../../common/components/modal/MapModal';
-import {TableColumn} from '../../common/components/Table';
-import {TableContainer} from '../../common/containers/TableContainer';
+import {Header} from '../../shared/components/Texts';
+import {MapModal, MapModalProps, defaultMapProps} from '../../shared/components/modal/MapModal';
+import {TableColumn} from '../../shared/components/Table';
+import {TableContainer} from '../../shared/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({

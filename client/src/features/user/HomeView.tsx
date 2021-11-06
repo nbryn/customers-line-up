@@ -3,10 +3,10 @@ import {Badge, Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory} from 'react-router-dom';
 
-import {CardInfo} from '../../common/components/card/CardInfo';
+import {CardInfo} from '../../shared/components/card/CardInfo';
 import {fetchUserInsights, selectUserInsights} from '../insights/insightsSlice';
-import {Header} from '../../common/components/Texts';
-import {InfoCard} from '../../common/components/card/InfoCard';
+import {Header} from '../../shared/components/Texts';
+import {InfoCard} from '../../shared/components/card/InfoCard';
 import {selectCurrentUser} from './userSlice';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 

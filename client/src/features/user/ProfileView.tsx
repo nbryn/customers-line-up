@@ -3,15 +3,15 @@ import {pick} from 'lodash-es';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {ErrorView} from '../../common/views/ErrorView';
-import {FormCard, FormCardData} from '../../common/components/card/FormCard';
-import {Header} from '../../common/components/Texts';
+import {ErrorView} from '../../shared/views/ErrorView';
+import {FormCard, FormCardData} from '../../shared/components/card/FormCard';
+import {Header} from '../../shared/components/Texts';
 import {selectCurrentUser, updateUserInfo} from './userSlice';
-import StringUtil from '../../common/util/StringUtil';
-import {TextFieldModal} from '../../common/components/modal/TextFieldModal';
-import TextFieldUtil from '../../common/util/TextFieldUtil';
+import StringUtil from '../../shared/util/StringUtil';
+import {TextFieldModal} from '../../shared/components/modal/TextFieldModal';
+import TextFieldUtil from '../../shared/util/TextFieldUtil';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
-import {useForm} from '../../common/hooks/useForm';
+import {useForm} from '../../shared/hooks/useForm';
 import {UserDTO} from './User';
 import {userValidationSchema} from './UserValidation';
 

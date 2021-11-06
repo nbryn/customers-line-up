@@ -6,12 +6,12 @@ import {useSelector} from 'react-redux';
 
 import {deleteEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} from './employeeSlice';
 import {EmployeeDTO} from './Employee';
-import {ErrorView} from '../../common/views/ErrorView';
-import {Header} from '../../common/components/Texts';
-import {selectCurrentBusiness} from '../business/businessSlice';
-import {RootState, useAppDispatch, useAppSelector} from '../../app/Store';
-import {TableColumn} from '../../common/components/Table';
-import {TableContainer} from '../../common/containers/TableContainer';
+import {ErrorView} from '../../../shared/views/ErrorView';
+import {Header} from '../../../shared/components/Texts';
+import {selectCurrentBusiness} from '../businessSlice';
+import {RootState, useAppDispatch, useAppSelector} from '../../../app/Store';
+import {TableColumn} from '../../../shared/components/Table';
+import {TableContainer} from '../../../shared/containers/TableContainer';
 
 const useStyles = makeStyles((theme) => ({
     row: {

@@ -4,18 +4,18 @@ import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {createBooking} from './bookingSlice';
-import {ErrorView} from '../../common/views/ErrorView';
+import {ErrorView} from '../../shared/views/ErrorView';
 import {
     fetchAvailableTimeSlotsByBusiness,
     selectAvailableTimeSlotsByBusiness,
-} from '../timeslot/timeSlotSlice';
-import {Header} from '../../common/components/Texts';
+} from '../business/timeslot/timeSlotSlice';
+import {Header} from '../../shared/components/Texts';
 
-import {MapModal} from '../../common/components/modal/MapModal';
+import {MapModal} from '../../shared/components/modal/MapModal';
 import {selectCurrentBusiness} from '../business/businessSlice';
-import {TableColumn} from '../../common/components/Table';
-import {TableContainer} from '../../common/containers/TableContainer';
-import {TimeSlotDTO} from '../timeslot/TimeSlot';
+import {TableColumn} from '../../shared/components/Table';
+import {TableContainer} from '../../shared/containers/TableContainer';
+import {TimeSlotDTO} from '../business/timeslot/TimeSlot';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({

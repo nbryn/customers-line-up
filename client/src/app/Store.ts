@@ -1,12 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
-import apiReducer from '../common/api/apiSlice';
+import apiReducer from '../shared/api/apiSlice';
 import bookingReducer from '../features/booking/bookingSlice';
 import businessReducer from '../features/business/businessSlice';
-import employeeReducer from '../features/employee/employeeSlice';
+import employeeReducer from '../features/business/employee/employeeSlice';
 import insightsReducer from '../features/insights/insightsSlice';
-import timeSlotReducer from '../features/timeslot/timeSlotSlice';
+import timeSlotReducer from '../features/business/timeslot/timeSlotSlice';
 import userReducer from '../features/user/userSlice';
 
 export const store = configureStore({

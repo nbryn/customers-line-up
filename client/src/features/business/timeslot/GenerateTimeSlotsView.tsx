@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {Card} from '../../common/components/card/Card';
-import {generateTimeSlots} from '../timeslot/timeSlotSlice';
-import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
-import DateUtil from '../../common/util/DateUtil';
-import {ErrorView} from '../../common/views/ErrorView';
-import {Header} from '../../common/components/Texts';
-import {selectCurrentBusiness} from '../business/businessSlice';
-import {useAppDispatch, useAppSelector} from '../../app/Store';
+import {Card} from '../../../shared/components/card/Card';
+import {generateTimeSlots} from './timeSlotSlice';
+import {ComboBox, ComboBoxOption} from '../../../shared/components/form/ComboBox';
+import DateUtil from '../../../shared/util/DateUtil';
+import {ErrorView} from '../../../shared/views/ErrorView';
+import {Header} from '../../../shared/components/Texts';
+import {selectCurrentBusiness} from '../businessSlice';
+import {useAppDispatch, useAppSelector} from '../../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
     button: {

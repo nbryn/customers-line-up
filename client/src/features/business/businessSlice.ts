@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/ApiCaller';
+import ApiCaller from '../../shared/api/ApiCaller';
 import {BusinessDTO} from './Business';
 import {NormalizedEntityState} from '../../app/AppTypes';
 import {RootState} from '../../app/Store';
@@ -66,16 +66,16 @@ export const businessSlice = createSlice({
             payload.forEach((business) => (newState[business.id] = business));
 
             state.byId = newState;
-        });
+        })
 
-        builder.addCase(fetchBusinessesByOwner.fulfilled, (state, {payload}) => {
+        .addCase(fetchBusinessesByOwner.fulfilled, (state, {payload}) => {
             const newState = {...state.byId};
             payload.forEach((business) => (newState[business.id] = business));
 
             state.byId = newState;
-        });
+        })
 
-        builder.addCase(fetchBusinessesTypes.fulfilled, (state, {payload}) => {
+        .addCase(fetchBusinessesTypes.fulfilled, (state, {payload}) => {
             state.businessTypes = payload;
         });
     },

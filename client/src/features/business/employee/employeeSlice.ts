@@ -1,11 +1,11 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/ApiCaller';
+import ApiCaller from '../../../shared/api/ApiCaller';
 import {EmployeeDTO} from './Employee';
-import {NormalizedEntityState, ThunkParam} from '../../app/AppTypes';
-import {RootState} from '../../app/Store';
+import {NormalizedEntityState, ThunkParam} from '../../../app/AppTypes';
+import {RootState} from '../../../app/Store';
 
-const DEFAULT_EMPLOYEE_ROUTE = 'employee';
+const DEFAULT_EMPLOYEE_ROUTE = 'business/employee';
 
 const initialState: NormalizedEntityState<EmployeeDTO> = {
     byId: {},
@@ -29,7 +29,7 @@ export const fetchEmployeesByBusiness = createAsyncThunk(
     'employee/fetchByBusiness',
     async (businessId: string) => {
         const response = await ApiCaller.get<EmployeeDTO[]>(
-            `${DEFAULT_EMPLOYEE_ROUTE}/business/${businessId}`
+            `${DEFAULT_EMPLOYEE_ROUTE}/${businessId}`
         );
 
         return response;
@@ -43,9 +43,9 @@ export const employeeSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(deleteEmployee.fulfilled, (state, action) => {
             delete state.byId[action.payload];
-        });
+        })
 
-        builder.addCase(
+        .addCase(
             fetchEmployeesByBusiness.fulfilled,
             (state, action: PayloadAction<EmployeeDTO[]>) => {
                 const newState = {...state.byId};

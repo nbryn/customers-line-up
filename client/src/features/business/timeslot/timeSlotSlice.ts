@@ -1,11 +1,12 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/ApiCaller';
-import {NormalizedEntityState} from '../../app/AppTypes';
-import {RootState} from '../../app/Store';
+import ApiCaller from '../../../shared/api/ApiCaller';
+import {NormalizedEntityState} from '../../../app/AppTypes';
+import {RootState} from '../../../app/Store';
 import {TimeSlotDTO} from './TimeSlot';
 
-const DEFAULT_TIMESLOT_ROUTE = 'timeslot';
+const DEFAULT_TIMESLOT_ROUTE = 'business/timeslot';
+
 interface TimeSlotState extends NormalizedEntityState<TimeSlotDTO> {
     availableByBusiness: {[businessId: string]: TimeSlotDTO[]};
 }
@@ -48,7 +49,7 @@ export const fetchTimeSlotsByBusiness = createAsyncThunk(
     'timeSlot/byBusiness',
     async (businessId: string) => {
         const timeSlots = await ApiCaller.get<TimeSlotDTO[]>(
-            `${DEFAULT_TIMESLOT_ROUTE}/business/${businessId}`
+            `${DEFAULT_TIMESLOT_ROUTE}/${businessId}`
         );
 
         return timeSlots;
@@ -69,13 +70,13 @@ export const timeSlotSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(deleteTimeSlot.fulfilled, (state, {payload}) => {
             delete state.byId[payload.timeSlotId]
-        });
+        })
 
-        builder.addCase(fetchAvailableTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
+        .addCase(fetchAvailableTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
             state.availableByBusiness[payload.businessId] = payload.timeSlots;
-        });
+        })
 
-        builder.addCase(fetchTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
+        .addCase(fetchTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
             const newState = {...state.byId};
             payload.forEach((timeSlot) => (newState[timeSlot.id] = timeSlot));
 

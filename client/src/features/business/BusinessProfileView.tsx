@@ -5,15 +5,15 @@ import {omit} from 'lodash-es';
 
 import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
-import {ErrorView} from '../../common/views/ErrorView';
+import {ErrorView} from '../../shared/views/ErrorView';
 import {fetchBusinessesTypes, selectBusinessTypes, updateBusinessInfo} from './businessSlice';
-import {FormCard, FormCardData} from '../../common/components/card/FormCard';
-import {Header} from '../../common/components/Texts';
+import {FormCard, FormCardData} from '../../shared/components/card/FormCard';
+import {Header} from '../../shared/components/Texts';
 import {selectCurrentBusiness} from './businessSlice';
-import TextFieldUtil from '../../common/util/TextFieldUtil';
-import {TextFieldModal} from '../../common/components/modal/TextFieldModal';
+import TextFieldUtil from '../../shared/util/TextFieldUtil';
+import {TextFieldModal} from '../../shared/components/modal/TextFieldModal';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
-import {useForm} from '../../common/hooks/useForm';
+import {useForm} from '../../shared/hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
     col: {

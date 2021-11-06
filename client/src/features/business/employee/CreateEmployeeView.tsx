@@ -2,20 +2,20 @@ import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {Card} from '../../common/components/card/Card';
-import {ComboBox, ComboBoxOption} from '../../common/components/form/ComboBox';
+import {Card} from '../../../shared/components/card/Card';
+import {ComboBox, ComboBoxOption} from '../../../shared/components/form/ComboBox';
 import {createEmployee} from './employeeSlice';
-import {employeeValidationSchema} from '../business/BusinessValidation';
-import {ErrorView} from '../../common/views/ErrorView';
-import {fetchUsersNotEmployedByBusiness, selectUsersNotEmployedByBusiness} from '../user/userSlice';
-import {Form} from '../../common/components/form/Form';
-import {Header} from '../../common/components/Texts';
+import {employeeValidationSchema} from '../BusinessValidation';
+import {ErrorView} from '../../../shared/views/ErrorView';
+import {fetchUsersNotEmployedByBusiness, selectUsersNotEmployedByBusiness} from '../../user/userSlice';
+import {Form} from '../../../shared/components/form/Form';
+import {Header} from '../../../shared/components/Texts';
 import {EmployeeDTO, NewEmployeeDTO} from './Employee';
-import {selectCurrentBusiness} from '../business/businessSlice';
-import {TextField} from '../../common/components/form/TextField';
-import {useAppDispatch, useAppSelector} from '../../app/Store';
-import {useForm} from '../../common/hooks/useForm';
-import {UserDTO} from '../user/User';
+import {selectCurrentBusiness} from '../businessSlice';
+import {TextField} from '../../../shared/components/form/TextField';
+import {useAppDispatch, useAppSelector} from '../../../app/Store';
+import {useForm} from '../../../shared/hooks/useForm';
+import {UserDTO} from '../../user/User';
 
 const useStyles = makeStyles((theme) => ({
     card: {

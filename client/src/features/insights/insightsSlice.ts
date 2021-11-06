@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
-import ApiCaller from '../../common/api/ApiCaller';
+import ApiCaller from '../../shared/api/ApiCaller';
 import {RootState} from '../../app/Store';
 import {UserInsights} from './Insights';
 
@@ -14,13 +14,9 @@ const initialState: InsightsState = {
 };
 
 export const fetchUserInsights = createAsyncThunk('insights/userBooking', async () => {
-    const bookingInsights = await ApiCaller.get<UserInsights>(
-        `${DEFAULT_INSIGHTS_ROUTE}/user/booking`
-    );
+    const bookingInsights = await ApiCaller.get<UserInsights>(`user/${DEFAULT_INSIGHTS_ROUTE}`);
 
-    const businessInsights = await ApiCaller.get<UserInsights>(
-        `${DEFAULT_INSIGHTS_ROUTE}/user/business`
-    );
+    const businessInsights = await ApiCaller.get<UserInsights>(`business/${DEFAULT_INSIGHTS_ROUTE}`);
 
     return {userInsights: {...bookingInsights, ...businessInsights}};
 });
