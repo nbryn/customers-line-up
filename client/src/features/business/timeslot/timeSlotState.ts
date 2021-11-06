@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../../shared/api/ApiCaller';
 import {NormalizedEntityState} from '../../../app/AppTypes';
@@ -7,11 +7,11 @@ import {TimeSlotDTO} from './TimeSlot';
 
 const DEFAULT_TIMESLOT_ROUTE = 'business/timeslot';
 
-interface TimeSlotState extends NormalizedEntityState<TimeSlotDTO> {
+export interface TimeSlotState extends NormalizedEntityState<TimeSlotDTO> {
     availableByBusiness: {[businessId: string]: TimeSlotDTO[]};
 }
 
-const initialState: TimeSlotState = {
+export const initialTimeSlotState: TimeSlotState = {
     byId: {},
     availableByBusiness: {},
     allIds: [],
@@ -63,32 +63,9 @@ export const generateTimeSlots = createAsyncThunk(
     }
 );
 
-export const timeSlotSlice = createSlice({
-    name: 'timeSlot',
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder.addCase(deleteTimeSlot.fulfilled, (state, {payload}) => {
-            delete state.byId[payload.timeSlotId]
-        })
-
-        .addCase(fetchAvailableTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
-            state.availableByBusiness[payload.businessId] = payload.timeSlots;
-        })
-
-        .addCase(fetchTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
-            const newState = {...state.byId};
-            payload.forEach((timeSlot) => (newState[timeSlot.id] = timeSlot));
-
-            state.byId = newState;
-        });
-    },
-});
-
 export const selectTimeSlotsByBusiness = (businessId: string) => (state: RootState) =>
-    Object.values(state.timeSlots.byId).filter((t) => t.businessId === businessId);
+    Object.values(state.businesses.timeSlots.byId).filter((t) => t.businessId === businessId);
 
 export const selectAvailableTimeSlotsByBusiness = (businessId: string) => (state: RootState) =>
-    state.timeSlots.availableByBusiness[businessId];
+    state.businesses.timeSlots.availableByBusiness[businessId];
 
-export default timeSlotSlice.reducer;

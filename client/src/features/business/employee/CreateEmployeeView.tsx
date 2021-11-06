@@ -4,7 +4,7 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {Card} from '../../../shared/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../../shared/components/form/ComboBox';
-import {createEmployee} from './employeeSlice';
+import {createEmployee} from './employeeState';
 import {employeeValidationSchema} from '../BusinessValidation';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {fetchUsersNotEmployedByBusiness, selectUsersNotEmployedByBusiness} from '../../user/userSlice';

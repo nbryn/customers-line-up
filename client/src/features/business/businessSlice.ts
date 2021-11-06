@@ -2,14 +2,26 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../shared/api/ApiCaller';
 import {BusinessDTO} from './Business';
+import {EmployeeDTO} from './employee/Employee';
 import {NormalizedEntityState} from '../../app/AppTypes';
 import {RootState} from '../../app/Store';
 import {selectCurrentUser} from '../user/userSlice';
+import {deleteEmployee, fetchEmployeesByBusiness, initialEmployeeState} from './employee/employeeState';
+import {
+    TimeSlotState,
+    deleteTimeSlot,
+    fetchAvailableTimeSlotsByBusiness,
+    fetchTimeSlotsByBusiness,
+    initialTimeSlotState,
+} from './timeslot/timeSlotState';
 
 const DEFAULT_BUSINESS_ROUTE = 'business';
+
 interface BusinessState extends NormalizedEntityState<BusinessDTO> {
     businessTypes: string[];
     currentBusiness: BusinessDTO | null;
+    employees: typeof initialEmployeeState
+    timeSlots: TimeSlotState;
 }
 
 const initialState: BusinessState = {
@@ -17,6 +29,8 @@ const initialState: BusinessState = {
     allIds: [],
     businessTypes: [],
     currentBusiness: null,
+    employees: initialEmployeeState,
+    timeSlots: initialTimeSlotState,
 };
 
 export const createBusiness = createAsyncThunk('business/create', async (data: BusinessDTO) => {
@@ -61,23 +75,52 @@ export const businessSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchAllBusinesses.fulfilled, (state, {payload}) => {
-            const newState = {...state.byId};
-            payload.forEach((business) => (newState[business.id] = business));
+        builder
+            .addCase(fetchAllBusinesses.fulfilled, (state, {payload}) => {
+                const newState = {...state.byId};
+                payload.forEach((business) => (newState[business.id] = business));
 
-            state.byId = newState;
-        })
+                state.byId = newState;
+            })
 
-        .addCase(fetchBusinessesByOwner.fulfilled, (state, {payload}) => {
-            const newState = {...state.byId};
-            payload.forEach((business) => (newState[business.id] = business));
+            .addCase(fetchBusinessesByOwner.fulfilled, (state, {payload}) => {
+                const newState = {...state.byId};
+                payload.forEach((business) => (newState[business.id] = business));
 
-            state.byId = newState;
-        })
+                state.byId = newState;
+            })
 
-        .addCase(fetchBusinessesTypes.fulfilled, (state, {payload}) => {
-            state.businessTypes = payload;
-        });
+            .addCase(fetchBusinessesTypes.fulfilled, (state, {payload}) => {
+                state.businessTypes = payload;
+            })
+
+            .addCase(deleteTimeSlot.fulfilled, (state, {payload}) => {
+                delete state.timeSlots.byId[payload.timeSlotId];
+            })
+
+            .addCase(fetchAvailableTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
+                state.timeSlots.availableByBusiness[payload.businessId] = payload.timeSlots;
+            })
+
+            .addCase(fetchTimeSlotsByBusiness.fulfilled, (state, {payload}) => {
+                const newState = {...state.timeSlots.byId};
+                payload.forEach((timeSlot) => (newState[timeSlot.id] = timeSlot));
+
+                state.timeSlots.byId = newState;
+            })
+
+            .addCase(deleteEmployee.fulfilled, (state, action) => {
+                delete state.employees.byId[action.payload];
+            })
+    
+            .addCase(
+                fetchEmployeesByBusiness.fulfilled,
+                (state, action: PayloadAction<EmployeeDTO[]>) => {
+                    const newState = {...state.employees.byId};
+                    action.payload.forEach((employee) => (newState[employee.id] = employee));
+                    state.employees.byId = newState;
+                }
+            );
     },
 });
 

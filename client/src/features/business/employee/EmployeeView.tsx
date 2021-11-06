@@ -4,7 +4,7 @@ import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useSelector} from 'react-redux';
 
-import {deleteEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} from './employeeSlice';
+import {deleteEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} from './employeeState';
 import {EmployeeDTO} from './Employee';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';

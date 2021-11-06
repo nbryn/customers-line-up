@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../../shared/api/ApiCaller';
 import {EmployeeDTO} from './Employee';
@@ -7,7 +7,7 @@ import {RootState} from '../../../app/Store';
 
 const DEFAULT_EMPLOYEE_ROUTE = 'business/employee';
 
-const initialState: NormalizedEntityState<EmployeeDTO> = {
+export const initialEmployeeState: NormalizedEntityState<EmployeeDTO> = {
     byId: {},
     allIds: [],
 };
@@ -36,27 +36,6 @@ export const fetchEmployeesByBusiness = createAsyncThunk(
     }
 );
 
-export const employeeSlice = createSlice({
-    name: 'employee',
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-        builder.addCase(deleteEmployee.fulfilled, (state, action) => {
-            delete state.byId[action.payload];
-        })
-
-        .addCase(
-            fetchEmployeesByBusiness.fulfilled,
-            (state, action: PayloadAction<EmployeeDTO[]>) => {
-                const newState = {...state.byId};
-                action.payload.forEach((employee) => (newState[employee.id] = employee));
-                state.byId = newState;
-            }
-        );
-    },
-});
-
 export const selectEmployeesByBusiness = (state: RootState, businessId: string) =>
-    Object.values(state.employees.byId).filter((employee) => employee.businessId === businessId);
+    Object.values(state.businesses.employees.byId).filter((employee) => employee.businessId === businessId);
 
-export default employeeSlice.reducer;
