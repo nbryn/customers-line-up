@@ -30,7 +30,6 @@ namespace CLup.Application
             services.AddSingleton(_config);
             services.ConfigureJwt(_config);
             services.AddMediatR(typeof(Startup));
-            services.AddMediatR(typeof(User));
 
             services.AddAuthorization(config =>
             {

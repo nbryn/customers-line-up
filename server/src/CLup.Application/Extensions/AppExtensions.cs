@@ -14,7 +14,7 @@ namespace CLup.Application.Extensions
             using var scope = app.ApplicationServices.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<CLupContext>();
 
-            await context.Database.EnsureCreatedAsync();
+            context.Database.EnsureCreated();
             var seeder = scope.ServiceProvider.GetRequiredService<Seeder>();
 
             await seeder.Seed();
