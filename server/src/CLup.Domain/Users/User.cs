@@ -43,9 +43,9 @@ namespace CLup.Domain.Users
         public string Email => UserData.Email;
         public string Password => UserData.Password;
 
-        public User Update(string email, string name, (Address address, Coords coords) info)
+        public User Update(string name, string email, (Address address, Coords coords) info)
         {
-            UserData = new UserData(email, name, Password);
+            UserData = new UserData(name, email, Password);
             Address = info.address;
             Coords = info.coords;
 

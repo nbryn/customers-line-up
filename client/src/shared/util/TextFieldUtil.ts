@@ -1,7 +1,8 @@
-import StringUtil from './StringUtil';
-import {Index} from '../models/General';
-import {TextFieldType} from '../components/form/TextField';
 import {Address} from '../services/AddressService';
+import {HasAddress} from '../models/General';
+import {Index} from '../models/General';
+import StringUtil from './StringUtil';
+import {TextFieldType} from '../components/form/TextField';
 
 function mapKeyToLabel(key: string, address = false): string {
     if (key === 'timeSlotLength') return 'Visit Length';
@@ -25,11 +26,20 @@ function mapKeyToType(key: string): TextFieldType {
     return 'text';
 }
 
-function mapKeyToValue(key: string, values: Index, addresses: Address[]): string {
-    if (key === 'timeSlotLength') return `${values[key]} minutes`;
+function mapKeyToValue(
+    key: string,
+    values: Index,
+    addresses: Address[],
+    entity: HasAddress
+): string {
     if (key === 'zip') {
+        if (!addresses.length) return `${entity.zip} - ${entity.city}`;
         const address = addresses.find((a) => a.zip === values[key]);
         return `${values[key]} - ${address?.city ?? ''}`;
+    }
+
+    if (key === 'opens' || key === 'closes') {
+        return values[key]?.toString().replace('.', ':') as string;
     }
 
     return values[key] as any;

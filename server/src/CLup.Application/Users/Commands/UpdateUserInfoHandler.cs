@@ -32,12 +32,12 @@ namespace CLup.Application.Users.Commands
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.Id == command.Id)
                     .FailureIf($"User with the email '{command.Email}' was not found.")
-                    .AndThen((user) => user.Update(user.Email, user.Name, Convert(command)))
+                    .AndThen((user) => user.Update(command.Name, command.Email, Convert(command)))
                     .Validate(_validator)
                     .Finally(updatedUser => _context.UpdateEntity(updatedUser.Id, updatedUser));
         }
 
         private (Address, Coords) Convert(UpdateUserInfoCommand command)    
-           => (new Address(command.Street, command.Zip, command.City), new Coords(command.Latitude, command.Longitude));      
+           => (new Address(command.Street, command.Zip, command.City), new Coords(command.Longitude, command.Latitude));      
     }
 }

@@ -27,7 +27,7 @@ namespace CLup.Application.Auth
         {
             return await _context.Users.FirstOrDefaultAsync(x => x.UserData.Email == command.Email)
                 .ToResult()
-                .Ensure(user => BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
+                .Ensure(user => user != null && BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
                 .AndThenF(user => _userService.DetermineRole(user))
                 .Finally(_mapper.Map<UserDto>);
         }

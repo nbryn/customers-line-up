@@ -13,6 +13,7 @@ import {Header} from '../../shared/components/Texts';
 import StringUtil from '../../shared/util/StringUtil';
 import {TextField} from '../../shared/components/form/TextField';
 import TextFieldUtil from '../../shared/util/TextFieldUtil';
+import {useAddress} from '../../shared/hooks/useAddress';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useForm} from '../../shared/hooks/useForm';
 
@@ -54,7 +55,7 @@ export const CreateBusinessView: React.FC = () => {
         closes: '',
     };
 
-    const {addressHandler, formHandler} = useForm<BusinessDTO>({
+    const {formHandler} = useForm<BusinessDTO>({
         initialValues: formValues,
         validationSchema: businessValidationSchema,
         onSubmit: (business) => dispatch(createBusiness(business)),
@@ -73,6 +74,8 @@ export const CreateBusinessView: React.FC = () => {
             return newBusiness;
         },
     });
+
+    const addressHandler = useAddress(formHandler);
 
     useEffect(() => {
         (async () => {

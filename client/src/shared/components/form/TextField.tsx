@@ -14,13 +14,11 @@ type Props = {
     id: string;
     label: string | undefined;
     value?: ReactText | undefined;
-    onBlur?: (event: React.FocusEvent) => void;
     helperText?: string | boolean;
     inputProps?: any;
     size?: 'small' | 'medium';
     margin?: 'none' | 'dense' | 'normal';
     type?: TextFieldType;
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     autoFocus?: boolean;
     select?: boolean;
     className?: any;
@@ -32,9 +30,14 @@ type Props = {
     required?: boolean;
     disabled?: boolean;
     step?: number;
+    style?: any
+    setInputRef?: (element: HTMLInputElement) => void;
+    onBlur?: (event: React.FocusEvent) => void;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onClick?: (event?: React.MouseEvent<HTMLParagraphElement>) => void;
 };
 
-export const TextField: React.FC<Props> = (props: Props) => {
+export const TextField = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
     const styles = useStyles();
 
     return (
@@ -47,6 +50,7 @@ export const TextField: React.FC<Props> = (props: Props) => {
             FormHelperTextProps={{className: styles.helperText}}
             fullWidth
             id={props.id}
+            onClick={props.onClick}
             onBlur={props.onBlur}
             onChange={props.onChange}
             label={props.label}
@@ -59,6 +63,8 @@ export const TextField: React.FC<Props> = (props: Props) => {
             error={props.error}
             required={props.required || true}
             disabled={props.disabled || false}
+            inputRef={props.setInputRef}
+            style={props.style}
             autoComplete="off"
             inputProps={{
                 autocomplete: 'new-password',
@@ -71,4 +77,4 @@ export const TextField: React.FC<Props> = (props: Props) => {
             {props.children}
         </MaterialUITextField>
     );
-};
+});

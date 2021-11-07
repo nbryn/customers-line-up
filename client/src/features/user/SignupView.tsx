@@ -11,6 +11,7 @@ import StringUtil from '../../shared/util/StringUtil';
 import {TextField} from '../../shared/components/form/TextField';
 import TextFieldUtil from '../../shared/util/TextFieldUtil';
 import {useAppDispatch} from '../../app/Store';
+import {useAddress} from '../../shared/hooks/useAddress';
 import {useForm} from '../../shared/hooks/useForm';
 import {UserDTO} from './User';
 
@@ -46,7 +47,7 @@ export const SignupView: React.FC = () => {
         password: '',
     };
 
-    const {addressHandler, formHandler} = useForm<UserDTO>({
+    const {formHandler} = useForm<UserDTO>({
         initialValues: formValues,
         validationSchema: signupValidationSchema,
         onSubmit: (data) => dispatch(register(data)),
@@ -60,6 +61,8 @@ export const SignupView: React.FC = () => {
             return user;
         },
     });
+
+    const addressHandler = useAddress(formHandler);
 
     return (
         <>

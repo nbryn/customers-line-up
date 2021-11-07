@@ -1,25 +1,9 @@
 import React from 'react';
 import Autocomplete, {createFilterOptions} from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {makeStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
 import {TextFieldType} from './TextField';
-
-const useStyles = makeStyles((theme) => ({
-    inputRoot: {
-        '&&[class*="MuiOutlinedInput-root"] $input': {
-            margin: 0,
-        },
-    },
-    textField: {
-        width: '60%',
-        textAlign: 'center',
-    },
-    col: {
-        marginBottom: 25,
-    },
-}));
 
 export type ComboBoxOption = {
     label: string;
@@ -31,58 +15,45 @@ export type Props = {
     label: string;
     options: ComboBoxOption[];
     type?: TextFieldType;
-    setFieldValue: (option: ComboBoxOption, formFieldId: string) => void;
-    onBlur?: (event: React.FocusEvent) => void;
     error?: boolean;
     helperText?: string | boolean;
-    style?: any;
+    style?: React.CSSProperties;
     partOfForm?: boolean;
     defaultLabel?: string;
+    setFieldValue: (option: ComboBoxOption, formFieldId: string) => void;
+    onBlur?: (event: React.FocusEvent) => void;
+    setInputRef?: (element: HTMLInputElement) => void;
 };
 
-export const ComboBox: React.FC<Props> = ({
-    id,
-    label,
-    options,
-    style,
-    error,
-    helperText,
-    type,
-    defaultLabel,
-    partOfForm = true,
-    onBlur,
-    setFieldValue,
-}: Props) => {
-    const styles = useStyles();
-
+export const ComboBox = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
     const filterOptions = createFilterOptions<ComboBoxOption>({
-        limit: options[0]?.label === 'Choose zip first' ? 1 : 10,
+        limit: props.options[0]?.label === 'Choose zip first' ? 1 : 10,
         matchFrom: 'start',
     });
 
     return (
         <>
-            {!partOfForm && options.length === 0 ? (
+            {!props.partOfForm && props.options.length === 0 ? (
                 <CircularProgress />
             ) : (
                 <Autocomplete
-                    className={styles.col}
-                    id={id}
+                    id={props.id}
                     filterOptions={filterOptions}
-                    onBlur={onBlur}
+                    onBlur={props.onBlur}
                     onChange={(event: any, newValue: ComboBoxOption | null) => {
-                        setFieldValue(newValue || {label: ''}, id);
+                        props.setFieldValue(newValue || {label: ''}, props.id);
                     }}
-                    options={options}
+                    options={props.options}
                     getOptionLabel={(option: ComboBoxOption) => option.label}
-                    style={style}
+                    style={props.style}
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            error={error}
-                            helperText={helperText}
-                            label={options.length === 0 ? defaultLabel : label}
-                            type={type}
+                            inputRef={props.setInputRef}
+                            error={props.error}
+                            helperText={props.helperText}
+                            label={props.options.length === 0 ? props.defaultLabel : props.label}
+                            type={props.type}
                             required
                             variant="outlined"
                         />
@@ -91,4 +62,4 @@ export const ComboBox: React.FC<Props> = ({
             )}
         </>
     );
-};
+});

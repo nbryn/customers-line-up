@@ -1,16 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {pick} from 'lodash-es';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {ErrorView} from '../../shared/views/ErrorView';
-import {FormCard, FormCardData} from '../../shared/components/card/FormCard';
+import {FormCard} from '../../shared/components/card/FormCard';
 import {Header} from '../../shared/components/Texts';
 import {selectCurrentUser, updateUserInfo} from './userSlice';
-import StringUtil from '../../shared/util/StringUtil';
-import {TextFieldModal} from '../../shared/components/modal/TextFieldModal';
-import TextFieldUtil from '../../shared/util/TextFieldUtil';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
+import {useAddress} from '../../shared/hooks/useAddress';
 import {useForm} from '../../shared/hooks/useForm';
 import {UserDTO} from './User';
 import {userValidationSchema} from './UserValidation';
@@ -43,9 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export const ProfileView: React.FC = () => {
     const styles = useStyles();
     const user = useAppSelector(selectCurrentUser);
-
     const dispatch = useAppDispatch();
-    const [modalKey, setModalKey] = useState('');
 
     if (!user) {
         return <ErrorView />;
@@ -53,17 +49,17 @@ export const ProfileView: React.FC = () => {
 
     const formValues = pick(user, ['name', 'email', 'zip', 'street']) as UserDTO;
 
-    const {addressHandler, formHandler} = useForm<UserDTO>({
+    const {formHandler} = useForm<UserDTO>({
         initialValues: formValues,
         validationSchema: userValidationSchema,
         onSubmit: (updatedUserInfo) => dispatch(updateUserInfo(updatedUserInfo)),
         beforeSubmit: (updatedUser) => {
-            const address = addressHandler.addresses.find((x) => x.zipCity === user.address);
+            const address = addressHandler.addresses.find((x) => x.street === updatedUser.street);
 
-            updatedUser.longitude = address?.longitude;
-            updatedUser.latitude = address?.latitude;
-            updatedUser.city = address?.city ?? '';
-            updatedUser.zip = address?.zip ?? '';
+            updatedUser.longitude = address?.longitude ?? user.longitude;
+            updatedUser.latitude = address?.latitude ?? user.latitude;
+            updatedUser.city = address?.city ?? user.city;
+            updatedUser.zip = address?.zip ?? user.zip;
             updatedUser.role = user.role;
             updatedUser.id = user.id;
 
@@ -71,14 +67,7 @@ export const ProfileView: React.FC = () => {
         },
     });
 
-    const profileData: FormCardData[] = Object.keys(formValues).map((key) => ({
-        key,
-        label: StringUtil.capitalize(key),
-        type: TextFieldUtil.mapKeyToType(key),
-        value: TextFieldUtil.mapKeyToValue(key, formHandler.values, addressHandler.addresses),
-        buttonAction: () => setModalKey(key),
-        buttonText: 'Update',
-    }));
+    const addressHandler = useAddress(formHandler);
 
     return (
         <>
@@ -87,23 +76,16 @@ export const ProfileView: React.FC = () => {
             </Row>
             <Row className={styles.wrapper}>
                 <Col sm={6} lg={6}>
-                    <TextFieldModal
-                        show={modalKey ? true : false}
-                        isComboBox={modalKey === 'zip' || modalKey === 'street'}
-                        streetOptions={addressHandler.getLabels('street')}
-                        zipOptions={addressHandler.getLabels('zip')}
-                        showModal={setModalKey}
-                        textFieldKey={modalKey}
-                        textFieldType={TextFieldUtil.mapKeyToType(modalKey)}
-                        primaryAction={async () => {
-                            formHandler.handleSubmit();
-                            setModalKey('');
-                        }}
-                        initialValue={user[modalKey] as string}
+                    <FormCard
+                        title="User Data"
+                        formData={formValues}
+                        entity={user}
+                        buttonText="Save Changes"
+                        primaryDisabled={!formHandler.isValid}
+                        buttonAction={formHandler.handleSubmit}
                         formHandler={formHandler}
-                        primaryActionText="Save Changes"
+                        addressHandler={addressHandler}
                     />
-                    <FormCard title="User Data" data={profileData} />
                 </Col>
             </Row>
         </>
