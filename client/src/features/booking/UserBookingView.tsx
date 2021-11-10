@@ -28,12 +28,10 @@ export const UserBookingView: React.FC = () => {
         {title: 'id', field: 'id', hidden: true},
         {title: 'timeSlotid', field: 'timeSlotId', hidden: true},
         {title: 'Date', field: 'date'},
-        {title: 'Business & Zip', field: 'business'},
-        {title: 'Address', field: 'address'},
         {title: 'Interval', field: 'interval'},
+        {title: 'Business & Zip', field: 'business'},
+        {title: 'Street', field: 'street'},      
     ];
-
-    console.log(bookings);
 
     const actions = [
         {

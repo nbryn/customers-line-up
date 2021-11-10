@@ -35,9 +35,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CLup.Data\CLup.Data.csproj" />
+        <ProjectReference Include="..\CLup.Infrastructure\CLup.Infrastructure.csproj" />
         <ProjectReference Include="..\CLup.Domain\CLup.Domain.csproj" />
     </ItemGroup>
 
-
+    
 </Project>

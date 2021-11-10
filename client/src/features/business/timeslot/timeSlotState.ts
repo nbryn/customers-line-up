@@ -5,7 +5,7 @@ import {NormalizedEntityState} from '../../../app/AppTypes';
 import {RootState} from '../../../app/Store';
 import {TimeSlotDTO} from './TimeSlot';
 
-const DEFAULT_TIMESLOT_ROUTE = 'business/timeslot';
+const DEFAULT_TIMESLOT_ROUTE = 'business';
 
 export interface TimeSlotState extends NormalizedEntityState<TimeSlotDTO> {
     availableByBusiness: {[businessId: string]: TimeSlotDTO[]};
@@ -38,7 +38,7 @@ export const fetchAvailableTimeSlotsByBusiness = createAsyncThunk(
         const end = tomorrow.toISOString().substring(0, 10);
 
         const timeSlots = await ApiCaller.get<TimeSlotDTO[]>(
-            `${DEFAULT_TIMESLOT_ROUTE}/available?businessid=${businessId}&start=${start}&end=${end}`
+            `query/${DEFAULT_TIMESLOT_ROUTE}/timeslot/available?businessid=${businessId}&start=${start}&end=${end}`
         );
 
         return {businessId, timeSlots};
@@ -49,7 +49,7 @@ export const fetchTimeSlotsByBusiness = createAsyncThunk(
     'timeSlot/byBusiness',
     async (businessId: string) => {
         const timeSlots = await ApiCaller.get<TimeSlotDTO[]>(
-            `${DEFAULT_TIMESLOT_ROUTE}/${businessId}`
+            `query/${DEFAULT_TIMESLOT_ROUTE}/timeslot/${businessId}`
         );
 
         return timeSlots;

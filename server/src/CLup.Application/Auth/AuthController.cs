@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
-using CLup.Application.Extensions;
-using CLup.Application.Users;
+using CLup.Application.Queries.User;
+using CLup.Application.Shared.Extensions;
+using CLup.Application.Shared.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

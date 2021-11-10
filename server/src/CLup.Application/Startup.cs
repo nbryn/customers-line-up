@@ -1,6 +1,6 @@
 using CLup.Application.Auth;
-using CLup.Application.Extensions;
-using CLup.Domain.Users;
+using CLup.Application.Shared.Extensions;
+using CLup.Domain.User;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;

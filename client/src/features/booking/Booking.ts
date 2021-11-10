@@ -2,7 +2,7 @@ import {DTO} from '../../shared/models/General';
 
 export interface BookingDTO extends DTO {
     timeSlotId: string;
-    address: string;
+    street: string;
     business: string;
     longitude: number;
     latitude: number;

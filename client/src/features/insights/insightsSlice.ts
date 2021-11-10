@@ -14,9 +14,9 @@ const initialState: InsightsState = {
 };
 
 export const fetchUserInsights = createAsyncThunk('insights/userBooking', async () => {
-    const bookingInsights = await ApiCaller.get<UserInsights>(`user/${DEFAULT_INSIGHTS_ROUTE}`);
+    const bookingInsights = await ApiCaller.get<UserInsights>(`query/user/${DEFAULT_INSIGHTS_ROUTE}`);
 
-    const businessInsights = await ApiCaller.get<UserInsights>(`business/${DEFAULT_INSIGHTS_ROUTE}`);
+    const businessInsights = await ApiCaller.get<UserInsights>(`query/business/${DEFAULT_INSIGHTS_ROUTE}`);
 
     return {userInsights: {...bookingInsights, ...businessInsights}};
 });

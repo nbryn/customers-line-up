@@ -38,19 +38,19 @@ export const createBusiness = createAsyncThunk('business/create', async (data: B
 });
 
 export const fetchAllBusinesses = createAsyncThunk('business/fetchAll', async () => {
-    const businesses = await ApiCaller.get<BusinessDTO[]>(`${DEFAULT_BUSINESS_ROUTE}/all`);
+    const businesses = await ApiCaller.get<BusinessDTO[]>(`query/${DEFAULT_BUSINESS_ROUTE}/all`);
 
     return businesses;
 });
 
 export const fetchBusinessesByOwner = createAsyncThunk('business/fetchByOwner', async () => {
-    const businesses = ApiCaller.get<BusinessDTO[]>(`${DEFAULT_BUSINESS_ROUTE}/owner`);
+    const businesses = ApiCaller.get<BusinessDTO[]>(`query/${DEFAULT_BUSINESS_ROUTE}/owner`);
 
     return businesses;
 });
 
 export const fetchBusinessesTypes = createAsyncThunk('business/fetchBusinessTypes', async () => {
-    const businessTypes = ApiCaller.get<string[]>(`${DEFAULT_BUSINESS_ROUTE}/types`);
+    const businessTypes = ApiCaller.get<string[]>(`query/${DEFAULT_BUSINESS_ROUTE}/types`);
 
     return businessTypes;
 });

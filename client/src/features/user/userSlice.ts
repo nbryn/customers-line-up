@@ -18,7 +18,7 @@ const initialState: UserState = {
 };
 
 export const fetchUserInfo = createAsyncThunk('user/userInfo', async () => {
-    const user = await ApiCaller.get<UserDTO>(`${DEFAULT_USER_ROUTE}`);
+    const user = await ApiCaller.get<UserDTO>(`query/${DEFAULT_USER_ROUTE}`);
 
     return user;
 });
@@ -27,7 +27,7 @@ export const fetchUsersNotEmployedByBusiness = createAsyncThunk(
     'user/notEmployedByBusiness',
     async (businessId: string) => {
         const notEmployedByBusiness = await ApiCaller.get<NotEmployedByBusiness>(
-            `${DEFAULT_USER_ROUTE}/all/${businessId}`
+            `query/${DEFAULT_USER_ROUTE}/all/${businessId}`
         );
 
         return notEmployedByBusiness;

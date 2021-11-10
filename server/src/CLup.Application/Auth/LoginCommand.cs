@@ -1,5 +1,6 @@
+using CLup.Application.Queries.User;
 using CLup.Application.Shared;
-using CLup.Application.Users;
+using CLup.Application.Shared.Models;
 using MediatR;
 
 namespace CLup.Application.Auth

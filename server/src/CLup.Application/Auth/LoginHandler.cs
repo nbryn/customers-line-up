@@ -1,10 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using CLup.Application.Extensions;
+using CLup.Application.Queries.User;
 using CLup.Application.Shared;
-using CLup.Application.Users;
-using CLup.Data;
+using CLup.Application.Shared.Extensions;
+using CLup.Application.Shared.Models;
+using CLup.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using BC = BCrypt.Net.BCrypt;

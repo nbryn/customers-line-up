@@ -1,11 +1,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using CLup.Application.Extensions;
+using CLup.Application.Queries.User;
 using CLup.Application.Shared;
-using CLup.Application.Users;
-using CLup.Data;
-using CLup.Domain.Users;
+using CLup.Application.Shared.Extensions;
+using CLup.Application.Shared.Models;
+using CLup.Domain.User;
+using CLup.Infrastructure;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

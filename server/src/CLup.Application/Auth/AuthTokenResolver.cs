@@ -1,6 +1,7 @@
 using AutoMapper;
-using CLup.Application.Users;
-using CLup.Domain.Users;
+using CLup.Application.Queries.User;
+using CLup.Application.Shared.Models;
+using CLup.Domain.User;
 
 namespace CLup.Application.Auth
 {

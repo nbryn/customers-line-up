@@ -22,14 +22,14 @@ const initialState: BookingState = {
 export const createBooking = createAsyncThunk<any, any, {state: RootState}>(
     'booking/create',
     async ({id, data}: ThunkParam<string>, {getState}) => {
-        await ApiCaller.post(`${DEFAULT_BOOKING_ROUTE}/${id}?userId=${selectCurrentUser(getState())?.id}&businessId=${data}`);
+        await ApiCaller.post(`user/${DEFAULT_BOOKING_ROUTE}/${id}?userId=${selectCurrentUser(getState())?.id}&businessId=${data}`);
     }
 );
 
 export const deleteBookingForBusiness = createAsyncThunk(
     'booking/deleteForBusiness',
     async ({id, data}: ThunkParam<string>) => {
-        await ApiCaller.remove(`${DEFAULT_BOOKING_ROUTE}/business/${id}?bookingId=${data}`);
+        await ApiCaller.remove(`business/${DEFAULT_BOOKING_ROUTE}/${id}?bookingId=${data}`);
 
         return {businessId: id, bookingId: data};
     }
@@ -38,7 +38,7 @@ export const deleteBookingForBusiness = createAsyncThunk(
 export const deleteBookingForUser = createAsyncThunk<any, any, {state: RootState}>(
     'booking/deleteForUser',
     async (bookingId: string, {getState}) => {
-        await ApiCaller.remove(`${DEFAULT_BOOKING_ROUTE}/user/${bookingId}`);
+        await ApiCaller.remove(`user/${DEFAULT_BOOKING_ROUTE}/${bookingId}`);
 
         return {bookingId, userEmail: selectCurrentUser(getState())?.email};
     }
@@ -48,7 +48,7 @@ export const fetchBookingsByBusiness = createAsyncThunk(
     'booking/byBusiness',
     async (businessId: string) => {
         const bookings = await ApiCaller.get<BookingDTO[]>(
-            `${DEFAULT_BOOKING_ROUTE}/business/${businessId}`
+            `query/business/${DEFAULT_BOOKING_ROUTE}/${businessId}`
         );
 
         return {businessId, bookings};
@@ -59,7 +59,7 @@ export const fetchBookingsByUser = createAsyncThunk<any, any, {state: RootState}
     'booking/byUser',
     async (_: void, {getState}) => {
         const currentUser = selectCurrentUser(getState());
-        const bookings = await ApiCaller.get<BookingDTO[]>(`${DEFAULT_BOOKING_ROUTE}/user/${currentUser?.id}`);
+        const bookings = await ApiCaller.get<BookingDTO[]>(`query/user/${DEFAULT_BOOKING_ROUTE}/${currentUser?.id}`);
 
         return {userEmail: currentUser?.email, bookings};
     }
