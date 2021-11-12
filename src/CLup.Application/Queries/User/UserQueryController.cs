@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CLup.Application.Auth;
-using CLup.Application.Queries.User.Models;
+using CLup.Application.Queries.User.Booking;
+using CLup.Application.Queries.User.General;
+using CLup.Application.Queries.User.Message;
+using CLup.Application.Queries.User.NotEmployed;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Models;
 using MediatR;
@@ -10,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CLup.WebUI.Controllers
+namespace CLup.Application.Queries.User
 {
     [ApiController]
     [Authorize(Policy = Policies.User)]

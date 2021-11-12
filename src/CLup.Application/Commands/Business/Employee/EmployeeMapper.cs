@@ -1,5 +1,5 @@
 using AutoMapper;
-using CLup.Application.Commands.Business.Employee.Models;
+using CLup.Application.Commands.Business.Employee.Create;
 
 namespace CLup.Application.Commands.Business.Employee
 {

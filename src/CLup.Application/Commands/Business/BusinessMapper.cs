@@ -1,5 +1,6 @@
 using AutoMapper;
-using CLup.Application.Commands.Business.Models;
+using CLup.Application.Commands.Business.Create;
+using CLup.Application.Commands.Business.Update;
 using CLup.Domain.Business;
 using CLup.Domain.Shared.ValueObjects;
 

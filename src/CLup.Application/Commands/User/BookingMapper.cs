@@ -1,5 +1,5 @@
 using AutoMapper;
-using CLup.Application.Commands.User.Models;
+using CLup.Application.Commands.User.CreateBooking;
 using CLup.Domain.Booking;
 
 namespace CLup.Application.Commands.User

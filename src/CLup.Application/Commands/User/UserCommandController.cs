@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using CLup.Application.Auth;
-using CLup.Application.Commands.User.Models;
+using CLup.Application.Commands.User.CreateBooking;
+using CLup.Application.Commands.User.Update;
 using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CLup.WebUI.Controllers
+namespace CLup.Application.Commands.User
 {
     [ApiController]
     [Authorize(Policy = Policies.User)]

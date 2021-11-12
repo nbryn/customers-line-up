@@ -1,16 +1,20 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CLup.Application.Auth;
-using CLup.Application.Commands.Business.Employee.Models;
-using CLup.Application.Commands.Business.Models;
-using CLup.Application.Commands.Business.TimeSlot.Models;
+using CLup.Application.Commands.Business.Create;
+using CLup.Application.Commands.Business.DeleteBooking;
+using CLup.Application.Commands.Business.Employee.Create;
+using CLup.Application.Commands.Business.Employee.Delete;
+using CLup.Application.Commands.Business.TimeSlot.Delete;
+using CLup.Application.Commands.Business.TimeSlot.Generate;
+using CLup.Application.Commands.Business.Update;
 using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CLup.WebUI.Controllers
+namespace CLup.Application.Commands.Business
 {
     [ApiController]
     [Authorize(Policy = Policies.User)]

@@ -2,9 +2,12 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CLup.Application.Auth;
+using CLup.Application.Queries.Business.Booking;
 using CLup.Application.Queries.Business.Employee.Models;
-using CLup.Application.Queries.Business.Models;
-using CLup.Application.Queries.Business.TimeSlot.Models;
+using CLup.Application.Queries.Business.General;
+using CLup.Application.Queries.Business.Owner;
+using CLup.Application.Queries.Business.TimeSlot.All;
+using CLup.Application.Queries.Business.TimeSlot.Available;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Models;
 using MediatR;
