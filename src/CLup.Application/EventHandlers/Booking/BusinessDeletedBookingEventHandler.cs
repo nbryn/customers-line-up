@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
 using CLup.Domain.Booking;
-using CLup.Domain.Message;
 using MediatR;
 
 namespace CLup.Application.EventHandlers.Booking
@@ -17,7 +16,7 @@ namespace CLup.Application.EventHandlers.Booking
         public async Task Handle(DomainEventNotification<BusinessDeletedBookingEvent> @event, CancellationToken cancellationToken)
         {
             var domainEvent = @event.DomainEvent;
-            var message = domainEvent.Booking.Business.BookingDeletedMessage(domainEvent.Booking.UserId);
+            var message = domainEvent.Business.BookingDeletedMessage(domainEvent.ReceiverId);
             
             await _context.BusinessMessages.AddAsync(message);
         }

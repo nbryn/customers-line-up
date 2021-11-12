@@ -4,8 +4,14 @@ namespace CLup.Domain.Booking
 {
     public class BusinessDeletedBookingEvent : DomainEvent
     {
-        public Booking Booking { get; }
+        public Business.Business Business { get; }
 
-        public BusinessDeletedBookingEvent(Booking booking) => Booking = booking;
+        public string ReceiverId { get; }
+
+        public BusinessDeletedBookingEvent(Business.Business business, string receiverId)
+        {
+            Business = business;
+            ReceiverId = receiverId;
+        }
     }
 }
