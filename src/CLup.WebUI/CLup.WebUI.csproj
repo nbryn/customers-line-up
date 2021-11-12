@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
+        <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.9" />
+        <!-- <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.0" /> -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.6" />
+        <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9" />
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="3.1.9" />
+        <PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="6.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\CLup.Application\CLup.Application.csproj" />
+        <ProjectReference Include="..\CLup.Infrastructure\CLup.Infrastructure.csproj" />
+        <ProjectReference Include="..\CLup.Domain\CLup.Domain.csproj" />
+    </ItemGroup>
+
+
+</Project>

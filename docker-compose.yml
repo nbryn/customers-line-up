@@ -13,7 +13,7 @@ services:
   server:
     container_name: clup_server
     build:
-      context: server/src/CLup.Application
+      context: src/CLup.WebUI
       dockerfile: Dockerfile
     volumes:
       - ./server/CLup:/app
@@ -27,7 +27,7 @@ services:
   client:
     container_name: clup_client
     build:
-      context: client
+      context: src/CLup.WebUI/Client
       dockerfile: Dockerfile
     environment:
       CHOKIDAR_USEPOLLING: "true"
