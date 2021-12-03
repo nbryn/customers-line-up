@@ -13,4 +13,20 @@ export interface DTO extends Index {
     longitude?: number;
     latitude?: number;
 }
+
+export interface MessageDTO extends DTO {
+    date: string;
+    title: string;
+    content: string
+}
+
+export interface ReceivedMessageDTO extends MessageDTO {
+    senderId: string;
+    sender: string;
+}
+
+export interface SentMessageDTO extends MessageDTO {
+    receiverId: string;
+    receiver: string;
+}
  

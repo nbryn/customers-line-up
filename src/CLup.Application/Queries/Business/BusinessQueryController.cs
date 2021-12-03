@@ -8,6 +8,7 @@ using CLup.Application.Queries.Business.General;
 using CLup.Application.Queries.Business.Owner;
 using CLup.Application.Queries.Business.TimeSlot.All;
 using CLup.Application.Queries.Business.TimeSlot.Available;
+using CLup.Application.Queries.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Models;
 using MediatR;

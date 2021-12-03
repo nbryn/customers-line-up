@@ -96,6 +96,6 @@ export const selectBookingsByBusiness = (businessId: string) => (state: RootStat
     state.bookings.byBusiness[businessId];
 
 export const selectBookingsByUser = (state: RootState) =>
-    state.bookings.byUser[state.users.currentUser!.email];
+    state.bookings.byUser[state.user.current!.email];
 
 export default bookingSlice.reducer;

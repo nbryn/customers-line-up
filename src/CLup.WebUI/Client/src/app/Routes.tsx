@@ -16,6 +16,7 @@ import {ErrorView} from '../shared/views/ErrorView';
 import {NotFoundView} from '../shared/views/NotFoundView';
 import {HomeView} from '../features/user/HomeView';
 import {ProfileView} from '../features/user/ProfileView';
+import {UserMessageView} from '../features/user/UserMessageView';
 
 export const Routes: React.FC = () => {
     return (
@@ -24,6 +25,7 @@ export const Routes: React.FC = () => {
             <Route exact path="/user/profile" component={ProfileView} />
             <Route exact path="/user/bookings" component={UserBookingView} />
             <Route exact path="/user/business" component={AllBusinessesView} />
+            <Route exact path="/user/messages" component={UserMessageView} />
 
             <Route exact path="/booking/new" component={CreateBookingView} />
             <Route exact path="/business/new" component={CreateBusinessView} />

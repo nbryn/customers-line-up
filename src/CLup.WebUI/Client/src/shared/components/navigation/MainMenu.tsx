@@ -39,8 +39,8 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     listItem: {
-        marginTop: 25,
-        marginBottom: 25,
+        marginTop: 15,
+        marginBottom: 15,
     },
     listItemIcon: {
         marginRight: -10,
@@ -72,7 +72,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
             path: '/',
         },
         {
-            label: 'All Businesses',
+            label: 'Find Business',
             icon: <DashboardIcon />,
             path: '/user/business',
         },
@@ -80,6 +80,11 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
             label: 'My Bookings',
             icon: <DashboardIcon />,
             path: '/user/bookings',
+        },
+        {
+            label: 'Messages',
+            icon: <DashboardIcon />,
+            path: '/user/messages',
         },
         {
             label: 'Profile',
@@ -113,6 +118,11 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
             label: 'Employees',
             icon: <DashboardIcon />,
             path: '/business/employees',
+        },
+        {
+            label: 'Messages',
+            icon: <DashboardIcon />,
+            path: '/business/messages',
         },
     ];
 

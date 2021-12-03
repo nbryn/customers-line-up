@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using CLup.Domain.Business;
-using CLup.Domain.User;
+using CLup.Application.Queries.Shared;
 
 namespace CLup.Application.Queries.User.Message
 {
@@ -8,8 +7,8 @@ namespace CLup.Application.Queries.User.Message
     {
         public string UserId { get; set; }
         
-        public IList<UserMessage> SentMessages { get; set; }
+        public IList<SentMessageDto> SentMessages { get; set; }
 
-        public IList<BusinessMessage> ReceivedMessages { get; set; }
+        public IList<ReceivedMessageDto> ReceivedMessages { get; set; }
     }
 }

@@ -23,6 +23,8 @@ namespace CLup.Infrastructure
             services.AddScoped<ICLupDbContext, CLupDbContext>();
             services.AddScoped<IQueryDbContext, QueryDbContext>();
             services.AddScoped<IDomainEventService, DomainEventService>();
+            services.AddTransient<Seeder>();
+
             ConfigureDb(services, configuration, environment);
 
             return services;
@@ -33,7 +35,6 @@ namespace CLup.Infrastructure
             IConfiguration configuration,
             IWebHostEnvironment environment)
         {
-            services.AddTransient<Seeder>();
 
             if (environment.IsDevelopment())
             {

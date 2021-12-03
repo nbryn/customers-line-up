@@ -2,7 +2,7 @@ using System.Linq;
 using AutoMapper;
 using CLup.Domain.Booking;
 
-namespace CLup.Application.Shared.Models.Mapping
+namespace CLup.Application.Queries.Shared
 {
     public class BookingMapper : Profile
     {

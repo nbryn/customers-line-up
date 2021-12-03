@@ -2,25 +2,33 @@ import Cookies from 'js-cookie';
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../shared/api/ApiCaller';
-import {LoginDTO, NotEmployedByBusiness, UserDTO} from './User';
+import {LoginDTO, MessagesResponse, NotEmployedByBusiness, UserDTO} from './User';
 import {RootState} from '../../app/Store';
 
 const DEFAULT_USER_ROUTE = 'user';
 
 export interface UserState {
     notEmployedByBusiness: {[businessId: string]: UserDTO[]};
-    currentUser: UserDTO | null;
+    current: UserDTO | null;
+    messages: MessagesResponse | null;
 }
 
 const initialState: UserState = {
     notEmployedByBusiness: {},
-    currentUser: null,
+    current: null,
+    messages: null,
 };
 
 export const fetchUserInfo = createAsyncThunk('user/userInfo', async () => {
     const user = await ApiCaller.get<UserDTO>(`query/${DEFAULT_USER_ROUTE}`);
 
     return user;
+});
+
+export const fetchUserMessages = createAsyncThunk('user/messages', async (userId: string) => {
+    const messages = await ApiCaller.get<MessagesResponse>(`query/${DEFAULT_USER_ROUTE}/${userId}/messages`);
+
+    return messages;
 });
 
 export const fetchUsersNotEmployedByBusiness = createAsyncThunk(
@@ -57,34 +65,40 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         clearCurrentUser: (state) => {
-            state.currentUser = null;
+            state.current = null;
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchUsersNotEmployedByBusiness.fulfilled, (state, action) => {
-            state.notEmployedByBusiness[action.payload.businessId] = action.payload.users;
-        })
+        builder
+            .addCase(fetchUsersNotEmployedByBusiness.fulfilled, (state, action) => {
+                state.notEmployedByBusiness[action.payload.businessId] = action.payload.users;
+            })
 
-        .addCase(fetchUserInfo.fulfilled, (state, action) => {
-            state.currentUser = action.payload;
-        })
+            .addCase(fetchUserInfo.fulfilled, (state, action) => {
+                state.current = action.payload;
+            })
 
-        .addCase(updateUserInfo.fulfilled, (state, action) => {
-            state.currentUser = action.payload;
-        })
+            .addCase(fetchUserMessages.fulfilled, (state, action) => {
+                state.messages = action.payload;
+            })
 
-        .addMatcher(isAnyOf(login.fulfilled, register.fulfilled), (state, action) => {
-            state.currentUser = action.payload;
-            Cookies.set('access_token', action.payload.token!);
-        });
+            .addCase(updateUserInfo.fulfilled, (state, action) => {
+                state.current = action.payload;
+            })
+
+            .addMatcher(isAnyOf(login.fulfilled, register.fulfilled), (state, action) => {
+                state.current = action.payload;
+                Cookies.set('access_token', action.payload.token!);
+            });
     },
 });
 
 export const {clearCurrentUser} = userSlice.actions;
 
 export const selectUsersNotEmployedByBusiness = (businessId: string) => (state: RootState) =>
-    state.users.notEmployedByBusiness[businessId] ?? null;
+    state.user.notEmployedByBusiness[businessId] ?? null;
 
-export const selectCurrentUser = (state: RootState) => state.users.currentUser;
+export const selectCurrentUser = (state: RootState) => state.user.current;
+export const selectUserMessages = (state: RootState) => state.user.messages;
 
 export default userSlice.reducer;

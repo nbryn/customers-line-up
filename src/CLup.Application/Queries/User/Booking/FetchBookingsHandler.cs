@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using CLup.Application.Shared.Interfaces;
-using CLup.Application.Shared.Models;
+using CLup.Application.Queries.Shared;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +31,6 @@ namespace CLup.Application.Queries.User.Booking
                                     .ThenInclude(x => x.Business)
                                     .Where(x => x.UserId == query.UserId)
                                     .OrderBy(x => x.TimeSlot.Start)
-                                    .AsNoTracking()
                                     .ToListAsync();
 
             return bookings.Select(_mapper.Map<BookingDto>).ToList();

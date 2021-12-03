@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using CLup.Application.Auth;
+using CLup.Application.Queries.Shared;
 using CLup.Application.Queries.User.Booking;
 using CLup.Application.Queries.User.General;
 using CLup.Application.Queries.User.Message;
@@ -59,12 +60,11 @@ namespace CLup.Application.Queries.User
         }
         
         [Route("{userId}/messages")]
-        [HttpPut]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FetchMessagesResponse))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchMessages([FromRoute] FetchMessagesQuery query)
         {
-            query.UserEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var result = await _mediator.Send(query);
 
             return this.CreateActionResult(result);

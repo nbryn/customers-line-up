@@ -1,4 +1,4 @@
-namespace CLup.Application.Shared.Models
+namespace CLup.Application.Queries.Shared
 {
     public class BookingDto
     {

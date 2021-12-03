@@ -6,7 +6,7 @@ using AutoMapper;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
-using CLup.Application.Shared.Models;
+using CLup.Application.Queries.Shared;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

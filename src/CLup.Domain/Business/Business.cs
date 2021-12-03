@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using CLup.Domain.Message;
 using CLup.Domain.Shared;
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.User;
+
+using TimeSpan = CLup.Domain.Shared.ValueObjects.TimeSpan;
 
 namespace CLup.Domain.Business
 {
@@ -62,6 +65,7 @@ namespace CLup.Domain.Business
             var content = $"Your booking at {Name} was deleted.";
             var messageData = new MessageData("Booking Deleted", content);
             var message = new BusinessMessage(Id, receiverId, messageData, MessageType.BookingDeleted);
+            message.CreatedAt = DateTime.Now;
 
             return message;
         }

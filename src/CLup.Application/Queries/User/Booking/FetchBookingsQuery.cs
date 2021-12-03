@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using CLup.Application.Shared.Models;
+using CLup.Application.Queries.Shared;
 using MediatR;
 
 namespace CLup.Application.Queries.User.Booking

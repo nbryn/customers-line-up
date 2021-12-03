@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace CLup.Application.Shared.Models.Validation
+namespace CLup.Application.Queries.Shared
 {
     public class BookingValidator : AbstractValidator<BookingDto>
     {

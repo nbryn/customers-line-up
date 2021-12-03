@@ -54,7 +54,8 @@ export const CreateBookingView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Book Time" clickable color="primary" />,
             onClick: async (event: any, rowData: TimeSlotDTO) => {
-                dispatch(createBooking(rowData.id));
+                console.log(rowData);
+                dispatch(createBooking({id: rowData.id, data: rowData.businessId}));
             },
         },
     ];

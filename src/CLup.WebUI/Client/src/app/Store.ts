@@ -13,7 +13,7 @@ export const store = configureStore({
         bookings: bookingReducer,
         businesses: businessReducer,
         insights: insightsReducer,
-        users: userReducer,
+        user: userReducer,
     },
 });
 
