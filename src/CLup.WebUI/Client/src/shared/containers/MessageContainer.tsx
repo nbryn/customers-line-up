@@ -1,15 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
+import {DialogModal} from '../../shared/components/modal/DialogModal';
 import {Header} from '../../shared/components/Texts';
-import {MessageDTO} from '../models/General';
-import {MessagesResponse} from '../../features/user/User';
+import {MessageDTO, MessageResponse} from '../models/General';
 import StringUtil from '../util/StringUtil';
 import {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
-
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -25,11 +24,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-    messageResponse: MessagesResponse | null;
+    messageResponse: MessageResponse | null;
     fetchData: () => void;
 };
 
-const getMessages = (sent: boolean, messageResponse: MessagesResponse | null) => {
+const getMessages = (sent: boolean, messageResponse: MessageResponse | null) => {
     if (!messageResponse) return [];
     if (sent) return messageResponse.sentMessages;
 
@@ -38,7 +37,7 @@ const getMessages = (sent: boolean, messageResponse: MessagesResponse | null) =>
 
 const getTitle = (sent: boolean, tableColumn = true, capitalize = true) => {
     if (tableColumn) {
-        const result = sent ? "receiver" : 'sender';
+        const result = sent ? 'receiver' : 'sender';
 
         return capitalize ? StringUtil.capitalize(result) : result;
     }
@@ -48,7 +47,24 @@ const getTitle = (sent: boolean, tableColumn = true, capitalize = true) => {
 
 export const MessageContainer: React.FC<Props> = ({messageResponse, fetchData}: Props) => {
     const styles = useStyles();
+    const [showDialog, setShowDialog] = useState(false);
+    const [replyMode, setReplyMode] = useState(false);
+    const [newMessageContent, setNewMessageContent] = useState('');
+
+    const [selectedMessage, setSelectedMessage] = useState<MessageDTO>();
     const [showSentMessages, setShowSentMessages] = useState(false);
+
+    const handleSubmit = () => {
+        if (replyMode) {
+            // Send message
+        }
+
+        setReplyMode(!replyMode);
+    };
+
+    useEffect(() => {
+        setReplyMode(false);
+    }, [showDialog]);
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -62,7 +78,8 @@ export const MessageContainer: React.FC<Props> = ({messageResponse, fetchData}: 
             icon: () => <Chip size="small" label="Open" clickable color="primary" />,
             tooltip: 'Open Message',
             onClick: (event: any, message: MessageDTO) => {
-                console.log('Open');
+                setSelectedMessage(message);
+                setShowDialog(true);
             },
         },
         {
@@ -82,6 +99,14 @@ export const MessageContainer: React.FC<Props> = ({messageResponse, fetchData}: 
 
             <Row className={styles.row}>
                 <Col sm={6} md={8} xl={12}>
+                    <DialogModal
+                        show={showDialog}
+                        replyMode={replyMode}
+                        title={replyMode ? 'Send Message' : selectedMessage?.title ?? ''}
+                        text={selectedMessage?.content}
+                        onSubmit={handleSubmit}
+                        close={() => setShowDialog(false)}
+                    />
                     <TableContainer
                         actions={actions}
                         columns={columns}

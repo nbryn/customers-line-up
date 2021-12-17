@@ -4,9 +4,9 @@ export interface Index {
 export interface DTO extends Index {
     [key: string]: string | number | undefined;
     id: string;
- }
+}
 
- export interface HasAddress extends Index {
+export interface HasAddress extends Index {
     street: string;
     zip: string;
     city?: string;
@@ -17,7 +17,7 @@ export interface DTO extends Index {
 export interface MessageDTO extends DTO {
     date: string;
     title: string;
-    content: string
+    content: string;
 }
 
 export interface ReceivedMessageDTO extends MessageDTO {
@@ -29,4 +29,8 @@ export interface SentMessageDTO extends MessageDTO {
     receiverId: string;
     receiver: string;
 }
- 
+
+export interface MessageResponse {
+    sentMessages: SentMessageDTO[];
+    receivedMessages: ReceivedMessageDTO[];
+}

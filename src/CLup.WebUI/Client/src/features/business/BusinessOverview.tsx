@@ -30,7 +30,6 @@ export const BusinessOverview: React.FC = () => {
 
     const apiState = useAppSelector(selectApiState);
     const businesses = useAppSelector(selectBusinessesByOwner);
-
     const pathInfo: PathInfo = PathUtil.getPathAndTextFromURL(window.location.pathname);
 
     useEffect(() => {

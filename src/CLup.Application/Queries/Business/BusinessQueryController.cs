@@ -5,6 +5,7 @@ using CLup.Application.Auth;
 using CLup.Application.Queries.Business.Booking;
 using CLup.Application.Queries.Business.Employee.Models;
 using CLup.Application.Queries.Business.General;
+using CLup.Application.Queries.Business.Message;
 using CLup.Application.Queries.Business.Owner;
 using CLup.Application.Queries.Business.TimeSlot.All;
 using CLup.Application.Queries.Business.TimeSlot.Available;
@@ -98,6 +99,18 @@ namespace CLup.Application.Queries.Business
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAvailableTimeSlots([FromQuery] AvailableTimeSlotsByBusinessQuery query)
         {
+            var result = await _mediator.Send(query);
+
+            return this.CreateActionResult(result);
+        }
+
+        [Route("{businessId}/messages")]
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FetchMessagesResponse))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> FetchMessages([FromRoute] FetchMessagesQuery query)
+        {
+            query.UserEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var result = await _mediator.Send(query);
 
             return this.CreateActionResult(result);

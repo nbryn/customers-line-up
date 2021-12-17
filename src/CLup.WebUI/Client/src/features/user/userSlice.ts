@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../shared/api/ApiCaller';
-import {LoginDTO, MessagesResponse, NotEmployedByBusiness, UserDTO} from './User';
+import {LoginDTO, UserMessageResponse, NotEmployedByBusiness, UserDTO} from './User';
 import {RootState} from '../../app/Store';
 
 const DEFAULT_USER_ROUTE = 'user';
@@ -10,7 +10,7 @@ const DEFAULT_USER_ROUTE = 'user';
 export interface UserState {
     notEmployedByBusiness: {[businessId: string]: UserDTO[]};
     current: UserDTO | null;
-    messages: MessagesResponse | null;
+    messages: UserMessageResponse | null;
 }
 
 const initialState: UserState = {
@@ -26,7 +26,7 @@ export const fetchUserInfo = createAsyncThunk('user/userInfo', async () => {
 });
 
 export const fetchUserMessages = createAsyncThunk('user/messages', async (userId: string) => {
-    const messages = await ApiCaller.get<MessagesResponse>(`query/${DEFAULT_USER_ROUTE}/${userId}/messages`);
+    const messages = await ApiCaller.get<UserMessageResponse>(`query/${DEFAULT_USER_ROUTE}/${userId}/messages`);
 
     return messages;
 });

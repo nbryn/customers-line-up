@@ -1,4 +1,4 @@
-import {DTO, HasAddress} from '../../shared/models/General';
+import {DTO, HasAddress, MessageResponse} from '../../shared/models/General';
 import {Address} from '../../shared/services/AddressService';
 
 export interface BusinessDTO extends DTO, HasAddress {
@@ -17,6 +17,10 @@ export type BusinessDataDTO = {
     numberOfTimeSlots: number;
     numberOfEmployees?: number;
 };
+
+export interface BusinessMessageResponse extends MessageResponse {
+    businessId: string;
+}
 
 export function updateBusiness(
     updatedBusiness: BusinessDTO,

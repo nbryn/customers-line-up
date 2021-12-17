@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import BsModal from 'react-bootstrap/Modal';
+import BootModal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -20,7 +20,7 @@ type Props = {
     children?: ReactNode;
 };
 
-export const Modal: React.FC<Props> = ({
+export const BsModal: React.FC<Props> = ({
     show,
     title,
     text,
@@ -34,18 +34,18 @@ export const Modal: React.FC<Props> = ({
 
     return (
         <>
-            <BsModal className={styles.modal} show={show} onHide={secondaryAction}>
-                <BsModal.Dialog>
-                    <BsModal.Header>
-                        <BsModal.Title>{title}</BsModal.Title>
-                    </BsModal.Header>
+            <BootModal className={styles.modal} show={show} onHide={secondaryAction}>
+                <BootModal.Dialog>
+                    <BootModal.Header>
+                        <BootModal.Title>{title}</BootModal.Title>
+                    </BootModal.Header>
 
-                    <BsModal.Body>
+                    <BootModal.Body>
                         <p>{text}</p>
                         {children}
-                    </BsModal.Body>
+                    </BootModal.Body>
 
-                    <BsModal.Footer>
+                    <BootModal.Footer>
                         <Button variant="secondary" onClick={secondaryAction}>
                             Close
                         </Button>
@@ -58,9 +58,9 @@ export const Modal: React.FC<Props> = ({
                                 {primaryActionText}
                             </Button>
                         )}
-                    </BsModal.Footer>
-                </BsModal.Dialog>
-            </BsModal>
+                    </BootModal.Footer>
+                </BootModal.Dialog>
+            </BootModal>
         </>
     );
 };

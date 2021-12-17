@@ -1,60 +1,62 @@
 export type PathInfo = {
-   primaryPath: string;
-   primaryButtonText: string;
-   secondaryPath?: string;
-   secondaryButtonText?: string;
+    primaryPath: string;
+    primaryButtonText: string;
+    secondaryPath?: string;
+    secondaryButtonText?: string;
 };
 
 function getPathAndTextFromURL(path: string): PathInfo {
-   const endOfPath = path.substring(path.lastIndexOf('/') + 1);
-   const primaryPath = getPrimaryPath(endOfPath);
-   const primaryButtonText = getPrimaryButtonText(endOfPath);
+    const endOfPath = path.substring(path.lastIndexOf('/') + 1);
+    const primaryPath = getPrimaryPath(endOfPath);
+    const primaryButtonText = getPrimaryButtonText(endOfPath);
 
-   const secondaryPath = getSecondaryPath(endOfPath);
-   const secondaryButtonText = getSecondaryButtonText(endOfPath);
+    const secondaryPath = getSecondaryPath(endOfPath);
+    const secondaryButtonText = getSecondaryButtonText(endOfPath);
 
-   return {
-      primaryPath,
-      primaryButtonText,
-      secondaryPath,
-      secondaryButtonText,
-   };
+    return {
+        primaryPath,
+        primaryButtonText,
+        secondaryPath,
+        secondaryButtonText,
+    };
 }
 
 function getPrimaryPath(path: string): string {
-   const newPath = path === 'business' ? 'manage' : path + '/manage';
+    const newPath = path === 'business' ? 'manage' : path + '/manage';
 
-   return newPath;
+    return newPath;
 }
 
 function getPrimaryButtonText(path: string): string {
-   switch (path) {
-      case 'business':
-         return 'Edit Info';
-      case 'bookings':
-         return 'Manage Bookings';
-      case 'timeslots':
-         return 'Manage Time Slots';
-      case 'employees':
-         return 'Manage Employees';
-      default:
-         return '';
-   }
+    switch (path) {
+        case 'business':
+            return 'Edit Info';
+        case 'bookings':
+            return 'Manage Bookings';
+        case 'timeslots':
+            return 'Manage Time Slots';
+        case 'employees':
+            return 'Manage Employees';
+        case 'messages':
+            return 'Manage Messages';
+        default:
+            return '';
+    }
 }
 
 function getSecondaryPath(path: string): string {
-   if (path === 'timeslots' || path === 'employees') return path + '/new';
+    if (path === 'timeslots' || path === 'employees') return path + '/new';
 
-   return '';
+    return '';
 }
 
 function getSecondaryButtonText(path: string): string {
-   if (path === 'timeslots') return 'Generate Time Slots';
-   if (path === 'employees') return 'New Employee';
+    if (path === 'timeslots') return 'Generate Time Slots';
+    if (path === 'employees') return 'New Employee';
 
-   return '';
+    return '';
 }
 
 export default {
-   getPathAndTextFromURL,
+    getPathAndTextFromURL,
 };

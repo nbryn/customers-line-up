@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../shared/api/ApiCaller';
-import {BusinessDTO} from './Business';
+import {BusinessDTO, BusinessMessageResponse} from './Business';
 import {EmployeeDTO} from './employee/Employee';
 import {NormalizedEntityState} from '../../app/AppTypes';
 import {RootState} from '../../app/Store';
@@ -22,6 +22,7 @@ interface BusinessState extends NormalizedEntityState<BusinessDTO> {
     currentBusiness: BusinessDTO | null;
     employees: typeof initialEmployeeState
     timeSlots: TimeSlotState;
+    messages: BusinessMessageResponse | null;
 }
 
 const initialState: BusinessState = {
@@ -29,12 +30,19 @@ const initialState: BusinessState = {
     allIds: [],
     businessTypes: [],
     currentBusiness: null,
+    messages: null,
     employees: initialEmployeeState,
     timeSlots: initialTimeSlotState,
 };
 
 export const createBusiness = createAsyncThunk('business/create', async (data: BusinessDTO) => {
     await ApiCaller.post(`${DEFAULT_BUSINESS_ROUTE}`, data);
+});
+
+export const fetchBusinessMessages = createAsyncThunk('business/messages', async (businessId: string) => {
+    const messages = await ApiCaller.get<BusinessMessageResponse>(`query/${DEFAULT_BUSINESS_ROUTE}/${businessId}/messages`);
+
+    return messages;
 });
 
 export const fetchAllBusinesses = createAsyncThunk('business/fetchAll', async () => {
@@ -112,6 +120,10 @@ export const businessSlice = createSlice({
             .addCase(deleteEmployee.fulfilled, (state, action) => {
                 delete state.employees.byId[action.payload];
             })
+
+            .addCase(fetchBusinessMessages.fulfilled, (state, action) => {
+                state.messages = action.payload;
+            })
     
             .addCase(
                 fetchEmployeesByBusiness.fulfilled,
@@ -133,5 +145,7 @@ export const selectBusinessesByOwner = (state: RootState) =>
     selectAllBusinesses(state).filter((b) => b.ownerEmail === selectCurrentUser(state)?.email);
 
 export const selectBusinessTypes = (state: RootState) => state.businesses.businessTypes;
+
+export const selectBusinessMessages = (state: RootState) => state.businesses.messages;
 
 export default businessSlice.reducer;

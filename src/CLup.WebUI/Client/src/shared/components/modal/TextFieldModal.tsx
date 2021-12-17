@@ -5,7 +5,7 @@ import {MenuItem} from '@material-ui/core';
 
 import {ComboBox, ComboBoxOption} from '../form/ComboBox';
 import {FormHandler} from '../../hooks/useForm';
-import {Modal} from './Modal';
+import {BsModal} from './BsModal';
 import {TextField, TextFieldType} from '../form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
 
@@ -47,7 +47,7 @@ export const TextFieldModal: React.FC<Props> = ({
     const [updating, setUpdating] = useState(false);
 
     return (
-        <Modal
+        <BsModal
             show={show}
             title={`Update ${TextFieldUtil.mapKeyToLabel(textFieldKey, true)}`}
             primaryActionText={primaryActionText}
@@ -117,6 +117,6 @@ export const TextFieldModal: React.FC<Props> = ({
                         ))}
                 </TextField>
             )}
-        </Modal>
+        </BsModal>
     );
 };

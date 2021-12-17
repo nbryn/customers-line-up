@@ -1,4 +1,8 @@
-import {HasAddress, Index, ReceivedMessageDTO, SentMessageDTO} from '../../shared/models/General';
+import {
+    HasAddress,
+    Index,
+    MessageResponse,
+} from '../../shared/models/General';
 
 export interface UserDTO extends HasAddress {
     [key: string]: string | number | undefined;
@@ -20,8 +24,6 @@ export type NotEmployedByBusiness = {
     users: UserDTO[];
 };
 
-export type MessagesResponse = {
+export interface UserMessageResponse extends MessageResponse {
     userId: string;
-    sentMessages: SentMessageDTO[];
-    receivedMessages: ReceivedMessageDTO[];
-};
+}

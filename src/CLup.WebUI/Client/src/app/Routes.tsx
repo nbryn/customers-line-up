@@ -17,6 +17,7 @@ import {NotFoundView} from '../shared/views/NotFoundView';
 import {HomeView} from '../features/user/HomeView';
 import {ProfileView} from '../features/user/ProfileView';
 import {UserMessageView} from '../features/user/UserMessageView';
+import {BusinessMessageView} from '../features/business/BusinessMessageView';
 
 export const Routes: React.FC = () => {
     return (
@@ -34,13 +35,15 @@ export const Routes: React.FC = () => {
             <Route exact path="/business/bookings" component={BusinessOverview} />
             <Route exact path="/business/timeslots" component={BusinessOverview} />
             <Route exact path="/business/employees" component={BusinessOverview} />
+            <Route exact path="/business/messages" component={BusinessOverview} />
             <Route exact path="/business/employees/new" component={CreateEmployeeView} />
             <Route exact path="/business/employees/manage" component={EmployeeView} />
             <Route exact path="/business/bookings/manage" component={BusinessBookingView} />
             <Route exact path="/business/timeslots/manage" component={TimeSlotView} />
+            <Route exact path="/business/messages/manage" component={BusinessMessageView} />
             <Route exact path="/business/timeslots/new" component={GenerateTimeSlotsView} />
             <Route exact path="/business/manage" component={BusinessProfileView} />
-
+            
             <Route exact path="/error" component={ErrorView} />
             <Route path="*" component={NotFoundView} />
         </Switch>

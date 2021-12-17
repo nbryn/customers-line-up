@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {Map} from '../map/Map.js';
-import {Modal} from './Modal';
+import {BsModal} from './BsModal';
 
 export type Marker = Array<number[] | number>;
 
@@ -28,8 +28,8 @@ export const MapModal: React.FC<MapModalProps> = ({
   markers,
 }: MapModalProps) => {
   return (
-    <Modal show={visible} secondaryAction={() => setVisible!()} title="Map">
+    <BsModal show={visible} secondaryAction={() => setVisible!()} title="Map">
       <Map center={center} markers={markers} zoom={zoom} />
-    </Modal>
+    </BsModal>
   );
 };
