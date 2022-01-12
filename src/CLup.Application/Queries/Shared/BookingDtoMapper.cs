@@ -4,9 +4,9 @@ using CLup.Domain.Booking;
 
 namespace CLup.Application.Queries.Shared
 {
-    public class BookingMapper : Profile
+    public class BookingDtoMapper : Profile
     {
-        public BookingMapper()
+        public BookingDtoMapper()
         {
             CreateMap<Booking, BookingDto>()
                 .ForMember(b => b.Business, s => s.MapFrom(

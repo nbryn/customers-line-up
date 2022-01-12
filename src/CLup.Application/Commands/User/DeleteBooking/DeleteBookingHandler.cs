@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Commands.User.DeleteBooking
 {
-    public class DeleteBookingHandler : IRequestHandler<DeleteBookingCommand, Result>
+    public class DeleteBookingHandler : IRequestHandler<UserDeleteBookingCommand, Result>
     {
         private readonly ICLupDbContext _context;
 
         public DeleteBookingHandler(ICLupDbContext context) => _context = context;
 
-        public async Task<Result> Handle(DeleteBookingCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UserDeleteBookingCommand command, CancellationToken cancellationToken)
         {
             return await _context.Bookings.Include(b => b.User).Include(b => b.Business).Include(b => b.TimeSlot).FirstOrDefaultAsync(x => x.Id == command.BookingId)
                      .FailureIf("Booking not found.")

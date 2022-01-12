@@ -17,10 +17,19 @@ namespace CLup.Infrastructure.Persistence.EntityConfigurations
             {
                 md.Property(md => md.Title)
                     .HasColumnName("Title");
-                    
+
                 md.Property(md => md.Content)
                     .HasColumnName("Content");
             });
+
+            userMessageConfiguration.OwnsOne(m => m.Metadata, metaData =>
+           {
+               metaData.Property(md => md.DeletedBySender)
+                   .HasColumnName("DeletedBySender");
+
+               metaData.Property(md => md.DeletedByReceiver)
+                   .HasColumnName("DeletedByReceiver");
+           });
 
             userMessageConfiguration
                     .Property(b => b.Type)

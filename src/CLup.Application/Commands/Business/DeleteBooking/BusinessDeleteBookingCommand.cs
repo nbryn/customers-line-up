@@ -3,7 +3,7 @@ using MediatR;
 
 namespace CLup.Application.Commands.Business.DeleteBooking
 {
-    public class DeleteBookingCommand : IRequest<Result>
+    public class BusinessDeleteBookingCommand : IRequest<Result>
     {
         public string OwnerEmail { get; set; }
 
@@ -11,7 +11,7 @@ namespace CLup.Application.Commands.Business.DeleteBooking
         
         public string BusinessId { get; set; }
 
-        public DeleteBookingCommand(
+        public BusinessDeleteBookingCommand(
             string ownerEmail,
             string bookingId,
             string businessId)

@@ -1,3 +1,4 @@
+using System;
 using CLup.Domain.Shared;
 
 namespace CLup.Domain.Message
@@ -18,17 +19,22 @@ namespace CLup.Domain.Message
 
         public TReceiver Receiver { get; }
 
+        public MessageMetadata Metadata { get; private set; }
+
         protected Message(
             string senderId,
             string receiverId,
             MessageData messageData,
-            MessageType type)
+            MessageType type,
+            MessageMetadata metadata)
             : base()
         {
             SenderId = senderId;
             ReceiverId = receiverId;
             MessageData = messageData;
             Type = type;
+            Metadata = metadata;
+            CreatedAt = DateTime.Now;
         }
     }
 }

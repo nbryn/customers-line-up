@@ -4,7 +4,7 @@ import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useSelector} from 'react-redux';
 
-import {deleteEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} from './employeeState';
+import {removeEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} from './employeeState';
 import {EmployeeDTO} from './Employee';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
@@ -45,7 +45,7 @@ export const EmployeeView: React.FC = () => {
             icon: () => <Chip size="small" label="Remove Employee" clickable color="primary" />,
             onClick: async (event: any, employee: EmployeeDTO) => {
                 dispatch(
-                    deleteEmployee({
+                    removeEmployee({
                         id: employee.businessId!,
                         data: employee.privateEmail!,
                     })

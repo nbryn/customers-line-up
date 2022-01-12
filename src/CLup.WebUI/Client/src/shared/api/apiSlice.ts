@@ -17,7 +17,7 @@ import {
 } from '../../features/business/businessSlice';
 import {
     createEmployee,
-    deleteEmployee,
+    removeEmployee,
     fetchEmployeesByBusiness,
 } from '../../features/business/employee/employeeState';
 import {fetchUserInsights} from '../../features/insights/insightsSlice';
@@ -33,6 +33,7 @@ import {
     fetchUserInfo,
     fetchUserMessages,
     fetchUsersNotEmployedByBusiness,
+    sendUserMessage,
     updateUserInfo,
 } from '../../features/user/userSlice';
 import {RootState} from '../../app/Store';
@@ -49,8 +50,12 @@ const EMPLOYEE_CREATED_MSG = 'Employee Created - Go to my employees to see your 
 const TIMESLOT_DELETED_MSG = 'Time slot Deleted';
 const TIMESLOTS_GENERATED_MSG = 'Success! Press see time slots to manage time slots.';
 
+const MESSAGE_SEND = 'Message successfully send'
+
 const USER_UPDATED_MSG = 'Info Updated.';
 const LOGIN_FAILED_MSG = 'Wrong Email/Password';
+
+
 
 export type ToastInfo = {
     buttonText: string;
@@ -154,6 +159,12 @@ export const apiSlice = createSlice({
                 state.message = BUSINESS_DELETED_BOOKING_MSG;
             })
 
+            .addCase(sendUserMessage.fulfilled, (state) => {
+                state.loading = false;
+                state.error = false;
+                state.message = MESSAGE_SEND;
+            })
+
             .addMatcher(
                 isAnyOf(
                     fetchBookingsByUser.fulfilled,
@@ -162,7 +173,7 @@ export const apiSlice = createSlice({
                     fetchBusinessesByOwner.fulfilled,
                     fetchBusinessMessages.fulfilled,
                     fetchBusinessesTypes.fulfilled,
-                    deleteEmployee.fulfilled,
+                    removeEmployee.fulfilled,
                     fetchEmployeesByBusiness.fulfilled,
                     fetchUserInsights.fulfilled,
                     fetchAvailableTimeSlotsByBusiness.fulfilled,
@@ -194,7 +205,7 @@ export const apiSlice = createSlice({
                     fetchBusinessesTypes.pending,
                     updateBusinessInfo.pending,
                     createEmployee.pending,
-                    deleteEmployee.pending,
+                    removeEmployee.pending,
                     fetchEmployeesByBusiness.pending,
                     fetchUserInsights.pending,
                     deleteTimeSlot.pending,
@@ -207,6 +218,7 @@ export const apiSlice = createSlice({
                     fetchUserInfo.pending,
                     updateUserInfo.pending,
                     fetchUserMessages.pending,
+                    sendUserMessage.pending,
                 ),
                 (state) => {
                     state.loading = true;
@@ -228,7 +240,7 @@ export const apiSlice = createSlice({
                     fetchBusinessesTypes.rejected,
                     updateBusinessInfo.rejected,
                     createEmployee.rejected,
-                    deleteEmployee.rejected,
+                    removeEmployee.rejected,
                     fetchEmployeesByBusiness.rejected,
                     fetchUserInsights.rejected,
                     deleteTimeSlot.rejected,
@@ -240,6 +252,7 @@ export const apiSlice = createSlice({
                     register.rejected,
                     updateUserInfo.rejected,
                     fetchUserMessages.rejected,
+                    sendUserMessage.rejected,
                 ),
                 (state, action) => {
                     state.loading = false;

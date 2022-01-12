@@ -5,7 +5,7 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {DialogModal} from '../../shared/components/modal/DialogModal';
 import {Header} from '../../shared/components/Texts';
-import {MessageDTO, MessageResponse} from '../models/General';
+import {MessageDTO, MessageResponse, SendMessage} from '../models/General';
 import StringUtil from '../util/StringUtil';
 import {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
     messageResponse: MessageResponse | null;
+    sendMessage: (message: SendMessage) => void;
     fetchData: () => void;
 };
 
@@ -45,18 +46,30 @@ const getTitle = (sent: boolean, tableColumn = true, capitalize = true) => {
     return sent ? 'Sent Messages' : 'Received Messages';
 };
 
-export const MessageContainer: React.FC<Props> = ({messageResponse, fetchData}: Props) => {
+export const MessageContainer: React.FC<Props> = ({
+    messageResponse,
+    fetchData,
+    sendMessage,
+}: Props) => {
     const styles = useStyles();
     const [showDialog, setShowDialog] = useState(false);
     const [replyMode, setReplyMode] = useState(false);
-    const [newMessageContent, setNewMessageContent] = useState('');
 
     const [selectedMessage, setSelectedMessage] = useState<MessageDTO>();
     const [showSentMessages, setShowSentMessages] = useState(false);
 
-    const handleSubmit = () => {
-        if (replyMode) {
-            // Send message
+    const handleSubmit = (newMessageContent: string) => {
+        if (replyMode && selectedMessage) {
+            const message: SendMessage = {
+                receiverId: selectedMessage.senderId,
+                senderId: selectedMessage.receiverId,
+                title: 'Enquiry',
+                content: newMessageContent,
+                type: 'Enquiry',
+            };
+
+            sendMessage(message);
+            setShowDialog(false);
         }
 
         setReplyMode(!replyMode);

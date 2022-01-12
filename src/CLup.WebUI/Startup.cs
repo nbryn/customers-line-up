@@ -2,6 +2,7 @@ using CLup.Application;
 using CLup.Application.Auth;
 using CLup.Infrastructure;
 using CLup.WebUI.Extensions;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,12 @@ namespace CLup.WebUI
                 config.AddPolicy(Policies.User, Policies.UserPolicy());
             });
 
+            services.AddControllers()
+                .AddFluentValidation(fv =>
+            {
+                fv.ImplicitlyValidateChildProperties = true;
+            });
+            
             services.ConfigureApplication(_config);
             services.ConfigureInfrastructure(_config, Environment);
         }

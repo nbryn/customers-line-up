@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
+using CLup.Application.Auth;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Models;
 using MediatR;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CLup.Application.Auth
+namespace CLup.WebUI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

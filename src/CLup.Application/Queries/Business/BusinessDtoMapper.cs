@@ -3,9 +3,9 @@ using CLup.Domain.Business;
 
 namespace CLup.Application.Shared.Models.Mapping
 {
-    public class BusinessMapper : Profile
+    public class BusinessDtoMapper : Profile
     {
-        public BusinessMapper()
+        public BusinessDtoMapper()
         {
             CreateMap<Business, BusinessDto>()
                 .ForMember(b => b.Type, s => s.MapFrom(m => m.Type.ToString()))

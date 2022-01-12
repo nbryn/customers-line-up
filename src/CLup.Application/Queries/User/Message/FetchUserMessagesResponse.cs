@@ -3,12 +3,12 @@ using CLup.Application.Queries.Shared;
 
 namespace CLup.Application.Queries.User.Message
 {
-    public class FetchMessagesResponse
+    public class FetchUserMessagesResponse
     {
         public string UserId { get; set; }
         
-        public IList<SentMessageDto> SentMessages { get; set; }
+        public IList<MessageDto> SentMessages { get; set; }
 
-        public IList<ReceivedMessageDto> ReceivedMessages { get; set; }
+        public IList<MessageDto> ReceivedMessages { get; set; }
     }
 }

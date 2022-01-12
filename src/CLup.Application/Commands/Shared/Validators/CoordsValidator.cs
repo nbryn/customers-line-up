@@ -1,6 +1,7 @@
+using CLup.Domain.Shared.ValueObjects;
 using FluentValidation;
 
-namespace CLup.Domain.Shared.ValueObjects.Validation
+namespace CLup.Application.Commands.Shared.Validators
 {
     public class CoordsValidator : AbstractValidator<Coords>
     {

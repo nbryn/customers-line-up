@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace CLup.Application.Queries.Shared
 {
-    public class BookingValidator : AbstractValidator<BookingDto>
+    public class BookingDtoValidator : AbstractValidator<BookingDto>
     {
-        public BookingValidator()
+        public BookingDtoValidator()
         {
             RuleFor(x => x.TimeSlotId).NotEmpty();
             RuleFor(x => x.Street).NotEmpty().Length(0, 75);

@@ -3,10 +3,10 @@ using MediatR;
 
 namespace CLup.Application.Queries.Business.Message
 {
-    public class FetchMessagesQuery : IRequest<Result<FetchMessagesResponse>>
+    public class FetchBusinessMessagesQuery : IRequest<Result<FetchMessagesResponse>>
     {
 
-        public FetchMessagesQuery()
+        public FetchBusinessMessagesQuery()
         {
 
         }
@@ -14,7 +14,7 @@ namespace CLup.Application.Queries.Business.Message
         public string BusinessId { get; set; }
         public string UserEmail { get; set; }
 
-        public FetchMessagesQuery(string businessId) => BusinessId = businessId;
+        public FetchBusinessMessagesQuery(string businessId) => BusinessId = businessId;
     }
 }
 

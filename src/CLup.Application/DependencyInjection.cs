@@ -18,13 +18,6 @@ namespace CLup.Application
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
             
-            services.AddControllers()
-                .AddFluentValidation(fv =>
-            {
-                fv.ImplicitlyValidateChildProperties = true;
-                fv.RegisterValidatorsFromAssemblyContaining<User>();
-            });
-            
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
 

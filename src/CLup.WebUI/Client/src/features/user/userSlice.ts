@@ -4,8 +4,10 @@ import {createAsyncThunk, createSlice, isAnyOf} from '@reduxjs/toolkit';
 import ApiCaller from '../../shared/api/ApiCaller';
 import {LoginDTO, UserMessageResponse, NotEmployedByBusiness, UserDTO} from './User';
 import {RootState} from '../../app/Store';
+import {SendMessage} from '../../shared/models/General';
 
-const DEFAULT_USER_ROUTE = 'user';
+const DEFAULT_USER_QUERY_ROUTE = 'api/query/user';
+const DEFAULT_USER_COMMAND_ROUTE = 'api/user';
 
 export interface UserState {
     notEmployedByBusiness: {[businessId: string]: UserDTO[]};
@@ -20,22 +22,28 @@ const initialState: UserState = {
 };
 
 export const fetchUserInfo = createAsyncThunk('user/userInfo', async () => {
-    const user = await ApiCaller.get<UserDTO>(`query/${DEFAULT_USER_ROUTE}`);
+    const user = await ApiCaller.get<UserDTO>(`${DEFAULT_USER_QUERY_ROUTE}/info`);
 
     return user;
 });
 
 export const fetchUserMessages = createAsyncThunk('user/messages', async (userId: string) => {
-    const messages = await ApiCaller.get<UserMessageResponse>(`query/${DEFAULT_USER_ROUTE}/${userId}/messages`);
+    const messages = await ApiCaller.get<UserMessageResponse>(
+        `${DEFAULT_USER_QUERY_ROUTE}/${userId}/messages`
+    );
 
     return messages;
+});
+
+export const sendUserMessage = createAsyncThunk('user/message/send', async (message: SendMessage) => {
+    await ApiCaller.post(`${DEFAULT_USER_COMMAND_ROUTE}/message`, message);
 });
 
 export const fetchUsersNotEmployedByBusiness = createAsyncThunk(
     'user/notEmployedByBusiness',
     async (businessId: string) => {
         const notEmployedByBusiness = await ApiCaller.get<NotEmployedByBusiness>(
-            `query/${DEFAULT_USER_ROUTE}/all/${businessId}`
+            `${DEFAULT_USER_QUERY_ROUTE}/notEmployedByBusiness/${businessId}`
         );
 
         return notEmployedByBusiness;
@@ -55,7 +63,7 @@ export const register = createAsyncThunk('auth/register', async (data: UserDTO) 
 });
 
 export const updateUserInfo = createAsyncThunk('user/update', async (data: UserDTO) => {
-    await ApiCaller.put<UserDTO, UserDTO>(`${DEFAULT_USER_ROUTE}/update`, data);
+    await ApiCaller.put<UserDTO, UserDTO>(`${DEFAULT_USER_COMMAND_ROUTE}/update`, data);
 
     return data;
 });

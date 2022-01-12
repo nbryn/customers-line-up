@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Queries.User.Message
 {
-    public class FetchMessagesHandler : IRequestHandler<FetchMessagesQuery, Result<FetchMessagesResponse>>
+    public class FetchMessagesHandler : IRequestHandler<FetchUserMessagesQuery, Result<FetchUserMessagesResponse>>
     {
         private readonly IQueryDbContext _queryContext;
         private readonly IMapper _mapper;
@@ -24,23 +25,36 @@ namespace CLup.Application.Queries.User.Message
             _mapper = mapper;
         }
 
-        public async Task<Result<FetchMessagesResponse>> Handle(
-            FetchMessagesQuery query,
+        public async Task<Result<FetchUserMessagesResponse>> Handle(
+            FetchUserMessagesQuery query,
             CancellationToken cancellationToken)
         {
-            return await _queryContext.Users.FirstOrDefaultAsync(u => u.Id == query.UserId)
+            return await _queryContext.Users.FirstOrDefaultAsync(user => user.Id == query.UserId)
                 .ToResult()
-                .EnsureDiscard(u => u.Id == query.UserId, "You don't have access to these messages")
+                .EnsureDiscard(user => user?.Id == query.UserId, "You don't have access to these messages")
                 .AndThen(async () =>
                 {
-                    var sentMessages = await _queryContext.UserMessages.Include(um => um.Receiver).Where(um => um.SenderId == query.UserId).ToListAsync();
-                    var receivedMessages = await _queryContext.BusinessMessages.Include(um => um.Sender).Where(bm => bm.ReceiverId == query.UserId).ToListAsync();
+                    var sentMessages = await _queryContext.UserMessages
+                    .Include(um => um.Metadata)
+                    .Include(um => um.Sender)
+                    .Include(um => um.Receiver)
+                    .Where(um => um.Sender.Id == query.UserId && !um.Metadata.DeletedBySender)
+                    .ToListAsync();
 
-                    return new FetchMessagesResponse()
+                    var receivedMessages = await _queryContext.BusinessMessages
+                    .Include(um => um.Metadata)
+                    .Include(um => um.Sender)
+                    .Include(um => um.Receiver)
+                    .Where(bm => bm.Receiver.Id == query.UserId && !bm.Metadata.DeletedByReceiver)
+                    .ToListAsync();
+
+                    Console.WriteLine(receivedMessages[0].Sender?.Id);
+
+                    return new FetchUserMessagesResponse()
                     {
                         UserId = query.UserId,
-                        SentMessages = sentMessages.Select(_mapper.Map<SentMessageDto>).ToList(),
-                        ReceivedMessages = receivedMessages.Select(_mapper.Map<ReceivedMessageDto>).ToList()
+                        SentMessages = sentMessages.Select(_mapper.Map<MessageDto>).ToList(),
+                        ReceivedMessages = receivedMessages.Select(_mapper.Map<MessageDto>).ToList()
                     };
                 })
                 .Finally(response => response);

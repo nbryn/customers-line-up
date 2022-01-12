@@ -4,7 +4,8 @@ import ApiCaller from '../../shared/api/ApiCaller';
 import {RootState} from '../../app/Store';
 import {UserInsights} from './Insights';
 
-const DEFAULT_INSIGHTS_ROUTE = 'insights';
+const DEFAULT_INSIGHTS_ROUTE = 'api/query';
+
 interface InsightsState {
     userInsights: UserInsights | null;
 }
@@ -14,9 +15,9 @@ const initialState: InsightsState = {
 };
 
 export const fetchUserInsights = createAsyncThunk('insights/userBooking', async () => {
-    const bookingInsights = await ApiCaller.get<UserInsights>(`query/user/${DEFAULT_INSIGHTS_ROUTE}`);
+    const bookingInsights = await ApiCaller.get<UserInsights>(`${DEFAULT_INSIGHTS_ROUTE}/user/insights`);
 
-    const businessInsights = await ApiCaller.get<UserInsights>(`query/business/${DEFAULT_INSIGHTS_ROUTE}`);
+    const businessInsights = await ApiCaller.get<UserInsights>(`${DEFAULT_INSIGHTS_ROUTE}/business/insights`);
 
     return {userInsights: {...bookingInsights, ...businessInsights}};
 });

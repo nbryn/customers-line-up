@@ -18,19 +18,21 @@ export interface MessageDTO extends DTO {
     date: string;
     title: string;
     content: string;
-}
-
-export interface ReceivedMessageDTO extends MessageDTO {
     senderId: string;
     sender: string;
-}
-
-export interface SentMessageDTO extends MessageDTO {
     receiverId: string;
     receiver: string;
 }
 
 export interface MessageResponse {
-    sentMessages: SentMessageDTO[];
-    receivedMessages: ReceivedMessageDTO[];
+    sentMessages: MessageDTO[];
+    receivedMessages: MessageDTO[];
+}
+
+export interface SendMessage {
+    title: string;
+    content: string;
+    type: string;
+    receiverId: string;
+    senderId?: string;
 }

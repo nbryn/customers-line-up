@@ -1,12 +1,29 @@
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {makeStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+
+import {TextField} from '../form/TextField';
+
+const useStyles = makeStyles((theme) => ({
+    buttons: {
+        marginTop: 25,
+    },
+    dialog: {
+        marginTop: -290,
+    },
+    dialogReplyMode: {
+        height: 175,
+    },
+    textField: {
+        marginTop: -10,
+    },
+}));
 
 type Props = {
     show: boolean;
@@ -16,7 +33,7 @@ type Props = {
     primaryDisabled?: boolean;
     subTitle?: string;
     close: () => void;
-    onSubmit: () => void;
+    onSubmit: (messageContent: string) => void;
 };
 
 export const DialogModal: React.FC<Props> = ({
@@ -29,35 +46,48 @@ export const DialogModal: React.FC<Props> = ({
     close,
     onSubmit,
 }: Props) => {
+    const styles = useStyles();
+    const [newMessageContent, setNewMessageContent] = useState('');
 
     return (
-        <div>
-            <Dialog open={show} onClose={close}>
+        <>
+            <Dialog open={show} onClose={close} className={styles.dialog}>
                 <DialogTitle>{title}</DialogTitle>
-                <DialogContent>
+                <DialogContent className={replyMode ? styles.dialogReplyMode : undefined} dividers>
                     <DialogContentText>{subTitle}</DialogContentText>
                     {!replyMode && <Typography>{text} </Typography>}
                     {replyMode && (
                         <TextField
-                            autoFocus
+                            className={styles.textField}
+                            value={newMessageContent}
                             margin="dense"
                             id="name"
-                            label="Email Address"
+                            label="Message"
                             type="email"
-                            fullWidth
                             variant="standard"
+                            maxLength={100}
+                            onChange={(e) => setNewMessageContent(e.target.value)}
+                            autoFocus
+                            multiline
                         />
                     )}
                 </DialogContent>
-                <DialogActions>
+                <DialogActions className={styles.buttons}>
                     <Button variant="secondary" onClick={close}>
                         Close
                     </Button>
-                    <Button variant="primary" disabled={primaryDisabled} onClick={onSubmit}>
+                    <Button
+                        variant="primary"
+                        disabled={primaryDisabled || replyMode && newMessageContent.length < 5}
+                        onClick={() => {
+                            onSubmit(newMessageContent);
+                            setNewMessageContent('');
+                        }}
+                    >
                         {replyMode ? 'Send Message' : 'Reply'}
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 };

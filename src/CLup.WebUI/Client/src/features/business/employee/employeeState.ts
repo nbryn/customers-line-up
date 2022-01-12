@@ -5,7 +5,8 @@ import {EmployeeDTO} from './Employee';
 import {NormalizedEntityState, ThunkParam} from '../../../app/AppTypes';
 import {RootState} from '../../../app/Store';
 
-const DEFAULT_EMPLOYEE_ROUTE = 'business';
+const DEFAULT_EMPLOYEE_QUERY_ROUTE = 'api/query/business';
+const DEFAULT_EMPLOYEE_COMMAND_ROUTE = 'api/business/employee';
 
 export const initialEmployeeState: NormalizedEntityState<EmployeeDTO> = {
     byId: {},
@@ -13,13 +14,13 @@ export const initialEmployeeState: NormalizedEntityState<EmployeeDTO> = {
 };
 
 export const createEmployee = createAsyncThunk('employee/create', async (data: EmployeeDTO) => {
-    await ApiCaller.post(`${DEFAULT_EMPLOYEE_ROUTE}/employee/`, data);
+    await ApiCaller.post(`${DEFAULT_EMPLOYEE_COMMAND_ROUTE}`, data);
 });
 
-export const deleteEmployee = createAsyncThunk(
+export const removeEmployee = createAsyncThunk(
     'employee/delete',
     async ({id, data}: ThunkParam<string>) => {
-        await ApiCaller.remove(`${DEFAULT_EMPLOYEE_ROUTE}/employee/${data}?businessId=${id}`);
+        await ApiCaller.remove(`${DEFAULT_EMPLOYEE_COMMAND_ROUTE}/${data}?businessId=${id}`);
 
         return id;
     }
@@ -29,7 +30,7 @@ export const fetchEmployeesByBusiness = createAsyncThunk(
     'employee/fetchByBusiness',
     async (businessId: string) => {
         const response = await ApiCaller.get<EmployeeDTO[]>(
-            `query/${DEFAULT_EMPLOYEE_ROUTE}/employee/${businessId}`
+            `${DEFAULT_EMPLOYEE_QUERY_ROUTE}/${businessId}/employee`
         );
 
         return response;

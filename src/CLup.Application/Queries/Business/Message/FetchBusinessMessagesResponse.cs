@@ -7,8 +7,8 @@ namespace CLup.Application.Queries.Business.Message
     {
         public string BusinessId { get; set; }
         
-        public IList<SentMessageDto> SentMessages { get; set; }
+        public IList<MessageDto> SentMessages { get; set; }
 
-        public IList<ReceivedMessageDto> ReceivedMessages { get; set; }
+        public IList<MessageDto> ReceivedMessages { get; set; }
     }
 }

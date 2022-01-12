@@ -4,9 +4,5 @@
         <TargetFramework>netcoreapp5.0</TargetFramework>
         <OutputType>Library</OutputType>
     </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="FluentValidation" Version="10.0.4" />
-    </ItemGroup>
     
 </Project>

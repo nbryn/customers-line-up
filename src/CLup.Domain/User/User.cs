@@ -8,6 +8,7 @@ namespace CLup.Domain.User
 {
     public class User : Entity
     {
+
         public UserData UserData { get; private set; }
 
         public Address Address { get; private set; }
@@ -55,8 +56,9 @@ namespace CLup.Domain.User
             var content =
                 $"The user with email {Email} deleted her/his booking at {booking.TimeSlot.Start.ToString("dd/MM/yyyy")}.";
             var messageData = new MessageData($"Booking Deleted - {booking.Business.Name}", content);
-            var message = new UserMessage(Id, receiverId, messageData, MessageType.BookingDeleted);
-
+            var metaData = new MessageMetadata(false, false);
+            
+            var message = new UserMessage(Id, receiverId, messageData, MessageType.BookingDeleted, metaData);
             return message;
         }
     }

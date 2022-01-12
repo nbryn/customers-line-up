@@ -6,7 +6,7 @@ import {EmployeeDTO} from './employee/Employee';
 import {NormalizedEntityState} from '../../app/AppTypes';
 import {RootState} from '../../app/Store';
 import {selectCurrentUser} from '../user/userSlice';
-import {deleteEmployee, fetchEmployeesByBusiness, initialEmployeeState} from './employee/employeeState';
+import {removeEmployee, fetchEmployeesByBusiness, initialEmployeeState} from './employee/employeeState';
 import {
     TimeSlotState,
     deleteTimeSlot,
@@ -15,7 +15,9 @@ import {
     initialTimeSlotState,
 } from './timeslot/timeSlotState';
 
-const DEFAULT_BUSINESS_ROUTE = 'business';
+const DEFAULT_BUSINESS_QUERY_ROUTE = 'api/query/business';
+const DEFAULT_BUSINESS_COMMAND_ROUTE = 'api/business';
+
 
 interface BusinessState extends NormalizedEntityState<BusinessDTO> {
     businessTypes: string[];
@@ -36,29 +38,29 @@ const initialState: BusinessState = {
 };
 
 export const createBusiness = createAsyncThunk('business/create', async (data: BusinessDTO) => {
-    await ApiCaller.post(`${DEFAULT_BUSINESS_ROUTE}`, data);
+    await ApiCaller.post(`${DEFAULT_BUSINESS_COMMAND_ROUTE}`, data);
 });
 
 export const fetchBusinessMessages = createAsyncThunk('business/messages', async (businessId: string) => {
-    const messages = await ApiCaller.get<BusinessMessageResponse>(`query/${DEFAULT_BUSINESS_ROUTE}/${businessId}/messages`);
+    const messages = await ApiCaller.get<BusinessMessageResponse>(`${DEFAULT_BUSINESS_QUERY_ROUTE}/${businessId}/messages`);
 
     return messages;
 });
 
 export const fetchAllBusinesses = createAsyncThunk('business/fetchAll', async () => {
-    const businesses = await ApiCaller.get<BusinessDTO[]>(`query/${DEFAULT_BUSINESS_ROUTE}/all`);
+    const businesses = await ApiCaller.get<BusinessDTO[]>(`${DEFAULT_BUSINESS_QUERY_ROUTE}/all`);
 
     return businesses;
 });
 
 export const fetchBusinessesByOwner = createAsyncThunk('business/fetchByOwner', async () => {
-    const businesses = ApiCaller.get<BusinessDTO[]>(`query/${DEFAULT_BUSINESS_ROUTE}/owner`);
+    const businesses = ApiCaller.get<BusinessDTO[]>(`${DEFAULT_BUSINESS_QUERY_ROUTE}/owner`);
 
     return businesses;
 });
 
 export const fetchBusinessesTypes = createAsyncThunk('business/fetchBusinessTypes', async () => {
-    const businessTypes = ApiCaller.get<string[]>(`query/${DEFAULT_BUSINESS_ROUTE}/types`);
+    const businessTypes = ApiCaller.get<string[]>(`${DEFAULT_BUSINESS_QUERY_ROUTE}/types`);
 
     return businessTypes;
 });
@@ -66,7 +68,7 @@ export const fetchBusinessesTypes = createAsyncThunk('business/fetchBusinessType
 export const updateBusinessInfo = createAsyncThunk(
     'business/update',
     async (data: {businessId: string; ownerEmail: string; business: BusinessDTO}) => {
-        await ApiCaller.put(`${DEFAULT_BUSINESS_ROUTE}/${data.businessId}`, {
+        await ApiCaller.put(`${DEFAULT_BUSINESS_COMMAND_ROUTE}/${data.businessId}`, {
             ...data.business,
             id: data.businessId,
             ownerEmail: data.ownerEmail,
@@ -117,7 +119,7 @@ export const businessSlice = createSlice({
                 state.timeSlots.byId = newState;
             })
 
-            .addCase(deleteEmployee.fulfilled, (state, action) => {
+            .addCase(removeEmployee.fulfilled, (state, action) => {
                 delete state.employees.byId[action.payload];
             })
 

@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 namespace CLup.Application.Commands.Business.DeleteBooking
 {
 
-    public class DeleteBookingHandler : IRequestHandler<DeleteBookingCommand, Result>
+    public class DeleteBookingHandler : IRequestHandler<BusinessDeleteBookingCommand, Result>
     {
         private readonly ICLupDbContext _context;
 
         public DeleteBookingHandler(ICLupDbContext context) => _context = context;
 
-        public async Task<Result> Handle(DeleteBookingCommand command, CancellationToken cancellationToken)
+        public async Task<Result> Handle(BusinessDeleteBookingCommand command, CancellationToken cancellationToken)
         {
 
             return await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.BusinessId)

@@ -4,7 +4,7 @@ namespace CLup.Domain.Business
 {
     public class BusinessMessage : Message<Business, User.User>
     {
-        protected BusinessMessage() : base(null, null, null, MessageType.Enquiry)
+        protected BusinessMessage() : base(string.Empty, string.Empty, null, MessageType.Enquiry, null)
         {
         }
 
@@ -12,8 +12,9 @@ namespace CLup.Domain.Business
             string senderId,
             string receiverId,
             MessageData messageData,
-            MessageType type)
-            : base(senderId, receiverId, messageData, type)
+            MessageType type,
+            MessageMetadata metaData)
+            : base(senderId, receiverId, messageData, type, metaData)
         {
         }
     }

@@ -22,7 +22,7 @@ type Props = {
     autoFocus?: boolean;
     select?: boolean;
     className?: any;
-    variant?: 'filled' | 'outlined';
+    variant?: 'filled' | 'outlined' | 'standard';
     defaultValue?: ReactText;
     inputLabelProps?: any;
     error?: boolean;
@@ -30,6 +30,8 @@ type Props = {
     required?: boolean;
     disabled?: boolean;
     step?: number;
+    maxLength?: number;
+    multiline?: boolean;
     style?: any
     setInputRef?: (element: HTMLInputElement) => void;
     onBlur?: (event: React.FocusEvent) => void;
@@ -50,6 +52,7 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>((props, ref) 
             FormHelperTextProps={{className: styles.helperText}}
             fullWidth
             id={props.id}
+            multiline={props.multiline}
             onClick={props.onClick}
             onBlur={props.onBlur}
             onChange={props.onChange}
@@ -67,6 +70,7 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>((props, ref) 
             style={props.style}
             autoComplete="off"
             inputProps={{
+                maxLength: props.maxLength ?? 500,
                 autocomplete: 'new-password',
                 step: props.step,
                 form: {

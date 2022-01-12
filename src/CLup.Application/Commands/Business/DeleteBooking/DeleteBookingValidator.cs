@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace CLup.Application.Commands.Business.DeleteBooking
 {
-    public class DeleteBookingValidator : AbstractValidator<DeleteBookingCommand>
+    public class DeleteBookingValidator : AbstractValidator<BusinessDeleteBookingCommand>
     {
         public DeleteBookingValidator()
         {

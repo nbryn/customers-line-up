@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace CLup.Application.Commands.User.DeleteBooking
 {
-    public class DeleteBookingValidator : AbstractValidator<DeleteBookingCommand>
+    public class DeleteBookingValidator : AbstractValidator<UserDeleteBookingCommand>
     {
         public DeleteBookingValidator()
         {

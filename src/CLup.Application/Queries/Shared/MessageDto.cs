@@ -8,6 +8,14 @@ namespace CLup.Application.Queries.Shared
         
         public string Content { get; set; }   
         
-        public string Date { get; set; }         
+        public string Date { get; set; }
+
+        public string Sender { get; set; }
+        
+        public string SenderId { get; set; }
+
+        public string Receiver { get; set; }
+        
+        public string ReceiverId { get; set; }         
     }
 }

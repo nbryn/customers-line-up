@@ -26,6 +26,15 @@ namespace CLup.Infrastructure.Persistence.EntityConfigurations
                     .HasColumnName("Content");
             });
 
+            businessMessageConfiguration.OwnsOne(m => m.Metadata, metaData =>
+           {
+               metaData.Property(md => md.DeletedBySender)
+                   .HasColumnName("DeletedBySender");
+
+               metaData.Property(md => md.DeletedByReceiver)
+                   .HasColumnName("DeletedByReceiver");
+           });
+
             businessMessageConfiguration
                 .HasOne(m => m.Sender)
                 .WithMany(b => b.SentMessages);

@@ -5,7 +5,8 @@ import {NormalizedEntityState} from '../../../app/AppTypes';
 import {RootState} from '../../../app/Store';
 import {TimeSlotDTO} from './TimeSlot';
 
-const DEFAULT_TIMESLOT_ROUTE = 'business/timeslot';
+const DEFAULT_TIMESLOT_QUERY_ROUTE = 'api/query/business/timeslot';
+const DEFAULT_TIMESLOT_COMMAND_ROUTE = 'api/business/timeslot';
 
 export interface TimeSlotState extends NormalizedEntityState<TimeSlotDTO> {
     availableByBusiness: {[businessId: string]: TimeSlotDTO[]};
@@ -20,9 +21,16 @@ export const initialTimeSlotState: TimeSlotState = {
 export const deleteTimeSlot = createAsyncThunk(
     'timeSlot/delete',
     async (data: {businessId: string; timeSlotId: string}) => {
-        await ApiCaller.remove(`${DEFAULT_TIMESLOT_ROUTE}/${data.timeSlotId}`);
+        await ApiCaller.remove(`${DEFAULT_TIMESLOT_COMMAND_ROUTE}/${data.timeSlotId}`);
 
         return {businessId: data.businessId, timeSlotId: data.timeSlotId};
+    }
+);
+
+export const generateTimeSlots = createAsyncThunk(
+    'timeSlot/generate',
+    async (data: {businessId: string; start: string}) => {
+        await ApiCaller.post(`${DEFAULT_TIMESLOT_COMMAND_ROUTE}/generate`, data);
     }
 );
 
@@ -38,7 +46,7 @@ export const fetchAvailableTimeSlotsByBusiness = createAsyncThunk(
         const end = tomorrow.toISOString().substring(0, 10);
 
         const timeSlots = await ApiCaller.get<TimeSlotDTO[]>(
-            `query/${DEFAULT_TIMESLOT_ROUTE}/available?businessid=${businessId}&start=${start}&end=${end}`
+            `${DEFAULT_TIMESLOT_QUERY_ROUTE}/available?businessid=${businessId}&start=${start}&end=${end}`
         );
 
         return {businessId, timeSlots};
@@ -49,19 +57,13 @@ export const fetchTimeSlotsByBusiness = createAsyncThunk(
     'timeSlot/byBusiness',
     async (businessId: string) => {
         const timeSlots = await ApiCaller.get<TimeSlotDTO[]>(
-            `query/${DEFAULT_TIMESLOT_ROUTE}/${businessId}`
+            `${DEFAULT_TIMESLOT_QUERY_ROUTE}/${businessId}/timeslot`
         );
 
         return timeSlots;
     }
 );
 
-export const generateTimeSlots = createAsyncThunk(
-    'timeSlot/generate',
-    async (data: {businessId: string; start: string}) => {
-        await ApiCaller.post(`${DEFAULT_TIMESLOT_ROUTE}/generate`, data);
-    }
-);
 
 export const selectTimeSlotsByBusiness = (businessId: string) => (state: RootState) =>
     Object.values(state.businesses.timeSlots.byId).filter((t) => t.businessId === businessId);

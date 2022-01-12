@@ -6,7 +6,8 @@ import {RootState} from '../../app/Store';
 import {selectCurrentUser} from '../user/userSlice';
 import {ThunkParam} from '../../app/AppTypes';
 
-const DEFAULT_BOOKING_ROUTE = 'booking';
+const DEFAULT_BOOKING_QUERY_ROUTE = 'api/query';
+const DEFAULT_BOOKING_COMMAND_ROUTE = 'api';
 
 // Generic slice: https://redux-toolkit.js.org/usage/usage-with-typescript
 export interface BookingState {
@@ -22,14 +23,14 @@ const initialState: BookingState = {
 export const createBooking = createAsyncThunk<any, any, {state: RootState}>(
     'booking/create',
     async ({id, data}: ThunkParam<string>, {getState}) => {
-        await ApiCaller.post(`user/${DEFAULT_BOOKING_ROUTE}/${id}?userId=${selectCurrentUser(getState())?.id}&businessId=${data}`);
+        await ApiCaller.post(`${DEFAULT_BOOKING_COMMAND_ROUTE}/user/booking/${id}?userId=${selectCurrentUser(getState())?.id}&businessId=${data}`);
     }
 );
 
 export const deleteBookingForBusiness = createAsyncThunk(
     'booking/deleteForBusiness',
     async ({id, data}: ThunkParam<string>) => {
-        await ApiCaller.remove(`business/${DEFAULT_BOOKING_ROUTE}/${id}?bookingId=${data}`);
+        await ApiCaller.remove(`${DEFAULT_BOOKING_COMMAND_ROUTE}/business/${id}/booking?bookingId=${data}`);
 
         return {businessId: id, bookingId: data};
     }
@@ -38,7 +39,7 @@ export const deleteBookingForBusiness = createAsyncThunk(
 export const deleteBookingForUser = createAsyncThunk<any, any, {state: RootState}>(
     'booking/deleteForUser',
     async (bookingId: string, {getState}) => {
-        await ApiCaller.remove(`user/${DEFAULT_BOOKING_ROUTE}/${bookingId}`);
+        await ApiCaller.remove(`${DEFAULT_BOOKING_COMMAND_ROUTE}/user/booking/${bookingId}`);
 
         return {bookingId, userEmail: selectCurrentUser(getState())?.email};
     }
@@ -48,7 +49,7 @@ export const fetchBookingsByBusiness = createAsyncThunk(
     'booking/byBusiness',
     async (businessId: string) => {
         const bookings = await ApiCaller.get<BookingDTO[]>(
-            `query/business/${DEFAULT_BOOKING_ROUTE}/${businessId}`
+            `${DEFAULT_BOOKING_QUERY_ROUTE}/business/${businessId}/booking`
         );
 
         return {businessId, bookings};
@@ -59,7 +60,7 @@ export const fetchBookingsByUser = createAsyncThunk<any, any, {state: RootState}
     'booking/byUser',
     async (_: void, {getState}) => {
         const currentUser = selectCurrentUser(getState());
-        const bookings = await ApiCaller.get<BookingDTO[]>(`query/user/${DEFAULT_BOOKING_ROUTE}/${currentUser?.id}`);
+        const bookings = await ApiCaller.get<BookingDTO[]>(`${DEFAULT_BOOKING_QUERY_ROUTE}/user/${currentUser?.id}/booking`);
 
         return {userEmail: currentUser?.email, bookings};
     }
