@@ -1,6 +1,7 @@
 using System.Linq;
 using AutoMapper;
 using CLup.Domain.Business.TimeSlot;
+using CLup.Domain.Businesses.TimeSlots;
 
 namespace CLup.Application.Shared.Models.Mapping
 {

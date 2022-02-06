@@ -7,6 +7,8 @@ namespace CLup.Application.Queries.User.Message
     {
         public string UserId { get; set; }
 
+        public string RequesterEmail {get; set; }
+
         public FetchUserMessagesQuery()
         {
 

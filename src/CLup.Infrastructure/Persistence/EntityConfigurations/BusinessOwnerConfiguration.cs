@@ -1,4 +1,5 @@
 using CLup.Domain.Business;
+using CLup.Domain.Businesses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

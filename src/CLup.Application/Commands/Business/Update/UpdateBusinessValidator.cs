@@ -1,4 +1,5 @@
 using CLup.Domain.Business;
+using CLup.Domain.Businesses;
 using FluentValidation;
 
 namespace CLup.Application.Commands.Business.Update

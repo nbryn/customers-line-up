@@ -27,7 +27,7 @@ namespace CLup.Application.Commands.Business.TimeSlot.Generate
                     .FailureIf("Business not found.")
                     .AndThenDouble(() => _context.TimeSlots.FirstOrDefaultAsync(x => x.BusinessId == command.BusinessId && x.Start.Date == command.Start.Date))
                     .Ensure(timeSlot => timeSlot == null, "Time slots already generated for this date.")
-                    .AndThen(business => Domain.Business.TimeSlot.TimeSlot.GenerateTimeSlots(business, command.Start))
+                    .AndThen(business => Domain.Businesses.TimeSlots.TimeSlot.GenerateTimeSlots(business, command.Start))
                     .Finally(timeSlots => _context.AddAndSave(timeSlots.ToArray()));
         }
     }

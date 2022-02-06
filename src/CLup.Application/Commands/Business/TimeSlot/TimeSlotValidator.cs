@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace CLup.Domain.Business.TimeSlot
 {
-    public class TimeSlotValidator : AbstractValidator<TimeSlot>
+    public class TimeSlotValidator : AbstractValidator<Businesses.TimeSlots.TimeSlot>
     {
         public TimeSlotValidator()
         {

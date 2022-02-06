@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
-using CLup.Domain.Business.TimeSlot;
+using CLup.Domain.Businesses.TimeSlots;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +25,7 @@ namespace CLup.Application.EventHandlers.TimeSlot
 
             var messages = users.Select(u => domainEvent.TimeSlot.Business.BookingDeletedMessage(u.Id));
 
-            await _context.BusinessMessages.AddRangeAsync(messages);
+            await _context.Messages.AddRangeAsync(messages);
         }
     }
 }

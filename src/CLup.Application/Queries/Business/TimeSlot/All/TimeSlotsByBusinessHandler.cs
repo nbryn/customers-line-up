@@ -14,18 +14,18 @@ namespace CLup.Application.Queries.Business.TimeSlot.All
 {
     public class Handler : IRequestHandler<TimeSlotsByBusinessQuery, Result<List<TimeSlotDto>>>
     {
-        private readonly IQueryDbContext _queryContext;
+        private readonly IReadOnlyDbContext _readOnlyContext;
         private readonly IMapper _mapper;
-        public Handler(IQueryDbContext queryContext, IMapper mapper)
+        public Handler(IReadOnlyDbContext readOnlyContext, IMapper mapper)
         {
             _mapper = mapper;
-            _queryContext = queryContext;
+            _readOnlyContext = readOnlyContext;
         }
         public async Task<Result<List<TimeSlotDto>>> Handle(TimeSlotsByBusinessQuery query, CancellationToken cancellationToken)
         {
-            return await _queryContext.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
+            return await _readOnlyContext.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
                     .FailureIfDiscard("Business not found.")
-                    .AndThen(() => _queryContext.TimeSlots
+                    .AndThen(() => _readOnlyContext.TimeSlots
                                         .Include(x => x.Bookings)
                                         .Include(x => x.Business)
                                         .Where(x => x.BusinessId == query.BusinessId)

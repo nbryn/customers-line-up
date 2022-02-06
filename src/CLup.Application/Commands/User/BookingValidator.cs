@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace CLup.Domain.Booking
 {
-    public class BookingValidator : AbstractValidator<Booking>
+    public class BookingValidator : AbstractValidator<Bookings.Booking>
     {
         public BookingValidator()
         {

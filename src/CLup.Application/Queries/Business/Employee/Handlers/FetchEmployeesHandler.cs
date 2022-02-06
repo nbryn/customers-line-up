@@ -16,21 +16,21 @@ namespace CLup.Application.Queries.Business.Employee.Handlers
 
     public class FetchEmployeesHandler : IRequestHandler<FetchEmployeesQuery, Result<List<EmployeeDto>>>
     {
-        private readonly IQueryDbContext _queryContext;
+        private readonly IReadOnlyDbContext _readOnlyContext;
         private readonly IMapper _mapper;
 
-        public FetchEmployeesHandler(IQueryDbContext queryContext, IMapper mapper)
+        public FetchEmployeesHandler(IReadOnlyDbContext readOnlyContext, IMapper mapper)
         {
-            _queryContext = queryContext;
+            _readOnlyContext = readOnlyContext;
             _mapper = mapper;
         }
 
         public async Task<Result<List<EmployeeDto>>> Handle(FetchEmployeesQuery query, CancellationToken cancellationToken)
         {
 
-            return await _queryContext.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
+            return await _readOnlyContext.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
                     .FailureIfDiscard("Business not found")
-                    .AndThen(() => _queryContext.Employees
+                    .AndThen(() => _readOnlyContext.Employees
                                 .Include(e => e.Business)
                                 .Include(e => e.User)
                                 .Where(e => e.BusinessId == query.BusinessId))

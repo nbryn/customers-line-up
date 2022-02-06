@@ -1,4 +1,5 @@
 using CLup.Domain.Booking;
+using CLup.Domain.Bookings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

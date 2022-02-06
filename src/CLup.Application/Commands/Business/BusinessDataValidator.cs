@@ -1,3 +1,4 @@
+using CLup.Domain.Businesses;
 using FluentValidation;
 
 namespace CLup.Domain.Business

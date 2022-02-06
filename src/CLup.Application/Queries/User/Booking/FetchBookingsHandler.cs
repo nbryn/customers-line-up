@@ -13,19 +13,19 @@ namespace CLup.Application.Queries.User.Booking
     
     public class FetchBookingsHandler : IRequestHandler<FetchBookingsQuery, IList<BookingDto>>
     {
-        private readonly IQueryDbContext _queryContext;
+        private readonly IReadOnlyDbContext _readOnlyContext;
         private readonly IMapper _mapper;
 
-        public FetchBookingsHandler(IQueryDbContext queryContext, IMapper mapper)
+        public FetchBookingsHandler(IReadOnlyDbContext readOnlyContext, IMapper mapper)
         {
             _mapper = mapper;
-            _queryContext = queryContext;
+            _readOnlyContext = readOnlyContext;
         }
 
         public async Task<IList<BookingDto>> Handle(FetchBookingsQuery query, CancellationToken cancellationToken)
         {
             // Check access -> Email matches user id requested
-            var bookings = await _queryContext.Bookings
+            var bookings = await _readOnlyContext.Bookings
                                     .Include(x => x.Business)
                                     .Include(x => x.TimeSlot)
                                     .ThenInclude(x => x.Business)

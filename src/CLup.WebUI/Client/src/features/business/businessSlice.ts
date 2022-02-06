@@ -41,12 +41,6 @@ export const createBusiness = createAsyncThunk('business/create', async (data: B
     await ApiCaller.post(`${DEFAULT_BUSINESS_COMMAND_ROUTE}`, data);
 });
 
-export const fetchBusinessMessages = createAsyncThunk('business/messages', async (businessId: string) => {
-    const messages = await ApiCaller.get<BusinessMessageResponse>(`${DEFAULT_BUSINESS_QUERY_ROUTE}/${businessId}/messages`);
-
-    return messages;
-});
-
 export const fetchAllBusinesses = createAsyncThunk('business/fetchAll', async () => {
     const businesses = await ApiCaller.get<BusinessDTO[]>(`${DEFAULT_BUSINESS_QUERY_ROUTE}/all`);
 
@@ -123,10 +117,6 @@ export const businessSlice = createSlice({
                 delete state.employees.byId[action.payload];
             })
 
-            .addCase(fetchBusinessMessages.fulfilled, (state, action) => {
-                state.messages = action.payload;
-            })
-    
             .addCase(
                 fetchEmployeesByBusiness.fulfilled,
                 (state, action: PayloadAction<EmployeeDTO[]>) => {

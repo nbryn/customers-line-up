@@ -1,9 +1,10 @@
+using CLup.Domain.Businesses;
 using CLup.Domain.Shared.ValueObjects;
 using FluentValidation;
 
 namespace CLup.Domain.Business
 {
-    public class BusinessValidator : AbstractValidator<Business>
+    public class BusinessValidator : AbstractValidator<Businesses.Business>
     {
         public BusinessValidator(
             IValidator<BusinessData> businessDataValidator,

@@ -2,7 +2,7 @@ using FluentValidation;
 
 namespace CLup.Domain.Business.Employee
 {
-    public class EmployeeValidator : AbstractValidator<Employee>
+    public class EmployeeValidator : AbstractValidator<Businesses.Employees.Employee>
     {
         public EmployeeValidator()
         {

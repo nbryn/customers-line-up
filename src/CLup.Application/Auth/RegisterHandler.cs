@@ -6,6 +6,7 @@ using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
 using CLup.Domain.User;
+using CLup.Domain.Users;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

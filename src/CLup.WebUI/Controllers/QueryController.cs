@@ -110,7 +110,7 @@ namespace CLup.Application.Queries.User
 
         [Route("business/{businessId}/messages")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FetchMessagesResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Business.Message.FetchBusinessMessagesResponse))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchBusinessMessages([FromRoute] FetchBusinessMessagesQuery query)
         {
@@ -167,10 +167,11 @@ namespace CLup.Application.Queries.User
         
         [Route("user/{userId}/messages")]
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FetchUserMessagesResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Message.FetchUserMessagesResponse))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchMessages([FromRoute] FetchUserMessagesQuery query)
         {
+            query.RequesterEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var result = await _mediator.Send(query);
 
             return this.CreateActionResult(result);

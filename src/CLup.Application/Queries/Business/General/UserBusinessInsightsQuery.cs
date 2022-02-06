@@ -26,24 +26,24 @@ namespace CLup.Application.Queries.Business.General
 
         public class Handler : IRequestHandler<Query, Result<Model>>
         {
-            private readonly IQueryDbContext _queryQueryContext;
+            private readonly IReadOnlyDbContext _readOnlyReadOnlyContext;
 
-            public Handler(IQueryDbContext queryContext) => _queryQueryContext = queryContext;
+            public Handler(IReadOnlyDbContext readOnlyContext) => _readOnlyReadOnlyContext = readOnlyContext;
       
             public async Task<Result<Model>> Handle(Query query, CancellationToken cancellationToken)
             {
 
-                var businesses = await _queryQueryContext.Businesses
+                var businesses = await _readOnlyReadOnlyContext.Businesses
                                          .Where(b => b.OwnerEmail == query.UserEmail)
                                          .ToListAsync();
 
                 var businessIds = businesses.Select(b => b.Id);
 
-                var bookings = await _queryQueryContext.Bookings
+                var bookings = await _readOnlyReadOnlyContext.Bookings
                                        .Where(x => businessIds.Contains(x.BusinessId))
                                        .ToListAsync();
 
-                var employees = await _queryQueryContext.Employees
+                var employees = await _readOnlyReadOnlyContext.Employees
                                         .Where(e => businessIds.Contains(e.BusinessId))
                                         .ToListAsync();
 

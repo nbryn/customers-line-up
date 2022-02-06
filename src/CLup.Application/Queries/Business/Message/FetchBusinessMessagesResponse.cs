@@ -3,7 +3,7 @@ using CLup.Application.Queries.Shared;
 
 namespace CLup.Application.Queries.Business.Message
 {
-    public class FetchMessagesResponse
+    public class FetchBusinessMessagesResponse
     {
         public string BusinessId { get; set; }
         

@@ -1,4 +1,5 @@
 using CLup.Domain.Business;
+using CLup.Domain.Businesses;
 using CLup.Domain.Shared.ValueObjects;
 
 namespace CLup.Infrastructure.Persistence.Seed.Builders

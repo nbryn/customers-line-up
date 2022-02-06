@@ -1,11 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using CLup.Domain.Booking;
-using CLup.Domain.Business;
-using CLup.Domain.Business.Employee;
-using CLup.Domain.Business.TimeSlot;
+using CLup.Domain.Bookings;
+using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.Employees;
+using CLup.Domain.Businesses.TimeSlots;
+using CLup.Domain.Messages;
 using CLup.Domain.Shared;
-using CLup.Domain.User;
+using CLup.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Shared.Interfaces
@@ -24,9 +25,7 @@ namespace CLup.Application.Shared.Interfaces
         
         DbSet<User> Users { get; }
         
-        DbSet<BusinessMessage> BusinessMessages { get; }
-        
-        DbSet<UserMessage> UserMessages { get; }
+        DbSet<Message> Messages { get; }
 
         Task<int> AddAndSave(params Entity[] entities);
         

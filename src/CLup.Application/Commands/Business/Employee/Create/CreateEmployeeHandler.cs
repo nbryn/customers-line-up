@@ -12,12 +12,12 @@ namespace CLup.Application.Commands.Business.Employee.Create
 {
     public class CreateEmployeeHandler : IRequestHandler<CreateEmployeeCommand, Result>
     {
-        private readonly IValidator<Domain.Business.Employee.Employee> _validator;
+        private readonly IValidator<Domain.Businesses.Employees.Employee> _validator;
         private readonly ICLupDbContext _context;
         private readonly IMapper _mapper;
 
         public CreateEmployeeHandler(
-            IValidator<Domain.Business.Employee.Employee> validator,
+            IValidator<Domain.Businesses.Employees.Employee> validator,
             ICLupDbContext context, 
             IMapper mapper) 
         { 
@@ -30,7 +30,7 @@ namespace CLup.Application.Commands.Business.Employee.Create
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == command.UserId)
                     .FailureIfDiscard("User not found.")
                     .FailureIfDiscard(() => _context.Businesses.FirstOrDefaultAsync(b => b.Id == command.BusinessId), "Business not found.")
-                    .AndThen(() => _mapper.Map<Domain.Business.Employee.Employee>(command))
+                    .AndThen(() => _mapper.Map<Domain.Businesses.Employees.Employee>(command))
                     .Validate(_validator)
                     .Finally(employee => _context.AddAndSave(employee));
         }

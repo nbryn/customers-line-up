@@ -12,11 +12,11 @@ namespace CLup.Application.Commands.User.Update
 {
     public class UpdateUserInfoHandler : IRequestHandler<UpdateUserInfoCommand, Result>
     {
-        private readonly IValidator<Domain.User.User> _validator;
+        private readonly IValidator<Domain.Users.User> _validator;
         private readonly ICLupDbContext _context;
 
         public UpdateUserInfoHandler(
-            IValidator<Domain.User.User> validator,
+            IValidator<Domain.Users.User> validator,
             ICLupDbContext context)
         {
             _validator = validator;

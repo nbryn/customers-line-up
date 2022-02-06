@@ -1,6 +1,7 @@
 using System.Linq;
 using AutoMapper;
 using CLup.Domain.Booking;
+using CLup.Domain.Bookings;
 
 namespace CLup.Application.Queries.Shared
 {

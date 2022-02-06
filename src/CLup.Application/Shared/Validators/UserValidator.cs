@@ -1,9 +1,10 @@
 using CLup.Domain.Shared.ValueObjects;
+using CLup.Domain.Users;
 using FluentValidation;
 
 namespace CLup.Domain.User
 {
-    public class UserValidator : AbstractValidator<User>
+    public class UserValidator : AbstractValidator<Users.User>
     {
         public UserValidator(
             IValidator<UserData> userDataValidator,

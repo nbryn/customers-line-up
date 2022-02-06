@@ -5,12 +5,13 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using CLup.Application.Shared.Interfaces;
-using CLup.Domain.Booking;
-using CLup.Domain.Business;
-using CLup.Domain.Business.Employee;
-using CLup.Domain.Business.TimeSlot;
+using CLup.Domain.Bookings;
+using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.Employees;
+using CLup.Domain.Businesses.TimeSlots;
+using CLup.Domain.Messages;
 using CLup.Domain.Shared;
-using CLup.Domain.User;
+using CLup.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Infrastructure.Persistence
@@ -18,7 +19,7 @@ namespace CLup.Infrastructure.Persistence
     public class CLupDbContext : DbContext, ICLupDbContext
     {
         private readonly IDomainEventService _domainEventService;
-        
+
         public const string DEFAULT_SCHEMA = "CLup";
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BusinessOwner> BusinessOwners { get; set; }
@@ -26,11 +27,10 @@ namespace CLup.Infrastructure.Persistence
         public DbSet<Employee> Employees { get; set; }
         public DbSet<TimeSlot> TimeSlots { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<BusinessMessage> BusinessMessages { get; set; }
-        public DbSet<UserMessage> UserMessages { get; set; }
-        
+        public DbSet<Message> Messages { get; set; }
+
         public CLupDbContext(
-            DbContextOptions<CLupDbContext> options, 
+            DbContextOptions<CLupDbContext> options,
             IDomainEventService domainEventService)
             : base(options)
         {
@@ -40,7 +40,7 @@ namespace CLup.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -49,21 +49,21 @@ namespace CLup.Infrastructure.Persistence
             CancellationToken cancellationToken = default(CancellationToken))
         {
             MarkEntitiesAsUpdated();
-            
+
             var events = ChangeTracker.Entries<IHasDomainEvent>()
                 .SelectMany(x => x.Entity.DomainEvents)
                 .Where(domainEvent => !domainEvent.IsPublished)
                 .ToList();
-            
+
             await DispatchEvents(events);
 
             return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
-        
+
         public async Task<int> AddAndSave(params Entity[] entities)
         {
             await base.AddRangeAsync(entities);
-            
+
             return await SaveChangesAsync();
         }
 
@@ -71,7 +71,7 @@ namespace CLup.Infrastructure.Persistence
         {
             if (existingEntity == null)
             {
-                newEntity.Id = Guid.NewGuid().ToString(); 
+                newEntity.Id = Guid.NewGuid().ToString();
                 Add(newEntity);
             }
         }
@@ -82,7 +82,7 @@ namespace CLup.Infrastructure.Persistence
 
             return await SaveChangesAsync();
         }
-        
+
         public async Task<int> UpdateEntity<T>(string id, T updatedEntity) where T : Entity
         {
             var entity = (Entity)await FindAsync(typeof(T), id);
@@ -119,7 +119,7 @@ namespace CLup.Infrastructure.Persistence
                 }
             });
         }
-        
+
         private async Task DispatchEvents(IList<DomainEvent> events)
         {
             foreach (var @event in events)

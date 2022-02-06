@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.User;
+using CLup.Domain.Users;
 using BC = BCrypt.Net.BCrypt;
 
 namespace CLup.Application.Auth

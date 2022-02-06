@@ -28,14 +28,14 @@ namespace CLup.Application.Queries.User.Booking
 
         public class Handler : IRequestHandler<Query, Result<Model>>
         {
-            private readonly IQueryDbContext _queryContext;
+            private readonly IReadOnlyDbContext _readOnlyContext;
 
-            public Handler(IQueryDbContext queryContext) => _queryContext = queryContext;
+            public Handler(IReadOnlyDbContext readOnlyContext) => _readOnlyContext = readOnlyContext;
             
             public async Task<Result<Model>> Handle(Query query, CancellationToken cancellationToken)
             {
 
-                return await _queryContext.Bookings.Include(b => b.Business)
+                return await _readOnlyContext.Bookings.Include(b => b.Business)
                         .Include(b => b.TimeSlot)
                         .Include(b => b.User)
                         .Where(x => x.User.UserData.Email == query.UserEmail)

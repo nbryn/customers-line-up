@@ -12,17 +12,17 @@ namespace CLup.Application.Queries.User.General
 {
     public class Handler : IRequestHandler<FetchAllUsersQuery, Result<IList<UserDto>>>
     {
-        private readonly IQueryDbContext _queryContext;
+        private readonly IReadOnlyDbContext _readOnlyContext;
         private readonly IMapper _mapper;
 
-        public Handler(IQueryDbContext queryContext, IMapper mapper)
+        public Handler(IReadOnlyDbContext readOnlyContext, IMapper mapper)
         {
-            _queryContext = queryContext;
+            _readOnlyContext = readOnlyContext;
             _mapper = mapper;
         }
         public async Task<Result<IList<UserDto>>> Handle(FetchAllUsersQuery query, CancellationToken cancellationToken)
         {
-            var result = await _mapper.ProjectTo<UserDto>(_queryContext.Users).ToListAsync();
+            var result = await _mapper.ProjectTo<UserDto>(_readOnlyContext.Users).ToListAsync();
 
             return Result.Ok<IList<UserDto>>(result);
         }

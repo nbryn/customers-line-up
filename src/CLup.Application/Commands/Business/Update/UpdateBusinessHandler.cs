@@ -12,12 +12,12 @@ namespace CLup.Application.Commands.Business.Update
 {
     public class UpdateBusinessHandler : IRequestHandler<UpdateBusinessCommand, Result>
     {
-        private readonly IValidator<Domain.Business.Business> _businessValidator;
+        private readonly IValidator<Domain.Businesses.Business> _businessValidator;
         private readonly ICLupDbContext _context;
         private readonly IMapper _mapper;
 
         public UpdateBusinessHandler(
-            IValidator<Domain.Business.Business> businessValidator,
+            IValidator<Domain.Businesses.Business> businessValidator,
             ICLupDbContext context, 
             IMapper mapper)
         {
@@ -30,7 +30,7 @@ namespace CLup.Application.Commands.Business.Update
         {
             return await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.Id)
                     .FailureIfDiscard("Business not found.")
-                    .AndThen(() => _mapper.Map<Domain.Business.Business>(command))
+                    .AndThen(() => _mapper.Map<Domain.Businesses.Business>(command))
                     .Validate(_businessValidator)
                     .Finally(updatedBusiness => _context.UpdateEntity(command.Id, updatedBusiness));
         }

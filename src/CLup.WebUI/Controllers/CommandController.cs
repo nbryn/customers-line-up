@@ -8,9 +8,10 @@ using CLup.Application.Commands.Business.Employee.Delete;
 using CLup.Application.Commands.Business.TimeSlot.Delete;
 using CLup.Application.Commands.Business.TimeSlot.Generate;
 using CLup.Application.Commands.Business.Update;
+using CLup.Application.Commands.Shared.Message.MarkAsDeleted;
+using CLup.Application.Commands.Shared.Message.Send;
 using CLup.Application.Commands.User.CreateBooking;
 using CLup.Application.Commands.User.DeleteBooking;
-using CLup.Application.Commands.User.SendMessage;
 using CLup.Application.Commands.User.Update;
 using CLup.Application.Shared.Extensions;
 using MediatR;
@@ -142,10 +143,21 @@ namespace CLup.WebUI.Controllers
         }
 
         [HttpPost]
-        [Route("user/message")]
+        [Route("message/send")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> SendUserMessage([FromBody] SendUserMessageCommand command)
+        public async Task<IActionResult> SendMessage([FromBody] SendMessageCommand command)
+        {
+            var response = await _mediator.Send(command);
+
+            return this.CreateActionResult(response);
+        }
+
+        [HttpPut]
+        [Route("message/delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> MarkMessageAsDeleted([FromBody] MarkMessageAsDeletedCommand command)
         {
             var response = await _mediator.Send(command);
 

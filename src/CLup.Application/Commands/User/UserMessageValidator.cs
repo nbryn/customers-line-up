@@ -1,10 +1,9 @@
-using CLup.Domain.Message;
-using CLup.Domain.User;
+using CLup.Domain.Messages;
 using FluentValidation;
 
 namespace CLup.Application.Commands.User
 {
-    public class UserMessageValidator : AbstractValidator<UserMessage>
+    public class UserMessageValidator : AbstractValidator<Message>
     {
         public UserMessageValidator(
             IValidator<MessageData> messageDataValidator,

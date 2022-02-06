@@ -11,48 +11,68 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Queries.Business.Message
 {
-    public class FetchMessagesHandler : IRequestHandler<FetchBusinessMessagesQuery, Result<FetchMessagesResponse>>
+    public class FetchMessagesHandler : IRequestHandler<FetchBusinessMessagesQuery, Result<FetchBusinessMessagesResponse>>
     {
-        private readonly IQueryDbContext _queryContext;
+        private readonly IReadOnlyDbContext _readOnlyContext;
         private readonly IMapper _mapper;
 
         public FetchMessagesHandler(
-            IQueryDbContext queryContext,
+            IReadOnlyDbContext readOnlyContext,
             IMapper mapper)
         {
-            _queryContext = queryContext;
+            _readOnlyContext = readOnlyContext;
             _mapper = mapper;
         }
 
-        public async Task<Result<FetchMessagesResponse>> Handle(
+        public async Task<Result<FetchBusinessMessagesResponse>> Handle(
             FetchBusinessMessagesQuery query,
             CancellationToken cancellationToken)
         {
-            return await _queryContext.Businesses
+            return await _readOnlyContext.Businesses
                 .FirstOrDefaultAsync(business => business.OwnerEmail == query.UserEmail && business.Id == query.BusinessId)
                 .ToResult()
                 .EnsureDiscard(business => business != null, "You don't have access to these messages")
                 .AndThen(async () =>
                 {
-                    var sentMessages = await _queryContext.BusinessMessages
+                    var sentMessages = await _readOnlyContext.Messages
                     .Include(um => um.Metadata)
-                    .Include(um => um.Sender)
-                    .Include(um => um.Receiver)
-                    .Where(um => um.Sender.Id == query.BusinessId)
+                    .Where(um => um.SenderId == query.BusinessId && !um.Metadata.DeletedBySender)
                     .ToListAsync();
 
-                    var receivedMessages = await _queryContext.UserMessages
-                    .Include(bm => bm.Metadata)
-                    .Include(bm => bm.Sender)
-                    .Include(bm => bm.Receiver)
-                    .Where(bm => bm.ReceiverId == query.BusinessId)
+                    var sentMessagesDto = sentMessages.Select(async message =>
+                    {
+                        var dto = _mapper.Map<MessageDto>(message);
+                        var sender = await _readOnlyContext.Businesses.FirstOrDefaultAsync(business => business.Id == query.BusinessId);
+                        var receiver = await _readOnlyContext.Users.FirstOrDefaultAsync(user => user.Id == message.ReceiverId);
+                        dto.Sender = sender.Name;
+                        dto.Receiver = receiver.Name;
+
+                        return dto;
+                    })
+                    .ToList();
+
+                    var receivedMessages = await _readOnlyContext.Messages
+                    .Include(um => um.Metadata)
+                    .Where(bm => bm.ReceiverId == query.BusinessId && !bm.Metadata.DeletedByReceiver)
                     .ToListAsync();
 
-                    return new FetchMessagesResponse()
+                    var receivedMessagesDto = receivedMessages.Select(async message =>
+                    {
+                        var dto = _mapper.Map<MessageDto>(message);
+                        var sender = await _readOnlyContext.Users.FirstOrDefaultAsync(user => user.Id == message.SenderId);
+                        var receiver = await _readOnlyContext.Businesses.FirstOrDefaultAsync(business => business.Id == query.BusinessId);
+                        dto.Sender = sender.Name;
+                        dto.Receiver = receiver.Name;
+
+                        return dto;
+                    })
+                    .ToList();
+
+                    return new FetchBusinessMessagesResponse()
                     {
                         BusinessId = query.BusinessId,
-                        SentMessages = sentMessages.Select(_mapper.Map<MessageDto>).ToList(),
-                        ReceivedMessages = receivedMessages.Select(_mapper.Map<MessageDto>).ToList()
+                        SentMessages = await Task.WhenAll(sentMessagesDto),
+                        ReceivedMessages = await Task.WhenAll(receivedMessagesDto)
                     };
                 })
                 .Finally(response => response);

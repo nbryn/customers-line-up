@@ -15,23 +15,23 @@ namespace CLup.Application.Queries.Business.Booking
 
     public class BusinessBookingsHandler : IRequestHandler<BusinessBookingsQuery, Result<List<BookingDto>>>
     {
-        private readonly IQueryDbContext _queryContext;
+        private readonly IReadOnlyDbContext _readOnlyContext;
         private readonly IMapper _mapper;
 
-        public BusinessBookingsHandler(IQueryDbContext queryContext, IMapper mapper)
+        public BusinessBookingsHandler(IReadOnlyDbContext readOnlyContext, IMapper mapper)
         {
             _mapper = mapper;
-            _queryContext = queryContext;
+            _readOnlyContext = readOnlyContext;
         }
 
         public async Task<Result<List<BookingDto>>> Handle(BusinessBookingsQuery query, CancellationToken cancellationToken)
         {
-            return await _queryContext.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
+            return await _readOnlyContext.Businesses.FirstOrDefaultAsync(b => b.Id == query.BusinessId)
                     .ToResult()
                     .EnsureDiscard(business => business != null)
                     .Finally(async () =>
                     {
-                        var bookings = await _queryContext.Bookings
+                        var bookings = await _readOnlyContext.Bookings
                                         .Include(x => x.TimeSlot)
                                         .ThenInclude(x => x.Business)
                                         .Include(x => x.User)

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CLup.Application.Shared.Util;
 using CLup.Domain.Business;
+using CLup.Domain.Businesses;
 using MediatR;
 
 namespace CLup.Application.Queries.Business.General

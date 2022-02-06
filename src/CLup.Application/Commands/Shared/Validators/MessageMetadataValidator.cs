@@ -1,4 +1,4 @@
-using CLup.Domain.Message;
+using CLup.Domain.Messages;
 using FluentValidation;
 
 namespace CLup.Application.Commands.Shared.Validators

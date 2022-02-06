@@ -1,4 +1,5 @@
-using CLup.Domain.User;
+using CLup.Domain.Messages;
+using CLup.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -49,13 +50,15 @@ namespace CLup.Infrastructure.Persistence.EntityConfigurations
                     .HasMany(x => x.Bookings)
                     .WithOne(x => x.User);
 
-            userConfiguration
-                    .HasMany(x => x.SentMessages)
-                    .WithOne(x => x.Sender);
+           userConfiguration
+                    .HasMany<Message>(user => user.SentMessages)
+                    .WithOne()
+                    .HasForeignKey(message => message.SenderId);
 
             userConfiguration
-                    .HasMany(x => x.ReceivedMessages)
-                    .WithOne(x => x.Receiver);
+                    .HasMany<Message>(user => user.ReceivedMessages)
+                    .WithOne()
+                    .HasForeignKey(message => message.ReceiverId);
         }
     }
 }

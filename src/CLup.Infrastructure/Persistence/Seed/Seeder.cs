@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CLup.Domain.Business;
 using CLup.Domain.Business.TimeSlot;
+using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.TimeSlots;
 using CLup.Infrastructure.Persistence.Seed.Builders;
 using BC = BCrypt.Net.BCrypt;
 

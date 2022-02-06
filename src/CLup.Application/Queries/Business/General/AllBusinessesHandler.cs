@@ -13,18 +13,18 @@ namespace CLup.Application.Queries.Business.General
 
     public class AllBusinessesHandler : IRequestHandler<AllBusinessesQuery, Result<IList<BusinessDto>>>
     {
-        private readonly IQueryDbContext _queryContext;
+        private readonly IReadOnlyDbContext _readOnlyContext;
         private readonly IMapper _mapper;
 
-        public AllBusinessesHandler(IQueryDbContext queryContext, IMapper mapper)
+        public AllBusinessesHandler(IReadOnlyDbContext readOnlyContext, IMapper mapper)
         {
-            _queryContext = queryContext;
+            _readOnlyContext = readOnlyContext;
             _mapper = mapper;
         }
 
         public async Task<Result<IList<BusinessDto>>> Handle(AllBusinessesQuery query, CancellationToken cancellationToken)
         {
-            var result = await _mapper.ProjectTo<BusinessDto>(_queryContext.Businesses).ToListAsync();
+            var result = await _mapper.ProjectTo<BusinessDto>(_readOnlyContext.Businesses).ToListAsync();
 
             return Result.Ok<IList<BusinessDto>>(result);
         }

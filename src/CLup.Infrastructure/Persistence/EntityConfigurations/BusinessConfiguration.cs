@@ -1,5 +1,6 @@
 using System;
-using CLup.Domain.Business;
+using CLup.Domain.Businesses;
+using CLup.Domain.Messages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -67,12 +68,14 @@ namespace CLup.Infrastructure.Persistence.EntityConfigurations
                     .WithOne(x => x.Business);
 
             businessConfiguration
-                    .HasMany(x => x.SentMessages)
-                    .WithOne(x => x.Sender);
+                    .HasMany<Message>(business => business.SentMessages)
+                    .WithOne()
+                    .HasForeignKey(message => message.SenderId);
 
             businessConfiguration
-                    .HasMany(x => x.ReceivedMessages)
-                    .WithOne(x => x.Receiver);
+                    .HasMany<Message>(business => business.ReceivedMessages)
+                    .WithOne()
+                    .HasForeignKey(message => message.ReceiverId);
         }
     }
 }

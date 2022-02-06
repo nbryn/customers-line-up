@@ -12,12 +12,12 @@ namespace CLup.Application.Queries.User.NotEmployed
 {
     public class UsersNotEmployedByBusinessHandler : IRequestHandler<UsersNotEmployedByBusinessQuery, Result<UsersNotEmployedByBusinessResponse>>
     {
-        private readonly IQueryDbContext _queryContext;
+        private readonly IReadOnlyDbContext _readOnlyContext;
         private readonly IMapper _mapper;
 
-        public UsersNotEmployedByBusinessHandler(IQueryDbContext queryContext, IMapper mapper)
+        public UsersNotEmployedByBusinessHandler(IReadOnlyDbContext readOnlyContext, IMapper mapper)
         {
-            _queryContext = queryContext;
+            _readOnlyContext = readOnlyContext;
             _mapper = mapper;
         }
 
@@ -25,9 +25,9 @@ namespace CLup.Application.Queries.User.NotEmployed
         {
             var notAlreadyEmployedByBusiness = new List<UserDto>();
 
-            foreach (var user in await _queryContext.Users.ToListAsync())
+            foreach (var user in await _readOnlyContext.Users.ToListAsync())
             {
-                var employee = await _queryContext.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id &&
+                var employee = await _readOnlyContext.Employees.FirstOrDefaultAsync(e => e.UserId == user.Id &&
                                                                             e.BusinessId == query.BusinessId);
                 if (employee == null)
                 {

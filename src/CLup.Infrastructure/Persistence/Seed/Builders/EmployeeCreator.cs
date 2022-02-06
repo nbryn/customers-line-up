@@ -1,5 +1,6 @@
 using System;
 using CLup.Domain.Business.Employee;
+using CLup.Domain.Businesses.Employees;
 
 namespace CLup.Infrastructure.Persistence.Seed.Builders
 {

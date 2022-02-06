@@ -3,7 +3,7 @@ using MediatR;
 
 namespace CLup.Application.Queries.Business.Message
 {
-    public class FetchBusinessMessagesQuery : IRequest<Result<FetchMessagesResponse>>
+    public class FetchBusinessMessagesQuery : IRequest<Result<FetchBusinessMessagesResponse>>
     {
 
         public FetchBusinessMessagesQuery()

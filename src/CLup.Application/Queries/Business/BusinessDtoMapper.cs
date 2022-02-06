@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CLup.Domain.Business;
+using CLup.Domain.Businesses;
 
 namespace CLup.Application.Shared.Models.Mapping
 {

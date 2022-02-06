@@ -7,7 +7,7 @@ namespace CLup.Application.Commands.Business.Employee
     {
         public EmployeeMapper()
         {
-            CreateMap<CreateEmployeeCommand, Domain.Business.Employee.Employee>();
+            CreateMap<CreateEmployeeCommand, Domain.Businesses.Employees.Employee>();
         }
     }
 }

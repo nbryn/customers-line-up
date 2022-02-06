@@ -5,6 +5,7 @@ using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Business;
+using CLup.Domain.Businesses;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +14,12 @@ namespace CLup.Application.Commands.Business.Create
 {
     public class CreateBusinessHandler : IRequestHandler<CreateBusinessCommand, Result>
     {
-        private readonly IValidator<Domain.Business.Business> _validator;
+        private readonly IValidator<Domain.Businesses.Business> _validator;
         private readonly ICLupDbContext _context;
         private readonly IMapper _mapper;
 
         public CreateBusinessHandler(
-            IValidator<Domain.Business.Business> validator,
+            IValidator<Domain.Businesses.Business> validator,
             ICLupDbContext context, 
             IMapper mapper)
         {
@@ -32,7 +33,7 @@ namespace CLup.Application.Commands.Business.Create
             return await _context.BusinessOwners.FirstOrDefaultAsync(o => o.UserEmail == command.OwnerEmail)
                     .ToResult()
                     .AndThen(owner => _context.CreateEntityIfNotExists(owner, new BusinessOwner(command.OwnerEmail)))
-                    .AndThen(() => _mapper.Map<Domain.Business.Business>(command))
+                    .AndThen(() => _mapper.Map<Domain.Businesses.Business>(command))
                     .Validate(_validator)
                     .Finally(business => _context.AddAndSave(business));
         }

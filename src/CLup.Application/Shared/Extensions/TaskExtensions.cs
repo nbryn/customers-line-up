@@ -42,6 +42,9 @@ namespace CLup.Application.Shared.Extensions
 
         public static async Task<Result<T>> AndThen<T>(this Task<Result> task, Func<T> f)
             => (await task).Bind(f);
+        
+        public static async Task<Result<T>> AndThen<T>(this Task<Result> task, Func<Task<T>> f)
+            => await (await task).Bind(f);
             
         public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, U> f)
             => (await task).Bind(f);

@@ -1,3 +1,4 @@
+using CLup.Domain.Users;
 using FluentValidation;
 
 namespace CLup.Domain.User

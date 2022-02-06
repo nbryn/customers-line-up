@@ -5,6 +5,7 @@ using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Booking;
+using CLup.Domain.Bookings;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,4 +1,5 @@
-import {HasAddress, Index, MessageResponse} from '../../shared/models/General';
+import {HasAddress, Index} from '../../shared/models/General';
+import { MessageResponse } from '../message/Message';
 
 export interface UserDTO extends HasAddress {
     [key: string]: string | number | undefined;
