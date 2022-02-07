@@ -1,14 +1,18 @@
 import {HasAddress, Index} from '../../shared/models/General';
-import { MessageResponse } from '../message/Message';
+import {BookingDTO} from '../booking/Booking';
+import {BusinessDTO} from '../business/Business';
+import {MessageDTO, MessageResponse} from '../message/Message';
 
 export interface UserDTO extends HasAddress {
-    [key: string]: string | number | undefined;
     email: string;
     id?: string;
     name?: string;
     password?: string;
     token?: string;
     role?: 'User' | 'Employee' | 'Owner' | 'Admin';
+    bookings?: BookingDTO[];
+    businesses?: BusinessDTO[];
+    messages?: MessageDTO[];
 }
 
 export interface LoginDTO extends Index {
@@ -21,6 +25,6 @@ export type NotEmployedByBusiness = {
     users: UserDTO[];
 };
 
-export interface UserMessageResponse extends MessageResponse {
-    userId: string;
-}
+export type TokenResponse = {
+    token: string;
+};

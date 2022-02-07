@@ -11,7 +11,7 @@ import {LoginView} from '../features/user/LoginView';
 import {MainMenu} from '../shared/components/navigation/MainMenu';
 import {Routes} from './Routes';
 import {selectApiState} from '../shared/api/apiSlice';
-import {selectCurrentUser} from '../features/user/userSlice';
+import {selectCurrentUser} from '../features/user/UserState';
 import {useAppSelector, useAppDispatch} from '../app/Store';
 
 const useStyles = makeStyles((theme) => ({

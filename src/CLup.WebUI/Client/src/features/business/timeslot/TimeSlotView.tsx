@@ -5,12 +5,11 @@ import React from 'react';
 
 import {
     deleteTimeSlot,
-    fetchTimeSlotsByBusiness,
     selectTimeSlotsByBusiness,
-} from './timeSlotState';
+} from './TimeSlotState';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
-import {selectCurrentBusiness} from '../businessSlice';
+import {selectCurrentBusiness} from '../BusinessState';
 import {TimeSlotDTO} from './TimeSlot';
 import {TableColumn} from '../../../shared/components/Table';
 import {TableContainer} from '../../../shared/containers/TableContainer';
@@ -31,7 +30,7 @@ export const TimeSlotView: React.FC = () => {
         return <ErrorView />;
     }
 
-    const timeSlots = useAppSelector(selectTimeSlotsByBusiness(business.id));
+    const timeSlots = useAppSelector(selectTimeSlotsByBusiness);
 
     const columns: TableColumn[] = [
         {title: 'timeSlotId', field: 'timeSlotId', hidden: true},
@@ -60,7 +59,6 @@ export const TimeSlotView: React.FC = () => {
                         actions={actions}
                         columns={columns}
                         tableData={timeSlots}
-                        fetchData={() => dispatch(fetchTimeSlotsByBusiness(business.id))}
                         tableTitle="Time Slots"
                         emptyMessage="No Time Slots Yet"
                     />

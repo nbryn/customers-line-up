@@ -12,8 +12,6 @@ namespace CLup.Application.Shared.Interfaces
     {
         public IQueryable<Booking> Bookings { get; }
         
-        public IQueryable<BusinessOwner> BusinessOwners { get; }
-        
         public IQueryable<Business> Businesses { get; }
         
         public IQueryable<Employee> Employees { get; }

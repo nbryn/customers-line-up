@@ -4,7 +4,7 @@ import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {BookingDTO} from './Booking';
-import {deleteBookingForUser, fetchBookingsByUser, selectBookingsByUser} from './bookingSlice';
+import {deleteBookingForUser, selectBookingsByUser} from './BookingState';
 import {Header} from '../../shared/components/Texts';
 import {MapModal, MapModalProps, defaultMapProps} from '../../shared/components/modal/MapModal';
 import {TableColumn} from '../../shared/components/Table';
@@ -72,7 +72,6 @@ export const UserBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        fetchData={() => dispatch(fetchBookingsByUser(null))}
                         tableData={bookings}
                         tableTitle="Bookings"
                         emptyMessage="No Bookings Yet"

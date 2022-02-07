@@ -4,38 +4,30 @@ import {
     createBooking,
     deleteBookingForBusiness,
     deleteBookingForUser,
-    fetchBookingsByBusiness,
-    fetchBookingsByUser,
-} from '../../features/booking/bookingSlice';
+} from '../../features/booking/BookingState';
 import {
     createBusiness,
     fetchAllBusinesses,
-    fetchBusinessesByOwner,
-    fetchBusinessMessages,
     fetchBusinessesTypes,
     updateBusinessInfo,
-} from '../../features/business/businessSlice';
+} from '../../features/business/BusinessState';
 import {
     createEmployee,
     removeEmployee,
-    fetchEmployeesByBusiness,
-} from '../../features/business/employee/employeeState';
+} from '../../features/business/employee/EmployeeState';
 import {fetchUserInsights} from '../../features/insights/insightsSlice';
+import {sendMessage} from '../../features/message/MessageState';
 import {
     deleteTimeSlot,
-    fetchAvailableTimeSlotsByBusiness,
-    fetchTimeSlotsByBusiness,
     generateTimeSlots,
-} from '../../features/business/timeslot/timeSlotState';
+} from '../../features/business/timeslot/TimeSlotState';
 import {
     login,
     register,
-    fetchUserInfo,
-    fetchUserMessages,
+    fetchUserAggregate,
     fetchUsersNotEmployedByBusiness,
-    sendUserMessage,
     updateUserInfo,
-} from '../../features/user/userSlice';
+} from '../../features/user/UserState';
 import {RootState} from '../../app/Store';
 
 const BOOKING_CREATED_MSG = 'Success - Go to my bookings to see your bookings';
@@ -159,7 +151,7 @@ export const apiSlice = createSlice({
                 state.message = BUSINESS_DELETED_BOOKING_MSG;
             })
 
-            .addCase(sendUserMessage.fulfilled, (state) => {
+            .addCase(sendMessage.fulfilled, (state) => {
                 state.loading = false;
                 state.error = false;
                 state.message = MESSAGE_SEND;
@@ -167,22 +159,13 @@ export const apiSlice = createSlice({
 
             .addMatcher(
                 isAnyOf(
-                    fetchBookingsByUser.fulfilled,
-                    fetchBookingsByBusiness.fulfilled,
                     fetchAllBusinesses.fulfilled,
-                    fetchBusinessesByOwner.fulfilled,
-                    fetchBusinessMessages.fulfilled,
                     fetchBusinessesTypes.fulfilled,
                     removeEmployee.fulfilled,
-                    fetchEmployeesByBusiness.fulfilled,
                     fetchUserInsights.fulfilled,
-                    fetchAvailableTimeSlotsByBusiness.fulfilled,
-                    fetchTimeSlotsByBusiness.fulfilled,
-                    fetchUsersNotEmployedByBusiness.fulfilled,
                     login.fulfilled,
                     register.fulfilled,
-                    fetchUserInfo.fulfilled,
-                    fetchUserMessages.fulfilled,
+                    fetchUserAggregate.fulfilled,
                 ),
                 (state) => {
                     state.loading = false;
@@ -196,29 +179,21 @@ export const apiSlice = createSlice({
                     createBooking.pending,
                     deleteBookingForBusiness.pending,
                     deleteBookingForUser.pending,
-                    fetchBookingsByBusiness.pending,
-                    fetchBookingsByUser.pending,
                     createBusiness.pending,
                     fetchAllBusinesses.pending,
-                    fetchBusinessesByOwner.pending,
-                    fetchBusinessMessages.pending,
                     fetchBusinessesTypes.pending,
                     updateBusinessInfo.pending,
                     createEmployee.pending,
                     removeEmployee.pending,
-                    fetchEmployeesByBusiness.pending,
                     fetchUserInsights.pending,
                     deleteTimeSlot.pending,
-                    fetchAvailableTimeSlotsByBusiness.pending,
-                    fetchTimeSlotsByBusiness.pending,
                     generateTimeSlots.pending,
                     fetchUsersNotEmployedByBusiness.pending,
                     login.pending,
                     register.pending,
-                    fetchUserInfo.pending,
                     updateUserInfo.pending,
-                    fetchUserMessages.pending,
-                    sendUserMessage.pending,
+                    sendMessage.pending,
+                    fetchUserAggregate.pending,
                 ),
                 (state) => {
                     state.loading = true;
@@ -231,28 +206,20 @@ export const apiSlice = createSlice({
                     deleteBookingForBusiness.rejected,
                     deleteBookingForUser.rejected,
                     fetchAllBusinesses.rejected,
-                    fetchBookingsByBusiness.rejected,
-                    fetchBookingsByUser.rejected,
                     createBusiness.rejected,
                     fetchAllBusinesses.rejected,
-                    fetchBusinessesByOwner.rejected,
-                    fetchBusinessMessages.rejected,
                     fetchBusinessesTypes.rejected,
                     updateBusinessInfo.rejected,
                     createEmployee.rejected,
                     removeEmployee.rejected,
-                    fetchEmployeesByBusiness.rejected,
                     fetchUserInsights.rejected,
                     deleteTimeSlot.rejected,
-                    fetchAvailableTimeSlotsByBusiness.rejected,
-                    fetchTimeSlotsByBusiness.rejected,
                     generateTimeSlots.rejected,
                     fetchUsersNotEmployedByBusiness.rejected,
-                    fetchUserInfo.rejected,
                     register.rejected,
                     updateUserInfo.rejected,
-                    fetchUserMessages.rejected,
-                    sendUserMessage.rejected,
+                    sendMessage.rejected,
+                    fetchUserAggregate.rejected,
                 ),
                 (state, action) => {
                     state.loading = false;

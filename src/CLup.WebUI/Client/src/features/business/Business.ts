@@ -1,5 +1,10 @@
-import {DTO, HasAddress, MessageResponse} from '../../shared/models/General';
 import {Address} from '../../shared/services/AddressService';
+import {DTO, HasAddress} from '../../shared/models/General';
+import { BookingDTO } from '../booking/Booking';
+import { EmployeeDTO } from './employee/Employee';
+import { MessageDTO } from '../message/Message';
+import { TimeSlotDTO } from './timeslot/TimeSlot';
+
 
 export interface BusinessDTO extends DTO, HasAddress {
     name: string;
@@ -10,6 +15,10 @@ export interface BusinessDTO extends DTO, HasAddress {
     closes: string;
     businessHours?: string;
     ownerEmail?: string;
+    bookings?: BookingDTO[]
+    employees?: EmployeeDTO[]
+    messages?: MessageDTO[]
+    timeSlots?: TimeSlotDTO[]
 }
 
 export type BusinessDataDTO = {
@@ -17,10 +26,6 @@ export type BusinessDataDTO = {
     numberOfTimeSlots: number;
     numberOfEmployees?: number;
 };
-
-export interface BusinessMessageResponse extends MessageResponse {
-    businessId: string;
-}
 
 export function updateBusiness(
     updatedBusiness: BusinessDTO,

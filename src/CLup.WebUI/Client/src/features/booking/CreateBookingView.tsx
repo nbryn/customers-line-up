@@ -3,16 +3,15 @@ import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
-import {createBooking} from './bookingSlice';
+import {createBooking} from './BookingState';
 import {ErrorView} from '../../shared/views/ErrorView';
 import {
-    fetchAvailableTimeSlotsByBusiness,
-    selectAvailableTimeSlotsByBusiness,
-} from '../business/timeslot/timeSlotState';
+    selectAvailableTimeSlotsForCurrentBusiness,
+} from '../business/timeslot/TimeSlotState';
 import {Header} from '../../shared/components/Texts';
 
 import {MapModal} from '../../shared/components/modal/MapModal';
-import {selectCurrentBusiness} from '../business/businessSlice';
+import {selectCurrentBusiness} from '../business/BusinessState';
 import {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
 import {TimeSlotDTO} from '../business/timeslot/TimeSlot';
@@ -42,7 +41,7 @@ export const CreateBookingView: React.FC = () => {
         return <ErrorView />;
     }
 
-    const timeSlots = useAppSelector(selectAvailableTimeSlotsByBusiness(business.id));
+    const timeSlots = useAppSelector(selectAvailableTimeSlotsForCurrentBusiness);
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -54,7 +53,6 @@ export const CreateBookingView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Book Time" clickable color="primary" />,
             onClick: async (event: any, rowData: TimeSlotDTO) => {
-                console.log(rowData);
                 dispatch(createBooking({id: rowData.id, data: rowData.businessId}));
             },
         },
@@ -78,7 +76,6 @@ export const CreateBookingView: React.FC = () => {
                         actions={actions}
                         columns={columns}
                         tableData={timeSlots}
-                        fetchData={() => dispatch(fetchAvailableTimeSlotsByBusiness(business.id))}
                         tableTitle={
                             <>
                                 <h5 className={styles.address}>{business.street}</h5>

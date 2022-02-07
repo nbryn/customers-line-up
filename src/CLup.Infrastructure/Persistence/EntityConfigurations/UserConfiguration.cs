@@ -49,6 +49,10 @@ namespace CLup.Infrastructure.Persistence.EntityConfigurations
             userConfiguration
                     .HasMany(x => x.Bookings)
                     .WithOne(x => x.User);
+            
+             userConfiguration
+                    .HasMany(x => x.Businesses)
+                    .WithOne(x => x.Owner);
 
            userConfiguration
                     .HasMany<Message>(user => user.SentMessages)

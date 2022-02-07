@@ -21,8 +21,6 @@ namespace CLup.Infrastructure.Persistence
 
         public IQueryable<Booking> Bookings => _clupDbContext.Bookings.AsNoTracking().AsQueryable();
         
-        public IQueryable<BusinessOwner> BusinessOwners  => _clupDbContext.BusinessOwners.AsNoTracking().AsQueryable();
-        
         public IQueryable<Business> Businesses => _clupDbContext.Businesses.AsNoTracking().AsQueryable();
         
         public IQueryable<Employee> Employees => _clupDbContext.Employees.AsNoTracking().AsQueryable();

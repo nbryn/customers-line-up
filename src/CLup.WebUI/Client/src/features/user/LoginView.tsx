@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 
 import {Card} from '../../shared/components/card/Card';
 import {Form} from '../../shared/components/form/Form';
-import {login} from './userSlice';
+import {login} from './UserState';
 import {LoginDTO} from './User';
 import {loginValidationSchema} from './UserValidation';
 import {SignupView} from './SignupView';

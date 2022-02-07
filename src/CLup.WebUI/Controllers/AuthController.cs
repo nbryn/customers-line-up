@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using CLup.Application.Auth;
 using CLup.Application.Shared.Extensions;
-using CLup.Application.Shared.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,7 +18,7 @@ namespace CLup.WebUI.Controllers
         [AllowAnonymous]
         [Route("register")]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> Register([FromBody] RegisterCommand command)
         {
@@ -31,7 +30,7 @@ namespace CLup.WebUI.Controllers
         [AllowAnonymous]
         [Route("login")]
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {

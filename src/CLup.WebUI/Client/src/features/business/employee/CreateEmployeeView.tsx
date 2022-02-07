@@ -4,14 +4,14 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {Card} from '../../../shared/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../../shared/components/form/ComboBox';
-import {createEmployee} from './employeeState';
+import {createEmployee} from './EmployeeState';
 import {employeeValidationSchema} from '../BusinessValidation';
 import {ErrorView} from '../../../shared/views/ErrorView';
-import {fetchUsersNotEmployedByBusiness, selectUsersNotEmployedByBusiness} from '../../user/userSlice';
+import {fetchUsersNotEmployedByBusiness, selectUsersNotEmployedByBusiness} from '../../user/UserState';
 import {Form} from '../../../shared/components/form/Form';
 import {Header} from '../../../shared/components/Texts';
 import {EmployeeDTO, NewEmployeeDTO} from './Employee';
-import {selectCurrentBusiness} from '../businessSlice';
+import {selectCurrentBusiness} from '../BusinessState';
 import {TextField} from '../../../shared/components/form/TextField';
 import {useAppDispatch, useAppSelector} from '../../../app/Store';
 import {useForm} from '../../../shared/hooks/useForm';

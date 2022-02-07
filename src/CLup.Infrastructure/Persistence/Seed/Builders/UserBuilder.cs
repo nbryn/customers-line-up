@@ -1,5 +1,4 @@
 using CLup.Domain.Shared.ValueObjects;
-using CLup.Domain.User;
 using CLup.Domain.Users;
 
 namespace CLup.Infrastructure.Persistence.Seed.Builders
@@ -9,7 +8,7 @@ namespace CLup.Infrastructure.Persistence.Seed.Builders
         private UserData _userData;
         private Address _address;
         private Coords _coords;
-        private Role _role;
+        private Role _role = Role.User;
 
         public UserBuilder()
         {
@@ -37,6 +36,13 @@ namespace CLup.Infrastructure.Persistence.Seed.Builders
             return this;
         }
 
-        public User Build() => new User(_userData, _address, _coords);
+        public UserBuilder WithRole(Role role)
+        {
+            _role = role;
+
+            return this;
+        }
+
+        public User Build() => new User(_userData, _address, _coords, _role);
     }
 }

@@ -5,7 +5,7 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {DialogModal} from '../../shared/components/modal/DialogModal';
 import {Header} from '../../shared/components/Texts';
-import {MessageDTO, MessageResponse, SendMessage} from '../models/General';
+import {MessageDTO, SendMessage} from '../../features/message/Message';
 import StringUtil from '../util/StringUtil';
 import {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
@@ -24,16 +24,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type Props = {
-    messageResponse: MessageResponse | null;
+    receivedMessages: MessageDTO[];
+    sentMessages: MessageDTO[];
     sendMessage: (message: SendMessage) => void;
-    fetchData: () => void;
-};
-
-const getMessages = (sent: boolean, messageResponse: MessageResponse | null) => {
-    if (!messageResponse) return [];
-    if (sent) return messageResponse.sentMessages;
-
-    return messageResponse.receivedMessages;
 };
 
 const getTitle = (sent: boolean, tableColumn = true, capitalize = true) => {
@@ -47,8 +40,8 @@ const getTitle = (sent: boolean, tableColumn = true, capitalize = true) => {
 };
 
 export const MessageContainer: React.FC<Props> = ({
-    messageResponse,
-    fetchData,
+    receivedMessages,
+    sentMessages,
     sendMessage,
 }: Props) => {
     const styles = useStyles();
@@ -123,8 +116,7 @@ export const MessageContainer: React.FC<Props> = ({
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        tableData={getMessages(showSentMessages, messageResponse)}
-                        fetchData={fetchData}
+                        tableData={showSentMessages ? sentMessages : receivedMessages}
                         emptyMessage="No messages yet"
                         tableTitle={
                             <>

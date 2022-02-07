@@ -1,6 +1,5 @@
 export interface NormalizedEntityState<T> {
-    byId: {[id: string]: T};
-    allIds: string[];
+    [id: string]: T;
 }
 
 export type ThunkParam<T1> = {

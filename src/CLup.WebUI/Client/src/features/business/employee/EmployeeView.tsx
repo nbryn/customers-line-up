@@ -2,13 +2,12 @@ import React from 'react';
 import Chip from '@material-ui/core/Chip';
 import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
-import {useSelector} from 'react-redux';
 
-import {removeEmployee, fetchEmployeesByBusiness, selectEmployeesByBusiness} from './employeeState';
+import {removeEmployee, selectEmployeesByBusiness} from './EmployeeState';
 import {EmployeeDTO} from './Employee';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
-import {selectCurrentBusiness} from '../businessSlice';
+import {selectCurrentBusiness} from '../BusinessState';
 import {RootState, useAppDispatch, useAppSelector} from '../../../app/Store';
 import {TableColumn} from '../../../shared/components/Table';
 import {TableContainer} from '../../../shared/containers/TableContainer';
@@ -28,9 +27,7 @@ export const EmployeeView: React.FC = () => {
         return <ErrorView />;
     }
 
-    const employees = useSelector<RootState, EmployeeDTO[]>((state) =>
-        selectEmployeesByBusiness(state, business.id)
-    );
+    const employees = useAppSelector(selectEmployeesByBusiness)
 
     const columns: TableColumn[] = [
         {title: 'BusinessId', field: 'businessId', hidden: true},
@@ -64,7 +61,6 @@ export const EmployeeView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        fetchData={() => dispatch(fetchEmployeesByBusiness(business.id))}
                         tableTitle="Employees"
                         tableData={employees}
                         emptyMessage="No Employees Yet"

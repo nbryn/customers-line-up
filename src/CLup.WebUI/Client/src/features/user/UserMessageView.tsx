@@ -1,33 +1,24 @@
 import React from 'react';
 import {Container} from 'react-bootstrap';
 
-import {ErrorView} from '../../shared/views/ErrorView';
-import {
-    fetchUserMessages,
-    selectCurrentUser,
-    selectUserMessages,
-    sendUserMessage,
-} from './userSlice';
 import {MessageContainer} from '../../shared/containers/MessageContainer';
-import {SendMessage} from '../../shared/models/General';
+import {
+    selectReceivedUserMessages,
+    selectSentUserMessages,
+} from '../../features/message/MessageState';
+import {SendMessage} from '../../features/message/Message';
+import {sendMessage} from '../../features/message/MessageState';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 export const UserMessageView: React.FC = () => {
     const dispatch = useAppDispatch();
 
-    const user = useAppSelector(selectCurrentUser);
-    const messageResponse = useAppSelector(selectUserMessages);
-
-    if (!user) {
-        return <ErrorView />;
-    }
-
     return (
         <Container>
             <MessageContainer
-                messageResponse={messageResponse}
-                fetchData={() => dispatch(fetchUserMessages(user.id!))}
-                sendMessage={(message: SendMessage) => dispatch(sendUserMessage(message))}
+                receivedMessages={useAppSelector(selectReceivedUserMessages)}
+                sentMessages={useAppSelector(selectSentUserMessages)}
+                sendMessage={(message: SendMessage) => dispatch(sendMessage(message))}
             />
         </Container>
     );

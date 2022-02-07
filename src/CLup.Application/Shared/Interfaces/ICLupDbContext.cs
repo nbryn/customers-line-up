@@ -15,8 +15,6 @@ namespace CLup.Application.Shared.Interfaces
     {
         DbSet<Booking> Bookings { get; }
         
-        DbSet<BusinessOwner> BusinessOwners { get; }
-        
         DbSet<Business> Businesses { get; }
         
         DbSet<Employee> Employees { get; }

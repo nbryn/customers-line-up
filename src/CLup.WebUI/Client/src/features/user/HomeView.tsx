@@ -7,7 +7,7 @@ import {CardInfo} from '../../shared/components/card/CardInfo';
 import {fetchUserInsights, selectUserInsights} from '../insights/insightsSlice';
 import {Header} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
-import {selectCurrentUser} from './userSlice';
+import {selectCurrentUser} from './UserState';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({

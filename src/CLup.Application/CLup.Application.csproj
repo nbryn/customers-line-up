@@ -34,5 +34,11 @@
         <ProjectReference Include="..\CLup.Domain\CLup.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Businesses\Bookings\Commands" />
+      <Folder Include="Businesses\Bookings\Queries" />
+      <Folder Include="Users\Bookings\Queries" />
+    </ItemGroup>
+
     
 </Project>

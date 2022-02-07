@@ -1,22 +1,9 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../../shared/api/ApiCaller';
-import {NormalizedEntityState} from '../../../app/AppTypes';
 import {RootState} from '../../../app/Store';
-import {TimeSlotDTO} from './TimeSlot';
 
-const DEFAULT_TIMESLOT_QUERY_ROUTE = 'api/query/business/timeslot';
 const DEFAULT_TIMESLOT_COMMAND_ROUTE = 'api/business/timeslot';
-
-export interface TimeSlotState extends NormalizedEntityState<TimeSlotDTO> {
-    availableByBusiness: {[businessId: string]: TimeSlotDTO[]};
-}
-
-export const initialTimeSlotState: TimeSlotState = {
-    byId: {},
-    availableByBusiness: {},
-    allIds: [],
-};
 
 export const deleteTimeSlot = createAsyncThunk(
     'timeSlot/delete',
@@ -34,40 +21,11 @@ export const generateTimeSlots = createAsyncThunk(
     }
 );
 
-export const fetchAvailableTimeSlotsByBusiness = createAsyncThunk(
-    'timeSlot/availableByBusiness',
-    async (businessId: string) => {
-        const today = new Date();
-        today.setDate(today.getDate() - 100);
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 30);
+const getTimeSlots = (state: RootState) => Object.values(state.entities.timeSlots);
 
-        const start = today.toISOString().substring(0, 10);
-        const end = tomorrow.toISOString().substring(0, 10);
+export const selectTimeSlotsByBusiness = (state: RootState) =>
+    getTimeSlots(state).filter((timeSlot) => timeSlot.businessId === state.business.current?.id);
 
-        const timeSlots = await ApiCaller.get<TimeSlotDTO[]>(
-            `${DEFAULT_TIMESLOT_QUERY_ROUTE}/available?businessid=${businessId}&start=${start}&end=${end}`
-        );
-
-        return {businessId, timeSlots};
-    }
-);
-
-export const fetchTimeSlotsByBusiness = createAsyncThunk(
-    'timeSlot/byBusiness',
-    async (businessId: string) => {
-        const timeSlots = await ApiCaller.get<TimeSlotDTO[]>(
-            `${DEFAULT_TIMESLOT_QUERY_ROUTE}/${businessId}/timeslot`
-        );
-
-        return timeSlots;
-    }
-);
-
-
-export const selectTimeSlotsByBusiness = (businessId: string) => (state: RootState) =>
-    Object.values(state.businesses.timeSlots.byId).filter((t) => t.businessId === businessId);
-
-export const selectAvailableTimeSlotsByBusiness = (businessId: string) => (state: RootState) =>
-    state.businesses.timeSlots.availableByBusiness[businessId];
-
+export const selectAvailableTimeSlotsForCurrentBusiness = (state: RootState) =>
+    selectTimeSlotsByBusiness(state).filter((timeSlot) => timeSlot.available);
+    

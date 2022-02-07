@@ -1,4 +1,3 @@
-using CLup.Domain.Business.TimeSlot;
 using CLup.Domain.Businesses.TimeSlots;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

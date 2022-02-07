@@ -22,7 +22,6 @@ namespace CLup.Infrastructure.Persistence
 
         public const string DEFAULT_SCHEMA = "CLup";
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<BusinessOwner> BusinessOwners { get; set; }
         public DbSet<Business> Businesses { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<TimeSlot> TimeSlots { get; set; }

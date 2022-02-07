@@ -1,7 +1,7 @@
 using CLup.Domain.Users;
 using FluentValidation;
 
-namespace CLup.Domain.User
+namespace CLup.Application.Shared.Validators
 {
     public class UserDataValidator : AbstractValidator<UserData>
     {

@@ -21,7 +21,7 @@ export type Props = {
     tableData: DTO[];
     tableTitle: string | ReactElement;
     emptyMessage?: string;
-    fetchData: () => void;
+    fetchData?: () => void;
 };
 
 export const TableContainer: React.FC<Props> = ({
@@ -37,7 +37,7 @@ export const TableContainer: React.FC<Props> = ({
 
     useEffect(() => {
         (async () => {
-            fetchData();
+            fetchData?.();
         })();
     }, []);
 

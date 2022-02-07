@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using CLup.Domain.Bookings;
 using CLup.Domain.Shared;
@@ -19,9 +20,9 @@ namespace CLup.Domain.Businesses.TimeSlots
         public DateTime Start { get; internal set; }
 
         public DateTime End { get; internal set; }
-        
+
         public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
-        
+
         public IEnumerable<Booking> Bookings { get; private set; }
 
         public TimeSlot(
@@ -39,21 +40,6 @@ namespace CLup.Domain.Businesses.TimeSlots
             End = end;
         }
 
-        public static IList<TimeSlot> GenerateTimeSlots(Business business, DateTime start)
-        {
-            var opens = start.AddHours(Double.Parse(business.Opens.Substring(0, business.Opens.IndexOf("."))));
-            var closes = start.AddHours(Double.Parse(business.Closes.Substring(0, business.Closes.IndexOf("."))));
-
-            var timeSlots = new List<TimeSlot>();
-            for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(business.BusinessData.TimeSlotLength))
-            {
-                var end = date.AddMinutes(business.BusinessData.TimeSlotLength);
-                var timeSlot = new TimeSlot(business.Id, business.Name, business.BusinessData.Capacity, date, end);
-
-                timeSlots.Add(timeSlot);
-            }
-
-            return timeSlots;
-        }
+        public bool IsAvailable() => Bookings?.Count() < Capacity && (Start - System.DateTime.Now).TotalDays < 14 && (Start - System.DateTime.Now).TotalDays >= 0;
     }
 }

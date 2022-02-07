@@ -1,5 +1,4 @@
 using System;
-using CLup.Domain.Booking;
 using CLup.Domain.Bookings;
 
 namespace CLup.Infrastructure.Persistence.Seed.Builders

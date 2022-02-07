@@ -56,6 +56,8 @@ namespace CLup.Application.Shared
 
         public Result<T> Bind<T>(Func<T> f) => Success ? Ok<T>(f()) : Fail<T>(Code, Error);
 
+        public Result BindNoContent() => Success ? Ok() : Fail(Code, Error);
+
         public static Result<T> ToResult<T>(T maybe, string errorMessage) => maybe == null ? NotFound<T>(errorMessage) : Ok<T>(maybe);
 
         public static Result ToResultIgnore<T>(T maybe, string errorMessage) => maybe == null ? NotFound(errorMessage) : Ok();

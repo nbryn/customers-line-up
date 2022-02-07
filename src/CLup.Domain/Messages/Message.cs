@@ -26,6 +26,7 @@ namespace CLup.Domain.Messages
             MessageData messageData,
             MessageType type,
             MessageMetadata metadata)
+            : base()
         {
             SenderId = senderId;
             ReceiverId = receiverId;

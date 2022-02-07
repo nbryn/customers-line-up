@@ -1,0 +1,85 @@
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+
+import ApiCaller from '../../shared/api/ApiCaller';
+import {BusinessDTO} from './Business';
+import {RootState} from '../../app/Store';
+import {selectCurrentUser} from '../user/UserState';
+
+const DEFAULT_BUSINESS_QUERY_ROUTE = 'api/query/business';
+const DEFAULT_BUSINESS_COMMAND_ROUTE = 'api/business';
+
+interface BusinessState {
+    types: string[];
+    current: BusinessDTO | null;
+    externalBusinesses: {[id: string]: BusinessDTO};
+}
+
+const initialBusinessState: BusinessState = {
+    types: [],
+    current: null,
+    externalBusinesses: {},
+};
+
+export const createBusiness = createAsyncThunk('business/create', async (data: BusinessDTO) => {
+    await ApiCaller.post(`${DEFAULT_BUSINESS_COMMAND_ROUTE}`, data);
+});
+
+export const fetchAllBusinesses = createAsyncThunk('business/fetchAll', async () => {
+    const businesses = await ApiCaller.get<BusinessDTO[]>(`${DEFAULT_BUSINESS_QUERY_ROUTE}/all`);
+
+    return businesses;
+});
+
+export const fetchBusinessesTypes = createAsyncThunk('business/fetchBusinessTypes', async () => {
+    const businessTypes = ApiCaller.get<string[]>(`${DEFAULT_BUSINESS_QUERY_ROUTE}/types`);
+
+    return businessTypes;
+});
+
+export const updateBusinessInfo = createAsyncThunk(
+    'business/update',
+    async (data: {businessId: string; ownerEmail: string; business: BusinessDTO}) => {
+        await ApiCaller.put(`${DEFAULT_BUSINESS_COMMAND_ROUTE}/${data.businessId}`, {
+            ...data.business,
+            id: data.businessId,
+            ownerEmail: data.ownerEmail,
+        });
+    }
+);
+
+export const businessSlice = createSlice({
+    name: 'business',
+    initialState: initialBusinessState,
+    reducers: {
+        setCurrentBusiness: (state, {payload}) => {
+            state.current = payload;
+        },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchAllBusinesses.fulfilled, (state, {payload}) => {
+                const newState = {...state};
+                payload.forEach(
+                    (business) => (newState.externalBusinesses[business.id] = business)
+                );
+            })
+
+            .addCase(fetchBusinessesTypes.fulfilled, (state, {payload}) => {
+                state.types = payload;
+            });
+    },
+});
+
+export const selectAllBusinesses = (state: RootState) =>
+    Object.values(state.business.externalBusinesses);
+
+export const selectCurrentBusiness = (state: RootState) => state.business.current;
+
+export const selectBusinessesByOwner = (state: RootState) =>
+    selectAllBusinesses(state).filter((b) => b.ownerEmail === selectCurrentUser(state)?.email);
+
+export const selectBusinessTypes = (state: RootState) => state.business.types;
+
+export const {setCurrentBusiness} = businessSlice.actions;
+
+export default businessSlice.reducer;

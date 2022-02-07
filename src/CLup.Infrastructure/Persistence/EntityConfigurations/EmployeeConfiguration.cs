@@ -1,4 +1,3 @@
-using CLup.Domain.Business.Employee;
 using CLup.Domain.Businesses.Employees;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

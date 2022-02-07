@@ -5,7 +5,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {useHistory} from 'react-router';
 
 import {BusinessDTO} from './Business';
-import {fetchAllBusinesses, selectAllBusinesses, setCurrentBusiness} from './businessSlice';
+import {fetchAllBusinesses, selectAllBusinesses, setCurrentBusiness} from './BusinessState';
 import {Header} from '../../shared/components/Texts';
 import {MapModal, MapModalProps, defaultMapProps} from '../../shared/components/modal/MapModal';
 import {TableColumn} from '../../shared/components/Table';

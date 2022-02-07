@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import React, {useContext, useEffect} from 'react';
 
-import {clearCurrentUser, fetchUserInfo} from './userSlice';
+import {clearCurrentUser, fetchUserAggregate} from './UserState';
 import {useAppDispatch} from '../../app/Store';
 
 export type ContextValue = {
@@ -26,7 +26,7 @@ export const UserContextProvider: React.FC<Props> = (props: Props) => {
     };
 
     useEffect(() => {
-        if (Cookies.get('access_token')) dispatch(fetchUserInfo());
+        if (Cookies.get('access_token')) dispatch(fetchUserAggregate());
         setTimeout(() => logout(), 7200000);
     }, []);
 

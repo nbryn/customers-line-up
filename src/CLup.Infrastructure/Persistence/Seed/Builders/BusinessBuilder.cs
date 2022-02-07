@@ -1,4 +1,3 @@
-using CLup.Domain.Business;
 using CLup.Domain.Businesses;
 using CLup.Domain.Shared.ValueObjects;
 
@@ -6,7 +5,7 @@ namespace CLup.Infrastructure.Persistence.Seed.Builders
 {
     public class BusinessBuilder
     {
-        private string _ownerEmail;
+        private string _ownerId;
         private BusinessData _businessData;
         private Address _address;
         private Coords _coords;
@@ -18,9 +17,9 @@ namespace CLup.Infrastructure.Persistence.Seed.Builders
 
         }
 
-        public BusinessBuilder WithOwner(string ownerEmail)
+        public BusinessBuilder WithOwner(string ownerId)
         {
-            _ownerEmail = ownerEmail;
+            _ownerId = ownerId;
 
             return this;
         }
@@ -60,7 +59,7 @@ namespace CLup.Infrastructure.Persistence.Seed.Builders
             return this;
         }
 
-        public Business Build() => new Business(_ownerEmail, _businessData, _address, _coords, _businessHours, _type);
+        public Business Build() => new Business(_ownerId, _businessData, _address, _coords, _businessHours, _type);
     }
 }
 

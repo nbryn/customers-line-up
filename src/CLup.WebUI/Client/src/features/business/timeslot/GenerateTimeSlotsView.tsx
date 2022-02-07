@@ -3,12 +3,12 @@ import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {Card} from '../../../shared/components/card/Card';
-import {generateTimeSlots} from './timeSlotState';
+import {generateTimeSlots} from './TimeSlotState';
 import {ComboBox, ComboBoxOption} from '../../../shared/components/form/ComboBox';
 import DateUtil from '../../../shared/util/DateUtil';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
-import {selectCurrentBusiness} from '../businessSlice';
+import {selectCurrentBusiness} from '../BusinessState';
 import {useAppDispatch, useAppSelector} from '../../../app/Store';
 
 const useStyles = makeStyles((theme) => ({

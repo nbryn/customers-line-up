@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CLup.Domain.Business;
-using CLup.Domain.Business.TimeSlot;
 using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.TimeSlots;
+using CLup.Domain.Users;
 using CLup.Infrastructure.Persistence.Seed.Builders;
 using BC = BCrypt.Net.BCrypt;
 
@@ -20,7 +18,7 @@ namespace CLup.Infrastructure.Persistence.Seed
         public async Task Seed()
         {
             var userIds = AddUsers();
-            var businesses = AddBusinesses();
+            var businesses = AddBusinesses(userIds);
             var businessTimeSlots = AddTimeSlots(businesses);
             AddBookings(businessTimeSlots, businesses.Select(b => b.Id).ToList(), userIds);
             AddEmployees(businesses.Select(b => b.Id).ToList(), userIds);
@@ -40,6 +38,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .WithUserData("Peter", "test@test.com", BC.HashPassword("1234"))
                 .WithAddress("Farum Hovedgade 15", "3520", "Farum")
                 .WithCoords(55.8122540, 12.3706760)
+                .WithRole(Role.Owner)
                 .Build();
 
             _dbContext.Add(user1);
@@ -49,6 +48,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .WithUserData("Jens", "h@h.com", BC.HashPassword("1234"))
                 .WithAddress("Farum Hovedgade 50", "3520", "Farum")
                 .WithCoords(55.810706, 12.3640744)
+                .WithRole(Role.Owner)
                 .Build();
 
             _dbContext.Add(user2);
@@ -93,7 +93,7 @@ namespace CLup.Infrastructure.Persistence.Seed
             return ids;
         }
 
-        private IList<Business> AddBusinesses()
+        private IList<Business> AddBusinesses(IList<string> userIds)
         {
             var businesses = new List<Business>();
             if (_dbContext.Businesses.Any())
@@ -102,7 +102,7 @@ namespace CLup.Infrastructure.Persistence.Seed
             }
 
             var business1 = new BusinessBuilder()
-                .WithOwner("test@test.com")
+                .WithOwner(userIds[0])
                 .WithBusinessData("Super Brugsen", 50, 30)
                 .WithBusinessHours("10.00", "22.00")
                 .WithAddress("Ryttergårdsvej 10", "3520", "Farum")
@@ -113,7 +113,7 @@ namespace CLup.Infrastructure.Persistence.Seed
             businesses.Add(business1);
 
             var business2 = new BusinessBuilder()
-                .WithOwner("test@test.com")
+                .WithOwner(userIds[0])
                 .WithBusinessData("Farum Museum", 40, 60)
                 .WithBusinessHours("10.00", "16.00")
                 .WithAddress("Farum Hovedgade 100", "3520", "Farum")
@@ -124,7 +124,7 @@ namespace CLup.Infrastructure.Persistence.Seed
             businesses.Add(business2);
 
             var business3 = new BusinessBuilder()
-                .WithOwner("test@test.com")
+                .WithOwner(userIds[0])
                 .WithBusinessData("Kvick Kiosk", 30, 10)
                 .WithBusinessHours("08.30", "23.00")
                 .WithAddress("Vermlandsgade 30", "2300", "København S")
@@ -135,7 +135,7 @@ namespace CLup.Infrastructure.Persistence.Seed
             businesses.Add(business3);
 
             var business4 = new BusinessBuilder()
-                .WithOwner("h@h.com")
+                .WithOwner(userIds[1])
                 .WithBusinessData("HairCut", 2, 40)
                 .WithBusinessHours("9.00", "18.00")
                 .WithAddress("Amagerbrogade 32", "2840", "Holte")
@@ -146,7 +146,7 @@ namespace CLup.Infrastructure.Persistence.Seed
             businesses.Add(business4);
 
             var business5 = new BusinessBuilder()
-                .WithOwner("h@h.com")
+                .WithOwner(userIds[1])
                 .WithBusinessData("Odense Bibliotek", 75, 80)
                 .WithBusinessHours("08.00", "20.00")
                 .WithAddress("Østre Stationsvej 15", "5000", "Odense")
@@ -157,7 +157,7 @@ namespace CLup.Infrastructure.Persistence.Seed
             businesses.Add(business5);
 
             var business6 = new BusinessBuilder()
-                .WithOwner("h@h.com")
+                .WithOwner(userIds[1])
                 .WithBusinessData("Foto", 8, 15)
                 .WithBusinessHours("10.30", "19.00")
                 .WithAddress("Nord Vej 92", "2605", "Brøndby")
@@ -168,7 +168,7 @@ namespace CLup.Infrastructure.Persistence.Seed
             businesses.Add(business6);
 
             var business7 = new BusinessBuilder()
-                .WithOwner("h@h.com")
+                .WithOwner(userIds[1])
                 .WithBusinessData("Netto", 40, 20)
                 .WithBusinessHours("09.00", "14.00")
                 .WithAddress("Lundebjerg 1", "2740", "Skovlunde")
@@ -179,7 +179,7 @@ namespace CLup.Infrastructure.Persistence.Seed
             businesses.Add(business7);
 
             var business8 = new BusinessBuilder()
-                .WithOwner("h@h.com")
+                .WithOwner(userIds[1])
                 .WithBusinessData("Grab'n'Go", 5, 5)
                 .WithBusinessHours("08.30", "15.30")
                 .WithAddress("Ellemosevej 5", "8370", "Hadsten")
@@ -188,15 +188,8 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .Build();
 
             businesses.Add(business8);
-
-            var owner = new BusinessOwner("test@test.com");
-            var owner2 = new BusinessOwner("h@h.com");
-            owner.UpdatedAt = DateTime.Now;
-            owner2.UpdatedAt = DateTime.Now;
-            _dbContext.Add(owner);
-            _dbContext.Add(owner2);
-
             _dbContext.AddRange(businesses);
+            
             return businesses;
         }
 
@@ -210,7 +203,7 @@ namespace CLup.Infrastructure.Persistence.Seed
 
             foreach (var business in businesses)
             {
-                var timeSlots = TimeSlot.GenerateTimeSlots(business, (DateTime.Today.AddDays(1)));
+                var timeSlots = business.GenerateTimeSlots(DateTime.Today.AddDays(1));
                 businessTimeSlots.Add(business.Id, timeSlots.Select(t => t.Id).ToList());
 
                 _dbContext.AddRange(timeSlots);

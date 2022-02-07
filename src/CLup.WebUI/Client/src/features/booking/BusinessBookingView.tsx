@@ -4,14 +4,10 @@ import {Col, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {BookingDTO} from './Booking';
-import {
-    deleteBookingForBusiness,
-    fetchBookingsByBusiness,
-    selectBookingsByBusiness,
-} from './bookingSlice';
+import {deleteBookingForBusiness, selectBookingsByBusiness} from './BookingState';
 import {ErrorView} from '../../shared/views/ErrorView';
 import {Header} from '../../shared/components/Texts';
-import {selectCurrentBusiness} from '../business/businessSlice';
+import {selectCurrentBusiness} from '../business/BusinessState';
 import {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
@@ -31,7 +27,7 @@ export const BusinessBookingView: React.FC = () => {
         return <ErrorView />;
     }
 
-    const bookings = useAppSelector(selectBookingsByBusiness(business.id));
+    const bookings = useAppSelector(selectBookingsByBusiness);
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -67,7 +63,6 @@ export const BusinessBookingView: React.FC = () => {
                     <TableContainer
                         actions={actions}
                         columns={columns}
-                        fetchData={() => dispatch(fetchBookingsByBusiness(business.id))}
                         tableTitle="Bookings"
                         emptyMessage="No Bookings Yet"
                         tableData={bookings}

@@ -4,8 +4,6 @@ using AutoMapper;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
-using CLup.Application.Shared.Models;
-using CLup.Domain.User;
 using CLup.Domain.Users;
 using FluentValidation;
 using MediatR;
@@ -13,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Auth
 {
-    public class RegisterHandler : IRequestHandler<RegisterCommand, Result<UserDto>>
+    public class RegisterHandler : IRequestHandler<RegisterCommand, Result<TokenResponse>>
     {
         private readonly IValidator<User> _validator;
         private readonly ICLupDbContext _dbContext;
@@ -28,7 +26,8 @@ namespace CLup.Application.Auth
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public async Task<Result<UserDto>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+        
+        public async Task<Result<TokenResponse>> Handle(RegisterCommand command, CancellationToken cancellationToken)
         {
             return await _dbContext.Users.FirstOrDefaultAsync(x => x.UserData.Email == command.Email)
                     .ToResult()
@@ -36,7 +35,7 @@ namespace CLup.Application.Auth
                     .AndThen(() => _mapper.Map<User>(command))
                     .Validate(_validator)
                     .AndThenF(newUser => _dbContext.AddAndSave(newUser))
-                    .Finally(newUser => _mapper.Map<UserDto>(newUser));
+                    .Finally(_mapper.Map<TokenResponse>);
         }
     }
 }

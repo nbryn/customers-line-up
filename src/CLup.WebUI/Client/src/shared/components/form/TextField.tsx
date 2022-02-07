@@ -1,6 +1,7 @@
 import React, {ReactText} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import MaterialUITextField from '@material-ui/core/TextField';
+import { DTO } from '../../models/General';
 
 const useStyles = makeStyles((theme) => ({
     helperText: {
@@ -13,7 +14,7 @@ export type TextFieldType = 'text' | 'number' | 'time' | 'password' | 'email' | 
 type Props = {
     id: string;
     label: string | undefined;
-    value?: ReactText | undefined;
+    value?: ReactText | boolean | DTO | DTO[] | undefined;
     helperText?: string | boolean;
     inputProps?: any;
     size?: 'small' | 'medium';

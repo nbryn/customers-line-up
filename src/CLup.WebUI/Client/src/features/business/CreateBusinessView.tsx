@@ -7,7 +7,7 @@ import {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
 import {Card} from '../../shared/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../shared/components/form/ComboBox';
-import {createBusiness, fetchBusinessesTypes, selectBusinessTypes} from './businessSlice';
+import {createBusiness, fetchBusinessesTypes, selectBusinessTypes} from './BusinessState';
 import {Form} from '../../shared/components/form/Form';
 import {Header} from '../../shared/components/Texts';
 import StringUtil from '../../shared/util/StringUtil';

@@ -6,7 +6,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {ErrorView} from '../../shared/views/ErrorView';
 import {FormCard} from '../../shared/components/card/FormCard';
 import {Header} from '../../shared/components/Texts';
-import {selectCurrentUser, updateUserInfo} from './userSlice';
+import {selectCurrentUser, updateUserInfo} from './UserState';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useAddress} from '../../shared/hooks/useAddress';
 import {useForm} from '../../shared/hooks/useForm';

@@ -6,4 +6,5 @@ export interface TimeSlotDTO extends DTO {
     capacity: string;
     start: string;
     end: string;
+    available: boolean;
 }

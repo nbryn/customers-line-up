@@ -2,18 +2,18 @@ import {configureStore} from '@reduxjs/toolkit';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
 import apiReducer from '../shared/api/apiSlice';
-import bookingReducer from '../features/booking/bookingSlice';
-import businessReducer from '../features/business/businessSlice';
+import businessReducer from '../features/business/BusinessState';
 import insightsReducer from '../features/insights/insightsSlice';
-import userReducer from '../features/user/userSlice';
+import entityReducer from './EntitySlice';
+import userReducer from '../features/user/UserState';
 
 export const store = configureStore({
     reducer: {
         api: apiReducer,
-        bookings: bookingReducer,
-        businesses: businessReducer,
+        entities: entityReducer,
         insights: insightsReducer,
         user: userReducer,
+        business: businessReducer,
     },
 });
 

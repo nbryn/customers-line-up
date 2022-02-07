@@ -1,5 +1,5 @@
 export interface Index {
-    [key: string]: string | number | boolean | undefined;
+    [key: string]: DTO | DTO[] | string | number | boolean | undefined;
 }
 
 export interface DTO extends Index {

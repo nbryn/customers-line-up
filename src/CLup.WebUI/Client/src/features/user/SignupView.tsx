@@ -5,7 +5,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Card} from '../../shared/components/card/Card';
 import {ComboBox, ComboBoxOption} from '../../shared/components/form/ComboBox';
 import {Form} from '../../shared/components/form/Form';
-import {register} from './userSlice';
+import {register} from './UserState';
 import {signupValidationSchema} from './UserValidation';
 import StringUtil from '../../shared/util/StringUtil';
 import {TextField} from '../../shared/components/form/TextField';

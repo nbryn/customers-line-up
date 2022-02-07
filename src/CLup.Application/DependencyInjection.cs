@@ -1,9 +1,6 @@
 using System.Reflection;
 using CLup.Application.Auth;
-using CLup.Application.Queries.User;
-using CLup.Domain.User;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,8 +14,6 @@ namespace CLup.Application
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
-            
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
 
             return services;
