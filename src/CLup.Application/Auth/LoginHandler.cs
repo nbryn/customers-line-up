@@ -15,7 +15,6 @@ namespace CLup.Application.Auth
         private readonly IReadOnlyDbContext _readOnlyDbContext;
         private readonly IMapper _mapper;
 
-
         public LoginHandler(
             IReadOnlyDbContext readOnlyDbContext,
             IMapper mapper)

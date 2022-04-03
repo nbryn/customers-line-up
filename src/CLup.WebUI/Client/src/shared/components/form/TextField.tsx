@@ -72,10 +72,10 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>((props, ref) 
             autoComplete="off"
             inputProps={{
                 maxLength: props.maxLength ?? 500,
-                autocomplete: 'new-password',
+                autoComplete: 'new-password',
                 step: props.step,
                 form: {
-                    autocomplete: 'off',
+                    autoComplete: 'off',
                 },
             }}
         >

@@ -11,16 +11,10 @@ import {
     fetchBusinessesTypes,
     updateBusinessInfo,
 } from '../../features/business/BusinessState';
-import {
-    createEmployee,
-    removeEmployee,
-} from '../../features/business/employee/EmployeeState';
+import {createEmployee, removeEmployee} from '../../features/business/employee/EmployeeState';
 import {fetchUserInsights} from '../../features/insights/insightsSlice';
 import {sendMessage} from '../../features/message/MessageState';
-import {
-    deleteTimeSlot,
-    generateTimeSlots,
-} from '../../features/business/timeslot/TimeSlotState';
+import {deleteTimeSlot, generateTimeSlots} from '../../features/business/timeslot/TimeSlotState';
 import {
     login,
     register,
@@ -42,12 +36,10 @@ const EMPLOYEE_CREATED_MSG = 'Employee Created - Go to my employees to see your 
 const TIMESLOT_DELETED_MSG = 'Time slot Deleted';
 const TIMESLOTS_GENERATED_MSG = 'Success! Press see time slots to manage time slots.';
 
-const MESSAGE_SEND = 'Message successfully send'
+const MESSAGE_SEND = 'Message successfully send';
 
 const USER_UPDATED_MSG = 'Info Updated.';
 const LOGIN_FAILED_MSG = 'Wrong Email/Password';
-
-
 
 export type ToastInfo = {
     buttonText: string;
@@ -61,7 +53,7 @@ interface ApiState {
     toastInfo?: ToastInfo;
 }
 
-export const initialState: ApiState = {
+const initialState: ApiState = {
     error: false,
     loading: false,
     message: '',
@@ -165,7 +157,7 @@ export const apiSlice = createSlice({
                     fetchUserInsights.fulfilled,
                     login.fulfilled,
                     register.fulfilled,
-                    fetchUserAggregate.fulfilled,
+                    fetchUserAggregate.fulfilled
                 ),
                 (state) => {
                     state.loading = false;
@@ -193,7 +185,7 @@ export const apiSlice = createSlice({
                     register.pending,
                     updateUserInfo.pending,
                     sendMessage.pending,
-                    fetchUserAggregate.pending,
+                    fetchUserAggregate.pending
                 ),
                 (state) => {
                     state.loading = true;
@@ -219,7 +211,7 @@ export const apiSlice = createSlice({
                     register.rejected,
                     updateUserInfo.rejected,
                     sendMessage.rejected,
-                    fetchUserAggregate.rejected,
+                    fetchUserAggregate.rejected
                 ),
                 (state, action) => {
                     state.loading = false;

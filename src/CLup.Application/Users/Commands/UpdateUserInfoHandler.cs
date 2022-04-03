@@ -8,7 +8,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CLup.Application.Users.Commands.Update
+namespace CLup.Application.Users.Commands
 {
     public class UpdateUserInfoHandler : IRequestHandler<UpdateUserInfoCommand, Result>
     {

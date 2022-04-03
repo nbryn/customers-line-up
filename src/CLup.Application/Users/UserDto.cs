@@ -1,9 +1,9 @@
 using System.Collections.Generic;
-using CLup.Application.Businesses.Queries;
+using CLup.Application.Businesses;
 using CLup.Application.Shared.Bookings;
 using CLup.Application.Shared.Messages;
 
-namespace CLup.Application.Users.Queries
+namespace CLup.Application.Users
 {
     public class UserDto
     {

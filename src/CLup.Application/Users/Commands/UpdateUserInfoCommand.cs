@@ -1,7 +1,7 @@
 using CLup.Application.Shared;
 using MediatR;
 
-namespace CLup.Application.Users.Commands.Update
+namespace CLup.Application.Users.Commands
 {
     public class UpdateUserInfoCommand : IRequest<Result>
     {

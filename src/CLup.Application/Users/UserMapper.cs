@@ -2,7 +2,7 @@ using System.Linq;
 using AutoMapper;
 using CLup.Domain.Users;
 
-namespace CLup.Application.Users.Queries
+namespace CLup.Application.Users
 {
     public class UserMapper : Profile
     {

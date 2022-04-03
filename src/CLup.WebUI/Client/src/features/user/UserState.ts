@@ -19,6 +19,12 @@ const initialState: UserState = {
     current: null,
 };
 
+export const callApiAndFetchAggregate = async (thunkAPI: any, apiCall: () => Promise<void>) => {
+    await apiCall();
+
+    thunkAPI.dispatch(fetchUserAggregate());
+};
+
 export const fetchUserAggregate = createAsyncThunk('user/aggregate', async () => {
     const user = await ApiCaller.get<UserDTO>(`${DEFAULT_USER_QUERY_ROUTE}`);
 
@@ -37,23 +43,24 @@ export const fetchUsersNotEmployedByBusiness = createAsyncThunk(
 );
 
 export const login = createAsyncThunk('auth/login', async (data: LoginDTO, thunkAPI) => {
-    const response = await ApiCaller.post<TokenResponse, LoginDTO>(`auth/login`, data);
-    Cookies.set('access_token', response.token);
-
-    thunkAPI.dispatch(fetchUserAggregate());
+    callApiAndFetchAggregate(thunkAPI, async () => {
+        const response = await ApiCaller.post<LoginDTO, TokenResponse>(`auth/login`, data);
+        Cookies.set('access_token', response.token);
+    });
 });
 
 export const register = createAsyncThunk('auth/register', async (data: UserDTO, thunkAPI) => {
-    const response = await ApiCaller.post<TokenResponse, UserDTO>(`auth/register`, data);
-    Cookies.set('access_token', response.token);
-    
-    thunkAPI.dispatch(fetchUserAggregate());
+    callApiAndFetchAggregate(thunkAPI, async () => {
+        const response = await ApiCaller.post<UserDTO, TokenResponse>(`auth/register`, data);
+        Cookies.set('access_token', response.token);
+    });
 });
 
-export const updateUserInfo = createAsyncThunk('user/update', async (data: UserDTO) => {
-    await ApiCaller.put<UserDTO, UserDTO>(`${DEFAULT_USER_COMMAND_ROUTE}/update`, data);
-
-    return data;
+export const updateUserInfo = createAsyncThunk('user/update', async (data: UserDTO, thunkAPI) => {
+    callApiAndFetchAggregate(
+        thunkAPI,
+        async () => await ApiCaller.put<UserDTO>(`${DEFAULT_USER_COMMAND_ROUTE}/update`, data)
+    );
 });
 
 export const userSlice = createSlice({
@@ -72,10 +79,6 @@ export const userSlice = createSlice({
 
             .addCase(fetchUserAggregate.fulfilled, (state, {payload}) => {
                 state.current = omit(payload, ['bookings', 'businesses', 'messages']) as UserDTO;
-            })
-
-            .addCase(updateUserInfo.fulfilled, (state, {payload}) => {
-                state.current = payload;
             })
     },
 });

@@ -1,7 +1,7 @@
 using CLup.Domain.Businesses;
 using FluentValidation;
 
-namespace CLup.Application.Businesses.Queries
+namespace CLup.Application.Businesses
 {
     public class BusinessDataValidator : AbstractValidator<BusinessData>
     {

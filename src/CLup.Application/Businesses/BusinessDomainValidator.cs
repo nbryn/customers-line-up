@@ -2,7 +2,7 @@ using CLup.Domain.Businesses;
 using CLup.Domain.Shared.ValueObjects;
 using FluentValidation;
 
-namespace CLup.Application.Businesses.Queries
+namespace CLup.Application.Businesses
 {
     public class BusinessDomainValidator : AbstractValidator<Domain.Businesses.Business>
     {

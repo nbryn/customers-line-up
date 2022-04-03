@@ -3,7 +3,7 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import ApiCaller from '../../shared/api/ApiCaller';
 import {BusinessDTO} from './Business';
 import {RootState} from '../../app/Store';
-import {selectCurrentUser} from '../user/UserState';
+import {callApiAndFetchAggregate, selectCurrentUser} from '../user/UserState';
 
 const DEFAULT_BUSINESS_QUERY_ROUTE = 'api/query/business';
 const DEFAULT_BUSINESS_COMMAND_ROUTE = 'api/business';
@@ -11,18 +11,22 @@ const DEFAULT_BUSINESS_COMMAND_ROUTE = 'api/business';
 interface BusinessState {
     types: string[];
     current: BusinessDTO | null;
-    externalBusinesses: {[id: string]: BusinessDTO};
 }
 
 const initialBusinessState: BusinessState = {
     types: [],
     current: null,
-    externalBusinesses: {},
 };
 
-export const createBusiness = createAsyncThunk('business/create', async (data: BusinessDTO) => {
-    await ApiCaller.post(`${DEFAULT_BUSINESS_COMMAND_ROUTE}`, data);
-});
+export const createBusiness = createAsyncThunk(
+    'business/create',
+    async (data: BusinessDTO, thunkAPI) => {
+        callApiAndFetchAggregate(
+            thunkAPI,
+            async () => await ApiCaller.post(`${DEFAULT_BUSINESS_COMMAND_ROUTE}`, data)
+        );
+    }
+);
 
 export const fetchAllBusinesses = createAsyncThunk('business/fetchAll', async () => {
     const businesses = await ApiCaller.get<BusinessDTO[]>(`${DEFAULT_BUSINESS_QUERY_ROUTE}/all`);
@@ -38,12 +42,16 @@ export const fetchBusinessesTypes = createAsyncThunk('business/fetchBusinessType
 
 export const updateBusinessInfo = createAsyncThunk(
     'business/update',
-    async (data: {businessId: string; ownerEmail: string; business: BusinessDTO}) => {
-        await ApiCaller.put(`${DEFAULT_BUSINESS_COMMAND_ROUTE}/${data.businessId}`, {
-            ...data.business,
-            id: data.businessId,
-            ownerEmail: data.ownerEmail,
-        });
+    async (data: {businessId: string; ownerEmail: string; business: BusinessDTO}, thunkAPI) => {
+        callApiAndFetchAggregate(
+            thunkAPI,
+            async () =>
+                await ApiCaller.put(`${DEFAULT_BUSINESS_COMMAND_ROUTE}/${data.businessId}`, {
+                    ...data.business,
+                    id: data.businessId,
+                    ownerEmail: data.ownerEmail,
+                })
+        );
     }
 );
 
@@ -56,22 +64,13 @@ export const businessSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder
-            .addCase(fetchAllBusinesses.fulfilled, (state, {payload}) => {
-                const newState = {...state};
-                payload.forEach(
-                    (business) => (newState.externalBusinesses[business.id] = business)
-                );
-            })
-
-            .addCase(fetchBusinessesTypes.fulfilled, (state, {payload}) => {
-                state.types = payload;
-            });
+        builder.addCase(fetchBusinessesTypes.fulfilled, (state, {payload}) => {
+            state.types = payload;
+        });
     },
 });
 
-export const selectAllBusinesses = (state: RootState) =>
-    Object.values(state.business.externalBusinesses);
+export const selectAllBusinesses = (state: RootState) => Object.values(state.entities.businesses);
 
 export const selectCurrentBusiness = (state: RootState) => state.business.current;
 

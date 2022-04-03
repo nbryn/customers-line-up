@@ -6,9 +6,9 @@ using CLup.Application.Shared.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CLup.Application.Businesses.Queries
+namespace CLup.Application.Businesses
 {
-    public class UserBusinessInsightsQuery
+    public class UserBusinessInsights
     {
         public class Query : IRequest<Result<Model>>
         {
@@ -26,27 +26,26 @@ namespace CLup.Application.Businesses.Queries
 
         public class Handler : IRequestHandler<Query, Result<Model>>
         {
-            private readonly IReadOnlyDbContext _readOnlyReadOnlyContext;
+            private readonly IReadOnlyDbContext _readContext;
 
-            public Handler(IReadOnlyDbContext readOnlyContext) => _readOnlyReadOnlyContext = readOnlyContext;
+            public Handler(IReadOnlyDbContext readContext) => _readContext = readContext;
       
             public async Task<Result<Model>> Handle(Query query, CancellationToken cancellationToken)
             {
 
-                var businesses = await _readOnlyReadOnlyContext.Businesses.Include(business => business.Owner)
+                var businesses = await _readContext.Businesses.Include(business => business.Owner)
                                          .Where(b => b.Owner.UserData.Email == query.UserEmail)
                                          .ToListAsync();
 
                 var businessIds = businesses.Select(b => b.Id);
 
-                var bookings = await _readOnlyReadOnlyContext.Bookings
+                var bookings = await _readContext.Bookings
                                        .Where(x => businessIds.Contains(x.BusinessId))
                                        .ToListAsync();
 
-                var employees = await _readOnlyReadOnlyContext.Employees
+                var employees = await _readContext.Employees
                                         .Where(e => businessIds.Contains(e.BusinessId))
                                         .ToListAsync();
-
 
                 var insights = new Model
                 {

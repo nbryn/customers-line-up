@@ -3,28 +3,28 @@ import {SerializedError} from '@reduxjs/toolkit';
 
 import ApiClient from './ApiClient';
 
-const get = <T>(url: string): Promise<T> => {
-    return callApi<T>(url, 'GET');
+const get = <TResult>(url: string): Promise<TResult> => {
+    return callApi<void, TResult>(url, 'GET');
 };
 
-const patch = <T1, T2>(url: string, data: T2): Promise<T1> => {
-    return callApi<T1, T2>(url, 'PATCH', data);
+const patch = <TData, TResult>(url: string, data: TData): Promise<TResult> => {
+    return callApi<TData, TResult>(url, 'PATCH', data);
 };
 
-const post = <T1, T2>(url: string, data?: T2): Promise<T1> => {
-    return callApi<T1, T2>(url, 'POST', data);
+const post = <TData, TResult>(url: string, data?: TData): Promise<TResult> => {
+    return callApi<TData, TResult>(url, 'POST', data);
 };
 
-const put = <T1, T2>(url: string, data: T2): Promise<T1> => {
-    return callApi<T1, T2>(url, 'PUT', data);
+const put = <TData>(url: string, data: TData): Promise<void> => {
+    return callApi<TData, void>(url, 'PUT', data);
 };
 
-const remove = <T>(url: string): Promise<T> => {
-    return callApi<T>(url, 'DELETE');
+const remove = <TResult>(url: string): Promise<TResult> => {
+    return callApi<void, TResult>(url, 'DELETE');
 };
 
-const callApi = async <T1, T2 = void>(url: string, method: Method, request?: T2): Promise<T1> => {
-    let response: T1;
+const callApi = async <TData, TResult>(url: string, method: Method, request?: TData): Promise<TResult> => {
+    let response: TResult;
 
     console.log(url);
 

@@ -13,7 +13,7 @@ using CLup.Application.Shared.Messages.MarkAsDeleted;
 using CLup.Application.Shared.Messages.Send;
 using CLup.Application.Users.Bookings.Commands.Create;
 using CLup.Application.Users.Bookings.Commands.Delete;
-using CLup.Application.Users.Commands.Update;
+using CLup.Application.Users.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

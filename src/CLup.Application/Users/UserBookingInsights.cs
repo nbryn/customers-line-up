@@ -8,9 +8,9 @@ using CLup.Application.Shared.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace CLup.Application.Users.Queries
+namespace CLup.Application.Users
 {
-    public class UserBookingInsightsQuery
+    public class UserBookingInsights
     {
         public class Query : IRequest<Result<Model>>
         {

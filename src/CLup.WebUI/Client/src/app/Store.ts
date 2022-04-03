@@ -1,7 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
-import apiReducer from '../shared/api/apiSlice';
+import apiReducer from '../shared/api/ApiState';
 import businessReducer from '../features/business/BusinessState';
 import insightsReducer from '../features/insights/insightsSlice';
 import entityReducer from './EntitySlice';

@@ -4,7 +4,7 @@ import {Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {DTO} from '../models/General';
-import {selectApiState} from '../api/apiSlice';
+import {selectApiState} from '../api/ApiState';
 import {Table, TableColumn} from '../components/Table';
 import {useAppSelector} from '../../app/Store';
 

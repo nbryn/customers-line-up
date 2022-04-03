@@ -4,17 +4,28 @@ import ApiCaller from '../../../shared/api/ApiCaller';
 import {EmployeeDTO} from './Employee';
 import {ThunkParam} from '../../../app/AppTypes';
 import {RootState} from '../../../app/Store';
+import {callApiAndFetchAggregate} from '../../user/UserState';
 
 const DEFAULT_EMPLOYEE_COMMAND_ROUTE = 'api/business/employee';
 
-export const createEmployee = createAsyncThunk('employee/create', async (data: EmployeeDTO) => {
-    await ApiCaller.post(`${DEFAULT_EMPLOYEE_COMMAND_ROUTE}`, data);
-});
+export const createEmployee = createAsyncThunk(
+    'employee/create',
+    async (data: EmployeeDTO, thunkAPI) => {
+        callApiAndFetchAggregate(
+            thunkAPI,
+            async () => await ApiCaller.post(`${DEFAULT_EMPLOYEE_COMMAND_ROUTE}`, data)
+        );
+    }
+);
 
 export const removeEmployee = createAsyncThunk(
     'employee/delete',
-    async ({id, data}: ThunkParam<string>) => {
-        await ApiCaller.remove(`${DEFAULT_EMPLOYEE_COMMAND_ROUTE}/${data}?businessId=${id}`);
+    async ({id, data}: ThunkParam<string>, thunkAPI) => {
+        callApiAndFetchAggregate(
+            thunkAPI,
+            async () =>
+                await ApiCaller.remove(`${DEFAULT_EMPLOYEE_COMMAND_ROUTE}/${data}?businessId=${id}`)
+        );
 
         return id;
     }

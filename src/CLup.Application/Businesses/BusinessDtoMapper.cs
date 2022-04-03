@@ -2,7 +2,7 @@
 using AutoMapper;
 using CLup.Domain.Businesses;
 
-namespace CLup.Application.Businesses.Queries
+namespace CLup.Application.Businesses
 {
     public class BusinessDtoMapper : Profile
     {
