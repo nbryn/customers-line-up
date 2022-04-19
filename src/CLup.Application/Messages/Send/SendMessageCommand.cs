@@ -1,10 +1,10 @@
+using CLup.Application.Shared;
 using MediatR;
 
-namespace CLup.Application.Shared.Messages.Send
+namespace CLup.Application.Messages.Send
 {
     public class SendMessageCommand : IRequest<Result>
     {
-
         public string SenderId { get; set; }
 
         public string ReceiverId { get; set; }

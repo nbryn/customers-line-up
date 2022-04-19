@@ -22,13 +22,13 @@ namespace CLup.Application.Businesses.TimeSlots.Commands.Generate
         }
 
         public async Task<Result> Handle(GenerateTimeSlotsCommand command, CancellationToken cancellationToken)
-        {
-            return await _context.Businesses.Include(business => business.Owner).FirstOrDefaultAsync(b => b.Id == command.BusinessId)
-                    .FailureIf("Business not found.")
-                    .AndThenDouble(() => _context.TimeSlots.FirstOrDefaultAsync(x => x.BusinessId == command.BusinessId && x.Start.Date == command.Start.Date))
-                    .Ensure(timeSlot => timeSlot == null, "Time slots already generated for this date.")
-                    .AndThen(business => business.Owner.GenerateTimeSlots(business.Id, command.Start))
-                    .Finally(timeSlots => _context.AddAndSave(timeSlots.ToArray()));
-        }
+            => await _context.Businesses.Include(business => business.Owner)
+                .FirstOrDefaultAsync(b => b.Id == command.BusinessId)
+                .FailureIf("Business not found.")
+                .AndThenDouble(() => _context.TimeSlots.FirstOrDefaultAsync(x =>
+                    x.BusinessId == command.BusinessId && x.Start.Date == command.Start.Date))
+                .Ensure(timeSlot => timeSlot == null, "Time slots already generated for this date.")
+                .AndThen(business => business.Owner.GenerateTimeSlots(business.Id, command.Start))
+                .Finally(timeSlots => _context.AddAndSave(timeSlots.ToArray()));
     }
 }

@@ -5,6 +5,7 @@ namespace CLup.Domain.Shared.ValueObjects
     public class Coords : ValueObject
     {
         public double Latitude { get; private set; }
+        
         public double Longitude { get; private set; }
 
         public Coords()

@@ -12,7 +12,6 @@ namespace CLup.Domain.Users
 {
     public class User : Entity, IAggregateRoot
     {
-
         public UserData UserData { get; private set; }
 
         public Address Address { get; private set; }

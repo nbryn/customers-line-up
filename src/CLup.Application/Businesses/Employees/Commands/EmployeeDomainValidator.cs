@@ -1,8 +1,9 @@
 using FluentValidation;
+using CLup.Domain.Businesses.Employees;
 
 namespace CLup.Application.Businesses.Employees.Commands
 {
-    public class EmployeeDomainValidator : AbstractValidator<Domain.Businesses.Employees.Employee>
+    public class EmployeeDomainValidator : AbstractValidator<Employee>
     {
         public EmployeeDomainValidator()
         {

@@ -16,15 +16,11 @@ namespace CLup.Infrastructure.Services
             _mediator = mediator;
         }
 
-        public async Task Publish(DomainEvent domainEvent)
-        {
-            await _mediator.Publish(GetNotificationCorrespondingToDomainEvent(domainEvent));
-        }
-
+        public async Task Publish(DomainEvent domainEvent) 
+            => await _mediator.Publish(GetNotificationCorrespondingToDomainEvent(domainEvent));
+        
         private INotification GetNotificationCorrespondingToDomainEvent(DomainEvent domainEvent)
-        {
-            return (INotification) Activator.CreateInstance(
+            => (INotification)Activator.CreateInstance(
                 typeof(DomainEventNotification<>).MakeGenericType(domainEvent.GetType()), domainEvent)!;
-        }
     }
 }

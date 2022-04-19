@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CLup.Application.Businesses;
+using CLup.Application.Messages;
 using CLup.Application.Shared.Bookings;
-using CLup.Application.Shared.Messages;
 
 namespace CLup.Application.Users
 {

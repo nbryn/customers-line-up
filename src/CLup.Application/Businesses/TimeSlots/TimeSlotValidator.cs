@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace CLup.Application.Businesses.TimeSlots.Queries
+namespace CLup.Application.Businesses.TimeSlots
 {
     public class TimeSlotValidator : AbstractValidator<Domain.Businesses.TimeSlots.TimeSlot>
     {

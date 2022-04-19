@@ -10,20 +10,20 @@ namespace CLup.Application.Businesses.Commands
     {
         public BusinessCommandMapper()
         {
-            CreateMap<CreateBusinessCommand, Domain.Businesses.Business>()
-                .ForMember(b => b.Id, s => s.Ignore())
-                .ForMember(b => b.BusinessData, s => s.MapFrom(c => new BusinessData(c.Name, c.Capacity, c.TimeSlotLength)))
-                .ForMember(b => b.Address, s => s.MapFrom(c => new Address(c.Street, c.Zip, c.City)))
-                .ForMember(b => b.Coords, s => s.MapFrom(c => new Coords(c.Longitude, c.Latitude)))
-                .ForMember(b => b.BusinessHours, s => s.MapFrom(c => new TimeSpan(c.Opens, c.Closes)))
-                .ForMember(b => b.Type, s => s.MapFrom(m => BusinessType.Parse(typeof(BusinessType), m.Type)));
+            CreateMap<CreateBusinessCommand, Business>()
+                .ForMember(dest => dest.Id, opts => opts.Ignore())
+                .ForMember(dest => dest.BusinessData, opts => opts.MapFrom(src => new BusinessData(src.Name, src.Capacity, src.TimeSlotLength)))
+                .ForMember(dest => dest.Address, opts => opts.MapFrom(src => new Address(src.Street, src.Zip, src.City)))
+                .ForMember(dest => dest.Coords, opts => opts.MapFrom(src => new Coords(src.Longitude, src.Latitude)))
+                .ForMember(dest => dest.BusinessHours, opts => opts.MapFrom(src => new TimeSpan(src.Opens, src.Closes)))
+                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => BusinessType.Parse(typeof(BusinessType), src.Type)));
 
-            CreateMap<UpdateBusinessCommand, Domain.Businesses.Business>()
-                .ForMember(b => b.BusinessData, s => s.MapFrom(c => new BusinessData(c.Name, c.Capacity, c.TimeSlotLength)))
-                .ForMember(b => b.Address, s => s.MapFrom(c => new Address(c.Street, c.Zip, c.City)))
-                .ForMember(b => b.Coords, s => s.MapFrom(c => new Coords(c.Longitude, c.Latitude)))
-                .ForMember(b => b.BusinessHours, s => s.MapFrom(c => new TimeSpan(c.Opens, c.Closes)))
-                .ForMember(b => b.Type, s => s.MapFrom(m => BusinessType.Parse(typeof(BusinessType), m.Type)));
+            CreateMap<UpdateBusinessCommand, Business>()
+                .ForMember(dest => dest.BusinessData, opts => opts.MapFrom(src => new BusinessData(src.Name, src.Capacity, src.TimeSlotLength)))
+                .ForMember(dest => dest.Address, opts => opts.MapFrom(src => new Address(src.Street, src.Zip, src.City)))
+                .ForMember(dest => dest.Coords, opts => opts.MapFrom(src => new Coords(src.Longitude, src.Latitude)))
+                .ForMember(dest => dest.BusinessHours, opts => opts.MapFrom(src => new TimeSpan(src.Opens, src.Closes)))
+                .ForMember(dest => dest.Type, opts => opts.MapFrom(src => BusinessType.Parse(typeof(BusinessType), src.Type)));
         }
     }
 }

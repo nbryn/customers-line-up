@@ -13,7 +13,6 @@ namespace CLup.Domain.Businesses
 {
     public class Business : Entity
     {
-
         public string OwnerId { get; private set; }
 
         public User Owner { get; private set; }

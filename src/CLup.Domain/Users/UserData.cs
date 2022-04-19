@@ -6,7 +6,9 @@ namespace CLup.Domain.Users
     public class UserData : ValueObject
     {
         public string Name { get; private set; }
+        
         public string Email { get; private set; }
+        
         public string Password { get; private set; }
 
         public UserData()

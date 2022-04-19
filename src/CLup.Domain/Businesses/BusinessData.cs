@@ -6,7 +6,9 @@ namespace CLup.Domain.Businesses
     public class BusinessData : ValueObject
     {
         public string Name { get; private set; }
+        
         public int Capacity { get; private set; }
+        
         public int TimeSlotLength { get; private set; }
 
         public BusinessData() { }

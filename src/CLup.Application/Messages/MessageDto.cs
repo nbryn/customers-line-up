@@ -1,4 +1,4 @@
-namespace CLup.Application.Shared.Messages
+namespace CLup.Application.Messages
 {
     public class MessageDto
     {
@@ -9,7 +9,7 @@ namespace CLup.Application.Shared.Messages
         public string Content { get; set; }   
         
         public string Date { get; set; }
-
+        
         public string Sender { get; set; }
         
         public string SenderId { get; set; }

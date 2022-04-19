@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Businesses.Employees.Commands.Delete
 {
-
     public class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeCommand, Result>
     {
         private readonly ICLupDbContext _context;
@@ -16,11 +15,9 @@ namespace CLup.Application.Businesses.Employees.Commands.Delete
         public DeleteEmployeeHandler(ICLupDbContext context) => _context = context;
 
         public async Task<Result> Handle(DeleteEmployeeCommand command, CancellationToken cancellationToken)
-        {
-            return await _context.Employees.FirstOrDefaultAsync(e => e.UserId == command.UserId &&
-                                                                e.BusinessId == command.BusinessId)
-                    .FailureIf("Employee not found.")
-                    .Finally(employee => _context.RemoveAndSave(employee));
-        }
+            => await _context.Employees.FirstOrDefaultAsync(e => e.UserId == command.UserId &&
+                                                                 e.BusinessId == command.BusinessId)
+                .FailureIf("Employee not found.")
+                .Finally(employee => _context.RemoveAndSave(employee));
     }
 }

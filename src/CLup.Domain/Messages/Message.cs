@@ -38,7 +38,7 @@ namespace CLup.Domain.Messages
 
         public Message DeletedBySender()
         {
-            Metadata = new MessageMetadata(true, false);
+            Metadata = new MessageMetadata(true);
 
             return this;
         }

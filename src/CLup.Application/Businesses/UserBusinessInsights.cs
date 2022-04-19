@@ -12,7 +12,7 @@ namespace CLup.Application.Businesses
     {
         public class Query : IRequest<Result<Model>>
         {
-            public string UserEmail { get; set; }
+            public string UserEmail { get; }
 
             public Query(string userEmail) => UserEmail = userEmail;
         }
@@ -32,7 +32,6 @@ namespace CLup.Application.Businesses
       
             public async Task<Result<Model>> Handle(Query query, CancellationToken cancellationToken)
             {
-
                 var businesses = await _readContext.Businesses.Include(business => business.Owner)
                                          .Where(b => b.Owner.UserData.Email == query.UserEmail)
                                          .ToListAsync();

@@ -19,23 +19,21 @@ namespace CLup.Application.Auth
 
         public RegisterHandler(
             IValidator<User> validator,
-            ICLupDbContext clupContext, 
+            ICLupDbContext clupContext,
             IMapper mapper)
         {
             _validator = validator;
             _clupContext = clupContext;
             _mapper = mapper;
         }
-        
+
         public async Task<Result<TokenResponse>> Handle(RegisterCommand command, CancellationToken cancellationToken)
-        {
-            return await _clupContext.Users.FirstOrDefaultAsync(x => x.UserData.Email == command.Email)
-                    .ToResult()
-                    .EnsureDiscard(user => user == null, $"The email '{command.Email}' is already in use.")
-                    .AndThen(() => _mapper.Map<User>(command))
-                    .Validate(_validator)
-                    .AndThenF(newUser => _clupContext.AddAndSave(newUser))
-                    .Finally(_mapper.Map<TokenResponse>);
-        }
+            => await _clupContext.Users.FirstOrDefaultAsync(x => x.UserData.Email == command.Email)
+                .ToResult()
+                .EnsureDiscard(user => user == null, $"The email '{command.Email}' is already in use.")
+                .AndThen(() => _mapper.Map<User>(command))
+                .Validate(_validator)
+                .AndThenF(newUser => _clupContext.AddAndSave(newUser))
+                .Finally(_mapper.Map<TokenResponse>);
     }
 }

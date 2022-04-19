@@ -10,13 +10,13 @@ namespace CLup.Application.Auth
         public AuthMapper()
         {
             CreateMap<RegisterCommand, User>()
-                .ForMember(u => u.UserData, s => s.MapFrom(s => new UserData(s.Name, s.Email, BC.HashPassword(s.Password))))
-                .ForMember(u => u.Address, s => s.MapFrom(s => new Address(s.Street, s.Zip, s.City)))
-                .ForMember(u => u.Coords, s => s.MapFrom(s => new Coords(s.Longitude, s.Latitude)))
-                .ForMember(u => u.Role, s => s.MapFrom(s => Role.User));
+                .ForMember(dest => dest.UserData, opts => opts.MapFrom(src => new UserData(src.Name, src.Email, BC.HashPassword(src.Password))))
+                .ForMember(dest => dest.Address, opts => opts.MapFrom(src => new Address(src.Street, src.Zip, src.City)))
+                .ForMember(dest => dest.Coords, opts => opts.MapFrom(src => new Coords(src.Longitude, src.Latitude)))
+                .ForMember(dest => dest.Role, opts => opts.MapFrom(src => Role.User));
 
             CreateMap<User, TokenResponse>()
-                .ForMember(dest => dest.Token, config => config.MapFrom<AuthTokenResolver>());
+                .ForMember(dest => dest.Token, opts => opts.MapFrom<AuthTokenResolver>());
             
         }
     }

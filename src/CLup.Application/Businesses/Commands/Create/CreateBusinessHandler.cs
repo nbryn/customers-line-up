@@ -14,13 +14,13 @@ namespace CLup.Application.Businesses.Commands.Create
 {
     public class CreateBusinessHandler : IRequestHandler<CreateBusinessCommand, Result>
     {
-        private readonly IValidator<Domain.Businesses.Business> _validator;
+        private readonly IValidator<Business> _validator;
         private readonly ICLupDbContext _context;
         private readonly IMapper _mapper;
 
         public CreateBusinessHandler(
             IValidator<Business> validator,
-            ICLupDbContext context, 
+            ICLupDbContext context,
             IMapper mapper)
         {
             _validator = validator;
@@ -29,13 +29,11 @@ namespace CLup.Application.Businesses.Commands.Create
         }
 
         public async Task<Result> Handle(CreateBusinessCommand command, CancellationToken cancellationToken)
-        {
-            return await _context.Users.FirstOrDefaultAsync(user => user.Email == command.OwnerEmail)
-                    .ToResult()
-                    .AndThenDiscard(user => user.UpdateRole(Role.Owner))
-                    .AndThen(() => _mapper.Map<Business>(command))
-                    .Validate(_validator)
-                    .Finally(business => _context.AddAndSave(business));
-        }
+            => await _context.Users.FirstOrDefaultAsync(user => user.Email == command.OwnerEmail)
+                .ToResult()
+                .AndThenDiscard(user => user.UpdateRole(Role.Owner))
+                .AndThen(() => _mapper.Map<Business>(command))
+                .Validate(_validator)
+                .Finally(business => _context.AddAndSave(business));
     }
 }

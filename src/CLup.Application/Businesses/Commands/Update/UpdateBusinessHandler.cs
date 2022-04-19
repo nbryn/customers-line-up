@@ -18,7 +18,7 @@ namespace CLup.Application.Businesses.Commands.Update
 
         public UpdateBusinessHandler(
             IValidator<Domain.Businesses.Business> businessValidator,
-            ICLupDbContext context, 
+            ICLupDbContext context,
             IMapper mapper)
         {
             _businessValidator = businessValidator;
@@ -27,12 +27,10 @@ namespace CLup.Application.Businesses.Commands.Update
         }
 
         public async Task<Result> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)
-        {
-            return await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.Id)
-                    .FailureIfDiscard("Business not found.")
-                    .AndThen(() => _mapper.Map<Domain.Businesses.Business>(command))
-                    .Validate(_businessValidator)
-                    .Finally(updatedBusiness => _context.UpdateEntity(command.Id, updatedBusiness));
-        }
+            => await _context.Businesses.FirstOrDefaultAsync(x => x.Id == command.Id)
+                .FailureIfDiscard("Business not found.")
+                .AndThen(() => _mapper.Map<Domain.Businesses.Business>(command))
+                .Validate(_businessValidator)
+                .Finally(updatedBusiness => _context.UpdateEntity(command.Id, updatedBusiness));
     }
 }

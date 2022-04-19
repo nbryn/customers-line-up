@@ -5,6 +5,7 @@ namespace CLup.Domain.Shared.ValueObjects
     public class TimeSpan : ValueObject
     {
         public string Start { get; private set; }
+        
         public string End { get; private set; }
 
         public TimeSpan() { }

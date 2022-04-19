@@ -8,7 +8,6 @@ namespace CLup.Domain.Businesses.TimeSlots
 {
     public class TimeSlot : Entity, IHasDomainEvent
     {
-
         public string BusinessId { get; private set; }
 
         public Business Business { get; private set; }
@@ -40,6 +39,6 @@ namespace CLup.Domain.Businesses.TimeSlots
             End = end;
         }
 
-        public bool IsAvailable() => Bookings?.Count() < Capacity && (Start - System.DateTime.Now).TotalDays < 14 && (Start - System.DateTime.Now).TotalDays >= 0;
+        public bool IsAvailable() => Bookings?.Count() < Capacity && (Start - DateTime.Now).TotalDays is < 14 and >= 0;
     }
 }

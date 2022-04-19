@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace CLup.Application.Shared.Messages.Send
+namespace CLup.Application.Messages.Send
 {
     public class SendMessageValidator : AbstractValidator<SendMessageCommand>
     {

@@ -19,17 +19,14 @@ namespace CLup.Application.Auth
             IReadOnlyDbContext readOnlyDbContext,
             IMapper mapper)
         {
-
             _readOnlyDbContext = readOnlyDbContext;
             _mapper = mapper;
         }
 
         public async Task<Result<TokenResponse>> Handle(LoginCommand command, CancellationToken cancellationToken)
-        {
-            return await _readOnlyDbContext.Users.FirstOrDefaultAsync(x => x.UserData.Email == command.Email)
+            => await _readOnlyDbContext.Users.FirstOrDefaultAsync(x => x.UserData.Email == command.Email)
                 .ToResult()
                 .Ensure(user => user != null && BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
                 .Finally(_mapper.Map<TokenResponse>);
-        }
     }
 }

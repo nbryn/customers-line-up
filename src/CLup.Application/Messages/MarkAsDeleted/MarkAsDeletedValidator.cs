@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace CLup.Application.Shared.Messages.MarkAsDeleted
+namespace CLup.Application.Messages.MarkAsDeleted
 {
     public class MarkAsDeletedValidator : AbstractValidator<MarkMessageAsDeletedCommand>
     {

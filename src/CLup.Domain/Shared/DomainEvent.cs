@@ -16,6 +16,7 @@ namespace CLup.Domain.Shared
         }
         
         public bool IsPublished { get; set; }
+        
         public DateTimeOffset DateOccurred { get; protected set; } = DateTime.UtcNow;
     }
 }

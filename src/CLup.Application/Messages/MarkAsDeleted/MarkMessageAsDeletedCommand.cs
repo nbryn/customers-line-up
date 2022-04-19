@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using CLup.Application.Shared;
+using MediatR;
 
-namespace CLup.Application.Shared.Messages.MarkAsDeleted
+namespace CLup.Application.Messages.MarkAsDeleted
 {
     public class MarkMessageAsDeletedCommand : IRequest<Result>
     {

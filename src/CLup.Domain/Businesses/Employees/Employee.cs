@@ -5,7 +5,6 @@ namespace CLup.Domain.Businesses.Employees
 {
     public class Employee : Entity
     {
-
         public string UserId { get; private set; }
 
         public User User { get; private set; }

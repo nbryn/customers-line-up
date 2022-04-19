@@ -1,5 +1,6 @@
 using AutoMapper;
 using CLup.Application.Businesses.Employees.Commands.Create;
+using CLup.Domain.Businesses.Employees;
 
 namespace CLup.Application.Businesses.Employees.Commands
 {
@@ -7,7 +8,7 @@ namespace CLup.Application.Businesses.Employees.Commands
     {
         public EmployeeCommandMapper()
         {
-            CreateMap<CreateEmployeeCommand, Domain.Businesses.Employees.Employee>();
+            CreateMap<CreateEmployeeCommand, Employee>();
         }
     }
 }
