@@ -1,17 +1,18 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../../shared/api/ApiCaller';
+import {callApiAndFetchUser} from '../../user/UserState';
 import {EmployeeDTO} from './Employee';
-import {ThunkParam} from '../../../app/AppTypes';
 import {RootState} from '../../../app/Store';
-import {callApiAndFetchAggregate} from '../../user/UserState';
+import {selectBusinessesByOwner} from '../BusinessState';
+import {ThunkParam} from '../../../app/AppTypes';
 
 const DEFAULT_EMPLOYEE_COMMAND_ROUTE = 'api/business/employee';
 
 export const createEmployee = createAsyncThunk(
     'employee/create',
     async (data: EmployeeDTO, thunkAPI) => {
-        callApiAndFetchAggregate(
+        callApiAndFetchUser(
             thunkAPI,
             async () => await ApiCaller.post(`${DEFAULT_EMPLOYEE_COMMAND_ROUTE}`, data)
         );
@@ -21,7 +22,7 @@ export const createEmployee = createAsyncThunk(
 export const removeEmployee = createAsyncThunk(
     'employee/delete',
     async ({id, data}: ThunkParam<string>, thunkAPI) => {
-        callApiAndFetchAggregate(
+        callApiAndFetchUser(
             thunkAPI,
             async () =>
                 await ApiCaller.remove(`${DEFAULT_EMPLOYEE_COMMAND_ROUTE}/${data}?businessId=${id}`)
@@ -31,7 +32,12 @@ export const removeEmployee = createAsyncThunk(
     }
 );
 
-const getEmployees = (state: RootState) => Object.values(state.entities.employees);
+const selectAllEmployees = (state: RootState) => Object.values(state.entities.employees);
 
 export const selectEmployeesByBusiness = (state: RootState) =>
-    getEmployees(state).filter((employee) => employee.businessId === state.business.current?.id);
+    selectAllEmployees(state).filter(
+        (employee) => employee.businessId === state.business.current?.id
+    );
+
+export const selectEmployeesByOwner = (state: RootState) =>
+    selectBusinessesByOwner(state).flatMap((business) => business.employees);

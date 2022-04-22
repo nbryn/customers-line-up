@@ -56,7 +56,7 @@ export const SignupView: React.FC = () => {
 
             user.longitude = address?.longitude;
             user.latitude = address?.latitude;
-            user.city = address?.city ?? ''
+            user.city = address?.city ?? '';
             user.zip = address?.zip ?? '';
             return user;
         },
@@ -108,9 +108,7 @@ export const SignupView: React.FC = () => {
                                                     formHandler.errors[key]
                                                 }
                                                 defaultLabel={
-                                                    key === 'street'
-                                                        ? 'street - After Zip'
-                                                        : 'Zip'
+                                                    key === 'street' ? 'street - After Zip' : 'Zip'
                                                 }
                                             />
                                         </FormGroup>

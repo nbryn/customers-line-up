@@ -12,13 +12,12 @@ import {
     updateBusinessInfo,
 } from '../../features/business/BusinessState';
 import {createEmployee, removeEmployee} from '../../features/business/employee/EmployeeState';
-import {fetchUserInsights} from '../../features/insights/insightsSlice';
 import {sendMessage} from '../../features/message/MessageState';
 import {deleteTimeSlot, generateTimeSlots} from '../../features/business/timeslot/TimeSlotState';
 import {
     login,
     register,
-    fetchUserAggregate,
+    fetchUser,
     fetchUsersNotEmployedByBusiness,
     updateUserInfo,
 } from '../../features/user/UserState';
@@ -154,10 +153,9 @@ export const apiSlice = createSlice({
                     fetchAllBusinesses.fulfilled,
                     fetchBusinessesTypes.fulfilled,
                     removeEmployee.fulfilled,
-                    fetchUserInsights.fulfilled,
                     login.fulfilled,
                     register.fulfilled,
-                    fetchUserAggregate.fulfilled
+                    fetchUser.fulfilled
                 ),
                 (state) => {
                     state.loading = false;
@@ -177,7 +175,6 @@ export const apiSlice = createSlice({
                     updateBusinessInfo.pending,
                     createEmployee.pending,
                     removeEmployee.pending,
-                    fetchUserInsights.pending,
                     deleteTimeSlot.pending,
                     generateTimeSlots.pending,
                     fetchUsersNotEmployedByBusiness.pending,
@@ -185,7 +182,7 @@ export const apiSlice = createSlice({
                     register.pending,
                     updateUserInfo.pending,
                     sendMessage.pending,
-                    fetchUserAggregate.pending
+                    fetchUser.pending
                 ),
                 (state) => {
                     state.loading = true;
@@ -204,14 +201,13 @@ export const apiSlice = createSlice({
                     updateBusinessInfo.rejected,
                     createEmployee.rejected,
                     removeEmployee.rejected,
-                    fetchUserInsights.rejected,
                     deleteTimeSlot.rejected,
                     generateTimeSlots.rejected,
                     fetchUsersNotEmployedByBusiness.rejected,
                     register.rejected,
                     updateUserInfo.rejected,
                     sendMessage.rejected,
-                    fetchUserAggregate.rejected
+                    fetchUser.rejected
                 ),
                 (state, action) => {
                     state.loading = false;

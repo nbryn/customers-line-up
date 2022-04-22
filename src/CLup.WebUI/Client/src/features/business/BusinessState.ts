@@ -2,8 +2,8 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../shared/api/ApiCaller';
 import {BusinessDTO} from './Business';
+import {callApiAndFetchUser, selectCurrentUser} from '../user/UserState';
 import {RootState} from '../../app/Store';
-import {callApiAndFetchAggregate, selectCurrentUser} from '../user/UserState';
 
 const DEFAULT_BUSINESS_QUERY_ROUTE = 'api/query/business';
 const DEFAULT_BUSINESS_COMMAND_ROUTE = 'api/business';
@@ -21,7 +21,7 @@ const initialBusinessState: BusinessState = {
 export const createBusiness = createAsyncThunk(
     'business/create',
     async (data: BusinessDTO, thunkAPI) => {
-        callApiAndFetchAggregate(
+        callApiAndFetchUser(
             thunkAPI,
             async () => await ApiCaller.post(`${DEFAULT_BUSINESS_COMMAND_ROUTE}`, data)
         );
@@ -43,7 +43,7 @@ export const fetchBusinessesTypes = createAsyncThunk('business/fetchBusinessType
 export const updateBusinessInfo = createAsyncThunk(
     'business/update',
     async (data: {businessId: string; ownerEmail: string; business: BusinessDTO}, thunkAPI) => {
-        callApiAndFetchAggregate(
+        callApiAndFetchUser(
             thunkAPI,
             async () =>
                 await ApiCaller.put(`${DEFAULT_BUSINESS_COMMAND_ROUTE}/${data.businessId}`, {

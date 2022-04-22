@@ -2,14 +2,14 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../../shared/api/ApiCaller';
 import {RootState} from '../../../app/Store';
-import {callApiAndFetchAggregate} from '../../user/UserState';
+import {callApiAndFetchUser} from '../../user/UserState';
 
 const DEFAULT_TIMESLOT_COMMAND_ROUTE = 'api/business/timeslot';
 
 export const deleteTimeSlot = createAsyncThunk(
     'timeSlot/delete',
     async (data: {businessId: string; timeSlotId: string}, thunkAPI) => {
-        callApiAndFetchAggregate(
+        callApiAndFetchUser(
             thunkAPI,
             async () =>
                 await ApiCaller.remove(`${DEFAULT_TIMESLOT_COMMAND_ROUTE}/${data.timeSlotId}`)
@@ -22,7 +22,7 @@ export const deleteTimeSlot = createAsyncThunk(
 export const generateTimeSlots = createAsyncThunk(
     'timeSlot/generate',
     async (data: {businessId: string; start: string}, thunkAPI) => {
-        callApiAndFetchAggregate(
+        callApiAndFetchUser(
             thunkAPI,
             async () => await ApiCaller.post(`${DEFAULT_TIMESLOT_COMMAND_ROUTE}/generate`, data)
         );

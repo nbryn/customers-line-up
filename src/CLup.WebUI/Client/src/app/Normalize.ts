@@ -1,7 +1,7 @@
 import {normalize, schema, Schema} from 'normalizr';
 import {BusinessDTO} from '../features/business/Business';
 import {UserDTO} from '../features/user/User';
-import {EntityState} from './EntitySlice';
+import {EntityState} from './EntityState';
 
 const bookingSchema = new schema.Entity('bookings');
 const employeeSchema = new schema.Entity('employees');
@@ -33,7 +33,7 @@ const userAggregateSchema = (): Schema => {
     return {user: userSchema};
 };
 
-export const normalizeUserAggregate = (user: UserDTO) => {
+export const normalizeUser = (user: UserDTO) => {
     const normalizedEntities = (normalize({user}, userAggregateSchema())
         .entities as unknown) as EntityState;
 

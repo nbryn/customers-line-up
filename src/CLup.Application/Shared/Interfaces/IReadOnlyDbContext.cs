@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CLup.Application.Users;
 using CLup.Domain.Bookings;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Employees;
@@ -10,16 +11,12 @@ namespace CLup.Application.Shared.Interfaces
 {
     public interface IReadOnlyDbContext
     {
+        Task<Result<UsersNotEmployedByBusiness>> FetchUsersNotEmployedByBusiness(string businessId);
+        
         public Task<User> FetchUserAggregate(string userEmail);
 
         public Task<IList<Business>> FetchAllBusinesses();
 
-        public IQueryable<Booking> Bookings { get; }
-        
-        public IQueryable<Business> Businesses { get; }
-        
-        public IQueryable<Employee> Employees { get; }
-        
         public IQueryable<User> Users { get; }
     }
 }

@@ -1,12 +1,12 @@
-import {HasAddress, Index} from '../../shared/models/General';
+import {DTO, HasAddress, Index} from '../../shared/models/General';
 import {BookingDTO} from '../booking/Booking';
 import {BusinessDTO} from '../business/Business';
-import {MessageDTO, MessageResponse} from '../message/Message';
+import {MessageDTO} from '../message/Message';
 
 export interface UserDTO extends HasAddress {
     email: string;
-    id?: string;
     name?: string;
+    id?: string;
     password?: string;
     token?: string;
     role?: 'User' | 'Employee' | 'Owner' | 'Admin';

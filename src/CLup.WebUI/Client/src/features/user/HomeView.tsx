@@ -1,13 +1,14 @@
-import React, {useEffect} from 'react';
-import {Badge, Col, Container, Row} from 'react-bootstrap';
+import React from 'react';
+import {Col, Container, Row} from 'react-bootstrap';
 import {makeStyles} from '@material-ui/core/styles';
 import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../shared/components/card/CardInfo';
-import {fetchUserInsights, selectUserInsights} from '../insights/insightsSlice';
 import {Header} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
-import {selectCurrentUser} from './UserState';
+import {selectBookingsByOwner, selectBookingsByUser, selectNextBookingByUser} from '../booking/BookingState';
+import {selectCurrentUser} from '../user/UserState';
+import {selectEmployeesByOwner} from '../business/employee/EmployeeState';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
@@ -25,13 +26,10 @@ export const HomeView: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const user = useAppSelector(selectCurrentUser);
-    const userInsights = useAppSelector(selectUserInsights);
-
-    useEffect(() => {
-        (() => {
-            dispatch(fetchUserInsights());
-        })();
-    }, []);
+    const userBookings = useAppSelector(selectBookingsByUser)
+    const userEmployees = useAppSelector(selectEmployeesByOwner);
+    const userBusinessBookings = useAppSelector(selectBookingsByOwner);
+    const userNextBooking = useAppSelector(selectNextBookingByUser)
 
     return (
         <Container>
@@ -50,10 +48,10 @@ export const HomeView: React.FC = () => {
                     >
                         <CardInfo
                             infoTexts={[
-                                {text: `Bookings: ${userInsights?.ownBookings}`, icon: 'Home'},
-                                {text: `Next: ${userInsights?.nextBookingTime}`, icon: 'Hot'},
+                                {text: `Bookings: ${userBookings.length}`, icon: 'Home'},
+                                {text: `Next: ${userNextBooking.dateString}`, icon: 'Hot'},
                                 {
-                                    text: `Where: ${userInsights?.nextBookingBusiness}`,
+                                    text: `Where: ${userNextBooking.booking.business}`,
                                     icon: 'Grain',
                                 },
                             ]}
@@ -64,7 +62,7 @@ export const HomeView: React.FC = () => {
                     <InfoCard
                         buttonAction={() => history.push('/business')}
                         buttonText="My Businesses"
-                        primaryButtonDisabled={!userInsights?.businesses}
+                        primaryButtonDisabled={!user.businesses}
                         secondaryAction={() => history.push('/business/new')}
                         secondaryButtonText="Create Business"
                         title="Business Info"
@@ -72,10 +70,10 @@ export const HomeView: React.FC = () => {
                     >
                         <CardInfo
                             infoTexts={[
-                                {text: `Businesses: ${userInsights?.businesses}`, icon: 'Home'},
-                                {text: `Employees: ${userInsights?.employees}`, icon: 'Hot'},
+                                {text: `Businesses: ${user.businesses?.length}`, icon: 'Home'},
+                                {text: `Employees: ${userEmployees.length}`, icon: 'Hot'},
                                 {
-                                    text: `Bookings: ${userInsights?.businessBookings}`,
+                                    text: `Bookings: ${userBusinessBookings.length}`,
                                     icon: 'Grain',
                                 },
                             ]}

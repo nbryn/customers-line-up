@@ -12,9 +12,9 @@ import React from 'react';
 import {useHistory} from 'react-router-dom';
 
 import Booking from '../../../assets/images/Booking.png';
-import {useUserContext} from '../../../features/user/UserContext';
 import {selectCurrentUser} from '../../../features/user/UserState';
 import {useAppSelector} from '../../../app/Store';
+import {useUserContext} from '../../../features/user/UserContext';
 
 const drawerWidth = 210;
 
