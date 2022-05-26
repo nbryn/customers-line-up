@@ -24,7 +24,7 @@ namespace CLup.Application.Auth
         }
 
         public async Task<Result<TokenResponse>> Handle(LoginCommand command, CancellationToken cancellationToken)
-            => await _readOnlyDbContext.Users.FirstOrDefaultAsync(x => x.UserData.Email == command.Email)
+            => await _readOnlyDbContext.FetchUserAggregate(command.Email)
                 .ToResult()
                 .Ensure(user => user != null && BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
                 .Finally(_mapper.Map<TokenResponse>);

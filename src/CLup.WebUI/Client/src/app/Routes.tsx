@@ -7,6 +7,7 @@ import {UserBookingView} from '../features/booking/UserBookingView';
 import {AllBusinessesView} from '../features/business/AllBusinessesView';
 import {CreateBusinessView} from '../features/business/CreateBusinessView';
 import {BusinessOverview} from '../features/business/BusinessOverview';
+import {SelectBusinessView} from '../features/business/SelectBusinessView';
 import {BusinessProfileView} from '../features/business/BusinessProfileView';
 import {EmployeeView} from '../features/business/employee/EmployeeView';
 import {CreateEmployeeView} from '../features/business/employee/CreateEmployeeView';
@@ -31,11 +32,12 @@ export const Routes: React.FC = () => {
             <Route exact path="/booking/new" component={CreateBookingView} />
             <Route exact path="/business/new" component={CreateBusinessView} />
 
-            <Route exact path="/business" component={BusinessOverview} />
-            <Route exact path="/business/bookings" component={BusinessOverview} />
-            <Route exact path="/business/timeslots" component={BusinessOverview} />
-            <Route exact path="/business/employees" component={BusinessOverview} />
-            <Route exact path="/business/messages" component={BusinessOverview} />
+            <Route exact path="/business" component={SelectBusinessView} />
+            <Route exact path="/business/overview" component={BusinessOverview} />
+            <Route exact path="/business/bookings" component={SelectBusinessView} />
+            <Route exact path="/business/timeslots" component={SelectBusinessView} />
+            <Route exact path="/business/employees" component={SelectBusinessView} />
+            <Route exact path="/business/messages" component={SelectBusinessView} />
             <Route exact path="/business/employees/new" component={CreateEmployeeView} />
             <Route exact path="/business/employees/manage" component={EmployeeView} />
             <Route exact path="/business/bookings/manage" component={BusinessBookingView} />
@@ -43,7 +45,7 @@ export const Routes: React.FC = () => {
             <Route exact path="/business/messages/manage" component={BusinessMessageView} />
             <Route exact path="/business/timeslots/new" component={GenerateTimeSlotsView} />
             <Route exact path="/business/manage" component={BusinessProfileView} />
-            
+
             <Route exact path="/error" component={ErrorView} />
             <Route path="*" component={NotFoundView} />
         </Switch>

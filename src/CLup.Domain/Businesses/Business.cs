@@ -27,15 +27,15 @@ namespace CLup.Domain.Businesses
 
         public BusinessType Type { get; private set; }
 
-        public IEnumerable<Booking> Bookings { get; private set; }
+        public IEnumerable<Booking> Bookings { get; private set; } = new List<Booking>();
 
-        public IEnumerable<Employee> Employees { get; private set; }
+        public IEnumerable<Employee> Employees { get; private set; } = new List<Employee>();
 
-        public IEnumerable<TimeSlot> TimeSlots { get; private set; }
+        public IEnumerable<TimeSlot> TimeSlots { get; private set; } = new List<TimeSlot>();
 
-        public IList<Message> SentMessages { get; private set; }
+        public IList<Message> SentMessages { get; private set; } = new List<Message>();
 
-        public IList<Message> ReceivedMessages { get; private set; }
+        public IList<Message> ReceivedMessages { get; private set; } = new List<Message>();
 
         protected Business()
         {
@@ -65,14 +65,13 @@ namespace CLup.Domain.Businesses
 
         public string Name => BusinessData.Name;
 
-        public Message BookingDeletedMessage(string receiverId)
+        public void BookingDeletedMessage(string receiverId)
         {
             var content = $"Your booking at {Name} was deleted.";
             var messageData = new MessageData("Booking Deleted", content);
             var metadata = new MessageMetadata(false, false);
 
-            var message = new Message(Id, receiverId, messageData, MessageType.BookingDeleted, metadata);
-            return message;
+            SentMessages.Add(new Message(Id, receiverId, messageData, MessageType.BookingDeleted, metadata));
         }
 
         public IList<TimeSlot> GenerateTimeSlots(DateTime start)

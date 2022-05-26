@@ -20,13 +20,13 @@ namespace CLup.Domain.Users
 
         public Role Role { get; set; }
 
-        public IList<Booking> Bookings { get; private set; }
+        public IList<Message> ReceivedMessages { get; private set; } = new List<Message>();
 
-        public IList<Business> Businesses { get; private set; }
+        public IList<Message> SentMessages { get; private set; } = new List<Message>();
 
-        public IList<Message> SentMessages { get; private set; }
+        public IList<Business> Businesses { get; private set; } = new List<Business>();
 
-        public IList<Message> ReceivedMessages { get; private set; }
+        public IList<Booking> Bookings { get; private set; } = new List<Booking>();
 
         protected User()
         {
@@ -69,23 +69,19 @@ namespace CLup.Domain.Users
             return this;
         }
 
-        public Message UserDeletedBookingMessage(Booking booking, string receiverId)
+        public void UserDeletedBookingMessage(Booking booking, string receiverId)
         {
             var content =
                 $"The user with email {Email} deleted her/his booking at {booking.TimeSlot.Start.ToString("dd/MM/yyyy")}.";
             var messageData = new MessageData($"Booking Deleted - {booking.Business.Name}", content);
             var metaData = new MessageMetadata(false, false);
 
-            var message = new Message(Id, receiverId, messageData, MessageType.BookingDeleted, metaData);
-            return message;
+            SentMessages.Add(new Message(Id, receiverId, messageData, MessageType.BookingDeleted, metaData));
         }
 
-        public Message BusinessDeletedBookingMessage(string businessId, string receiverId)
-        {
-            var business = Businesses?.FirstOrDefault(business => business.Id == businessId);
+        public void BusinessDeletedBookingMessage(Business business, string userId) =>
+            business.BookingDeletedMessage(userId);
 
-            return business?.BookingDeletedMessage(receiverId);
-        }
 
         public IList<TimeSlot> GenerateTimeSlots(string businessId, DateTime start)
         {

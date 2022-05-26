@@ -1,4 +1,3 @@
-using CLup.Domain.Messages;
 using CLup.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -10,59 +9,57 @@ namespace CLup.Infrastructure.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<User> userConfiguration)
         {
             userConfiguration.ToTable("users");
-            userConfiguration.HasKey(b => b.Id);
+            userConfiguration.HasKey(user => user.Id);
 
-            userConfiguration.OwnsOne(b => b.Address, a =>
+            userConfiguration.OwnsOne(user => user.Address, a =>
             {
-                a.Property(a => a.Street)
+                a.Property(address => address.Street)
                     .HasColumnName("Street");
 
-                a.Property(p => p.Zip)
+                a.Property(address => address.Zip)
                     .HasColumnName("Zip");
 
-                a.Property(a => a.City)
+                a.Property(address => address.City)
                     .HasColumnName("City");
             });
 
             userConfiguration.OwnsOne(b => b.UserData, u =>
             {
-                u.Property(u => u.Name)
-                   .HasColumnName("Name");
+                u.Property(userData => userData.Name)
+                    .HasColumnName("Name");
 
 
-                u.Property(u => u.Email)
+                u.Property(userData => userData.Email)
                     .HasColumnName("Email");
 
-                u.Property(u => u.Password)
+                u.Property(userData => userData.Password)
                     .HasColumnName("Password");
             });
 
-            userConfiguration.OwnsOne(b => b.Coords, c =>
+            userConfiguration.OwnsOne(user => user.Coords, c =>
             {
-                c.Property(c => c.Latitude)
+                c.Property(coords => coords.Latitude)
                     .HasColumnName("Latitude");
-                    
-                c.Property(c => c.Longitude)
+
+                c.Property(coords => coords.Longitude)
                     .HasColumnName("Longitude");
             });
 
             userConfiguration
-                    .HasMany(x => x.Bookings)
-                    .WithOne(x => x.User);
-            
-             userConfiguration
-                    .HasMany(x => x.Businesses)
-                    .WithOne(x => x.Owner);
-
-           userConfiguration
-                    .HasMany<Message>(user => user.SentMessages)
-                    .WithOne()
-                    .HasForeignKey(message => message.SenderId);
+                .HasMany(user => user.Bookings)
+                .WithOne(booking => booking.User);
 
             userConfiguration
-                    .HasMany<Message>(user => user.ReceivedMessages)
-                    .WithOne()
-                    .HasForeignKey(message => message.ReceiverId);
+                .HasMany(user => user.Businesses)
+                .WithOne(business => business.Owner);
+
+            userConfiguration
+                .HasMany(user => user.SentMessages)
+                .WithOne();
+
+            userConfiguration
+                .HasMany(user => user.ReceivedMessages)
+                .WithOne();
         }
     }
 }

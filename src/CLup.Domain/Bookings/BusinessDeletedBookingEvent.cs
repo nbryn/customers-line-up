@@ -1,24 +1,18 @@
+using CLup.Domain.Businesses;
 using CLup.Domain.Shared;
-using CLup.Domain.Users;
 
 namespace CLup.Domain.Bookings
 {
     public class BusinessDeletedBookingEvent : DomainEvent
     {
-        public User Owner { get; }
+        public Booking Booking { get; }
 
-        public string BusinessId { get; }
+        public Business Business { get; }
 
-        public string ReceiverId { get; }
-
-        public BusinessDeletedBookingEvent(
-            User owner, 
-            string businessId,
-            string receiverId)
+        public BusinessDeletedBookingEvent(Booking booking)
         {
-            Owner = owner;
-            BusinessId = businessId;
-            ReceiverId = receiverId;
+            Business = booking.Business;
+            Booking = booking;
         }
     }
 }

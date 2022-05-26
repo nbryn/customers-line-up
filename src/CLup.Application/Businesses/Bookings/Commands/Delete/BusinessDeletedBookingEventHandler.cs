@@ -16,9 +16,9 @@ namespace CLup.Application.Businesses.Bookings.Commands.Delete
         public async Task Handle(DomainEventNotification<BusinessDeletedBookingEvent> @event, CancellationToken cancellationToken)
         {
             var domainEvent = @event.DomainEvent;
-            var message = domainEvent.Owner.BusinessDeletedBookingMessage(domainEvent.BusinessId, domainEvent.ReceiverId);
+            domainEvent.Booking.User.BusinessDeletedBookingMessage(domainEvent.Business, domainEvent.Booking.UserId);
             
-            await _context.Messages.AddAsync(message);
+            await _context.UpdateEntity(domainEvent.Business.Id, domainEvent.Business);
         }
     }
 }

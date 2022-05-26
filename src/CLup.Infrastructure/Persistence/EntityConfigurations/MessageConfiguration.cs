@@ -9,28 +9,28 @@ namespace CLup.Infrastructure.Persistence.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Message> messageConfiguration)
         {
-            messageConfiguration.ToTable("Messages");
-            messageConfiguration.HasKey(b => b.Id);
+            messageConfiguration.ToTable("messages");
+            messageConfiguration.HasKey(message => message.Id);
 
             messageConfiguration
-                    .Property(b => b.Type)
-                    .HasConversion(b => b.ToString("G"), b => Enum.Parse<MessageType>(b));
+                    .Property(message => message.Type)
+                    .HasConversion(type => type.ToString("G"), type => Enum.Parse<MessageType>(type));
 
-            messageConfiguration.OwnsOne(m => m.MessageData, md =>
+            messageConfiguration.OwnsOne(message => message.MessageData, md =>
             {
-                md.Property(md => md.Title)
+                md.Property(messageData => messageData.Title)
                     .HasColumnName("Title");
 
-                md.Property(md => md.Content)
+                md.Property(messageData => messageData.Content)
                     .HasColumnName("Content");
             });
 
-            messageConfiguration.OwnsOne(m => m.Metadata, metaData =>
+            messageConfiguration.OwnsOne(message => message.Metadata, metaData =>
            {
-               metaData.Property(md => md.DeletedBySender)
+               metaData.Property(messageMetadata => messageMetadata.DeletedBySender)
                    .HasColumnName("DeletedBySender");
 
-               metaData.Property(md => md.DeletedByReceiver)
+               metaData.Property(messageMetadata => messageMetadata.DeletedByReceiver)
                    .HasColumnName("DeletedByReceiver");
            });
         }

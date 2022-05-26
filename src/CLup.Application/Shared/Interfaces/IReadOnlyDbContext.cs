@@ -16,7 +16,5 @@ namespace CLup.Application.Shared.Interfaces
         public Task<User> FetchUserAggregate(string userEmail);
 
         public Task<IList<Business>> FetchAllBusinesses();
-
-        public IQueryable<User> Users { get; }
     }
 }

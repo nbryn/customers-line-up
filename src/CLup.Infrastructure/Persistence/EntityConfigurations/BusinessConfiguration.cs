@@ -1,6 +1,5 @@
 using System;
 using CLup.Domain.Businesses;
-using CLup.Domain.Messages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,67 +14,65 @@ namespace CLup.Infrastructure.Persistence.EntityConfigurations
 
             businessConfiguration.OwnsOne(b => b.Address, a =>
             {
-                a.Property(a => a.Street)
+                a.Property(address => address.Street)
                     .HasColumnName("Street");
 
                 a.Property(a => a.Zip)
                     .HasColumnName("Zip");
 
-                a.Property(a => a.City)
+                a.Property(address => address.City)
                     .HasColumnName("City");
             });
 
             businessConfiguration.OwnsOne(b => b.BusinessData, b =>
             {
-                b.Property(b => b.Name)
+                b.Property(businessData => businessData.Name)
                     .HasColumnName("Name");
 
-                b.Property(b => b.Capacity)
+                b.Property(businessData => businessData.Capacity)
                     .HasColumnName("Capacity");
 
-                b.Property(b => b.TimeSlotLength)
+                b.Property(businessData => businessData.TimeSlotLength)
                     .HasColumnName("TimeSlotLength");
             });
 
             businessConfiguration.OwnsOne(b => b.Coords, c =>
             {
-                c.Property(c => c.Latitude)
+                c.Property(coords => coords.Latitude)
                     .HasColumnName("Latitude");
 
-                c.Property(c => c.Longitude)
+                c.Property(coords => coords.Longitude)
                     .HasColumnName("Longitude");
             });
 
             businessConfiguration.OwnsOne(b => b.BusinessHours, t =>
             {
-                t.Property(t => t.Start)
+                t.Property(timeSpan => timeSpan.Start)
                     .HasColumnName("Start");
 
-                t.Property(t => t.End)
+                t.Property(timeSpan => timeSpan.End)
                     .HasColumnName("End");
             });
 
             businessConfiguration
-                    .Property(b => b.Type)
+                    .Property(business => business.Type)
                     .HasConversion(b => b.ToString("G"), b => Enum.Parse<BusinessType>(b));
 
             businessConfiguration
-                    .HasMany(x => x.TimeSlots)
-                    .WithOne(x => x.Business);
+                    .HasMany(business => business.TimeSlots)
+                    .WithOne(timeSlot => timeSlot.Business);
 
             businessConfiguration
-                    .HasMany(x => x.Employees)
-                    .WithOne(x => x.Business);
+                    .HasMany(business => business.Employees)
+                    .WithOne(employee => employee.Business);
 
             businessConfiguration
-                    .HasMany<Message>(business => business.SentMessages)
-                    .WithOne()
-                    .HasForeignKey(message => message.SenderId);
+                .HasMany(business => business.SentMessages)
+                .WithOne();
 
             businessConfiguration
-                    .HasMany<Message>(business => business.ReceivedMessages)
-                    .WithOne()
-                    .HasForeignKey(message => message.ReceiverId);
+                .HasMany(business => business.ReceivedMessages)
+                .WithOne();
         }
     }
 }

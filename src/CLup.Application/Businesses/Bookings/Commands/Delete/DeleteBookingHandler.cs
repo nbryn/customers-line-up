@@ -27,7 +27,7 @@ namespace CLup.Application.Businesses.Bookings.Commands.Delete
                         .ThenInclude(business => business.Owner)
                         .FirstOrDefaultAsync(booking => booking.Id == command.BookingId), "Booking not found")
                 .AddDomainEvent(booking =>
-                    booking.DomainEvents.Add(new BusinessDeletedBookingEvent(booking.Business.Owner, booking.Business.Id, booking.UserId)))
+                    booking.DomainEvents.Add(new BusinessDeletedBookingEvent(booking)))
                 .Finally(booking => _context.RemoveAndSave(booking));
     }
 }

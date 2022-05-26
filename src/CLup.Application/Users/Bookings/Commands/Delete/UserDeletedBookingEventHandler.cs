@@ -18,10 +18,9 @@ namespace CLup.Application.Users.Bookings.Commands.Delete
             CancellationToken cancellationToken)
         {
             var domainEvent = @event.DomainEvent;
-            var message =
-                domainEvent.Booking.User.UserDeletedBookingMessage(domainEvent.Booking, domainEvent.Booking.BusinessId);
-
-            await _context.Messages.AddAsync(message);
+            domainEvent.User.UserDeletedBookingMessage(domainEvent.Booking, domainEvent.Booking.BusinessId);
+            
+            await _context.UpdateEntity(domainEvent.User.Id, domainEvent.User);
         }
     }
 }

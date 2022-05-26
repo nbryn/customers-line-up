@@ -15,17 +15,22 @@ namespace CLup.Application.Businesses.TimeSlots.Commands.Delete
 
         public TimeSlotDeletedEventHandler(ICLupDbContext context) => _context = context;
 
-        public async Task Handle(DomainEventNotification<TimeSlotDeletedEvent> @event, CancellationToken cancellationToken)
+        public async Task Handle(
+            DomainEventNotification<TimeSlotDeletedEvent> @event,
+            CancellationToken cancellationToken)
         {
             var domainEvent = @event.DomainEvent;
             var users = await _context.Users
-                .Include(u => u.Bookings)
-                .Where(u => u.Bookings.Any(b => b.TimeSlotId == domainEvent.TimeSlot.Id))
+                .Include(user => user.Bookings)
+                .Where(user => user.Bookings.Any(booking => booking.TimeSlotId == domainEvent.TimeSlot.Id))
                 .ToListAsync();
 
-            var messages = users.Select(user => domainEvent.BusinessOwner.BusinessDeletedBookingMessage(domainEvent.TimeSlot.BusinessId, user.Id));
+            foreach (var user in users)
+            {
+                domainEvent.BusinessOwner.BusinessDeletedBookingMessage(domainEvent.TimeSlot.Business, user.Id);
+            }
 
-            await _context.Messages.AddRangeAsync(messages);
+            await _context.UpdateEntity(domainEvent.TimeSlot.Business.Id, domainEvent.TimeSlot.Business);
         }
     }
 }

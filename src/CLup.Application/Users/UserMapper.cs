@@ -9,14 +9,15 @@ namespace CLup.Application.Users
         public UserMapper()
         {
             CreateMap<User, UserDto>()
-                .ForMember(u => u.Role, s => s.MapFrom(m => m.Role.ToString()))
-                .ForMember(u => u.Name, s => s.MapFrom(m => m.UserData.Name))
-                .ForMember(u => u.Street, s => s.MapFrom(m => m.Address.Street))
-                .ForMember(u => u.City, s => s.MapFrom(m => m.Address.City))
-                .ForMember(u => u.Zip, s => s.MapFrom(m => m.Address.Zip))
-                .ForMember(u => u.Latitude, s => s.MapFrom(m => m.Coords.Latitude))
-                .ForMember(u => u.Longitude, s => s.MapFrom(m => m.Coords.Longitude))
-                .ForMember(dest => dest.Messages, src => src.MapFrom(user => user.ReceivedMessages.Concat(user.SentMessages)));
+                .ForMember(dest => dest.Role, opts => opts.MapFrom(src => src.Role.ToString()))
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.UserData.Name))
+                .ForMember(dest => dest.Street, opts => opts.MapFrom(src => src.Address.Street))
+                .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.Address.City))
+                .ForMember(dest => dest.Zip, opts => opts.MapFrom(src => src.Address.Zip))
+                .ForMember(dest => dest.Latitude, opts => opts.MapFrom(src => src.Coords.Latitude))
+                .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Coords.Longitude))
+                .ForMember(dest => dest.Messages,
+                    opts => opts.MapFrom(src => src.ReceivedMessages.Concat(src.SentMessages)));
         }
     }
 }

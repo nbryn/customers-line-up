@@ -65,7 +65,7 @@ namespace CLup.Infrastructure.Persistence
 
         public async Task<Result<UsersNotEmployedByBusiness>> FetchUsersNotEmployedByBusiness(string businessId)
         {
-            var business = _clupContext.Businesses.FirstOrDefaultAsync(business => business.Id == businessId);
+            var business = await _clupContext.Businesses.FirstOrDefaultAsync(business => business.Id == businessId);
 
             if (business == null)
             {
@@ -84,7 +84,5 @@ namespace CLup.Infrastructure.Persistence
             return Result.Ok(new UsersNotEmployedByBusiness()
                 { BusinessId = businessId, Users = _mapper.Map<IList<UserDto>>(users) });
         }
-        
-        public IQueryable<User> Users => _clupContext.Users.AsNoTracking().AsQueryable();
     }
 }

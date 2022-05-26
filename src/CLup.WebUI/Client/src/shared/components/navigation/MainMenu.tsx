@@ -91,38 +91,18 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
             icon: <DashboardIcon />,
             path: '/user/profile',
         },
-        {
-            label: 'Create Business',
-            icon: <DashboardIcon />,
-            path: '/business/new',
-        },
     ];
 
-    const ownerItems: MenuItem[] = [
+    const businessItems: MenuItem[] = [
         {
             label: 'Businesses',
             icon: <DashboardIcon />,
             path: '/business',
         },
         {
-            label: 'Bookings',
+            label: 'Create Business',
             icon: <DashboardIcon />,
-            path: '/business/bookings',
-        },
-        {
-            label: 'Time Slots',
-            icon: <DashboardIcon />,
-            path: '/business/timeslots',
-        },
-        {
-            label: 'Employees',
-            icon: <DashboardIcon />,
-            path: '/business/employees',
-        },
-        {
-            label: 'Messages',
-            icon: <DashboardIcon />,
-            path: '/business/messages',
+            path: '/business/new',
         },
     ];
 
@@ -168,38 +148,34 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
                 ))}
             </List>
             <Divider />
-            {(user?.role === 'Owner' || user?.role === 'Employee') && (
-                <List>
-                    {user?.role === 'Owner' &&
-                        ownerItems.map((menuItem) => (
-                            <ListItem
-                                className={styles.listItem}
-                                button
-                                key={menuItem.label}
-                                onClick={() => handleMenuItemClick(menuItem)}
-                            >
-                                <ListItemIcon className={styles.listItemIcon}>
-                                    {menuItem.icon}
-                                </ListItemIcon>
-                                <ListItemText primary={menuItem.label} />
-                            </ListItem>
-                        ))}
-                    {user?.role === 'Employee' &&
-                        employeeItems.map((menuItem) => (
-                            <ListItem
-                                className={styles.listItem}
-                                button
-                                key={menuItem.label}
-                                onClick={() => handleMenuItemClick(menuItem)}
-                            >
-                                <ListItemIcon className={styles.listItemIcon}>
-                                    {menuItem.icon}
-                                </ListItemIcon>
-                                <ListItemText primary={menuItem.label} />
-                            </ListItem>
-                        ))}
-                </List>
-            )}
+
+            <List>
+                {businessItems.map((menuItem) => (
+                    <ListItem
+                        className={styles.listItem}
+                        button
+                        key={menuItem.label}
+                        onClick={() => handleMenuItemClick(menuItem)}
+                    >
+                        <ListItemIcon className={styles.listItemIcon}>{menuItem.icon}</ListItemIcon>
+                        <ListItemText primary={menuItem.label} />
+                    </ListItem>
+                ))}
+                {user?.role === 'Employee' &&
+                    employeeItems.map((menuItem) => (
+                        <ListItem
+                            className={styles.listItem}
+                            button
+                            key={menuItem.label}
+                            onClick={() => handleMenuItemClick(menuItem)}
+                        >
+                            <ListItemIcon className={styles.listItemIcon}>
+                                {menuItem.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={menuItem.label} />
+                        </ListItem>
+                    ))}
+            </List>
             <Divider />
         </>
     );
