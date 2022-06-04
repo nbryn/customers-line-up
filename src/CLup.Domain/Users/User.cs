@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using CLup.Domain.Bookings;
 using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.Employees;
 using CLup.Domain.Businesses.TimeSlots;
 using CLup.Domain.Messages;
 using CLup.Domain.Shared;
@@ -37,7 +38,6 @@ namespace CLup.Domain.Users
             Address address,
             Coords coords,
             Role role)
-            : base()
         {
             UserData = userData;
             Address = address;
@@ -89,5 +89,29 @@ namespace CLup.Domain.Users
 
             return business?.GenerateTimeSlots(start);
         }
+
+        public bool BookingExists(string timeSlotId) => Bookings.Any(booking => booking.TimeSlotId == timeSlotId);
+        
+        public Booking GetBooking(string bookingId) => Bookings.FirstOrDefault(booking => booking.Id == bookingId);
+
+        public Booking GetBusinessBooking(string businessId, string bookingId) =>
+            GetBusiness(businessId)?.Bookings.FirstOrDefault(booking => booking.Id == bookingId);
+
+        public Employee GetEmployee(string businessId, string userId)
+            => GetBusiness(businessId)?.Employees.FirstOrDefault(employee => employee.UserId == userId);
+
+        public TimeSlot GetTimeSlotByDate(string businessId, DateTime date)
+            => GetBusiness(businessId)?.TimeSlots.FirstOrDefault(timeSlot => timeSlot.Start == date);
+
+        public TimeSlot GetTimeSlot(string timeSlotId)
+        {
+            var business = Businesses.FirstOrDefault(business =>
+                business.TimeSlots.Any(timeSlot => timeSlot.Id == timeSlotId));
+
+            return business?.TimeSlots.FirstOrDefault(timeSlot => timeSlot.Id == timeSlotId);
+        }
+
+        public Business GetBusiness(string businessId) =>
+            Businesses.FirstOrDefault(business => business.Id == businessId);
     }
 }

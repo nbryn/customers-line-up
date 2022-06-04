@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CLup.Domain.Bookings;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Employees;
@@ -26,13 +25,11 @@ namespace CLup.Application.Shared.Interfaces
         DbSet<Message> Messages { get; }
 
         Task<int> AddAndSave(params Entity[] entities);
-        
-        Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken);
-
-        void CreateEntityIfNotExists<T>(T existingEntity, T newEntity) where T : Entity;
 
         Task<int> RemoveAndSave(Entity value);
         
         Task<int> UpdateEntity<T>(string id, T updatedEntity) where T : Entity;
+        
+        public Task<User> FetchUserAggregate(string mailOrId);
     }
 }

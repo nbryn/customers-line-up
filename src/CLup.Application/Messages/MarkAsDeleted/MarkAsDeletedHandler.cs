@@ -17,7 +17,7 @@ namespace CLup.Application.Messages.MarkAsDeleted
         public async Task<Result> Handle(MarkMessageAsDeletedCommand command, CancellationToken cancellationToken)
             => await _context.Messages
                 .Include(message => message.Metadata).FirstOrDefaultAsync(message => message.Id == command.MessageId)
-                .ToResult()
+                .FailureIf("Message not found.")
                 .AndThen(message => command.ForSender ? message.DeletedBySender() : message.DeletedByReceiver())
                 .Finally(message => _context.UpdateEntity(message.Id, message));
     }

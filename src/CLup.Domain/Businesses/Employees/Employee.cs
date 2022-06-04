@@ -16,7 +16,6 @@ namespace CLup.Domain.Businesses.Employees
         public string CompanyEmail { get; private set; }
 
         public Employee(string userId, string businessId, string companyEmail)
-            : base()
         {
             UserId = userId;
             BusinessId = businessId;

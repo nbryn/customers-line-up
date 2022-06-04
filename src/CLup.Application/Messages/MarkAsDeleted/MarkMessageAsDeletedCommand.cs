@@ -6,12 +6,11 @@ namespace CLup.Application.Messages.MarkAsDeleted
     public class MarkMessageAsDeletedCommand : IRequest<Result>
     {
         public string MessageId { get; set; }
-        
+
         public bool ForSender { get; set; }
 
         public MarkMessageAsDeletedCommand()
         {
-            
         }
 
         public MarkMessageAsDeletedCommand(

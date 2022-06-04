@@ -20,8 +20,8 @@ namespace CLup.Application.Users.Bookings.Commands.Create
 
         public CreateBookingHandler(
             IValidator<Booking> validator,
-            ICLupDbContext context, 
-            IMapper mapper) 
+            ICLupDbContext context,
+            IMapper mapper)
         {
             _validator = validator;
             _context = context;
@@ -29,20 +29,17 @@ namespace CLup.Application.Users.Bookings.Commands.Create
         }
 
         public async Task<Result> Handle(CreateBookingCommand command, CancellationToken cancellationToken)
-        {
-            return await _context.Bookings.FirstOrDefaultAsync(x =>
-                                                           x.TimeSlotId == command.TimeSlotId &&
-                                                           x.UserId == command.UserId)
-                    .ToResult()
-                    .EnsureDiscard(booking => booking == null, "You already have a booking for this time slot.")
-                    .FailureIf(() => _context.TimeSlots
-                                        .Include(x => x.Bookings)
-                                        .FirstOrDefaultAsync(x => x.Id == command.TimeSlotId), "Time Slot does not exists.")
-
-                    .EnsureDiscard(timeSlot => timeSlot.Bookings.Count() < timeSlot.Capacity, "This time slot is full.")
-                    .AndThen(() => _mapper.Map<Booking>(command))
-                    .Validate(_validator)
-                    .Finally(booking => _context.AddAndSave(booking));
-        }
+            => await _context.FetchUserAggregate(command.UserId)
+                .FailureIf("User not found.")
+                .EnsureDiscard(user => !user.BookingExists(command.TimeSlotId),
+                    "You already have a booking for this time slot.")
+                .FailureIf(() => _context.TimeSlots
+                        .Include(timeSlot => timeSlot.Bookings)
+                        .FirstOrDefaultAsync(timeSlot => timeSlot.Id == command.TimeSlotId),
+                    "Time Slot does not exist.")
+                .EnsureDiscard(timeSlot => timeSlot.Bookings.Count() < timeSlot.Capacity, "This time slot is full.")
+                .AndThen(() => _mapper.Map<Booking>(command))
+                .Validate(_validator)
+                .Finally(booking => _context.AddAndSave(booking));
     }
 }

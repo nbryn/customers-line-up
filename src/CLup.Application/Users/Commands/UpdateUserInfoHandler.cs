@@ -6,7 +6,6 @@ using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Shared.ValueObjects;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Users.Commands
 {
@@ -24,15 +23,14 @@ namespace CLup.Application.Users.Commands
         }
 
         public async Task<Result> Handle(UpdateUserInfoCommand command, CancellationToken cancellationToken)
-        {
-            return await _context.Users.FirstOrDefaultAsync(x => x.Id == command.Id)
-                    .FailureIf($"User with the email '{command.Email}' was not found.")
-                    .AndThen((user) => user.Update(command.Name, command.Email, Convert(command)))
-                    .Validate(_validator)
-                    .Finally(updatedUser => _context.UpdateEntity(updatedUser.Id, updatedUser));
-        }
+            => await _context.FetchUserAggregate(command.Id)
+                .FailureIf("User not found.")
+                .AndThen(user => user.Update(command.Name, command.Email, Convert(command)))
+                .Validate(_validator)
+                .Finally(updatedUser => _context.UpdateEntity(updatedUser.Id, updatedUser));
 
-        private (Address, Coords) Convert(UpdateUserInfoCommand command)    
-           => (new Address(command.Street, command.Zip, command.City), new Coords(command.Longitude, command.Latitude));      
+        private (Address, Coords) Convert(UpdateUserInfoCommand command)
+            => (new Address(command.Street, command.Zip, command.City),
+                new Coords(command.Longitude, command.Latitude));
     }
 }

@@ -21,11 +21,17 @@ namespace CLup.Infrastructure.Persistence
         private readonly IDomainEventService _domainEventService;
 
         public const string DEFAULT_SCHEMA = "CLup";
+        
         public DbSet<Booking> Bookings { get; set; }
+        
         public DbSet<Business> Businesses { get; set; }
+        
         public DbSet<Employee> Employees { get; set; }
+        
         public DbSet<TimeSlot> TimeSlots { get; set; }
+        
         public DbSet<User> Users { get; set; }
+        
         public DbSet<Message> Messages { get; set; }
 
         public CLupDbContext(
@@ -42,10 +48,40 @@ namespace CLup.Infrastructure.Persistence
 
             base.OnModelCreating(modelBuilder);
         }
+        
+        public async Task<User> FetchUserAggregate(string mailOrId)
+            => await Users
+                .Include(user => user.SentMessages)
+                .Include(user => user.ReceivedMessages)
+                .Include(user => user.Bookings)
+                .ThenInclude(booking => booking.Business)
+                .Include(user => user.Bookings)
+                .ThenInclude(booking => booking.TimeSlot)
+                .ThenInclude(timeSlot => timeSlot.Business)
+                .Include(user => user.Businesses)
+                .ThenInclude(business => business.Bookings)
+                .ThenInclude(booking => booking.TimeSlot)
+                .ThenInclude(timeSlot => timeSlot.Business)
+                .Include(user => user.Businesses)
+                .ThenInclude(business => business.Bookings)
+                .ThenInclude(booking => booking.User)
+                .Include(user => user.Businesses)
+                .ThenInclude(business => business.ReceivedMessages)
+                .Include(user => user.Businesses)
+                .ThenInclude(business => business.SentMessages)
+                .Include(user => user.Businesses)
+                .ThenInclude(business => business.Employees)
+                .ThenInclude(employee => employee.User)
+                .Include(user => user.Businesses)
+                .ThenInclude(business => business.TimeSlots)
+                .ThenInclude(timeSlot => timeSlot.Bookings)
+                .AsSplitQuery()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(user => user.Id == mailOrId || user.UserData.Email == mailOrId);
 
         public override async Task<int> SaveChangesAsync(
             bool acceptAllChangesOnSuccess,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default)
         {
             MarkEntitiesAsUpdated();
 
@@ -64,15 +100,6 @@ namespace CLup.Infrastructure.Persistence
             await base.AddRangeAsync(entities);
 
             return await SaveChangesAsync();
-        }
-
-        public void CreateEntityIfNotExists<T>(T existingEntity, T newEntity) where T : Entity
-        {
-            if (existingEntity == null)
-            {
-                newEntity.Id = Guid.NewGuid().ToString();
-                Add(newEntity);
-            }
         }
 
         public async Task<int> RemoveAndSave(Entity value)

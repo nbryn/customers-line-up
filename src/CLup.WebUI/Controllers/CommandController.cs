@@ -58,7 +58,7 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteBusinessBooking(string businessId, [FromQuery] string bookingId)
         {
-            string ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var response = await _mediator.Send(new BusinessDeleteBookingCommand(ownerEmail, bookingId, businessId));
 
             return this.CreateActionResult(response);
@@ -70,6 +70,7 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CreateEmployee(CreateEmployeeCommand command)
         {
+            command.OwnerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var result = await _mediator.Send(command);
 
             return this.CreateActionResult(result);
@@ -81,7 +82,8 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> RemoveEmployee(string email, [FromQuery] string businessId)
         {
-            var result = await _mediator.Send(new DeleteEmployeeCommand(businessId, email));
+            var ownerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await _mediator.Send(new DeleteEmployeeCommand(ownerEmail,businessId, email));
 
             return this.CreateActionResult(result);
         }
@@ -93,6 +95,7 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<IActionResult> GenerateTimeSlots([FromBody] GenerateTimeSlotsCommand command)
         {
+            command.OwnerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var result = await _mediator.Send(command);
 
             return this.CreateActionResult(result);
@@ -104,6 +107,7 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteTimeSlot([FromRoute] DeleteTimeSlotCommand command)
         {
+            command.OwnerEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var result = await _mediator.Send(command);
 
             return this.CreateActionResult(result);
@@ -137,6 +141,7 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteUserBooking([FromRoute] UserDeleteBookingCommand command)
         {
+            command.UserEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var response = await _mediator.Send(command);
 
             return this.CreateActionResult(response);

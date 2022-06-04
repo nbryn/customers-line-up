@@ -5,7 +5,6 @@ using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses.TimeSlots;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Businesses.TimeSlots.Commands.Delete
 {
@@ -16,14 +15,11 @@ namespace CLup.Application.Businesses.TimeSlots.Commands.Delete
         public DeleteTimeSlotHandler(ICLupDbContext context) => _context = context;
 
         public async Task<Result> Handle(DeleteTimeSlotCommand command, CancellationToken cancellationToken)
-            => await _context.TimeSlots
-                .Include(timeSlot => timeSlot.Business)
-                .ThenInclude(business => business.Owner)
-                .FirstOrDefaultAsync(t => t.Id == command.Id)
-                .FailureIf("Time slot not found")
+            => await _context.FetchUserAggregate(command.OwnerEmail)
+                .FailureIf("User not found.")
+                .FailureIf(user => user.GetTimeSlot(command.TimeSlotId), "Time slot or business not found")
                 // Check if TimeSlot has bookings -> Alert before deleting?
-                .AddDomainEvent(timeSlot =>
-                    timeSlot.DomainEvents.Add(new TimeSlotDeletedEvent(timeSlot.Business.Owner, timeSlot)))
+                .AddDomainEvent(timeSlot => timeSlot.DomainEvents.Add(new TimeSlotDeletedEvent(timeSlot)))
                 .Finally(timeSlot => _context.RemoveAndSave(timeSlot));
     }
 }

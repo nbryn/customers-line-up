@@ -6,7 +6,7 @@ namespace CLup.Application.Businesses.TimeSlots.Commands.Delete
     {
         public DeleteTimeSlotValidator()
         {
-            RuleFor(x => x.Id).NotEmpty();
+            RuleFor(x => x.TimeSlotId).NotEmpty();
         }
     }
 }

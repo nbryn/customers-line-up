@@ -30,7 +30,6 @@ namespace CLup.Domain.Businesses.TimeSlots
             int capacity,
             DateTime start,
             DateTime end)
-            : base()
         {
             BusinessId = businessId;
             BusinessName = businessName;

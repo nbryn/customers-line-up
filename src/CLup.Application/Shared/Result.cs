@@ -39,40 +39,26 @@ namespace CLup.Application.Shared
 
             var maybe = await f();
 
-            return Ok<T>(maybe);
-        }
-
-        public async Task<Result> BindIgnore<T>(Func<Task<T>> f, string errorMessage)
-        {
-            if (Success)
-            {
-                var maybe = await f();
-
-                return maybe == null ? NotFound(errorMessage) : Ok();
-            }
-
-            return Fail(Code, Error);
+            return Ok(maybe);
         }
 
         public Result<T> Bind<T>(Func<T> f) => Success ? Ok<T>(f()) : Fail<T>(Code, Error);
 
         public Result BindNoContent() => Success ? Ok() : Fail(Code, Error);
 
-        public static Result<T> ToResult<T>(T maybe, string errorMessage) => maybe == null ? NotFound<T>(errorMessage) : Ok<T>(maybe);
-
-        public static Result ToResultIgnore<T>(T maybe, string errorMessage) => maybe == null ? NotFound(errorMessage) : Ok();
+        public static Result<T> ToResult<T>(T maybe, string errorMessage) =>
+            maybe == null ? NotFound<T>(errorMessage) : Ok(maybe);
 
         public static Result Ok() => new(true, String.Empty, HttpCode.Ok);
 
         public static Result<T> Ok<T>(T value) => new(value, true, String.Empty, HttpCode.Ok);
 
-        public static Result<T, U> Ok<T, U>(T value, U extraValue) => new(value, extraValue, true, String.Empty, HttpCode.Ok);
+        public static Result<T, U> Ok<T, U>(T value, U extraValue) =>
+            new(value, extraValue, true, String.Empty, HttpCode.Ok);
 
         public static Result Fail(HttpCode code, string message) => new(false, message, code);
 
         public static Result<T> Fail<T>(HttpCode code, string message) => new(default, false, message, code);
-
-        public static Result<T, U> Fail<T, U>(HttpCode code, string message) => new(default, default, false, message, code);
 
         public static Result NotFound(string message = "") => new(false, message, HttpCode.NotFound);
 
@@ -82,12 +68,11 @@ namespace CLup.Application.Shared
 
         public static Result Conflict(string message = "") => new(false, message, HttpCode.Conflict);
 
-        public static Result<T> Conflict<T>(string message = "") => new(default, false, message, HttpCode.Conflict);
-
         public static Result<T> BadRequest<T>(string message = "") => new(default, false, message, HttpCode.BadRequest);
 
         public static Result<T> Unauthorized<T>() => new(default(T), false, String.Empty, HttpCode.Unauthorized);
     }
+
     public class Result<T> : Result
     {
         public T Value { get; set; }
@@ -98,7 +83,7 @@ namespace CLup.Application.Shared
             Value = value;
         }
 
-        public Result<U> Bind<U>(Func<T, U> f) => Success ? Ok<U>(f(Value)) : Fail<U>(Code, Error);
+        public Result<U> Bind<U>(Func<T, U> f) => Success ? Ok(f(Value)) : Fail<U>(Code, Error);
 
         public Result<T> AddDomainEvent(Action<T> f)
         {
@@ -124,19 +109,20 @@ namespace CLup.Application.Shared
             return Ok(maybe);
         }
 
-        public async Task<Result<T>> BindF<U>(Func<T, Task<U>> f)
+
+        public Result<U> Bind<U>(Func<T, U> f, string errorMessage)
         {
-            if (Failure)
+            var maybe = f(Value);
+
+            if (maybe == null)
             {
-                return Fail<T>(Code, Error);
+                return NotFound<U>(errorMessage);
             }
 
-            await f(Value);
-
-            return Ok(Value);
+            return Success ? Ok(maybe) : Fail<U>(Code, Error);
         }
 
-        public async Task<Result<T>> BindF(Func<T, Task> f)
+        public async Task<Result<T>> BindF<U>(Func<T, Task<U>> f)
         {
             if (Failure)
             {
@@ -160,7 +146,8 @@ namespace CLup.Application.Shared
             return Fail(Code, Error);
         }
 
-        public async Task<Result<T>> Ensure(Task<Result<T>> task, Func<T, bool> predicate, (HttpCode code, string message) errorInfo)
+        public async Task<Result<T>> Ensure(Task<Result<T>> task, Func<T, bool> predicate,
+            (HttpCode code, string message) errorInfo)
         {
             if (Failure)
             {
@@ -185,41 +172,6 @@ namespace CLup.Application.Shared
             return !predicate(Value) ? Conflict(errorMessage) : Ok();
         }
 
-        public Result EnsureIgnore(Func<T, bool> predicate, (HttpCode code, string message) errorInfo)
-        {
-            if (Failure)
-            {
-                return Fail(Code, Error);
-            }
-
-            return !predicate(Value) ? Fail(errorInfo.code, errorInfo.message) : Ok();
-        }
-
-        public async Task<Result<T, U>> BindDouble<U>(Func<Task<U>> f)
-        {
-            if (Failure)
-            {
-                return Fail<T, U>(Code, Error);
-            }
-
-            var maybe = await f();
-
-            return Ok(Value, maybe);
-        }
-
-        public Result<T, U> BindDouble<U>(Func<T, U> f)
-        {
-            if (Failure)
-            {
-                return Fail<T, U>(Code, Error);
-            }
-
-            var maybe = f(Value);
-
-            return Ok(Value, maybe);
-        }
-
-
         public Result<T> Validate(IValidator<T> validator)
         {
             if (Failure)
@@ -240,33 +192,6 @@ namespace CLup.Application.Shared
             : base(value, success, error, code)
         {
             ExtraValue = extraValue;
-        }
-
-        public Result<V> Bind<V>(Func<T, U, V> f)
-        {
-            if (Failure)
-            {
-                return Fail<V>(Code, Error);
-            }
-
-            var maybe = f(Value, ExtraValue);
-
-            return Ok(maybe);
-        }
-
-        public async Task<Result<T>> Ensure(Task<Result<T, U>> task, Func<U, bool> predicate, string errorMessage)
-        {
-            if (Failure)
-            {
-                return Fail<T>(Code, Error);
-            }
-
-            if (!predicate(ExtraValue))
-            {
-                return Conflict<T>(errorMessage);
-            }
-
-            return await task;
         }
     }
 }

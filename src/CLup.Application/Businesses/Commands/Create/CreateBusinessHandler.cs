@@ -8,7 +8,6 @@ using CLup.Domain.Businesses;
 using CLup.Domain.Users;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Businesses.Commands.Create
 {
@@ -29,7 +28,7 @@ namespace CLup.Application.Businesses.Commands.Create
         }
 
         public async Task<Result> Handle(CreateBusinessCommand command, CancellationToken cancellationToken)
-            => await _context.Users.FirstOrDefaultAsync(user => user.Email == command.OwnerEmail)
+            => await _context.FetchUserAggregate(command.OwnerEmail)
                 .ToResult()
                 .AndThenDiscard(user => user.UpdateRole(Role.Owner))
                 .AndThen(() => _mapper.Map<Business>(command))

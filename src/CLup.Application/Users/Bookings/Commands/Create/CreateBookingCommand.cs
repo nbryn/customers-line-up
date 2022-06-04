@@ -5,7 +5,6 @@ namespace CLup.Application.Users.Bookings.Commands.Create
 {
     public class CreateBookingCommand : IRequest<Result>
     {
-
         public string UserId { get; set; }
 
         public string TimeSlotId { get; set; }

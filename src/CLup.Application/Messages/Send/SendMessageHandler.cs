@@ -4,6 +4,7 @@ using AutoMapper;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
+using CLup.Domain.Messages;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,12 @@ namespace CLup.Application.Messages.Send
 {
     public class SendMessageHandler : IRequestHandler<SendMessageCommand, Result>
     {
-        private readonly IValidator<Domain.Messages.Message> _validator;
+        private readonly IValidator<Message> _validator;
         private readonly ICLupDbContext _context;
         private readonly IMapper _mapper;
 
         public SendMessageHandler(
-            IValidator<Domain.Messages.Message> validator,
+            IValidator<Message> validator,
             ICLupDbContext context,
             IMapper mapper)
         {
@@ -44,7 +45,7 @@ namespace CLup.Application.Messages.Send
                     return new { business, user };
                 })
                 .EnsureDiscard(anon => anon.user != null || anon.business != null, "Invalid receiver.")
-                .AndThen(() => _mapper.Map<Domain.Messages.Message>(command))
+                .AndThen(() => _mapper.Map<Message>(command))
                 .Validate(_validator)
                 .Finally(message => _context.AddAndSave(message));
     }

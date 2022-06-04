@@ -49,7 +49,6 @@ namespace CLup.Domain.Businesses
             Coords coords,
             TimeSpan businessHours,
             BusinessType type)
-            : base()
         {
             OwnerId = ownerId;
             BusinessData = businessData;

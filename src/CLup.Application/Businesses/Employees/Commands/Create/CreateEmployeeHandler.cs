@@ -7,7 +7,6 @@ using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses.Employees;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Businesses.Employees.Commands.Create
 {
@@ -28,10 +27,8 @@ namespace CLup.Application.Businesses.Employees.Commands.Create
         }
 
         public async Task<Result> Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
-            => await _context.Businesses.FirstOrDefaultAsync(business => business.Id == command.BusinessId)
-                .FailureIfDiscard("Business not found.")
-                .AndThen(() => _context.Users.FirstOrDefaultAsync(user => user.Id == command.UserId))
-                .Ensure(user => user != null, (HttpCode.NotFound, "User not found"))
+            => await _context.FetchUserAggregate(command.OwnerEmail)
+                .FailureIf("User not found.")
                 .Ensure(user => user.Role != Domain.Users.Role.Owner, (HttpCode.Conflict, "Owner cannot be employee."))
                 .AndThenDiscard(user => user.UpdateRole(Domain.Users.Role.Employee))
                 .AndThen(() => _mapper.Map<Employee>(command))

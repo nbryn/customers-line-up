@@ -9,11 +9,9 @@ namespace CLup.Domain.Businesses.TimeSlots
 
         public TimeSlot TimeSlot { get; }
 
-        public TimeSlotDeletedEvent(
-            User businessOwner,
-            TimeSlot timeSlot)
+        public TimeSlotDeletedEvent(TimeSlot timeSlot)
         {
-            BusinessOwner = businessOwner;
+            BusinessOwner = timeSlot.Business.Owner;
             TimeSlot = timeSlot;
         }
     }

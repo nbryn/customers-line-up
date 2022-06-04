@@ -20,10 +20,9 @@ namespace CLup.Domain.Bookings
 
         public Business Business { get; private set; }
 
-        public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
+        public List<DomainEvent> DomainEvents { get; set; } = new();
 
         public Booking(string userId, string timeSlotId, string businessId)
-            : base()
         {
             UserId = userId;
             TimeSlotId = timeSlotId;
