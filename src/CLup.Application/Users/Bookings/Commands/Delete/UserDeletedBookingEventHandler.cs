@@ -9,9 +9,9 @@ namespace CLup.Application.Users.Bookings.Commands.Delete
 {
     public class UserDeletedBookingEventHandler : INotificationHandler<DomainEventNotification<UserDeletedBookingEvent>>
     {
-        private readonly ICLupDbContext _context;
+        private readonly ICLupRepository _repository;
 
-        public UserDeletedBookingEventHandler(ICLupDbContext context) => _context = context;
+        public UserDeletedBookingEventHandler(ICLupRepository repository) => _repository = repository;
 
         public async Task Handle(
             DomainEventNotification<UserDeletedBookingEvent> @event,
@@ -20,7 +20,7 @@ namespace CLup.Application.Users.Bookings.Commands.Delete
             var domainEvent = @event.DomainEvent;
             domainEvent.User.UserDeletedBookingMessage(domainEvent.Booking, domainEvent.Booking.BusinessId);
             
-            await _context.UpdateEntity(domainEvent.User.Id, domainEvent.User);
+            await _repository.UpdateEntity(domainEvent.User.Id, domainEvent.User);
         }
     }
 }

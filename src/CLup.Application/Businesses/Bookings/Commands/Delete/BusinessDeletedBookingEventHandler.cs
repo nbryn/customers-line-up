@@ -9,16 +9,16 @@ namespace CLup.Application.Businesses.Bookings.Commands.Delete
 {
     public class BusinessDeletedBookingEventHandler : INotificationHandler<DomainEventNotification<BusinessDeletedBookingEvent>>
     {
-        private readonly ICLupDbContext _context;
+        private readonly ICLupRepository _repository;
 
-        public BusinessDeletedBookingEventHandler(ICLupDbContext context) => _context = context;
+        public BusinessDeletedBookingEventHandler(ICLupRepository repository) => _repository = repository;
 
         public async Task Handle(DomainEventNotification<BusinessDeletedBookingEvent> @event, CancellationToken cancellationToken)
         {
             var domainEvent = @event.DomainEvent;
             domainEvent.Booking.User.BusinessDeletedBookingMessage(domainEvent.Business, domainEvent.Booking.UserId);
             
-            await _context.UpdateEntity(domainEvent.Business.Id, domainEvent.Business);
+            await _repository.UpdateEntity(domainEvent.Business.Id, domainEvent.Business);
         }
     }
 }

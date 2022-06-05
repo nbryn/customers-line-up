@@ -10,16 +10,16 @@ namespace CLup.Application.Businesses.Bookings.Commands.Delete
 {
     public class BusinessDeleteBookingHandler : IRequestHandler<BusinessDeleteBookingCommand, Result>
     {
-        private readonly ICLupDbContext _context;
+        private readonly ICLupRepository _repository;
 
-        public BusinessDeleteBookingHandler(ICLupDbContext context) => _context = context;
+        public BusinessDeleteBookingHandler(ICLupRepository repository) => _repository = repository;
 
         public async Task<Result> Handle(BusinessDeleteBookingCommand command, CancellationToken cancellationToken)
-            => await _context.FetchUserAggregate(command.OwnerEmail)
+            => await _repository.FetchUserAggregate(command.OwnerEmail)
                 .FailureIf("User not found.")
                 .FailureIf(user => user.GetBusinessBooking(command.BusinessId, command.BookingId),
                     "Business or booking not found.")
                 .AddDomainEvent(booking => booking.DomainEvents.Add(new BusinessDeletedBookingEvent(booking)))
-                .Finally(booking => _context.RemoveAndSave(booking));
+                .Finally(booking => _repository.RemoveAndSave(booking));
     }
 }

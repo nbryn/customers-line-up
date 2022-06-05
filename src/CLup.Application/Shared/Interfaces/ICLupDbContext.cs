@@ -1,35 +1,29 @@
-﻿using System.Threading.Tasks;
-using CLup.Domain.Bookings;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.Employees;
 using CLup.Domain.Businesses.TimeSlots;
-using CLup.Domain.Messages;
 using CLup.Domain.Shared;
 using CLup.Domain.Users;
-using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Shared.Interfaces
 {
-    public interface ICLupDbContext
+    public interface ICLupRepository
     {
-        DbSet<Booking> Bookings { get; }
+        Task<IList<User>> FetchUsersNotEmployedByBusiness(string businessId);
         
-        DbSet<Business> Businesses { get; }
+        Task<TimeSlot> FetchTimeSlot(string timeSlotId);
         
-        DbSet<Employee> Employees { get; }
+        Task<Business> FetchBusiness(string businessId);
         
-        DbSet<TimeSlot> TimeSlots { get; }
+        Task<User> FetchUserAggregate(string mailOrId);
         
-        DbSet<User> Users { get; }
+        Task<IList<Business>> FetchAllBusinesses();
         
-        DbSet<Message> Messages { get; }
-
         Task<int> AddAndSave(params Entity[] entities);
 
         Task<int> RemoveAndSave(Entity value);
         
         Task<int> UpdateEntity<T>(string id, T updatedEntity) where T : Entity;
-        
-        public Task<User> FetchUserAggregate(string mailOrId);
+
     }
 }

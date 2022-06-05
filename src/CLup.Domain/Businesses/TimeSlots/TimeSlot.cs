@@ -20,7 +20,7 @@ namespace CLup.Domain.Businesses.TimeSlots
 
         public DateTime End { get; internal set; }
 
-        public List<DomainEvent> DomainEvents { get; set; } = new List<DomainEvent>();
+        public List<DomainEvent> DomainEvents { get; set; } = new();
 
         public IEnumerable<Booking> Bookings { get; private set; }
 

@@ -12,22 +12,22 @@ namespace CLup.Application.Users.Commands
     public class UpdateUserInfoHandler : IRequestHandler<UpdateUserInfoCommand, Result>
     {
         private readonly IValidator<Domain.Users.User> _validator;
-        private readonly ICLupDbContext _context;
+        private readonly ICLupRepository _repository;
 
         public UpdateUserInfoHandler(
             IValidator<Domain.Users.User> validator,
-            ICLupDbContext context)
+            ICLupRepository repository)
         {
             _validator = validator;
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<Result> Handle(UpdateUserInfoCommand command, CancellationToken cancellationToken)
-            => await _context.FetchUserAggregate(command.Id)
+            => await _repository.FetchUserAggregate(command.Id)
                 .FailureIf("User not found.")
                 .AndThen(user => user.Update(command.Name, command.Email, Convert(command)))
                 .Validate(_validator)
-                .Finally(updatedUser => _context.UpdateEntity(updatedUser.Id, updatedUser));
+                .Finally(updatedUser => _repository.UpdateEntity(updatedUser.Id, updatedUser));
 
         private (Address, Coords) Convert(UpdateUserInfoCommand command)
             => (new Address(command.Street, command.Zip, command.City),

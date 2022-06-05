@@ -5,32 +5,27 @@ using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
 using CLup.Domain.Businesses.TimeSlots;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Businesses.TimeSlots.Commands.Delete
 {
     public class TimeSlotDeletedEventHandler : INotificationHandler<DomainEventNotification<TimeSlotDeletedEvent>>
     {
-        private readonly ICLupDbContext _context;
+        private readonly ICLupRepository _repository;
 
-        public TimeSlotDeletedEventHandler(ICLupDbContext context) => _context = context;
+        public TimeSlotDeletedEventHandler(ICLupRepository repository) => _repository = repository;
 
         public async Task Handle(
             DomainEventNotification<TimeSlotDeletedEvent> @event,
             CancellationToken cancellationToken)
         {
             var domainEvent = @event.DomainEvent;
-            var users = await _context.Users
-                .Include(user => user.Bookings)
-                .Where(user => user.Bookings.Any(booking => booking.TimeSlotId == domainEvent.TimeSlot.Id))
-                .ToListAsync();
-
+            var users = domainEvent.TimeSlot.Bookings.Select(booking => booking.User);
             foreach (var user in users)
             {
                 domainEvent.BusinessOwner.BusinessDeletedBookingMessage(domainEvent.TimeSlot.Business, user.Id);
             }
 
-            await _context.UpdateEntity(domainEvent.TimeSlot.Business.Id, domainEvent.TimeSlot.Business);
+            await _repository.UpdateEntity(domainEvent.TimeSlot.Business.Id, domainEvent.TimeSlot.Business);
         }
     }
 }

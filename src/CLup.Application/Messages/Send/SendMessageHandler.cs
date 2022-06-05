@@ -7,46 +7,43 @@ using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Messages;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Application.Messages.Send
 {
     public class SendMessageHandler : IRequestHandler<SendMessageCommand, Result>
     {
         private readonly IValidator<Message> _validator;
-        private readonly ICLupDbContext _context;
+        private readonly ICLupRepository _repository;
         private readonly IMapper _mapper;
 
         public SendMessageHandler(
             IValidator<Message> validator,
-            ICLupDbContext context,
+            ICLupRepository repository,
             IMapper mapper)
         {
             _validator = validator;
-            _context = context;
+            _repository = repository;
             _mapper = mapper;
         }
 
         public async Task<Result> Handle(SendMessageCommand command, CancellationToken cancellationToken)
-            => await _context.Users.FirstOrDefaultAsync(user => user.Id == command.SenderId)
+            => await _repository.FetchUserAggregate(command.SenderId)
                 .ToResult()
                 .AndThen(async user =>
                 {
-                    var business =
-                        await _context.Businesses.FirstOrDefaultAsync(business => business.Id == command.SenderId);
+                    var business = await _repository.FetchBusiness(command.SenderId);
                     return new { business, user };
                 })
-                .EnsureDiscard(anon => anon.user != null || anon.business != null, "Invalid sender.")
-                .AndThen(async () =>
+                .Ensure(entry => entry.user != null || entry.business != null, "Invalid sender.")
+                .AndThen(async _ =>
                 {
-                    var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == command.ReceiverId);
-                    var business =
-                        await _context.Businesses.FirstOrDefaultAsync(business => business.Id == command.ReceiverId);
+                    var user = await _repository.FetchUserAggregate(command.ReceiverId);
+                    var business = await _repository.FetchBusiness(command.ReceiverId);
                     return new { business, user };
                 })
-                .EnsureDiscard(anon => anon.user != null || anon.business != null, "Invalid receiver.")
-                .AndThen(() => _mapper.Map<Message>(command))
+                .Ensure(entry => entry.user != null || entry.business != null, "Invalid receiver.")
+                .AndThen(_ => _mapper.Map<Message>(command))
                 .Validate(_validator)
-                .Finally(message => _context.AddAndSave(message));
+                .Finally(message => _repository.AddAndSave(message));
     }
 }

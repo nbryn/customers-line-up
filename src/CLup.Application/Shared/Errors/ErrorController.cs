@@ -5,7 +5,7 @@ namespace CLup.Application.Shared.Errors
 {
 
     [ApiExplorerSettings(IgnoreApi = true)]
-    [Route("[controller]")]
+    [Route("error")]
     public class ErrorController : ControllerBase
     {
         public ErrorResponse Error()
@@ -13,9 +13,7 @@ namespace CLup.Application.Shared.Errors
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
             var exception = context?.Error;
             var code = 500;
-
-            if (exception is BookingExistsException) code = 409;
-
+            
             Response.StatusCode = code;
 
             return new ErrorResponse(exception);

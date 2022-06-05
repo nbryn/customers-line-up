@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CLup.Application.Auth;
 using CLup.Application.Businesses;
-using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Util;
 using CLup.Application.Users;
 using CLup.Domain.Businesses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using CLup.Application.Shared.Extensions;
+using CLup.Application.Shared.Interfaces;
 
 namespace CLup.WebUI.Controllers
 {
@@ -21,14 +20,14 @@ namespace CLup.WebUI.Controllers
     [Route("api/query")]
     public class QueryController : ControllerBase
     {
-        private readonly IReadOnlyDbContext _readContext;
+        private readonly ICLupRepository _context;
         private readonly IMapper _mapper;
 
         public QueryController(
-            IReadOnlyDbContext readContext,
+            ICLupRepository context,
             IMapper mapper)
         {
-            _readContext = readContext;
+            _context = context;
             _mapper = mapper;
         }
 
@@ -39,7 +38,7 @@ namespace CLup.WebUI.Controllers
         public async Task<IActionResult> FetchUserAggregate()
         {
             var userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _readContext.FetchUserAggregate(userEmail);
+            var user = await _context.FetchUserAggregate(userEmail);
 
             if (user == null)
             {
@@ -55,7 +54,7 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllBusinesses()
         {
-            var businesses = await _readContext.FetchAllBusinesses();
+            var businesses = await _context.FetchAllBusinesses();
 
             return Ok(_mapper.Map<IList<BusinessDto>>(businesses));
         }
@@ -79,9 +78,16 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] string businessId)
         {
-            var result = await _readContext.FetchUsersNotEmployedByBusiness(businessId);
+            var business = await _context.FetchBusiness(businessId);
+            if (business == null)
+            {
+                return NotFound();
+            }
 
-            return this.CreateActionResult(result);
+            var users = await _context.FetchUsersNotEmployedByBusiness(businessId);
+
+            return Ok(new UsersNotEmployedByBusiness()
+                { BusinessId = businessId, Users = _mapper.Map<IList<UserDto>>(users) });
         }
     }
 }

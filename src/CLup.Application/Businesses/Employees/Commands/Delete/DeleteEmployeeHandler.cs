@@ -9,15 +9,15 @@ namespace CLup.Application.Businesses.Employees.Commands.Delete
 {
     public class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeCommand, Result>
     {
-        private readonly ICLupDbContext _context;
+        private readonly ICLupRepository _repository;
 
-        public DeleteEmployeeHandler(ICLupDbContext context) => _context = context;
+        public DeleteEmployeeHandler(ICLupRepository repository) => _repository = repository;
 
         public async Task<Result> Handle(DeleteEmployeeCommand command, CancellationToken cancellationToken)
-            => await _context.FetchUserAggregate(command.OwnerEmail)
+            => await _repository.FetchUserAggregate(command.OwnerEmail)
                 .FailureIf("User not found.")
                 .FailureIf(user => user.GetEmployee(command.BusinessId, command.UserId),
                     "Employee or business not found.")
-                .Finally(employee => _context.RemoveAndSave(employee));
+                .Finally(employee => _repository.RemoveAndSave(employee));
     }
 }

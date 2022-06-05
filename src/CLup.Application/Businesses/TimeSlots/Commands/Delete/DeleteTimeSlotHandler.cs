@@ -10,16 +10,16 @@ namespace CLup.Application.Businesses.TimeSlots.Commands.Delete
 {
     public class DeleteTimeSlotHandler : IRequestHandler<DeleteTimeSlotCommand, Result>
     {
-        private readonly ICLupDbContext _context;
+        private readonly ICLupRepository _repository;
 
-        public DeleteTimeSlotHandler(ICLupDbContext context) => _context = context;
+        public DeleteTimeSlotHandler(ICLupRepository repository) => _repository = repository;
 
         public async Task<Result> Handle(DeleteTimeSlotCommand command, CancellationToken cancellationToken)
-            => await _context.FetchUserAggregate(command.OwnerEmail)
+            => await _repository.FetchUserAggregate(command.OwnerEmail)
                 .FailureIf("User not found.")
                 .FailureIf(user => user.GetTimeSlot(command.TimeSlotId), "Time slot or business not found")
                 // Check if TimeSlot has bookings -> Alert before deleting?
                 .AddDomainEvent(timeSlot => timeSlot.DomainEvents.Add(new TimeSlotDeletedEvent(timeSlot)))
-                .Finally(timeSlot => _context.RemoveAndSave(timeSlot));
+                .Finally(timeSlot => _repository.RemoveAndSave(timeSlot));
     }
 }

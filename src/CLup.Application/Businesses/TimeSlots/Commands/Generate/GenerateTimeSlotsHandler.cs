@@ -10,19 +10,19 @@ namespace CLup.Application.Businesses.TimeSlots.Commands.Generate
 {
     public class GenerateTimeSlotsHandler : IRequestHandler<GenerateTimeSlotsCommand, Result>
     {
-        private readonly ICLupDbContext _context;
+        private readonly ICLupRepository _repository;
 
-        public GenerateTimeSlotsHandler(ICLupDbContext context)
+        public GenerateTimeSlotsHandler(ICLupRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public async Task<Result> Handle(GenerateTimeSlotsCommand command, CancellationToken cancellationToken)
-            => await _context.FetchUserAggregate(command.OwnerEmail)
+            => await _repository.FetchUserAggregate(command.OwnerEmail)
                 .FailureIf("User not found.")
                 .Ensure(user => user.GetTimeSlotByDate(command.BusinessId, command.Start) == null,
-                    (HttpCode.Conflict, "Time slots already generated for this date."))
+                    "Time slots already generated for this date.", HttpCode.Conflict)
                 .AndThen(user => user.GetBusiness(command.BusinessId)?.GenerateTimeSlots(command.Start))
-                .Finally(timeSlots => _context.AddAndSave(timeSlots.ToArray()));
+                .Finally(timeSlots => _repository.AddAndSave(timeSlots.ToArray()));
     }
 }

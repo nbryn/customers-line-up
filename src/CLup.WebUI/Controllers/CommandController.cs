@@ -164,6 +164,7 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> MarkMessageAsDeleted([FromBody] MarkMessageAsDeletedCommand command)
         {
+            command.UserEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var response = await _mediator.Send(command);
 
             return this.CreateActionResult(response);

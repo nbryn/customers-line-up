@@ -20,8 +20,7 @@ namespace CLup.Infrastructure
             IConfiguration configuration,
             IWebHostEnvironment environment)
         {
-            services.AddScoped<ICLupDbContext, CLupDbContext>();
-            services.AddScoped<IReadOnlyDbContext, ReadOnlyDbContext>();
+            services.AddScoped<ICLupRepository, CLupDbContext>();
             services.AddScoped<IDomainEventService, DomainEventService>();
             services.AddTransient<Seeder>();
 

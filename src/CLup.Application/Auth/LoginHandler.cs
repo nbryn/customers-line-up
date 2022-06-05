@@ -11,21 +11,21 @@ namespace CLup.Application.Auth
 {
     public class LoginHandler : IRequestHandler<LoginCommand, Result<TokenResponse>>
     {
-        private readonly IReadOnlyDbContext _readOnlyDbContext;
+        private readonly ICLupRepository _repository;
         private readonly IMapper _mapper;
 
         public LoginHandler(
-            IReadOnlyDbContext readOnlyDbContext,
+            ICLupRepository repository,
             IMapper mapper)
         {
-            _readOnlyDbContext = readOnlyDbContext;
+            _repository = repository;
             _mapper = mapper;
         }
 
         public async Task<Result<TokenResponse>> Handle(LoginCommand command, CancellationToken cancellationToken)
-            => await _readOnlyDbContext.FetchUserAggregate(command.Email)
+            => await _repository.FetchUserAggregate(command.Email)
                 .ToResult()
-                .Ensure(user => user != null && BC.Verify(command.Password, user.Password), (HttpCode.Unauthorized, ""))
+                .Ensure(user => user != null && BC.Verify(command.Password, user.Password), string.Empty, HttpCode.Unauthorized)
                 .Finally(_mapper.Map<TokenResponse>);
     }
 }

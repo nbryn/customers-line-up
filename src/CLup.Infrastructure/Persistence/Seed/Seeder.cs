@@ -11,9 +11,9 @@ namespace CLup.Infrastructure.Persistence.Seed
 {
     public class Seeder
     {
-        private readonly CLupDbContext _dbContext;
+        private readonly CLupDbContext _context;
 
-        public Seeder(CLupDbContext dbContext) => _dbContext = dbContext;
+        public Seeder(CLupDbContext context) => _context = context;
 
         public async Task Seed()
         {
@@ -23,13 +23,13 @@ namespace CLup.Infrastructure.Persistence.Seed
             AddBookings(businessTimeSlots, businesses.Select(b => b.Id).ToList(), userIds);
             AddEmployees(businesses.Select(b => b.Id).ToList(), userIds);
 
-            await _dbContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         private IList<string> AddUsers()
         {
             var ids = new List<string>();
-            if (_dbContext.Users.Any())
+            if (_context.Users.Any())
             {
                 return ids;
             }
@@ -41,7 +41,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .WithRole(Role.Owner)
                 .Build();
 
-            _dbContext.Add(user1);
+            _context.Add(user1);
             ids.Add(user1.Id);
 
             var user2 = new UserBuilder()
@@ -51,7 +51,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .WithRole(Role.Owner)
                 .Build();
 
-            _dbContext.Add(user2);
+            _context.Add(user2);
             ids.Add(user2.Id);
 
             var user3 = new UserBuilder()
@@ -60,7 +60,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .WithCoords(55.8075915, 12.3467888)
                 .Build();
 
-            _dbContext.Add(user3);
+            _context.Add(user3);
             ids.Add(user3.Id);
 
             var user4 = new UserBuilder()
@@ -69,7 +69,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .WithCoords(55.8200342, 12.3591325)
                 .Build();
 
-            _dbContext.Add(user4);
+            _context.Add(user4);
             ids.Add(user4.Id);
 
             var user5 = new UserBuilder()
@@ -78,7 +78,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .WithCoords(55.825272, 12.463181)
                 .Build();
 
-            _dbContext.Add(user5);
+            _context.Add(user5);
             ids.Add(user5.Id);
 
             var user6 = new UserBuilder()
@@ -87,7 +87,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .WithCoords(55.81111, 12.471199)
                 .Build();
 
-            _dbContext.Add(user6);
+            _context.Add(user6);
             ids.Add(user6.Id);
 
             return ids;
@@ -96,7 +96,7 @@ namespace CLup.Infrastructure.Persistence.Seed
         private IList<Business> AddBusinesses(IList<string> userIds)
         {
             var businesses = new List<Business>();
-            if (_dbContext.Businesses.Any())
+            if (_context.Businesses.Any())
             {
                 return businesses;
             }
@@ -188,7 +188,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 .Build();
 
             businesses.Add(business8);
-            _dbContext.AddRange(businesses);
+            _context.AddRange(businesses);
             
             return businesses;
         }
@@ -196,7 +196,7 @@ namespace CLup.Infrastructure.Persistence.Seed
         private Dictionary<string, List<string>> AddTimeSlots(IList<Business> businesses)
         {
             var businessTimeSlots = new Dictionary<string, List<string>>();
-            if (_dbContext.TimeSlots.Any())
+            if (_context.TimeSlots.Any())
             {
                 return businessTimeSlots;
             }
@@ -206,7 +206,7 @@ namespace CLup.Infrastructure.Persistence.Seed
                 var timeSlots = business.GenerateTimeSlots(DateTime.Today.AddDays(1));
                 businessTimeSlots.Add(business.Id, timeSlots.Select(t => t.Id).ToList());
 
-                _dbContext.AddRange(timeSlots);
+                _context.AddRange(timeSlots);
             }
 
             return businessTimeSlots;
@@ -214,40 +214,40 @@ namespace CLup.Infrastructure.Persistence.Seed
 
         private void AddBookings(Dictionary<string, List<string>> businessTimeSlots, IList<string> businessIds, IList<string> userIds)
         {
-            if (_dbContext.Bookings.Any())
+            if (_context.Bookings.Any())
             {
                 return;
             }
 
-            _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[0], businessTimeSlots[businessIds[0]].First()));
-            _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[1], businessTimeSlots[businessIds[1]][3]));
-            _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[2], businessTimeSlots[businessIds[2]][5]));
-            _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[3], businessTimeSlots[businessIds[3]][10]));
-            _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[4], businessTimeSlots[businessIds[4]][7]));
-            _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[5], businessTimeSlots[businessIds[5]][8]));
+            _context.Add(BookingCreator.Create(userIds[0], businessIds[0], businessTimeSlots[businessIds[0]].First()));
+            _context.Add(BookingCreator.Create(userIds[0], businessIds[1], businessTimeSlots[businessIds[1]][3]));
+            _context.Add(BookingCreator.Create(userIds[0], businessIds[2], businessTimeSlots[businessIds[2]][5]));
+            _context.Add(BookingCreator.Create(userIds[0], businessIds[3], businessTimeSlots[businessIds[3]][10]));
+            _context.Add(BookingCreator.Create(userIds[0], businessIds[4], businessTimeSlots[businessIds[4]][7]));
+            _context.Add(BookingCreator.Create(userIds[0], businessIds[5], businessTimeSlots[businessIds[5]][8]));
 
             foreach (var businessId in businessIds)
             {
                 for (int i = 1, timeSlotCounter = 0; i < 6; i++, timeSlotCounter++)
                 {
-                    _dbContext.Add(BookingCreator.Create(userIds[i], businessId, businessTimeSlots[businessId][i]));
+                    _context.Add(BookingCreator.Create(userIds[i], businessId, businessTimeSlots[businessId][i]));
                 }
             }
         }
 
         private void AddEmployees(IList<string> businessIds, IList<string> userIds)
         {
-            if (_dbContext.Employees.Any())
+            if (_context.Employees.Any())
             {
                 return;
             }
 
-            _dbContext.Add(EmployeeCreator.Create(businessIds[0], userIds[0], "info@brugsen.dk"));
-            _dbContext.Add(EmployeeCreator.Create(businessIds[0], userIds[1], "hej@brugsen.dk"));
-            _dbContext.Add(EmployeeCreator.Create(businessIds[1], userIds[2], "info@farum.dk"));
-            _dbContext.Add(EmployeeCreator.Create(businessIds[1], userIds[3], "hej@farum.dk"));
-            _dbContext.Add(EmployeeCreator.Create(businessIds[2], userIds[4], "info@kiosk.dk"));
-            _dbContext.Add(EmployeeCreator.Create(businessIds[2], userIds[5], "hej@kiosk.dk"));
+            _context.Add(EmployeeCreator.Create(businessIds[0], userIds[0], "info@brugsen.dk"));
+            _context.Add(EmployeeCreator.Create(businessIds[0], userIds[1], "hej@brugsen.dk"));
+            _context.Add(EmployeeCreator.Create(businessIds[1], userIds[2], "info@farum.dk"));
+            _context.Add(EmployeeCreator.Create(businessIds[1], userIds[3], "hej@farum.dk"));
+            _context.Add(EmployeeCreator.Create(businessIds[2], userIds[4], "info@kiosk.dk"));
+            _context.Add(EmployeeCreator.Create(businessIds[2], userIds[5], "hej@kiosk.dk"));
         }
     }
 }

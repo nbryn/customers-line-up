@@ -111,6 +111,9 @@ namespace CLup.Domain.Users
             return business?.TimeSlots.FirstOrDefault(timeSlot => timeSlot.Id == timeSlotId);
         }
 
+        public Message GetMessage(string messageId)
+            => SentMessages.Concat(ReceivedMessages).FirstOrDefault(message => message.Id == messageId);
+
         public Business GetBusiness(string businessId) =>
             Businesses.FirstOrDefault(business => business.Id == businessId);
     }

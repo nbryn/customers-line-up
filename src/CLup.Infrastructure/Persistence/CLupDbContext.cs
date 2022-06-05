@@ -16,23 +16,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Infrastructure.Persistence
 {
-    public class CLupDbContext : DbContext, ICLupDbContext
+    public class CLupDbContext : DbContext, ICLupRepository
     {
         private readonly IDomainEventService _domainEventService;
 
         public const string DEFAULT_SCHEMA = "CLup";
-        
-        public DbSet<Booking> Bookings { get; set; }
-        
+
         public DbSet<Business> Businesses { get; set; }
-        
+
         public DbSet<Employee> Employees { get; set; }
-        
+
         public DbSet<TimeSlot> TimeSlots { get; set; }
         
-        public DbSet<User> Users { get; set; }
-        
         public DbSet<Message> Messages { get; set; }
+
+        public DbSet<Booking> Bookings { get; set; }
+        
+        public DbSet<User> Users { get; set; }
 
         public CLupDbContext(
             DbContextOptions<CLupDbContext> options,
@@ -48,11 +48,35 @@ namespace CLup.Infrastructure.Persistence
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public async Task<IList<Business>> FetchAllBusinesses()
+            => await Businesses
+                .Include(business => business.Bookings)
+                .ThenInclude(booking => booking.TimeSlot)
+                .ThenInclude(timeSlot => timeSlot.Business)
+                .Include(business => business.Bookings)
+                .ThenInclude(booking => booking.User)
+                .AsSplitQuery()
+                .AsNoTracking()
+                .ToListAsync();
+
+        public async Task<Business> FetchBusiness(string businessId)
+            => await Businesses.FirstOrDefaultAsync(business => business.Id == businessId);
         
+        public async Task<TimeSlot> FetchTimeSlot(string timeSlotId)
+            => await TimeSlots.Include(timeSlot => timeSlot.Bookings)
+                .FirstOrDefaultAsync(timeSlot => timeSlot.Id == timeSlotId);
+
         public async Task<User> FetchUserAggregate(string mailOrId)
             => await Users
                 .Include(user => user.SentMessages)
+                .ThenInclude(message => message.MessageData)
+                .Include(user => user.SentMessages)
+                .ThenInclude(message => message.Metadata)
                 .Include(user => user.ReceivedMessages)
+                .ThenInclude(message => message.MessageData)
+                .Include(user => user.ReceivedMessages)
+                .ThenInclude(message => message.Metadata)
                 .Include(user => user.Bookings)
                 .ThenInclude(booking => booking.Business)
                 .Include(user => user.Bookings)
@@ -76,8 +100,21 @@ namespace CLup.Infrastructure.Persistence
                 .ThenInclude(business => business.TimeSlots)
                 .ThenInclude(timeSlot => timeSlot.Bookings)
                 .AsSplitQuery()
-                .AsNoTracking()
                 .FirstOrDefaultAsync(user => user.Id == mailOrId || user.UserData.Email == mailOrId);
+
+        public async Task<IList<User>> FetchUsersNotEmployedByBusiness(string businessId)
+        {
+            var employeeIds = await Employees
+                .Where(employee => employee.BusinessId == businessId)
+                .Select(employee => employee.UserId)
+                .ToListAsync();
+
+            var users = await Users
+                .Where(user => !employeeIds.Contains(user.Id))
+                .ToListAsync();
+
+            return users;
+        }
 
         public override async Task<int> SaveChangesAsync(
             bool acceptAllChangesOnSuccess,
@@ -122,8 +159,8 @@ namespace CLup.Infrastructure.Persistence
         private void MarkEntitiesAsUpdated()
         {
             var addedEntities = ChangeTracker.Entries()
-                            .Where(entry => entry.State == EntityState.Added)
-                            .ToList();
+                .Where(entry => entry.State == EntityState.Added)
+                .ToList();
 
             addedEntities.ForEach(entry =>
             {
