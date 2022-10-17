@@ -189,7 +189,7 @@ namespace CLup.Infrastructure.Persistence.Seed
 
             businesses.Add(business8);
             _context.AddRange(businesses);
-            
+
             return businesses;
         }
 
@@ -212,7 +212,10 @@ namespace CLup.Infrastructure.Persistence.Seed
             return businessTimeSlots;
         }
 
-        private void AddBookings(Dictionary<string, List<string>> businessTimeSlots, IList<string> businessIds, IList<string> userIds)
+        private void AddBookings(
+            Dictionary<string, List<string>> businessTimeSlots, 
+            IList<string> businessIds,
+            IList<string> userIds)
         {
             if (_context.Bookings.Any())
             {
@@ -228,7 +231,7 @@ namespace CLup.Infrastructure.Persistence.Seed
 
             foreach (var businessId in businessIds)
             {
-                for (int i = 1, timeSlotCounter = 0; i < 6; i++, timeSlotCounter++)
+                for (var i = 1; i < 6; i++)
                 {
                     _context.Add(BookingCreator.Create(userIds[i], businessId, businessTimeSlots[businessId][i]));
                 }
