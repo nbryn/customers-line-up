@@ -1,16 +1,21 @@
 using CLup.Domain.Bookings;
+using CLup.Domain.Bookings.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CLup.Infrastructure.Persistence.EntityConfigurations
+namespace CLup.Infrastructure.Persistence.EntityConfigurations;
+
+internal class BookingConfiguration : IEntityTypeConfiguration<Booking>
 {
-    class BookingConfiguration : IEntityTypeConfiguration<Booking>
+    public void Configure(EntityTypeBuilder<Booking> builder)
     {
-        public void Configure(EntityTypeBuilder<Booking> bookingConfiguration)
-        {
-            bookingConfiguration.Ignore(b => b.DomainEvents);
-            bookingConfiguration.ToTable("bookings");
-            bookingConfiguration.HasKey(b => b.Id);
-        }
+        builder.ToTable("bookings");
+        builder.Ignore(booking => booking.DomainEvents);
+        builder.HasKey(booking => booking.Id);
+        builder.Property(booking => booking.Id)
+            .ValueGeneratedNever()
+            .HasConversion(
+                bookingId => bookingId.Value,
+                value => BookingId.Create(value));
     }
 }

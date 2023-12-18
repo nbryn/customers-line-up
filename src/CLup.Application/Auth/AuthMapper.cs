@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users;
+using CLup.Domain.Users.Enums;
+using CLup.Domain.Users.ValueObjects;
 using BC = BCrypt.Net.BCrypt;
 
 namespace CLup.Application.Auth
@@ -17,7 +19,6 @@ namespace CLup.Application.Auth
 
             CreateMap<User, TokenResponse>()
                 .ForMember(dest => dest.Token, opts => opts.MapFrom<AuthTokenResolver>());
-            
         }
     }
 }

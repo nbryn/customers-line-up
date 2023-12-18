@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using CLup.Application.Businesses.Employees;
-using CLup.Application.Businesses.TimeSlots;
+using CLup.Application.Bookings;
+using CLup.Application.Employees;
 using CLup.Application.Messages;
-using CLup.Application.Shared.Bookings;
+using CLup.Application.TimeSlots;
 
 namespace CLup.Application.Businesses
 {

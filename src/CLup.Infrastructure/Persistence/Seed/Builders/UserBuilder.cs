@@ -1,5 +1,7 @@
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users;
+using CLup.Domain.Users.Enums;
+using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Infrastructure.Persistence.Seed.Builders
 {

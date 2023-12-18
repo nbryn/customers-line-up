@@ -1,65 +1,77 @@
+using CLup.Domain.Bookings;
+using CLup.Domain.Businesses;
+using CLup.Domain.Messages;
 using CLup.Domain.Users;
+using CLup.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CLup.Infrastructure.Persistence.EntityConfigurations
+namespace CLup.Infrastructure.Persistence.EntityConfigurations;
+
+internal class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    class UserConfiguration : IEntityTypeConfiguration<User>
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        public void Configure(EntityTypeBuilder<User> userConfiguration)
+        builder.ToTable("users");
+        builder.HasKey(user => user.Id);
+        builder.Property(user => user.Id)
+            .ValueGeneratedNever()
+            .HasConversion(
+            userId => userId.Value,
+            value => UserId.Create(value));
+
+        builder.OwnsOne(user => user.Address, a =>
         {
-            userConfiguration.ToTable("users");
-            userConfiguration.HasKey(user => user.Id);
+            a.Property(address => address.Street)
+                .HasColumnName("Street");
 
-            userConfiguration.OwnsOne(user => user.Address, a =>
-            {
-                a.Property(address => address.Street)
-                    .HasColumnName("Street");
+            a.Property(address => address.Zip)
+                .HasColumnName("Zip");
 
-                a.Property(address => address.Zip)
-                    .HasColumnName("Zip");
+            a.Property(address => address.City)
+                .HasColumnName("City");
+        });
 
-                a.Property(address => address.City)
-                    .HasColumnName("City");
-            });
-
-            userConfiguration.OwnsOne(b => b.UserData, u =>
-            {
-                u.Property(userData => userData.Name)
-                    .HasColumnName("Name");
+        builder.OwnsOne(b => b.UserData, u =>
+        {
+            u.Property(userData => userData.Name)
+                .HasColumnName("Name");
 
 
-                u.Property(userData => userData.Email)
-                    .HasColumnName("Email");
+            u.Property(userData => userData.Email)
+                .HasColumnName("Email");
 
-                u.Property(userData => userData.Password)
-                    .HasColumnName("Password");
-            });
+            u.Property(userData => userData.Password)
+                .HasColumnName("Password");
+        });
 
-            userConfiguration.OwnsOne(user => user.Coords, c =>
-            {
-                c.Property(coords => coords.Latitude)
-                    .HasColumnName("Latitude");
+        builder.OwnsOne(user => user.Coords, c =>
+        {
+            c.Property(coords => coords.Latitude)
+                .HasColumnName("Latitude");
 
-                c.Property(coords => coords.Longitude)
-                    .HasColumnName("Longitude");
-            });
+            c.Property(coords => coords.Longitude)
+                .HasColumnName("Longitude");
+        });
 
-            userConfiguration
-                .HasMany(user => user.Bookings)
-                .WithOne(booking => booking.User);
+        builder.HasMany<Booking>()
+            .WithOne()
+            .HasForeignKey(booking => booking.UserId)
+            .IsRequired();
 
-            userConfiguration
-                .HasMany(user => user.Businesses)
-                .WithOne(business => business.Owner);
+        builder.HasMany<Business>()
+            .WithOne()
+            .HasForeignKey(business => business.OwnerId)
+            .IsRequired();
 
-            userConfiguration
-                .HasMany(user => user.SentMessages)
-                .WithOne();
+        builder.HasMany<Message>()
+            .WithOne()
+            .HasForeignKey(message => message.SenderId)
+            .IsRequired();
 
-            userConfiguration
-                .HasMany(user => user.ReceivedMessages)
-                .WithOne();
-        }
+        builder.HasMany<Message>()
+            .WithOne()
+            .HasForeignKey(message => message.ReceiverId)
+            .IsRequired();
     }
 }

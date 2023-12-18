@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Users;
+using CLup.Domain.Users.Enums;
 using CLup.Infrastructure.Persistence.Seed.Builders;
 using BC = BCrypt.Net.BCrypt;
 

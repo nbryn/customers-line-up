@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Bookings;
 using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.Employees;
-using CLup.Domain.Businesses.TimeSlots;
+using CLup.Domain.Employees;
 using CLup.Domain.Messages;
 using CLup.Domain.Shared;
+using CLup.Domain.TimeSlots;
 using CLup.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,11 +27,11 @@ namespace CLup.Infrastructure.Persistence
         public DbSet<Employee> Employees { get; set; }
 
         public DbSet<TimeSlot> TimeSlots { get; set; }
-        
+
         public DbSet<Message> Messages { get; set; }
 
         public DbSet<Booking> Bookings { get; set; }
-        
+
         public DbSet<User> Users { get; set; }
 
         public CLupDbContext(
@@ -51,7 +51,7 @@ namespace CLup.Infrastructure.Persistence
 
         public async Task<IList<Business>> FetchAllBusinesses()
             => await Businesses
-                .Include(business => business.Bookings)
+                .Include(business => business.BookingIds)
                 .ThenInclude(booking => booking.TimeSlot)
                 .ThenInclude(timeSlot => timeSlot.Business)
                 .Include(business => business.Bookings)
@@ -62,14 +62,14 @@ namespace CLup.Infrastructure.Persistence
 
         public async Task<Business> FetchBusiness(string businessId)
             => await Businesses.FirstOrDefaultAsync(business => business.Id == businessId);
-        
+
         public async Task<TimeSlot> FetchTimeSlot(string timeSlotId)
-            => await TimeSlots.Include(timeSlot => timeSlot.Bookings)
+            => await TimeSlots.Include(timeSlot => timeSlot.BookingIds)
                 .FirstOrDefaultAsync(timeSlot => timeSlot.Id == timeSlotId);
 
         public async Task<User> FetchUserAggregate(string mailOrId)
             => await Users
-                .Include(user => user.SentMessages)
+                .Include(user => user.SentMessageIds)
                 .ThenInclude(message => message.MessageData)
                 .Include(user => user.SentMessages)
                 .ThenInclude(message => message.Metadata)

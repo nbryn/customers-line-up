@@ -1,13 +1,12 @@
 using System;
 
-namespace CLup.Domain.Shared
+namespace CLup.Domain.Shared;
+
+public abstract class Entity<TId>
 {
-    public abstract class Entity
-    {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        
-        public DateTime CreatedAt { get; set; }
-        
-        public DateTime UpdatedAt { get; set; }
-    }
+    public TId Id { get; protected set; }
+
+    public DateTime CreatedAt { get; protected init; }
+
+    public DateTime UpdatedAt { get; set; }
 }

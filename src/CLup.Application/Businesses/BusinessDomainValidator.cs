@@ -1,4 +1,4 @@
-using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Shared.ValueObjects;
 using FluentValidation;
 

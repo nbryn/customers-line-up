@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp5.0</TargetFramework>
+        <TargetFramework>netcoreapp8.0</TargetFramework>
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
@@ -35,8 +35,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Businesses\Bookings\Commands" />
+      <Folder Include="Bookings\Commands\" />
+      <Folder Include="Businesses\Commands\" />
+      <Folder Include="Employees\Commands\" />
+      <Folder Include="Messages\Commands\" />
+      <Folder Include="TimeSlots\Commands\" />
     </ItemGroup>
 
-    
 </Project>

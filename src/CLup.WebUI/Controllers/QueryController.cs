@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CLup.Application.Shared.Interfaces;
+using CLup.Application.Users.Queries;
+using CLup.Domain.Businesses.Enums;
 
 namespace CLup.WebUI.Controllers
 {

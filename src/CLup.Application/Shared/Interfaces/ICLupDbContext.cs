@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.TimeSlots;
 using CLup.Domain.Shared;
+using CLup.Domain.TimeSlots;
 using CLup.Domain.Users;
 
 namespace CLup.Application.Shared.Interfaces

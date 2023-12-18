@@ -1,6 +1,5 @@
-namespace CLup.Domain.Shared
+namespace CLup.Domain.Shared;
+
+public interface IAggregateRoot
 {
-    public interface IAggregateRoot
-    {
-    }
 }
