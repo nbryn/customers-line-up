@@ -35,6 +35,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Auth\Commands\Login\" />
       <Folder Include="Bookings\Commands\" />
       <Folder Include="Businesses\Commands\" />
       <Folder Include="Employees\Commands\" />

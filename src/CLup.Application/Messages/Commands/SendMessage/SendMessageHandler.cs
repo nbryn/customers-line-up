@@ -10,6 +10,8 @@ using MediatR;
 
 namespace CLup.Application.Messages.Commands.SendMessage
 {
+    using Shared.Result;
+
     public class SendMessageHandler : IRequestHandler<SendMessageCommand, Result>
     {
         private readonly IValidator<Message> _validator;

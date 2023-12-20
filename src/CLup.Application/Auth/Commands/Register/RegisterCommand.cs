@@ -1,8 +1,9 @@
-using CLup.Application.Shared;
-using MediatR;
-
-namespace CLup.Application.Auth
+namespace CLup.Application.Auth.Commands.Register
 {
+    using CLup.Application.Shared;
+    using MediatR;
+    using Shared.Result;
+
     public class RegisterCommand : IRequest<Result<TokenResponse>>
     {
         public string Email { get; set; }

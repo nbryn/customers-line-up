@@ -3,6 +3,8 @@ using MediatR;
 
 namespace CLup.Application.Bookings.Commands.DeleteBooking
 {
+    using Shared.Result;
+
     public class BusinessDeleteBookingCommand : IRequest<Result>
     {
         public string OwnerEmail { get; set; }

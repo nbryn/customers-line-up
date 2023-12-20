@@ -3,6 +3,8 @@ using MediatR;
 
 namespace CLup.Application.Users.Commands.UpdateUserInfo
 {
+    using Shared.Result;
+
     public class UpdateUserInfoCommand : IRequest<Result>
     {
         public string Id { get; set; }

@@ -3,6 +3,8 @@ using MediatR;
 
 namespace CLup.Application.Businesses.Commands.CreateBusiness
 {
+    using Shared.Result;
+
     public class CreateBusinessCommand : IRequest<Result>
     {
         public string Name { get; set; }

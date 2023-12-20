@@ -51,7 +51,7 @@ namespace CLup.Infrastructure.Persistence
 
         public async Task<IList<Business>> FetchAllBusinesses()
             => await Businesses
-                .Include(business => business.BookingIds)
+                .Include(business => business.Bookings)
                 .ThenInclude(booking => booking.TimeSlot)
                 .ThenInclude(timeSlot => timeSlot.Business)
                 .Include(business => business.Bookings)
@@ -64,12 +64,12 @@ namespace CLup.Infrastructure.Persistence
             => await Businesses.FirstOrDefaultAsync(business => business.Id == businessId);
 
         public async Task<TimeSlot> FetchTimeSlot(string timeSlotId)
-            => await TimeSlots.Include(timeSlot => timeSlot.BookingIds)
+            => await TimeSlots.Include(timeSlot => timeSlot.Bookings)
                 .FirstOrDefaultAsync(timeSlot => timeSlot.Id == timeSlotId);
 
         public async Task<User> FetchUserAggregate(string mailOrId)
             => await Users
-                .Include(user => user.SentMessageIds)
+                .Include(user => user.SentMessages)
                 .ThenInclude(message => message.MessageData)
                 .Include(user => user.SentMessages)
                 .ThenInclude(message => message.Metadata)

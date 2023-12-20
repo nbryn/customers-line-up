@@ -15,8 +15,8 @@ public sealed class Employee : Entity<EmployeeId>
 
     public Employee(UserId userId, BusinessId businessId, string companyEmail)
     {
-        UserId = userId;
-        BusinessId = businessId;
-        CompanyEmail = companyEmail;
+        this.UserId = userId;
+        this.BusinessId = businessId;
+        this.CompanyEmail = companyEmail;
     }
 }

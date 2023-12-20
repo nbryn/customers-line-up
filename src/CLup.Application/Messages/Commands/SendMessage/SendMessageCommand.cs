@@ -3,6 +3,8 @@ using MediatR;
 
 namespace CLup.Application.Messages.Commands.SendMessage
 {
+    using Shared.Result;
+
     public class SendMessageCommand : IRequest<Result>
     {
         public string SenderId { get; set; }

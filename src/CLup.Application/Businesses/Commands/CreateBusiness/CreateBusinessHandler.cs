@@ -11,6 +11,8 @@ using MediatR;
 
 namespace CLup.Application.Businesses.Commands.CreateBusiness
 {
+    using Shared.Result;
+
     public class CreateBusinessHandler : IRequestHandler<CreateBusinessCommand, Result>
     {
         private readonly IValidator<Business> _validator;

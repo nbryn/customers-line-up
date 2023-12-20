@@ -11,6 +11,8 @@ using MediatR;
 
 namespace CLup.Application.Bookings.Commands.CreateBooking;
 
+using Shared.Result;
+
 public sealed class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Result>
 {
     private readonly IValidator<Booking> _validator;

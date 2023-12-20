@@ -10,6 +10,8 @@ using MediatR;
 
 namespace CLup.Application.Businesses.Commands.UpdateBusiness
 {
+    using Shared.Result;
+
     public class UpdateBusinessHandler : IRequestHandler<UpdateBusinessCommand, Result>
     {
         private readonly IValidator<Business> _businessValidator;

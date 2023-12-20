@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.WebUI.Controllers
 {
+    using Application.Auth.Commands.Login;
+    using Application.Auth.Commands.Register;
+
     [ApiController]
     [Route("[controller]")]
     public class AuthController : ControllerBase

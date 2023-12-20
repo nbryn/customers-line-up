@@ -14,12 +14,14 @@ using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Domain.Users;
 
+using Bookings;
+
 public sealed class User : Entity<UserId>, IAggregateRoot
 {
-    private readonly List<MessageId> _receivedMessageIds = new();
-    private readonly List<MessageId> _sentMessageIds = new();
+    private readonly List<Message> _receivedMessages = new();
     private readonly List<BusinessId> _businessIds = new();
-    private readonly List<BookingId> _bookingIds = new();
+    private readonly List<Message> _sentMessage = new();
+    private readonly List<Booking> _bookings = new();
 
     public UserData UserData { get; private set; }
 
@@ -29,13 +31,13 @@ public sealed class User : Entity<UserId>, IAggregateRoot
 
     public Role Role { get; set; }
 
-    public IReadOnlyList<MessageId> ReceivedMessageIds => _receivedMessageIds.AsReadOnly();
+    public IReadOnlyList<Message> ReceivedMessages => this._receivedMessages.AsReadOnly();
 
-    public IReadOnlyList<MessageId> SentMessageIds => _sentMessageIds.AsReadOnly();
+    public IReadOnlyList<Message> SentMessages => this._sentMessage.AsReadOnly();
 
-    public IReadOnlyList<BusinessId> BusinessIds => _businessIds.AsReadOnly();
+    public IReadOnlyList<BusinessId> BusinessIds => this._businessIds.AsReadOnly();
 
-    public IReadOnlyList<BookingId> BookingIds => _bookingIds.AsReadOnly();
+    public IReadOnlyList<Booking> Bookings => this._bookings.AsReadOnly();
 
     protected User()
     {
@@ -47,32 +49,32 @@ public sealed class User : Entity<UserId>, IAggregateRoot
         Coords coords,
         Role role)
     {
-        UserData = userData;
-        Address = address;
-        Coords = coords;
-        Role = role;
+        this.UserData = userData;
+        this.Address = address;
+        this.Coords = coords;
+        this.Role = role;
     }
 
-    public string Name => UserData.Name;
+    public string Name => this.UserData.Name;
 
-    public string Email => UserData.Email;
+    public string Email => this.UserData.Email;
 
-    public string Password => UserData.Password;
+    public string Password => this.UserData.Password;
 
-    public bool IsBusinessOwner => BusinessIds?.Count > 0;
+    public bool IsBusinessOwner => this.BusinessIds?.Count > 0;
 
     public User UpdateRole(Role role)
     {
-        Role = role;
+        this.Role = role;
 
         return this;
     }
 
     public User Update(string name, string email, (Address address, Coords coords) info)
     {
-        UserData = new UserData(name, email, Password);
-        Address = info.address;
-        Coords = info.coords;
+        this.UserData = new UserData(name, email, this.Password);
+        this.Address = info.address;
+        this.Coords = info.coords;
 
         return this;
     }
@@ -80,10 +82,10 @@ public sealed class User : Entity<UserId>, IAggregateRoot
     public void UserDeletedBookingMessage(Business business, TimeSlot timeSlot, Guid receiverId)
     {
         var content =
-            $"The user with email {Email} deleted her/his booking at {timeSlot.Start.ToString("dd/MM/yyyy")}.";
+            $"The user with email {this.Email} deleted her/his booking at {timeSlot.Start.ToString("dd/MM/yyyy")}.";
         var messageData = new MessageData($"Booking Deleted - {business.Name}", content);
         var metaData = new MessageMetadata(false, false);
         var message = new Message(Id.Value, receiverId, messageData, MessageType.BookingDeleted, metaData);
-        _sentMessageIds.Add(message.Id);
+        this._sentMessage.Add(message);
     }
 }

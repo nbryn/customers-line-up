@@ -11,6 +11,8 @@ using MediatR;
 
 namespace CLup.Application.Employees.Commands.CreateEmployee
 {
+    using Shared.Result;
+
     public class CreateEmployeeHandler : IRequestHandler<CreateEmployeeCommand, Result>
     {
         private readonly IValidator<Employee> _validator;

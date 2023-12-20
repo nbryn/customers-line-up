@@ -8,9 +8,11 @@ using CLup.Domain.TimeSlots.ValueObjects;
 
 namespace CLup.Domain.TimeSlots
 {
+    using Bookings;
+
     public class TimeSlot : Entity<TimeSlotId>, IHasDomainEvent
     {
-        private List<BookingId> _bookingIds = new();
+        private List<Booking> _bookings = new();
 
         public BusinessId BusinessId { get; private set; }
 
@@ -24,7 +26,7 @@ namespace CLup.Domain.TimeSlots
 
         public List<DomainEvent> DomainEvents { get; set; } = new();
 
-        public IReadOnlyList<BookingId> BookingIds => _bookingIds;
+        public IReadOnlyList<Booking> Bookings => this._bookings.AsReadOnly();
 
         public TimeSlot(
             BusinessId businessId,
@@ -33,13 +35,13 @@ namespace CLup.Domain.TimeSlots
             DateTime start,
             DateTime end)
         {
-            BusinessId = businessId;
-            BusinessName = businessName;
-            Capacity = capacity;
-            Start = start;
-            End = end;
+            this.BusinessId = businessId;
+            this.BusinessName = businessName;
+            this.Capacity = capacity;
+            this.Start = start;
+            this.End = end;
         }
 
-        public bool IsAvailable() => BookingIds?.Count() < Capacity && (Start - DateTime.Now).TotalDays is < 14 and >= 0;
+        public bool IsAvailable() => this.Bookings?.Count() < this.Capacity && (this.Start - DateTime.Now).TotalDays is < 14 and >= 0;
     }
 }

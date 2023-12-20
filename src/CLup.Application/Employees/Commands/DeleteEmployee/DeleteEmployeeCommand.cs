@@ -3,6 +3,8 @@ using MediatR;
 
 namespace CLup.Application.Employees.Commands.DeleteEmployee
 {
+    using Shared.Result;
+
     public class DeleteEmployeeCommand : IRequest<Result>
     {
         public string OwnerEmail { get; set; }

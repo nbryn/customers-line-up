@@ -29,12 +29,12 @@ public sealed class Message : Entity<MessageId>
         MessageType type,
         MessageMetadata metadata)
     {
-        SenderId = senderId;
-        ReceiverId = receiverId;
-        MessageData = messageData;
-        Type = type;
-        Metadata = metadata;
-        CreatedAt = DateTime.Now;
+        this.SenderId = senderId;
+        this.ReceiverId = receiverId;
+        this.MessageData = messageData;
+        this.Type = type;
+        this.Metadata = metadata;
+        this.CreatedAt = DateTime.Now;
     }
 
     public Message DeletedBySender()

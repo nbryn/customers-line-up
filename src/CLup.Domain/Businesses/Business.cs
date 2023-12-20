@@ -16,13 +16,16 @@ using TimeSpan = CLup.Domain.Shared.ValueObjects.TimeSpan;
 
 namespace CLup.Domain.Businesses;
 
+using Bookings;
+using Employees;
+
 public sealed class Business : Entity<BusinessId>, IAggregateRoot
 {
-    private readonly List<MessageId> _receivedMessageIds = new();
-    private readonly List<MessageId> _sentMessageIds = new();
-    private readonly List<EmployeeId> _employeeIds = new();
-    private readonly List<TimeSlotId> _timeSlotIds = new();
-    private readonly List<BookingId> _bookingIds = new();
+    private readonly List<Message> _receivedMessages = new();
+    private readonly List<Message> _sentMessages = new();
+    private readonly List<Employee> _employees = new();
+    private readonly List<TimeSlot> _timeSlots = new();
+    private readonly List<Booking> _bookings = new();
 
     public UserId OwnerId { get; private set; }
 
@@ -36,15 +39,15 @@ public sealed class Business : Entity<BusinessId>, IAggregateRoot
 
     public BusinessType Type { get; private set; }
 
-    public IReadOnlyList<MessageId> ReceivedMessageIds => _receivedMessageIds.AsReadOnly();
+    public IReadOnlyList<Message> ReceivedMessages => this._receivedMessages.AsReadOnly();
 
-    public IReadOnlyList<MessageId> SentMessageIds => _sentMessageIds.AsReadOnly();
+    public IReadOnlyList<Message> SentMessages => this._sentMessages.AsReadOnly();
 
-    public IReadOnlyList<EmployeeId> EmployeeIds => _employeeIds.AsReadOnly();
+    public IReadOnlyList<Employee> Employees => this._employees.AsReadOnly();
 
-    public IReadOnlyList<TimeSlotId> TimeSlotIds => _timeSlotIds.AsReadOnly();
+    public IReadOnlyList<TimeSlot> TimeSlots => this._timeSlots.AsReadOnly();
 
-    public IReadOnlyList<BookingId> BookingIds => _bookingIds.AsReadOnly();
+    public IReadOnlyList<Booking> Bookings => this._bookings.AsReadOnly();
 
     protected Business()
     {
@@ -58,39 +61,39 @@ public sealed class Business : Entity<BusinessId>, IAggregateRoot
         TimeSpan businessHours,
         BusinessType type)
     {
-        OwnerId = ownerId;
-        BusinessData = businessData;
-        Address = address;
-        Coords = coords;
-        BusinessHours = businessHours;
-        Type = type;
+        this.OwnerId = ownerId;
+        this.BusinessData = businessData;
+        this.Address = address;
+        this.Coords = coords;
+        this.BusinessHours = businessHours;
+        this.Type = type;
     }
 
-    public string Opens => BusinessHours.Start;
+    public string Opens => this.BusinessHours.Start;
 
-    public string Closes => BusinessHours.End;
+    public string Closes => this.BusinessHours.End;
 
-    public string Name => BusinessData.Name;
+    public string Name => this.BusinessData.Name;
 
     public void BookingDeletedMessage(Guid receiverId)
     {
-        var content = $"Your booking at {Name} was deleted.";
+        var content = $"Your booking at {this.Name} was deleted.";
         var messageData = new MessageData("Booking Deleted", content);
         var metadata = new MessageMetadata(false, false);
-        var message = new Message(Id.Value, receiverId, messageData, MessageType.BookingDeleted, metadata);
-        _sentMessageIds.Add(message.Id);
+        var message = new Message(this.Id.Value, receiverId, messageData, MessageType.BookingDeleted, metadata);
+        this._sentMessages.Add(message);
     }
 
     public IList<TimeSlot> GenerateTimeSlots(DateTime start)
     {
-        var opens = start.AddHours(double.Parse(Opens.Substring(0, Opens.IndexOf("."))));
-        var closes = start.AddHours(double.Parse(Closes.Substring(0, Closes.IndexOf("."))));
+        var opens = start.AddHours(double.Parse(this.Opens.Substring(0, this.Opens.IndexOf("."))));
+        var closes = start.AddHours(double.Parse(this.Closes.Substring(0, this.Closes.IndexOf("."))));
 
         var timeSlots = new List<TimeSlot>();
-        for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(BusinessData.TimeSlotLength))
+        for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(this.BusinessData.TimeSlotLength))
         {
-            var end = date.AddMinutes(BusinessData.TimeSlotLength);
-            var timeSlot = new TimeSlot(Id, Name, BusinessData.Capacity, date, end);
+            var end = date.AddMinutes(this.BusinessData.TimeSlotLength);
+            var timeSlot = new TimeSlot(this.Id, this.Name, this.BusinessData.Capacity, date, end);
 
             timeSlots.Add(timeSlot);
         }

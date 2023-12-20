@@ -2,8 +2,6 @@ using System;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
-using CLup.Domain.Employees;
-using CLup.Domain.Messages;
 using CLup.Domain.TimeSlots;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -74,17 +72,17 @@ internal class BusinessConfiguration : IEntityTypeConfiguration<Business>
             .HasForeignKey(timeSlot => timeSlot.BusinessId)
             .IsRequired();
 
-        builder.HasMany<Employee>()
+        builder.HasMany(business => business.Employees)
             .WithOne()
             .HasForeignKey(employee => employee.BusinessId)
             .IsRequired();
 
-        builder.HasMany<Message>()
+        builder.HasMany(business => business.SentMessages)
             .WithOne()
             .HasForeignKey(message => message.SenderId)
             .IsRequired();
 
-        builder.HasMany<Message>()
+        builder.HasMany(business => business.ReceivedMessages)
             .WithOne()
             .HasForeignKey(message => message.ReceiverId)
             .IsRequired();

@@ -1,7 +1,8 @@
-namespace CLup.Application.Auth
+using CLup.Domain.Users;
+
+namespace CLup.Application.Auth;
+
+public interface IAuthService
 {
-    public interface IAuthService
-    {
-       string GenerateJwtToken(string email);
-    }
+    string GenerateJwtToken(User user);
 }

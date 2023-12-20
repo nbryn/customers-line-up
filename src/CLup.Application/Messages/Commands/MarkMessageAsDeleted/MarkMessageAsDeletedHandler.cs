@@ -7,6 +7,8 @@ using MediatR;
 
 namespace CLup.Application.Messages.Commands.MarkMessageAsDeleted
 {
+    using Shared.Result;
+
     public class MarkMessageAsDeletedHandler : IRequestHandler<MarkMessageAsDeletedCommand, Result>
     {
         private readonly ICLupRepository _repository;

@@ -8,6 +8,8 @@ using MediatR;
 
 namespace CLup.Application.Bookings.Commands.DeleteBooking
 {
+    using Shared.Result;
+
     public class BusinessDeleteBookingHandler : IRequestHandler<BusinessDeleteBookingCommand, Result>
     {
         private readonly ICLupRepository _repository;

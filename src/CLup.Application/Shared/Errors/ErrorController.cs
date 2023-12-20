@@ -8,15 +8,15 @@ namespace CLup.Application.Shared.Errors
     [Route("error")]
     public class ErrorController : ControllerBase
     {
-        public ErrorResponse Error()
+        public Error Error()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
             var exception = context?.Error;
             var code = 500;
-            
+
             Response.StatusCode = code;
 
-            return new ErrorResponse(exception);
+            return new Error(exception);
         }
     }
 }

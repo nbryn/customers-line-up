@@ -80,11 +80,6 @@ dotnet_analyzer_diagnostic.severity = warning
 # .NET Style Rules
 # https://docs.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/language-rules#net-style-rules
 [*.{cs,csx,cake,vb,vbx}]
-# "this." and "Me." qualifiers
-dotnet_style_qualification_for_field = true:warning
-dotnet_style_qualification_for_property = true:warning
-dotnet_style_qualification_for_method = true:warning
-dotnet_style_qualification_for_event = true:warning
 # Language keywords instead of framework type names for type references
 dotnet_style_predefined_type_for_locals_parameters_members = true:warning
 dotnet_style_predefined_type_for_member_access = true:warning
@@ -346,14 +341,6 @@ dotnet_naming_symbols.stylecop_fields_must_be_private_group.applicable_kinds    
 dotnet_naming_rule.stylecop_instance_fields_must_be_private_rule.symbols               = stylecop_fields_must_be_private_group
 dotnet_naming_rule.stylecop_instance_fields_must_be_private_rule.style                 = disallowed_style
 dotnet_naming_rule.stylecop_instance_fields_must_be_private_rule.severity              = error
-
-# Private fields must be camelCase
-# https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1306.md
-dotnet_naming_symbols.stylecop_private_fields_group.applicable_accessibilities = private
-dotnet_naming_symbols.stylecop_private_fields_group.applicable_kinds           = field
-dotnet_naming_rule.stylecop_private_fields_must_be_camel_case_rule.symbols     = stylecop_private_fields_group
-dotnet_naming_rule.stylecop_private_fields_must_be_camel_case_rule.style       = camel_case_style
-dotnet_naming_rule.stylecop_private_fields_must_be_camel_case_rule.severity    = warning
 
 # Local variables must be camelCase
 # https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1312.md

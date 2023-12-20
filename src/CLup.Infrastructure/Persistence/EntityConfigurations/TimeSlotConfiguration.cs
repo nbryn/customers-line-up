@@ -1,4 +1,3 @@
-using CLup.Domain.Bookings;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.TimeSlots.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +18,7 @@ internal class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
             timeSlotId => timeSlotId.Value,
             value => TimeSlotId.Create(value));
 
-        builder.HasMany<Booking>()
+        builder.HasMany(timeSlot => timeSlot.Bookings)
             .WithOne()
             .HasForeignKey(booking => booking.TimeSlotId)
             .IsRequired();

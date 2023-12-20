@@ -3,6 +3,8 @@ using MediatR;
 
 namespace CLup.Application.Messages.Commands.MarkMessageAsDeleted
 {
+    using Shared.Result;
+
     public class MarkMessageAsDeletedCommand : IRequest<Result>
     {
         public string UserEmail { get; set; }

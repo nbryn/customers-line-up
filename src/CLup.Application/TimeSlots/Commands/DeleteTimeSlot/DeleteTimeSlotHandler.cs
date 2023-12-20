@@ -8,6 +8,8 @@ using MediatR;
 
 namespace CLup.Application.TimeSlots.Commands.DeleteTimeSlot
 {
+    using Shared.Result;
+
     public class DeleteTimeSlotHandler : IRequestHandler<DeleteTimeSlotCommand, Result>
     {
         private readonly ICLupRepository _repository;

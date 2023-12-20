@@ -7,6 +7,8 @@ using MediatR;
 
 namespace CLup.Application.Employees.Commands.DeleteEmployee
 {
+    using Shared.Result;
+
     public class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeCommand, Result>
     {
         private readonly ICLupRepository _repository;

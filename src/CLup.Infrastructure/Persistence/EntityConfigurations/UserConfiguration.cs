@@ -1,6 +1,4 @@
-using CLup.Domain.Bookings;
 using CLup.Domain.Businesses;
-using CLup.Domain.Messages;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -54,22 +52,22 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("Longitude");
         });
 
-        builder.HasMany<Booking>()
-            .WithOne()
-            .HasForeignKey(booking => booking.UserId)
-            .IsRequired();
-
         builder.HasMany<Business>()
             .WithOne()
             .HasForeignKey(business => business.OwnerId)
             .IsRequired();
 
-        builder.HasMany<Message>()
+        builder.HasMany(user => user.Bookings)
+            .WithOne()
+            .HasForeignKey(booking => booking.UserId)
+            .IsRequired();
+
+        builder.HasMany(user => user.SentMessages)
             .WithOne()
             .HasForeignKey(message => message.SenderId)
             .IsRequired();
 
-        builder.HasMany<Message>()
+        builder.HasMany(user => user.ReceivedMessages)
             .WithOne()
             .HasForeignKey(message => message.ReceiverId)
             .IsRequired();

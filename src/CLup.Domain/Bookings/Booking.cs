@@ -19,8 +19,8 @@ public sealed class Booking : Entity<BookingId>, IHasDomainEvent
 
     public Booking(UserId userId, TimeSlotId timeSlotId, BusinessId businessId)
     {
-        UserId = userId;
-        TimeSlotId = timeSlotId;
-        BusinessId = businessId;
+        this.UserId = userId;
+        this.TimeSlotId = timeSlotId;
+        this.BusinessId = businessId;
     }
 }

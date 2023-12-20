@@ -4,6 +4,8 @@ using MediatR;
 
 namespace CLup.Application.Bookings.Commands.CreateBooking;
 
+using Shared.Result;
+
 public sealed class CreateBookingCommand : IRequest<Result>
 {
     public Guid UserId { get; set; }

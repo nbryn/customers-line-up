@@ -1,14 +1,12 @@
 using AutoMapper;
 using CLup.Domain.Bookings;
 
-namespace CLup.Application.Bookings.Commands.CreateBooking
+namespace CLup.Application.Bookings.Commands.CreateBooking;
+
+public class BookingMapper : Profile
 {
-    public class BookingMapper : Profile
+    public BookingMapper()
     {
-        public BookingMapper()
-        {
-            CreateMap<CreateBookingCommand, Booking>();
-        }
+        CreateMap<CreateBookingCommand, Booking>();
     }
 }
-

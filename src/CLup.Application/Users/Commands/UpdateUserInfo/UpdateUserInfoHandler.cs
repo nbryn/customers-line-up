@@ -9,6 +9,8 @@ using MediatR;
 
 namespace CLup.Application.Users.Commands.UpdateUserInfo
 {
+    using Shared.Result;
+
     public class UpdateUserInfoHandler : IRequestHandler<UpdateUserInfoCommand, Result>
     {
         private readonly IValidator<Domain.Users.User> _validator;

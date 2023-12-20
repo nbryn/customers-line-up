@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.Application.Shared.Extensions
 {
+    using Result;
+
     public static class ControllerBaseExtensions
     {
         public static IActionResult CreateActionResult(

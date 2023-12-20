@@ -4,6 +4,8 @@ using FluentValidation;
 
 namespace CLup.Application.Shared.Extensions
 {
+    using Result;
+
     public static class TaskExtensions
     {
         public static async Task<Result<T>> FailureIf<T>(this Task<T> task, string errorMessage = "")

@@ -8,6 +8,8 @@ using MediatR;
 
 namespace CLup.Application.TimeSlots.Commands.GenerateTimeSlot
 {
+    using Shared.Result;
+
     public class GenerateTimeSlotsHandler : IRequestHandler<GenerateTimeSlotsCommand, Result>
     {
         private readonly ICLupRepository _repository;

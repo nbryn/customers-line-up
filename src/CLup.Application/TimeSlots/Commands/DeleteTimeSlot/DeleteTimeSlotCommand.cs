@@ -3,6 +3,8 @@ using MediatR;
 
 namespace CLup.Application.TimeSlots.Commands.DeleteTimeSlot
 {
+    using Shared.Result;
+
     public class DeleteTimeSlotCommand : IRequest<Result>
     {
         public string OwnerEmail { get; set; }
