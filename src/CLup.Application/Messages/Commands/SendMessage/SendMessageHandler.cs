@@ -33,14 +33,14 @@ namespace CLup.Application.Messages.Commands.SendMessage
                 .ToResult()
                 .AndThen(async user =>
                 {
-                    var business = await _repository.FetchBusiness(command.SenderId);
+                    var business = await _repository.FetchBusinessAggregate(command.SenderId);
                     return new { business, user };
                 })
                 .Ensure(entry => entry.user != null || entry.business != null, "Invalid sender.")
                 .AndThen(async _ =>
                 {
                     var user = await _repository.FetchUserAggregate(command.ReceiverId);
-                    var business = await _repository.FetchBusiness(command.ReceiverId);
+                    var business = await _repository.FetchBusinessAggregate(command.ReceiverId);
                     return new { business, user };
                 })
                 .Ensure(entry => entry.user != null || entry.business != null, "Invalid receiver.")

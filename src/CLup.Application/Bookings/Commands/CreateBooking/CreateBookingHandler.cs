@@ -1,17 +1,19 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Bookings;
 using FluentValidation;
 using MediatR;
+using CLup.Domain.TimeSlots.ValueObjects;
+using CLup.Domain.Users;
+using CLup.Domain.Users.ValueObjects;
+using CLup.Application.Shared.Result;
+using CLup.Domain.TimeSlots;
+using CLup.Application.Shared;
 
 namespace CLup.Application.Bookings.Commands.CreateBooking;
-
-using Shared.Result;
 
 public sealed class CreateBookingHandler : IRequestHandler<CreateBookingCommand, Result>
 {
@@ -31,11 +33,12 @@ public sealed class CreateBookingHandler : IRequestHandler<CreateBookingCommand,
 
     public async Task<Result> Handle(CreateBookingCommand command, CancellationToken cancellationToken)
         => await _repository.FetchUserAggregate(command.UserId)
-            .FailureIf("User not found.")
-            .Ensure(user => !user.BookingExists(command.TimeSlotId),
-                "You already have a booking for this time slot.")
-            .FailureIf(async _ => await _repository.FetchTimeSlot(command.TimeSlotId), "Time Slot does not exist.")
-            .Ensure(timeSlot => timeSlot.Bookings.Count() < timeSlot.Capacity, "This time slot is full.")
+            .FailureIf(UserErrors.NotFound(UserId.Create(command.UserId)))
+            .Ensure(user => !user.BookingExists(TimeSlotId.Create(command.TimeSlotId)), HttpCode.BadRequest,
+                UserErrors.BookingExists())
+            .FailureIf(async _ => await _repository.FetchTimeSlot(command.TimeSlotId),
+                TimeSlotErrors.NotFound(TimeSlotId.Create(command.TimeSlotId)))
+            .Ensure(timeSlot => timeSlot.IsAvailable(), HttpCode.BadRequest, TimeSlotErrors.NoCapacity())
             .AndThen(_ => _mapper.Map<Booking>(command))
             .Validate(_validator)
             .Finally(booking => _repository.AddAndSave(booking));

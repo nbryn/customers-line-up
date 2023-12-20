@@ -1,14 +1,12 @@
-using CLup.Application.Shared;
+using System;
 using MediatR;
+using CLup.Application.Shared.Result;
 
-namespace CLup.Application.Bookings.Commands.UserDeleteBooking
+namespace CLup.Application.Bookings.Commands.UserDeleteBooking;
+
+public class UserDeleteBookingCommand : IRequest<Result>
 {
-    using Shared.Result;
+    public Guid UserId { get; set; }
 
-    public class UserDeleteBookingCommand : IRequest<Result>
-    {
-        public string UserEmail { get; set; }
-        
-        public string BookingId { get; set; }
-    }
+    public Guid BookingId { get; set; }
 }

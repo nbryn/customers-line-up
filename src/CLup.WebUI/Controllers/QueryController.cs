@@ -80,7 +80,7 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] string businessId)
         {
-            var business = await _context.FetchBusiness(businessId);
+            var business = await _context.FetchBusinessAggregate(businessId);
             if (business == null)
             {
                 return NotFound();

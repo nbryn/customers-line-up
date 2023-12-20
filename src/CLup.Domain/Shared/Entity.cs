@@ -4,7 +4,7 @@ namespace CLup.Domain.Shared;
 
 public abstract class Entity<TId>
 {
-    public TId Id { get; protected set; }
+    public TId Id { get; set; }
 
     public DateTime CreatedAt { get; protected init; }
 

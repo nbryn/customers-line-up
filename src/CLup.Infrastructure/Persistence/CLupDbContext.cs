@@ -146,9 +146,9 @@ namespace CLup.Infrastructure.Persistence
             return await SaveChangesAsync();
         }
 
-        public async Task<int> UpdateEntity<T>(string id, T updatedEntity) where T : Entity
+        public async Task<int> UpdateEntity<T, TId>(Guid id, T updatedEntity) where T : Entity<TId>
         {
-            var entity = (Entity)await FindAsync(typeof(T), id);
+            var entity = (Entity<TId>)await FindAsync(typeof(T), id);
 
             updatedEntity.Id = entity.Id;
             Entry(entity).CurrentValues.SetValues(updatedEntity);

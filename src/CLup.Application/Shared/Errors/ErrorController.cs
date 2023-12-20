@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.Application.Shared.Errors
 {
+    using Domain.Shared;
 
     [ApiExplorerSettings(IgnoreApi = true)]
     [Route("error")]

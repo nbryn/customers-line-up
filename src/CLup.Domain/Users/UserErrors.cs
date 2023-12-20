@@ -1,6 +1,13 @@
-﻿namespace CLup.Domain.Users;
+﻿using CLup.Domain.Shared;
+using CLup.Domain.Users.ValueObjects;
 
-public class UserErrors
+namespace CLup.Domain.Users;
+
+public static class UserErrors
 {
-    
+    public static Error NotFound(UserId userId) =>
+        new("Users.NotFound", $"The user with the id {userId.Value} was not found.");
+
+    public static Error BookingExists() =>
+        new("Users.BookingExists", "You already have a booking for this time slot.");
 }

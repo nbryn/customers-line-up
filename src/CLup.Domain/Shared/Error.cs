@@ -1,4 +1,6 @@
-namespace CLup.Application.Shared.Errors;
+namespace CLup.Domain.Shared;
+
+using System.Collections.Generic;
 
 public class Error
 {
@@ -10,4 +12,6 @@ public class Error
         Code = code;
         Message = message;
     }
+
+    public IDictionary<string, string> ToErrorDictionary() => new Dictionary<string, string>() { { Code, Message } };
 }

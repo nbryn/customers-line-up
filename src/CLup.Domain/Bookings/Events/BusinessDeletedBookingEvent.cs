@@ -9,9 +9,9 @@ public sealed class BusinessDeletedBookingEvent : DomainEvent
 
     public Business BookingOwner { get; }
 
-    public BusinessDeletedBookingEvent(Booking booking, Business bookingOwner)
+    public BusinessDeletedBookingEvent(Booking booking)
     {
-        BookingOwner = bookingOwner;
+        BookingOwner = booking.Business;
         Booking = booking;
     }
 }

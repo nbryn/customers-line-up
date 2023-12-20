@@ -1,6 +1,9 @@
-﻿namespace CLup.Domain.Businesses;
+﻿using CLup.Domain.Shared;
 
-public class BusinessErrors
+namespace CLup.Domain.Businesses;
+
+public static class BusinessErrors
 {
-    
+    public static Error NotFound() =>
+        new("Businesses.NotFound", "The business was not found.");
 }

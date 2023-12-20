@@ -7,6 +7,9 @@ using MediatR;
 
 namespace CLup.Application.Bookings.Commands.UserDeleteBooking
 {
+    using Domain.Users;
+    using Domain.Users.ValueObjects;
+
     public class UserDeletedBookingEventHandler : INotificationHandler<DomainEventNotification<UserDeletedBookingEvent>>
     {
         private readonly ICLupRepository _repository;
@@ -18,9 +21,9 @@ namespace CLup.Application.Bookings.Commands.UserDeleteBooking
             CancellationToken cancellationToken)
         {
             var domainEvent = @event.DomainEvent;
-            domainEvent.User.UserDeletedBookingMessage(domainEvent.Booking, domainEvent.Booking.BusinessId);
-            
-            await _repository.UpdateEntity(domainEvent.User.Id, domainEvent.User);
+            domainEvent.Owner.BookingDeletedMessage(domainEvent.Booking);
+
+            await _repository.UpdateEntity<User, UserId>(domainEvent.Booking.User.Id.Value, domainEvent.Booking.User);
         }
     }
 }

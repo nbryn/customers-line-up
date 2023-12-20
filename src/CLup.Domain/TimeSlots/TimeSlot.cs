@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.Bookings;
 using CLup.Domain.Shared;
 using CLup.Domain.TimeSlots.ValueObjects;
 
 namespace CLup.Domain.TimeSlots
 {
-    using Bookings;
-
     public class TimeSlot : Entity<TimeSlotId>, IHasDomainEvent
     {
         private List<Booking> _bookings = new();
@@ -26,7 +24,7 @@ namespace CLup.Domain.TimeSlots
 
         public List<DomainEvent> DomainEvents { get; set; } = new();
 
-        public IReadOnlyList<Booking> Bookings => this._bookings.AsReadOnly();
+        public IReadOnlyList<Booking> Bookings => _bookings.AsReadOnly();
 
         public TimeSlot(
             BusinessId businessId,
@@ -35,13 +33,13 @@ namespace CLup.Domain.TimeSlots
             DateTime start,
             DateTime end)
         {
-            this.BusinessId = businessId;
-            this.BusinessName = businessName;
-            this.Capacity = capacity;
-            this.Start = start;
-            this.End = end;
+            BusinessId = businessId;
+            BusinessName = businessName;
+            Capacity = capacity;
+            Start = start;
+            End = end;
         }
 
-        public bool IsAvailable() => this.Bookings?.Count() < this.Capacity && (this.Start - DateTime.Now).TotalDays is < 14 and >= 0;
+        public bool IsAvailable() => Bookings?.Count() < Capacity && (Start - DateTime.Now).TotalDays is < 14 and >= 0;
     }
 }

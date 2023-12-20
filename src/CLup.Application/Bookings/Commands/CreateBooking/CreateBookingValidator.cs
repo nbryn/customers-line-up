@@ -1,14 +1,13 @@
 using FluentValidation;
 
-namespace CLup.Application.Bookings.Commands.CreateBooking
+namespace CLup.Application.Bookings.Commands.CreateBooking;
+
+public class CreateBookingValidator : AbstractValidator<CreateBookingCommand>
 {
-    public class CreateBookingValidator : AbstractValidator<CreateBookingCommand>
+    public CreateBookingValidator()
     {
-        public CreateBookingValidator()
-        {
-            RuleFor(b => b.UserId).NotNull();
-            RuleFor(b => b.TimeSlotId).NotNull(); 
-            RuleFor(b => b.TimeSlotId).NotNull();           
-        }
+        RuleFor(b => b.UserId).NotNull();
+        RuleFor(b => b.TimeSlotId).NotNull();
+        RuleFor(b => b.TimeSlotId).NotNull();
     }
 }

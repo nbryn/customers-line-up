@@ -1,14 +1,13 @@
 using FluentValidation;
 
-namespace CLup.Application.Bookings.Commands.DeleteBooking
+namespace CLup.Application.Bookings.Commands.DeleteBooking;
+
+public class BusinessDeleteBookingValidator : AbstractValidator<BusinessDeleteBookingCommand>
 {
-    public class BusinessDeleteBookingValidator : AbstractValidator<BusinessDeleteBookingCommand>
+    public BusinessDeleteBookingValidator()
     {
-        public BusinessDeleteBookingValidator()
-        {
-            RuleFor(b => b.OwnerEmail).NotNull();
-            RuleFor(b => b.BookingId).NotNull();
-            RuleFor(b => b.BusinessId).NotNull();
-        }
+        RuleFor(command => command.OwnerId).NotNull();
+        RuleFor(command => command.BookingId).NotNull();
+        RuleFor(command => command.BusinessId).NotNull();
     }
 }
