@@ -1,15 +1,15 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
 using CLup.Domain.Bookings.Events;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.ValueObjects;
+using MediatR;
 
-namespace CLup.Application.Bookings.Commands.DeleteBooking;
+namespace CLup.Application.Bookings.Commands.BusinessDeleteBooking;
 
-public class BusinessDeletedBookingEventHandler : INotificationHandler<DomainEventNotification<BusinessDeletedBookingEvent>>
+public sealed class BusinessDeletedBookingEventHandler : INotificationHandler<DomainEventNotification<BusinessDeletedBookingEvent>>
 {
     private readonly ICLupRepository _repository;
 
@@ -21,7 +21,7 @@ public class BusinessDeletedBookingEventHandler : INotificationHandler<DomainEve
     public async Task Handle(DomainEventNotification<BusinessDeletedBookingEvent> @event, CancellationToken cancellationToken)
     {
         var domainEvent = @event.DomainEvent;
-        domainEvent.BookingOwner.BookingDeletedMessage(domainEvent.Booking.UserId.Value);
+        domainEvent.BookingOwner.BookingDeletedMessage(domainEvent.Booking.UserId);
 
         await _repository.UpdateEntity<Business, BusinessId>(domainEvent.BookingOwner.Id.Value, domainEvent.BookingOwner);
     }

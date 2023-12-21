@@ -1,15 +1,15 @@
+using System;
 using System.Collections.Generic;
 using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Shared;
 using CLup.Domain.TimeSlots.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
+using CLup.Domain.Businesses;
+using CLup.Domain.TimeSlots;
+using CLup.Domain.Users;
 
 namespace CLup.Domain.Bookings;
-
-using Businesses;
-using TimeSlots;
-using Users;
 
 public sealed class Booking : Entity<BookingId>, IHasDomainEvent
 {
@@ -29,8 +29,10 @@ public sealed class Booking : Entity<BookingId>, IHasDomainEvent
 
     public Booking(UserId userId, TimeSlotId timeSlotId, BusinessId businessId)
     {
-        this.UserId = userId;
-        this.TimeSlotId = timeSlotId;
-        this.BusinessId = businessId;
+        UserId = userId;
+        TimeSlotId = timeSlotId;
+        BusinessId = businessId;
+
+        Id = BookingId.Create(Guid.NewGuid());
     }
 }

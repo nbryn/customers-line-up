@@ -1,12 +1,11 @@
-using CLup.Domain.Messages;
 using CLup.Domain.Messages.ValueObjects;
 using FluentValidation;
 
-namespace CLup.Application.Messages
+namespace CLup.Domain.Messages.Validation
 {
-    public class MessageDomainValidator : AbstractValidator<Message>
+    public class MessageValidator : AbstractValidator<Message>
     {
-        public MessageDomainValidator(
+        public MessageValidator(
             IValidator<MessageData> messageDataValidator,
             IValidator<MessageMetadata> metadataValidator)
         {

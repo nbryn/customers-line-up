@@ -12,7 +12,7 @@ using CLup.Application.Shared.Result;
 
 namespace CLup.Application.Bookings.Commands.UserDeleteBooking;
 
-public class UserDeleteBookingHandler : IRequestHandler<UserDeleteBookingCommand, Result>
+public sealed class UserDeleteBookingHandler : IRequestHandler<UserDeleteBookingCommand, Result>
 {
     private readonly ICLupRepository _repository;
 

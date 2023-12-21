@@ -9,11 +9,12 @@ public class Result
 {
     public bool Success { get; private set; }
 
+    public bool Failure => !Success;
+
     public Error Error { get; private set; }
 
     public HttpCode Code { get; private set; }
 
-    public bool Failure => !Success;
 
     protected Result(bool success, HttpCode code, Error error = null)
     {
@@ -128,6 +129,25 @@ public class Result<T> : Result
         }
 
         if (!predicate(Value))
+        {
+            return Fail<T>(httpCode, error);
+        }
+
+        return await task;
+    }
+
+    public async Task<Result<T>> Ensure(
+        Task<Result<T>> task,
+        Func<T, Task<bool>> predicate,
+        HttpCode httpCode,
+        Error error = null)
+    {
+        if (Failure)
+        {
+            return Fail<T>(Code, Error);
+        }
+
+        if (!await predicate(Value))
         {
             return Fail<T>(httpCode, error);
         }

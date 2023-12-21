@@ -1,9 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>netcoreapp8.0</TargetFramework>
-        <OutputType>Library</OutputType>
-    </PropertyGroup>
-
+  <PropertyGroup>
+    <TargetFramework>netcoreapp8.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.0.4"/>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.0.4"/>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.0.4"/>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="TimeSlots\Validation\" />
+    <Folder Include="Users\Validation\" />
+    <Folder Include="Users\ValueObjects\Validation\" />
+  </ItemGroup>
 
 </Project>

@@ -1,8 +1,9 @@
-namespace CLup.Application.Auth.Commands.Register;
-
+using CLup.Application.Auth.Commands.Register;
 using FluentValidation;
 
-public class RegisterValidator : AbstractValidator<RegisterCommand>
+namespace CLup.Application.Auth.Validation;
+
+public sealed class RegisterValidator : AbstractValidator<RegisterCommand>
 {
     public RegisterValidator()
     {

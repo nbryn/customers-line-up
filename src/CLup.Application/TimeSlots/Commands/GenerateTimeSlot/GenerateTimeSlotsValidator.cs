@@ -1,13 +1,12 @@
 using FluentValidation;
 
-namespace CLup.Application.TimeSlots.Commands.GenerateTimeSlot
+namespace CLup.Application.TimeSlots.Commands.GenerateTimeSlot;
+
+public sealed class GenerateTimeSlotsValidator : AbstractValidator<GenerateTimeSlotsCommand>
 {
-    public class GenerateTimeSlotsValidator : AbstractValidator<GenerateTimeSlotsCommand>
+    public GenerateTimeSlotsValidator()
     {
-        public GenerateTimeSlotsValidator()
-        {
-            RuleFor(x => x.BusinessId).NotEmpty();
-            RuleFor(x => x.Start).NotEmpty();
-        }
+        RuleFor(command => command.BusinessId).NotEmpty();
+        RuleFor(command => command.Start).NotEmpty();
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CLup.Infrastructure.Persistence.EntityConfigurations;
 
-internal class BookingConfiguration : IEntityTypeConfiguration<Booking>
+internal sealed class BookingConfiguration : IEntityTypeConfiguration<Booking>
 {
     public void Configure(EntityTypeBuilder<Booking> builder)
     {

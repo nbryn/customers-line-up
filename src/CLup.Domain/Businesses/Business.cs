@@ -9,14 +9,15 @@ using CLup.Domain.Shared;
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.Users.ValueObjects;
+using CLup.Domain.Bookings;
+using CLup.Domain.Bookings.ValueObjects;
+using CLup.Domain.Employees;
+using CLup.Domain.Employees.ValueObjects;
+using CLup.Domain.TimeSlots.ValueObjects;
+using CLup.Domain.Users;
 using TimeSpan = CLup.Domain.Shared.ValueObjects.TimeSpan;
 
 namespace CLup.Domain.Businesses;
-
-using System.Linq;
-using Bookings;
-using Bookings.ValueObjects;
-using Employees;
 
 public sealed class Business : Entity<BusinessId>, IAggregateRoot
 {
@@ -66,6 +67,8 @@ public sealed class Business : Entity<BusinessId>, IAggregateRoot
         Coords = coords;
         BusinessHours = businessHours;
         Type = type;
+
+        Id = BusinessId.Create(Guid.NewGuid());
     }
 
     public string Opens => BusinessHours.Start;
@@ -74,15 +77,24 @@ public sealed class Business : Entity<BusinessId>, IAggregateRoot
 
     public string Name => BusinessData.Name;
 
-    public Booking GetBooking(BookingId bookingId) =>
+    public TimeSlot? GetTimeSlotById(TimeSlotId timeSlotId) =>
+        _timeSlots.Find(timeSlot => timeSlot.Id.Value == timeSlotId.Value);
+
+    public TimeSlot? GetTimeSlotByDate(DateTime start) =>
+        _timeSlots.Find(timeSlot => timeSlot.Start == start);
+
+    public Booking? GetBookingById(BookingId bookingId) =>
         _bookings.Find(booking => booking.Id.Value == bookingId.Value);
 
-    public void BookingDeletedMessage(Guid receiverId)
+    public Employee? GetEmployeeById(EmployeeId employeeId) =>
+        _employees.Find(employee => employee.Id.Value == employeeId.Value);
+
+    public void BookingDeletedMessage(UserId receiverId)
     {
         var content = $"Your booking at {Name} was deleted.";
         var messageData = new MessageData("Booking Deleted", content);
         var metadata = new MessageMetadata(false, false);
-        var message = new Message(Id.Value, receiverId, messageData, MessageType.BookingDeleted, metadata);
+        var message = new Message(Id.Value, receiverId.Value, messageData, MessageType.BookingDeleted, metadata);
         _sentMessages.Add(message);
     }
 

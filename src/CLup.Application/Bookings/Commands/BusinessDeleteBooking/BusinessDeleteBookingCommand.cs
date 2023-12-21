@@ -2,9 +2,9 @@ using System;
 using MediatR;
 using CLup.Application.Shared.Result;
 
-namespace CLup.Application.Bookings.Commands.DeleteBooking;
+namespace CLup.Application.Bookings.Commands.BusinessDeleteBooking;
 
-public class BusinessDeleteBookingCommand : IRequest<Result>
+public sealed class BusinessDeleteBookingCommand : IRequest<Result>
 {
     public Guid OwnerId { get; set; }
 

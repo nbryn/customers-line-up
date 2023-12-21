@@ -1,17 +1,14 @@
 using System;
-using CLup.Application.Shared;
+using CLup.Application.Shared.Result;
 using MediatR;
 
-namespace CLup.Application.TimeSlots.Commands.GenerateTimeSlot
+namespace CLup.Application.TimeSlots.Commands.GenerateTimeSlot;
+
+public sealed class GenerateTimeSlotsCommand : IRequest<Result>
 {
-    using Shared.Result;
+    public Guid OwnerId { get; set; }
 
-    public class GenerateTimeSlotsCommand : IRequest<Result>
-    {
-        public string OwnerEmail { get; set; }
-        
-        public string BusinessId { get; set; }
+    public Guid BusinessId { get; set; }
 
-        public DateTime Start { get; set; }
-    }
+    public DateTime Start { get; set; }
 }

@@ -2,7 +2,7 @@
 
 namespace CLup.Application.Shared;
 
-public class ProblemDetails
+public sealed class ProblemDetails
 {
     public string Type { get; } = "https://datatracker.ietf.org/doc/html/rfc7231#sections-6.5.1";
 

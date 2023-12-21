@@ -1,17 +1,15 @@
 using CLup.Domain.Shared;
 using CLup.Domain.Users;
+using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Domain.TimeSlots.Events;
 
 public sealed class TimeSlotDeletedEvent : DomainEvent
 {
-    public User BusinessOwner { get; }
-
     public TimeSlot TimeSlot { get; }
 
-    public TimeSlotDeletedEvent(TimeSlot timeSlot, User businessOwner)
+    public TimeSlotDeletedEvent(TimeSlot timeSlot)
     {
-        BusinessOwner = businessOwner;
         TimeSlot = timeSlot;
     }
 }

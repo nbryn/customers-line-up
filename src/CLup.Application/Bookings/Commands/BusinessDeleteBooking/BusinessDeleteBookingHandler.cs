@@ -1,18 +1,18 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
-using CLup.Domain.Bookings.Events;
 using CLup.Application.Shared.Result;
-using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Bookings;
+using CLup.Domain.Bookings.Events;
 using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.ValueObjects;
+using MediatR;
 
-namespace CLup.Application.Bookings.Commands.DeleteBooking;
+namespace CLup.Application.Bookings.Commands.BusinessDeleteBooking;
 
-public class BusinessDeleteBookingHandler : IRequestHandler<BusinessDeleteBookingCommand, Result>
+public sealed class BusinessDeleteBookingHandler : IRequestHandler<BusinessDeleteBookingCommand, Result>
 {
     private readonly ICLupRepository _repository;
 
@@ -21,7 +21,7 @@ public class BusinessDeleteBookingHandler : IRequestHandler<BusinessDeleteBookin
     public async Task<Result> Handle(BusinessDeleteBookingCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
             .FailureIf(BusinessErrors.NotFound())
-            .FailureIf(business => business.GetBooking(BookingId.Create(command.BookingId)), BookingErrors.NotFound())
+            .FailureIf(business => business.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound())
             .AddDomainEvent(booking => booking.DomainEvents.Add(new BusinessDeletedBookingEvent(booking)))
             .Finally(async booking => await _repository.RemoveAndSave(booking));
 }

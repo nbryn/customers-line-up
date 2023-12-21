@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Bookings;
+using CLup.Domain.Businesses;
 using CLup.Domain.Shared;
 using CLup.Domain.TimeSlots.ValueObjects;
 
@@ -13,6 +14,8 @@ namespace CLup.Domain.TimeSlots
         private List<Booking> _bookings = new();
 
         public BusinessId BusinessId { get; private set; }
+
+        public Business Business { get; private set; }
 
         public string BusinessName { get; private set; }
 
@@ -38,8 +41,10 @@ namespace CLup.Domain.TimeSlots
             Capacity = capacity;
             Start = start;
             End = end;
+
+            Id = TimeSlotId.Create(Guid.NewGuid());
         }
 
-        public bool IsAvailable() => Bookings?.Count() < Capacity && (Start - DateTime.Now).TotalDays is < 14 and >= 0;
+        public bool IsAvailable() => Bookings.Count() < Capacity && (Start - DateTime.Now).TotalDays is < 14 and >= 0;
     }
 }

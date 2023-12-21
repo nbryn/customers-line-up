@@ -4,7 +4,7 @@ using CLup.Application.Shared.Result;
 
 namespace CLup.Application.Bookings.Commands.UserDeleteBooking;
 
-public class UserDeleteBookingCommand : IRequest<Result>
+public sealed class UserDeleteBookingCommand : IRequest<Result>
 {
     public Guid UserId { get; set; }
 

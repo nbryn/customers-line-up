@@ -3,7 +3,7 @@ using CLup.Domain.Users;
 
 namespace CLup.Application.Auth;
 
-public class AuthTokenResolver : IValueResolver<User, TokenResponse, string>
+public sealed class AuthTokenResolver : IValueResolver<User, TokenResponse, string>
 {
     private readonly IAuthService _authService;
 

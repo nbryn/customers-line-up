@@ -1,14 +1,14 @@
-using CLup.Application.Shared;
+using System;
+using CLup.Application.Shared.Result;
 using MediatR;
 
-namespace CLup.Application.TimeSlots.Commands.DeleteTimeSlot
+namespace CLup.Application.TimeSlots.Commands.DeleteTimeSlot;
+
+public sealed class DeleteTimeSlotCommand : IRequest<Result>
 {
-    using Shared.Result;
+    public Guid OwnerId { get; set; }
 
-    public class DeleteTimeSlotCommand : IRequest<Result>
-    {
-        public string OwnerEmail { get; set; }
-        public string TimeSlotId { get; set; }
-    }
+    public Guid BusinessId { get; set; }
+
+    public Guid TimeSlotId { get; set; }
 }
-

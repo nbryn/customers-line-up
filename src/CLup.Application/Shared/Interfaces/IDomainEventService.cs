@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 using CLup.Domain.Shared;
 
-namespace CLup.Application.Shared.Interfaces
+namespace CLup.Application.Shared.Interfaces;
+
+public interface IDomainEventService
 {
-    public interface IDomainEventService
-    {
-        Task Publish(DomainEvent domainEvent);
-    }
+    Task Publish(DomainEvent domainEvent);
 }

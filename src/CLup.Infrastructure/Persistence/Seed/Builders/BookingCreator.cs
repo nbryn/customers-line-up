@@ -1,16 +1,18 @@
 using System;
 using CLup.Domain.Bookings;
+using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.TimeSlots.ValueObjects;
+using CLup.Domain.Users.ValueObjects;
 
-namespace CLup.Infrastructure.Persistence.Seed.Builders
+namespace CLup.Infrastructure.Persistence.Seed.Builders;
+
+public static class BookingCreator
 {
-    public class BookingCreator
+    public static Booking Create(UserId userId, BusinessId businessId, TimeSlotId timeSlotId)
     {
-        public static Booking Create(string userId, string businessId, string timeSlotId)
-        {
-            var booking = new Booking(userId, timeSlotId, businessId);
-            booking.UpdatedAt = DateTime.Now;
+        var booking = new Booking(userId, timeSlotId, businessId);
+        booking.UpdatedAt = DateTime.Now;
 
-            return booking;            
-        }
+        return booking;
     }
 }

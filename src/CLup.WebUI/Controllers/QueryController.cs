@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -7,13 +8,14 @@ using CLup.Application.Auth;
 using CLup.Application.Businesses;
 using CLup.Application.Shared.Util;
 using CLup.Application.Users;
-using CLup.Domain.Businesses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Users.Queries;
 using CLup.Domain.Businesses.Enums;
+using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.WebUI.Controllers
 {
@@ -39,8 +41,8 @@ namespace CLup.WebUI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> FetchUserAggregate()
         {
-            var userEmail = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var user = await _context.FetchUserAggregate(userEmail);
+            var userId = Guid.Parse((ReadOnlySpan<char>)User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var user = await _context.FetchUserAggregate(UserId.Create(userId));
 
             if (user == null)
             {
@@ -78,15 +80,15 @@ namespace CLup.WebUI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusiness))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] string businessId)
+        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] Guid businessId)
         {
-            var business = await _context.FetchBusinessAggregate(businessId);
+            var business = await _context.FetchBusinessAggregate(BusinessId.Create(businessId));
             if (business == null)
             {
                 return NotFound();
             }
 
-            var users = await _context.FetchUsersNotEmployedByBusiness(businessId);
+            var users = await _context.FetchUsersNotEmployedByBusiness(BusinessId.Create(businessId));
 
             return Ok(new UsersNotEmployedByBusiness()
                 { BusinessId = businessId, Users = _mapper.Map<IList<UserDto>>(users) });

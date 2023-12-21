@@ -1,13 +1,12 @@
 using FluentValidation;
 
-namespace CLup.Application.Employees.Commands.DeleteEmployee
+namespace CLup.Application.Employees.Commands.DeleteEmployee;
+
+public sealed class DeleteEmployeeValidator : AbstractValidator<DeleteEmployeeCommand>
 {
-    public class DeleteEmployeeValidator : AbstractValidator<DeleteEmployeeCommand>
+    public DeleteEmployeeValidator()
     {
-        public DeleteEmployeeValidator()
-        {
-            RuleFor(x => x.BusinessId).NotEmpty();
-            RuleFor(x => x.UserId).NotEmpty();
-        }
+        RuleFor(command => command.BusinessId).NotEmpty();
+        RuleFor(command => command.UserId).NotEmpty();
     }
 }

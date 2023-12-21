@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CLup.Application.Auth;
 
-public class AuthService : IAuthService
+public sealed class AuthService : IAuthService
 {
     private readonly IConfiguration _config;
 

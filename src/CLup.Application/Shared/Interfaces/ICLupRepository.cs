@@ -1,26 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using CLup.Domain.Businesses;
-using CLup.Domain.TimeSlots;
+using CLup.Domain.Messages;
+using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Shared;
 using CLup.Domain.Users;
-using CLup.Domain.TimeSlots.ValueObjects;
+using System;
+using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Application.Shared.Interfaces;
 
-using System;
-using Domain.Businesses.ValueObjects;
-using Domain.Users.ValueObjects;
-
 public interface ICLupRepository
 {
+    Task<Business?> FetchBusinessAggregate(BusinessId businessId);
+
+    Task<User?> FetchUserAggregate(UserId? userId, string? email = null);
+
+    Task<Message?> FetchMessage(MessageId messageId);
+
     Task<IList<User>> FetchUsersNotEmployedByBusiness(BusinessId businessId);
-
-    Task<TimeSlot> FetchTimeSlot(TimeSlotId timeSlotId);
-
-    Task<Business> FetchBusinessAggregate(BusinessId businessId);
-
-    Task<User> FetchUserAggregate(UserId userId);
 
     Task<IList<Business>> FetchAllBusinesses();
 

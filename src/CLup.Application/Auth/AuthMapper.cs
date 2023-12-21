@@ -4,12 +4,11 @@ using CLup.Domain.Users;
 using CLup.Domain.Users.Enums;
 using CLup.Domain.Users.ValueObjects;
 using BC = BCrypt.Net.BCrypt;
+using CLup.Application.Auth.Commands.Register;
 
 namespace CLup.Application.Auth;
 
-using Commands.Register;
-
-public class AuthMapper : Profile
+public sealed class AuthMapper : Profile
 {
     public AuthMapper()
     {

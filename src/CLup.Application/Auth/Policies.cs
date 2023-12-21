@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CLup.Application.Auth;
 
-public class Policies
+public static class Policies
 {
     public const string Admin = "Admin";
     public const string User = "User";

@@ -55,6 +55,8 @@ public sealed class User : Entity<UserId>, IAggregateRoot
         Address = address;
         Coords = coords;
         Role = role;
+
+        Id = UserId.Create(Guid.NewGuid());
     }
 
     public string Name => UserData.Name;

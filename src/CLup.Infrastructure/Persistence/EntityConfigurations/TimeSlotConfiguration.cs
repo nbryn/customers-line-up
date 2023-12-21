@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CLup.Infrastructure.Persistence.EntityConfigurations;
 
-internal class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
+internal sealed class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
 {
     public void Configure(EntityTypeBuilder<TimeSlot> builder)
     {

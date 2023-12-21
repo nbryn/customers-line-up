@@ -1,39 +1,40 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using CLup.Application.Shared;
+using FluentValidation;
+using MediatR;
+using CLup.Application.Shared.Result;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
-using FluentValidation;
-using MediatR;
+using CLup.Domain.Businesses.ValueObjects;
+using CLup.Application.Shared;
 
-namespace CLup.Application.Businesses.Commands.UpdateBusiness
+namespace CLup.Application.Businesses.Commands.UpdateBusiness;
+
+public sealed class UpdateBusinessHandler : IRequestHandler<UpdateBusinessCommand, Result>
 {
-    using Shared.Result;
+    private readonly IValidator<Business> _businessValidator;
+    private readonly ICLupRepository _repository;
+    private readonly IMapper _mapper;
 
-    public class UpdateBusinessHandler : IRequestHandler<UpdateBusinessCommand, Result>
+    public UpdateBusinessHandler(
+        IValidator<Business> businessValidator,
+        ICLupRepository repository,
+        IMapper mapper)
     {
-        private readonly IValidator<Business> _businessValidator;
-        private readonly ICLupRepository _repository;
-        private readonly IMapper _mapper;
-
-        public UpdateBusinessHandler(
-            IValidator<Business> businessValidator,
-            ICLupRepository repository,
-            IMapper mapper)
-        {
-            _businessValidator = businessValidator;
-            _repository = repository;
-            _mapper = mapper;
-        }
-
-        public async Task<Result> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)
-            => await _repository.FetchUserAggregate(command.OwnerEmail)
-                .FailureIf("User not found.")
-                .Ensure(user => user.GetBusiness(command.Id) != null, "Business not found.")
-                .AndThen(_ => _mapper.Map<Business>(command))
-                .Validate(_businessValidator)
-                .Finally(updatedBusiness => _repository.UpdateEntity(command.Id, updatedBusiness));
+        _businessValidator = businessValidator;
+        _repository = repository;
+        _mapper = mapper;
     }
+
+    public async Task<Result> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)
+        => await _repository.FetchBusinessAggregate(BusinessId.Create(command.Id))
+            .FailureIf(BusinessErrors.NotFound())
+            .Ensure(business => business.OwnerId.Value == command.OwnerId, HttpCode.Forbidden,
+                BusinessErrors.InvalidOwner())
+            .AndThen(_ => _mapper.Map<Business>(command))
+            .Validate(_businessValidator)
+            .Finally(async updatedBusiness =>
+                await _repository.UpdateEntity<Business, BusinessId>(command.Id, updatedBusiness));
 }

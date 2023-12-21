@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CLup.Infrastructure.Persistence.EntityConfigurations;
 
-internal class MessageConfiguration : IEntityTypeConfiguration<Message>
+internal sealed class MessageConfiguration : IEntityTypeConfiguration<Message>
 {
     public void Configure(EntityTypeBuilder<Message> builder)
     {

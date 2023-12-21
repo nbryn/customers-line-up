@@ -1,12 +1,12 @@
 using FluentValidation;
 
-namespace CLup.Application.TimeSlots.Commands.DeleteTimeSlot
+namespace CLup.Application.TimeSlots.Commands.DeleteTimeSlot;
+
+public sealed class DeleteTimeSlotValidator : AbstractValidator<DeleteTimeSlotCommand>
 {
-    public class DeleteTimeSlotValidator : AbstractValidator<DeleteTimeSlotCommand>
+    public DeleteTimeSlotValidator()
     {
-        public DeleteTimeSlotValidator()
-        {
-            RuleFor(x => x.TimeSlotId).NotEmpty();
-        }
+        RuleFor(command => command.BusinessId).NotEmpty();
+        RuleFor(command => command.TimeSlotId).NotEmpty();
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CLup.Infrastructure.Persistence.EntityConfigurations;
 
-internal class BusinessConfiguration : IEntityTypeConfiguration<Business>
+internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
 {
     public void Configure(EntityTypeBuilder<Business> builder)
     {

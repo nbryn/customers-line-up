@@ -1,26 +1,23 @@
-namespace CLup.Application.Auth.Commands.Register
+using CLup.Application.Shared.Result;
+using MediatR;
+
+namespace CLup.Application.Auth.Commands.Register;
+
+public sealed class RegisterCommand : IRequest<Result<TokenResponse>>
 {
-    using CLup.Application.Shared;
-    using MediatR;
-    using Shared.Result;
+    public string Email { get; set; }
 
-    public class RegisterCommand : IRequest<Result<TokenResponse>>
-    {
-        public string Email { get; set; }
-        
-        public string Password { get; set; }
-        
-        public string Name { get; set; }
-        
-        public string Zip { get; set; }
-        
-        public string Street { get; set; }
-        
-        public string City { get; set; }
-        
-        public double Longitude { get; set; }
-        
-        public double Latitude { get; set; }
-    }
+    public string Password { get; set; }
+
+    public string Name { get; set; }
+
+    public string Zip { get; set; }
+
+    public string Street { get; set; }
+
+    public string City { get; set; }
+
+    public double Longitude { get; set; }
+
+    public double Latitude { get; set; }
 }
-

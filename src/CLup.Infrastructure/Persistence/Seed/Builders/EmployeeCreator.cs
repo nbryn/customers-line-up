@@ -1,19 +1,20 @@
 using System;
+using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Employees;
+using CLup.Domain.Users.ValueObjects;
 
-namespace CLup.Infrastructure.Persistence.Seed.Builders
+namespace CLup.Infrastructure.Persistence.Seed.Builders;
+
+public static class EmployeeCreator
 {
-    public static class EmployeeCreator
+    public static Employee Create(
+        BusinessId businessId,
+        UserId userId,
+        string companyEmail)
     {
-        public static Employee Create(
-            string businessId,
-            string userId, 
-            string companyEmail)
-        {
-            var employee = new Employee(userId, businessId, companyEmail);
-            employee.UpdatedAt = DateTime.Now;
+        var employee = new Employee(userId, businessId, companyEmail);
+        employee.UpdatedAt = DateTime.Now;
 
-            return employee;
-        }
+        return employee;
     }
 }

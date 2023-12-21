@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace CLup.Application.Users.Queries
+namespace CLup.Application.Users.Queries;
+
+public sealed class UsersNotEmployedByBusiness
 {
-    public class UsersNotEmployedByBusiness
-    {
-        public string BusinessId { get; init; }
-        public IList<UserDto> Users { get; init; }
-    }
+    public Guid BusinessId { get; init; }
+    public IList<UserDto> Users { get; init; }
 }
