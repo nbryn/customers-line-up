@@ -29,5 +29,7 @@ public sealed class UserDto
 
     public IList<Guid> BusinessIds { get; set; }
 
-    public IList<MessageDto> Messages { get; set; }
+    public IList<MessageDto> ReceivedMessages { get; set; }
+
+    public IList<MessageDto> SentMessages { get; set; }
 }

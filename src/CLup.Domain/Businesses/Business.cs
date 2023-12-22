@@ -14,18 +14,19 @@ using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Employees;
 using CLup.Domain.Employees.ValueObjects;
 using CLup.Domain.TimeSlots.ValueObjects;
-using CLup.Domain.Users;
 using TimeSpan = CLup.Domain.Shared.ValueObjects.TimeSpan;
 
 namespace CLup.Domain.Businesses;
 
-public sealed class Business : Entity<BusinessId>, IAggregateRoot
+public sealed class Business : Entity, IAggregateRoot
 {
-    private readonly List<Message> _receivedMessages = new();
-    private readonly List<Message> _sentMessages = new();
+    private readonly List<UserMessage> _receivedMessages = new();
+    private readonly List<BusinessMessage> _sentMessages = new();
     private readonly List<Employee> _employees = new();
     private readonly List<TimeSlot> _timeSlots = new();
     private readonly List<Booking> _bookings = new();
+
+    public BusinessId Id { get; }
 
     public UserId OwnerId { get; private set; }
 
@@ -39,9 +40,9 @@ public sealed class Business : Entity<BusinessId>, IAggregateRoot
 
     public BusinessType Type { get; private set; }
 
-    public IReadOnlyList<Message> ReceivedMessages => _receivedMessages.AsReadOnly();
+    public IReadOnlyList<UserMessage> ReceivedMessages => _receivedMessages.AsReadOnly();
 
-    public IReadOnlyList<Message> SentMessages => _sentMessages.AsReadOnly();
+    public IReadOnlyList<BusinessMessage> SentMessages => _sentMessages.AsReadOnly();
 
     public IReadOnlyList<Employee> Employees => _employees.AsReadOnly();
 
@@ -94,7 +95,7 @@ public sealed class Business : Entity<BusinessId>, IAggregateRoot
         var content = $"Your booking at {Name} was deleted.";
         var messageData = new MessageData("Booking Deleted", content);
         var metadata = new MessageMetadata(false, false);
-        var message = new Message(Id.Value, receiverId.Value, messageData, MessageType.BookingDeleted, metadata);
+        var message = new BusinessMessage(Id, receiverId, messageData, MessageType.BookingDeleted, metadata);
         _sentMessages.Add(message);
     }
 

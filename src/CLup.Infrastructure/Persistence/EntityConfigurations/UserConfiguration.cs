@@ -1,4 +1,5 @@
 using CLup.Domain.Businesses;
+using CLup.Domain.Employees;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -52,13 +53,13 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("Longitude");
         });
 
-        builder.HasMany<Business>()
+        builder.HasMany(user => user.BusinessIds)
             .WithOne()
             .HasForeignKey(business => business.OwnerId)
             .IsRequired();
 
         builder.HasMany(user => user.Bookings)
-            .WithOne()
+            .WithOne(booking => booking.User)
             .HasForeignKey(booking => booking.UserId)
             .IsRequired();
 
@@ -70,6 +71,11 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(user => user.ReceivedMessages)
             .WithOne()
             .HasForeignKey(message => message.ReceiverId)
+            .IsRequired();
+
+        builder.HasOne<Employee>()
+            .WithOne(employee => employee.User)
+            .HasForeignKey<Employee>(employee => employee.UserId)
             .IsRequired();
     }
 }

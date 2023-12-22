@@ -2,7 +2,6 @@ using System;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
-using CLup.Domain.TimeSlots;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -63,17 +62,21 @@ internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
                 .HasColumnName("End");
         });
 
-        builder
-            .Property(business => business.Type)
+        builder.Property(business => business.Type)
             .HasConversion(businessType => businessType.ToString("G"), b => Enum.Parse<BusinessType>(b));
 
-        builder.HasMany<TimeSlot>()
-            .WithOne()
+        builder.HasMany(business => business.TimeSlots)
+            .WithOne(timeSlot => timeSlot.Business)
             .HasForeignKey(timeSlot => timeSlot.BusinessId)
             .IsRequired();
 
+        builder.HasMany(business => business.Bookings)
+            .WithOne(booking => booking.Business)
+            .HasForeignKey(booking => booking.BusinessId)
+            .IsRequired();
+
         builder.HasMany(business => business.Employees)
-            .WithOne()
+            .WithOne(employee => employee.Business)
             .HasForeignKey(employee => employee.BusinessId)
             .IsRequired();
 

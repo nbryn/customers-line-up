@@ -19,7 +19,7 @@ internal sealed class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
             value => TimeSlotId.Create(value));
 
         builder.HasMany(timeSlot => timeSlot.Bookings)
-            .WithOne()
+            .WithOne(booking => booking.TimeSlot)
             .HasForeignKey(booking => booking.TimeSlotId)
             .IsRequired();
     }

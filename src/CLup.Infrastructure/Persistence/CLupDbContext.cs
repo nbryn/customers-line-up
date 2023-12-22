@@ -12,6 +12,7 @@ using CLup.Domain.Employees;
 using CLup.Domain.Messages;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Shared;
+
 using CLup.Domain.TimeSlots;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
@@ -25,17 +26,19 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
     public const string DEFAULT_SCHEMA = "CLup";
 
-    public DbSet<Business> Businesses { get; set; }
+    public DbSet<Business> Businesses { get; private set; }
 
-    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Employee> Employees { get; private set; }
 
-    public DbSet<TimeSlot> TimeSlots { get; set; }
+    public DbSet<TimeSlot> TimeSlots { get; private set; }
 
-    public DbSet<Message> Messages { get; set; }
+    public DbSet<UserMessage> UserMessages { get; private set; }
 
-    public DbSet<Booking> Bookings { get; set; }
+    public DbSet<BusinessMessage> BusinessMessages { get; private set; }
 
-    public DbSet<User> Users { get; set; }
+    public DbSet<Booking> Bookings { get; private set; }
+
+    public DbSet<User> Users { get; private set; }
 
     public CLupDbContext(
         DbContextOptions<CLupDbContext> options,
@@ -48,7 +51,6 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
         base.OnModelCreating(modelBuilder);
     }
 
@@ -91,8 +93,10 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .AsSplitQuery()
             .FirstOrDefaultAsync(user => userId != null ? user.Id.Value == userId.Value : user.UserData.Email == email);
 
-    public async Task<Message?> FetchMessage(MessageId messageId) =>
-        await Messages.FirstOrDefaultAsync(message => message.Id.Value == messageId.Value);
+    public async Task<Message?> FetchMessage(MessageId messageId, bool forBusiness) =>
+        forBusiness
+            ? await BusinessMessages.FirstOrDefaultAsync(message => message.Id.Value == messageId.Value)
+            : await UserMessages.FirstOrDefaultAsync(message => message.Id.Value == messageId.Value);
 
     public async Task<IList<User>> FetchUsersNotEmployedByBusiness(BusinessId businessId)
     {
@@ -124,25 +128,26 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
-    public async Task<int> AddAndSave<TId>(params Entity<TId>[] entities)
+    public async Task<int> AddAndSave(params Entity[] entities)
     {
         await base.AddRangeAsync(entities);
 
         return await SaveChangesAsync();
     }
 
-    public async Task<int> RemoveAndSave<TId>(Entity<TId> value)
+    public async Task<int> RemoveAndSave(Entity value)
     {
         Remove(value);
 
         return await SaveChangesAsync();
     }
 
-    public async Task<int> UpdateEntity<T, TId>(Guid id, T updatedEntity) where T : Entity<TId>
+    public async Task<int> UpdateEntity(Guid id, Entity updatedEntity)
     {
-        var entity = (Entity<TId>)await FindAsync(typeof(T), id);
+        var entity = (Entity)await FindAsync(typeof(Entity), id);
 
-        updatedEntity.Id = entity.Id;
+        // Use reflection
+        // updatedEntity.Id = entity.Id;
         Entry(entity).CurrentValues.SetValues(updatedEntity);
 
         return await SaveChangesAsync();

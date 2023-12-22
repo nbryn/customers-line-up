@@ -30,6 +30,6 @@ public sealed class TimeSlotDeletedEventHandler : INotificationHandler<DomainEve
             domainEvent.TimeSlot.Business.BookingDeletedMessage(user.Id);
         }
 
-        await _repository.UpdateEntity<Business, BusinessId>(domainEvent.TimeSlot.Business.Id.Value, domainEvent.TimeSlot.Business);
+        await _repository.UpdateEntity(domainEvent.TimeSlot.Business.Id.Value, domainEvent.TimeSlot.Business);
     }
 }

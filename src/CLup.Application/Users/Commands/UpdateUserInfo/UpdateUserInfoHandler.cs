@@ -29,7 +29,7 @@ public sealed class UpdateUserInfoHandler : IRequestHandler<UpdateUserInfoComman
             .FailureIf(UserErrors.NotFound(UserId.Create(command.Id)))
             .AndThen(user => user.Update(command.Name, command.Email, Convert(command)))
             .Validate(_validator)
-            .Finally(updatedUser => _repository.UpdateEntity<User, UserId>(updatedUser.Id.Value, updatedUser));
+            .Finally(updatedUser => _repository.UpdateEntity(updatedUser.Id.Value, updatedUser));
 
     private (Address, Coords) Convert(UpdateUserInfoCommand command)
         => (new Address(command.Street, command.Zip, command.City),

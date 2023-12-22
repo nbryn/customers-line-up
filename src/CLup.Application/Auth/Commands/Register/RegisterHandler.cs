@@ -33,6 +33,6 @@ public sealed class RegisterHandler : IRequestHandler<RegisterCommand, Result<To
             .Ensure(user => user == null, HttpCode.BadRequest, UserErrors.EmailExists(command.Email))
             .AndThen(_ => _mapper.Map<User>(command))
             .Validate(_validator)
-            .AndThenF(async newUser => await _repository.AddAndSave(newUser))
+            .AndThenF(newUser => _repository.AddAndSave(newUser))
             .Finally(_mapper.Map<TokenResponse>);
 }

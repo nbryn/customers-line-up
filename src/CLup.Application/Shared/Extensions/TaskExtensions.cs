@@ -41,7 +41,6 @@ public static class TaskExtensions
     public static async Task<Result<T>> Validate<T>(this Task<Result<T>> task, IValidator<T> validator)
         => (await task).Validate(validator);
 
-
     public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, U> f)
         => (await task).Bind(f);
 
@@ -50,7 +49,6 @@ public static class TaskExtensions
 
     public static async Task<Result<T>> AndThenF<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
         => await (await task).BindF(f);
-
 
     public static async Task<Result<T>> Ensure<T>(
         this Task<Result<T>> task,

@@ -17,15 +17,15 @@ public interface ICLupRepository
 
     Task<User?> FetchUserAggregate(UserId? userId, string? email = null);
 
-    Task<Message?> FetchMessage(MessageId messageId);
+    Task<Message?> FetchMessage(MessageId messageId, bool forBusiness);
 
     Task<IList<User>> FetchUsersNotEmployedByBusiness(BusinessId businessId);
 
     Task<IList<Business>> FetchAllBusinesses();
 
-    Task<int> AddAndSave<TId>(params Entity<TId>[] entities);
+    Task<int> AddAndSave(params Entity[] entities);
 
-    Task<int> RemoveAndSave<TId>(Entity<TId> value);
+    Task<int> RemoveAndSave(Entity value);
 
-    Task<int> UpdateEntity<T, TId>(Guid id, T updatedEntity) where T : Entity<TId>;
+    Task<int> UpdateEntity(Guid id, Entity updatedEntity);
 }

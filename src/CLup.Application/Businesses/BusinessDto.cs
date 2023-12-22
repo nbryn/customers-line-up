@@ -41,7 +41,9 @@ public sealed class BusinessDto
 
     public IList<EmployeeDto> Employees { get; set; }
 
-    public IList<MessageDto> Messages { get; set; }
+    public IList<MessageDto> ReceivedMessages { get; set; }
+
+    public IList<MessageDto> SentMessages { get; set; }
 
     public IList<TimeSlotDto> TimeSlots { get; set; }
 }

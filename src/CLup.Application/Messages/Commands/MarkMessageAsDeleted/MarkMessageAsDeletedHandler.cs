@@ -23,15 +23,15 @@ public sealed class MarkMessageAsDeletedHandler : IRequestHandler<MarkMessageAsD
     }
 
     public async Task<Result> Handle(MarkMessageAsDeletedCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchMessage(MessageId.Create(command.MessageId))
+        => await _repository.FetchMessage(MessageId.Create(command.MessageId), command.RequestMadeByBusiness)
             .FailureIf(MessageErrors.NotFound())
             .Ensure(async message => await Validate(message, command), HttpCode.Forbidden, MessageErrors.NoAccess())
-            .AndThen(message => command.ForSender ? message.DeletedBySender() : message.DeletedByReceiver())
-            .Finally(message => _repository.UpdateEntity<Message, MessageId>(message.Id.Value, message));
+            .AndThen(message => command.ForSender ? message?.DeletedBySender() : message?.DeletedByReceiver())
+            .Finally(message => _repository.UpdateEntity(message.Id.Value, message));
 
     private async Task<bool> Validate(Message message, MarkMessageAsDeletedCommand command)
     {
-        if (message.SenderId != command.SenderId || message.ReceiverId != command.ReceiverId)
+        if (message.SenderId.Value != command.SenderId || message.ReceiverId.Value != command.ReceiverId)
         {
             return false;
         }
@@ -40,10 +40,10 @@ public sealed class MarkMessageAsDeletedHandler : IRequestHandler<MarkMessageAsD
         if (command.RequestMadeByBusiness)
         {
             var business = await _repository.FetchBusinessAggregate(BusinessId.Create(id));
-            return business.OwnerId.Value == id;
+            return business?.OwnerId.Value == id;
         }
 
         var user = await _repository.FetchUserAggregate(UserId.Create(id));
-        return user.Id.Value == id;
+        return user?.Id.Value == id;
     }
 }

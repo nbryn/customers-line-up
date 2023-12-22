@@ -15,8 +15,7 @@ public class Result
 
     public HttpCode Code { get; private set; }
 
-
-    protected Result(bool success, HttpCode code, Error error = null)
+    protected Result(bool success, HttpCode code, Error error)
     {
         Success = success;
         Error = error;
@@ -47,7 +46,7 @@ public class Result
 
 public class Result<T> : Result
 {
-    public T Value { get; set; }
+    public T Value { get; private set; }
 
     protected internal Result(T value, bool success, HttpCode code, Error error = null)
         : base(success, code, error)
@@ -121,7 +120,7 @@ public class Result<T> : Result
         Task<Result<T>> task,
         Func<T, bool> predicate,
         HttpCode httpCode,
-        Error error = null)
+        Error error)
     {
         if (Failure)
         {
@@ -140,7 +139,7 @@ public class Result<T> : Result
         Task<Result<T>> task,
         Func<T, Task<bool>> predicate,
         HttpCode httpCode,
-        Error error = null)
+        Error error)
     {
         if (Failure)
         {

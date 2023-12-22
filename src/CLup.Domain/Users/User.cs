@@ -1,29 +1,27 @@
 using System;
 using System.Collections.Generic;
-using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Messages;
 using CLup.Domain.Messages.Enums;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Shared;
 using CLup.Domain.Shared.ValueObjects;
-using CLup.Domain.TimeSlots;
 using CLup.Domain.Users.Enums;
 using CLup.Domain.Users.ValueObjects;
+using CLup.Domain.Bookings;
+using CLup.Domain.Bookings.ValueObjects;
+using CLup.Domain.Businesses;
+using CLup.Domain.TimeSlots.ValueObjects;
 
 namespace CLup.Domain.Users;
 
-using System.Linq;
-using Bookings;
-using Bookings.ValueObjects;
-using TimeSlots.ValueObjects;
-
-public sealed class User : Entity<UserId>, IAggregateRoot
+public sealed class User : Entity, IAggregateRoot
 {
-    private readonly List<Message> _receivedMessages = new();
-    private readonly List<BusinessId> _businessIds = new();
-    private readonly List<Message> _sentMessage = new();
+    private readonly List<BusinessMessage> _receivedMessages = new();
+    private readonly List<Business> _businessIds = new();
+    private readonly List<UserMessage> _sentMessage = new();
     private readonly List<Booking> _bookings = new();
+
+    public UserId Id { get; }
 
     public UserData UserData { get; private set; }
 
@@ -33,11 +31,11 @@ public sealed class User : Entity<UserId>, IAggregateRoot
 
     public Role Role { get; set; }
 
-    public IReadOnlyList<Message> ReceivedMessages => _receivedMessages.AsReadOnly();
+    public IReadOnlyList<BusinessMessage> ReceivedMessages => _receivedMessages.AsReadOnly();
 
-    public IReadOnlyList<Message> SentMessages => _sentMessage.AsReadOnly();
+    public IReadOnlyList<UserMessage> SentMessages => _sentMessage.AsReadOnly();
 
-    public IReadOnlyList<BusinessId> BusinessIds => _businessIds.AsReadOnly();
+    public IReadOnlyList<Business> BusinessIds => _businessIds.AsReadOnly();
 
     public IReadOnlyList<Booking> Bookings => _bookings.AsReadOnly();
 
@@ -74,11 +72,11 @@ public sealed class User : Entity<UserId>, IAggregateRoot
         return this;
     }
 
-    public Booking GetBookingById(BookingId bookingId) =>
+    public Booking? GetBookingById(BookingId bookingId) =>
         _bookings.Find(booking => booking.Id.Value == bookingId.Value);
 
     public bool BookingExists(TimeSlotId timeSlotId) =>
-        _bookings.Exists(booking => booking.TimeSlotId.Value == timeSlotId.Value);
+        _bookings.Exists(booking => booking.TimeSlot.Id.Value == timeSlotId.Value);
 
     public User Update(string name, string email, (Address address, Coords coords) info)
     {
@@ -95,7 +93,8 @@ public sealed class User : Entity<UserId>, IAggregateRoot
             $"The user with email {Email} deleted her/his booking at {booking.TimeSlot.Start.ToString("dd/MM/yyyy")}.";
         var messageData = new MessageData($"Booking Deleted - {booking.Business.Name}", content);
         var metaData = new MessageMetadata(false, false);
-        var message = new Message(Id.Value, booking.Business.Id.Value, messageData, MessageType.BookingDeleted, metaData);
+        var message = new UserMessage(Id, booking.Business.Id, messageData, MessageType.BookingDeleted, metaData);
+
         _sentMessage.Add(message);
     }
 }

@@ -1,23 +1,37 @@
 using System;
+using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Messages;
 using CLup.Domain.Messages.Enums;
 using CLup.Domain.Messages.ValueObjects;
+using CLup.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CLup.Infrastructure.Persistence.EntityConfigurations;
 
-internal sealed class MessageConfiguration : IEntityTypeConfiguration<Message>
+internal sealed class UserMessageConfiguration : IEntityTypeConfiguration<UserMessage>
 {
-    public void Configure(EntityTypeBuilder<Message> builder)
+    public void Configure(EntityTypeBuilder<UserMessage> builder)
     {
-        builder.ToTable("messages");
+        builder.ToTable("User Messages");
         builder.HasKey(message => message.Id);
         builder.Property(message => message.Id)
             .ValueGeneratedNever()
             .HasConversion(
             messageId => messageId.Value,
             value => MessageId.Create(value));
+
+        builder.Property(message => message.ReceiverId)
+            .ValueGeneratedNever()
+            .HasConversion(
+                receiverId => receiverId.Value,
+                value => BusinessId.Create(value));
+
+        builder.Property(message => message.SenderId)
+            .ValueGeneratedNever()
+            .HasConversion(
+                senderId => senderId.Value,
+                value => UserId.Create(value));
 
         builder
             .Property(message => message.Type)

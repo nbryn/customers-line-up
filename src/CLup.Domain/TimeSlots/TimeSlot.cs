@@ -9,9 +9,11 @@ using CLup.Domain.TimeSlots.ValueObjects;
 
 namespace CLup.Domain.TimeSlots
 {
-    public class TimeSlot : Entity<TimeSlotId>, IHasDomainEvent
+    public class TimeSlot : Entity, IHasDomainEvent
     {
         private List<Booking> _bookings = new();
+
+        public TimeSlotId Id { get; }
 
         public BusinessId BusinessId { get; private set; }
 
@@ -28,6 +30,10 @@ namespace CLup.Domain.TimeSlots
         public List<DomainEvent> DomainEvents { get; set; } = new();
 
         public IReadOnlyList<Booking> Bookings => _bookings.AsReadOnly();
+
+        protected TimeSlot()
+        {
+        }
 
         public TimeSlot(
             BusinessId businessId,

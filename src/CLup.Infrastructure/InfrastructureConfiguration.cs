@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CLup.Infrastructure;
 
-public static class ServiceCollectionExtensions
+public static class InfrastructureConfiguration
 {
     public static IServiceCollection ConfigureInfrastructure(
         this IServiceCollection services,

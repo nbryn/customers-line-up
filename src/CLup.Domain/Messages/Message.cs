@@ -2,29 +2,31 @@ using System;
 using CLup.Domain.Messages.Enums;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Shared;
+using CLup.Domain.Shared.ValueObjects;
 
 namespace CLup.Domain.Messages;
 
-public sealed class Message : Entity<MessageId>
+public abstract class Message : Entity
 {
+    public MessageId Id { get; }
+
+    public Id SenderId { get; private set; }
+
+    public Id ReceiverId { get; private set; }
+
     public MessageData MessageData { get; private set; }
 
     public MessageType Type { get; private set; }
-
-    public Guid SenderId { get; private set; }
-
-    public Guid ReceiverId { get; private set; }
 
     public MessageMetadata Metadata { get; private set; }
 
     protected Message()
     {
-
     }
 
-    public Message(
-        Guid senderId,
-        Guid receiverId,
+    protected Message(
+        Id senderId,
+        Id receiverId,
         MessageData messageData,
         MessageType type,
         MessageMetadata metadata)

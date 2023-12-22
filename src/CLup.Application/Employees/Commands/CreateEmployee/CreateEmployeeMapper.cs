@@ -10,7 +10,7 @@ public sealed class CreateEmployeeMapper : Profile
     public CreateEmployeeMapper()
     {
         CreateMap<CreateEmployeeCommand, Employee>()
-            .ForMember(dest => dest.BusinessId, opts => opts.MapFrom(src => BusinessId.Create(src.BusinessId)))
+            .ForMember(dest => dest.Business, opts => opts.MapFrom(src => BusinessId.Create(src.BusinessId)))
             .ForMember(dest => dest.UserId, opts => opts.MapFrom(src => UserId.Create(src.UserId)));
     }
 }

@@ -11,8 +11,10 @@ using CLup.Domain.Users;
 
 namespace CLup.Domain.Bookings;
 
-public sealed class Booking : Entity<BookingId>, IHasDomainEvent
+public sealed class Booking : Entity, IHasDomainEvent
 {
+    public BookingId Id { get; }
+
     public UserId UserId { get; private set; }
 
     public User User { get; private set; }
@@ -26,6 +28,10 @@ public sealed class Booking : Entity<BookingId>, IHasDomainEvent
     public Business Business { get; private set; }
 
     public List<DomainEvent> DomainEvents { get; set; } = new();
+
+    protected Booking()
+    {
+    }
 
     public Booking(UserId userId, TimeSlotId timeSlotId, BusinessId businessId)
     {

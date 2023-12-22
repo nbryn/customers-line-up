@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using CLup.Domain.Businesses;
 
 namespace CLup.Application.Businesses;
@@ -23,8 +22,6 @@ public sealed class BusinessMapper : Profile
             .ForMember(dest => dest.TimeSlotLength, opts => opts.MapFrom(src => src.BusinessData.TimeSlotLength))
             .ForMember(dest => dest.Capacity, opts => opts.MapFrom(src => src.BusinessData.Capacity))
             .ForMember(dest => dest.BusinessHours,
-                opts => opts.MapFrom(src => $"{src.BusinessHours.Start} - {src.BusinessHours.End}"))
-            .ForMember(dest => dest.Messages,
-                opts => opts.MapFrom(src => src.ReceivedMessages.Concat(src.SentMessages)));
+                opts => opts.MapFrom(src => $"{src.BusinessHours.Start} - {src.BusinessHours.End}"));
     }
 }

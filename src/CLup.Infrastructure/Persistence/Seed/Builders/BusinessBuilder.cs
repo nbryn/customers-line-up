@@ -9,7 +9,7 @@ namespace CLup.Infrastructure.Persistence.Seed.Builders;
 
 public sealed class BusinessBuilder
 {
-    private UserId _ownerId;
+    private UserId _owner;
     private BusinessData _businessData;
     private Address _address;
     private Coords _coords;
@@ -22,7 +22,7 @@ public sealed class BusinessBuilder
 
     public BusinessBuilder WithOwner(UserId ownerId)
     {
-        _ownerId = ownerId;
+        _owner = ownerId;
 
         return this;
     }
@@ -62,5 +62,5 @@ public sealed class BusinessBuilder
         return this;
     }
 
-    public Business Build() => new(_ownerId, _businessData, _address, _coords, _businessHours, _type);
+    public Business Build() => new(_owner, _businessData, _address, _coords, _businessHours, _type);
 }

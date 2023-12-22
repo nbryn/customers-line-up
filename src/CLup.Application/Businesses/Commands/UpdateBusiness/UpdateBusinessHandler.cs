@@ -36,5 +36,5 @@ public sealed class UpdateBusinessHandler : IRequestHandler<UpdateBusinessComman
             .AndThen(_ => _mapper.Map<Business>(command))
             .Validate(_businessValidator)
             .Finally(async updatedBusiness =>
-                await _repository.UpdateEntity<Business, BusinessId>(command.Id, updatedBusiness));
+                await _repository.UpdateEntity(command.Id, updatedBusiness));
 }

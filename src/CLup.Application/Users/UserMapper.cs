@@ -1,4 +1,3 @@
-using System.Linq;
 using AutoMapper;
 using CLup.Domain.Users;
 
@@ -16,8 +15,6 @@ public sealed class UserMapper : Profile
             .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.Address.City))
             .ForMember(dest => dest.Zip, opts => opts.MapFrom(src => src.Address.Zip))
             .ForMember(dest => dest.Latitude, opts => opts.MapFrom(src => src.Coords.Latitude))
-            .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Coords.Longitude))
-            .ForMember(dest => dest.Messages,
-                opts => opts.MapFrom(src => src.ReceivedMessages.Concat(src.SentMessages)));
+            .ForMember(dest => dest.Longitude, opts => opts.MapFrom(src => src.Coords.Longitude));
     }
 }
