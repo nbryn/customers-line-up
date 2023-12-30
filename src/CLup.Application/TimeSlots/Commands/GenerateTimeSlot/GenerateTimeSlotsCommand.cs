@@ -1,12 +1,13 @@
 using System;
-using CLup.Application.Shared.Result;
+using CLup.Application.Shared;
+using CLup.Domain.Users.ValueObjects;
 using MediatR;
 
 namespace CLup.Application.TimeSlots.Commands.GenerateTimeSlot;
 
 public sealed class GenerateTimeSlotsCommand : IRequest<Result>
 {
-    public Guid OwnerId { get; set; }
+    public UserId OwnerId { get; set; }
 
     public Guid BusinessId { get; set; }
 

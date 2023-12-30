@@ -1,5 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
+using CLup.Application.Shared;
 using MediatR;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
@@ -8,7 +9,6 @@ using CLup.Domain.Bookings;
 using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
-using CLup.Application.Shared.Result;
 
 namespace CLup.Application.Bookings.Commands.UserDeleteBooking;
 
@@ -22,9 +22,9 @@ public sealed class UserDeleteBookingHandler : IRequestHandler<UserDeleteBooking
     }
 
     public async Task<Result> Handle(UserDeleteBookingCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchUserAggregate(UserId.Create(command.UserId))
-            .FailureIf(UserErrors.NotFound(UserId.Create(command.UserId)))
-            .FailureIf(user => user.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound())
+        => await _repository.FetchUserAggregate(command.UserId)
+            .FailureIf(UserErrors.NotFound)
+            .FailureIf(user => user.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound)
             .AddDomainEvent(booking => booking.DomainEvents.Add(new UserDeletedBookingEvent(booking)))
             .Finally(async booking => await _repository.RemoveAndSave(booking));
 }

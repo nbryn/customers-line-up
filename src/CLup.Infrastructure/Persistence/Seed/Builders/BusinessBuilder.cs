@@ -1,9 +1,9 @@
+using System;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using TimeSpan = CLup.Domain.Shared.ValueObjects.TimeSpan;
 
 namespace CLup.Infrastructure.Persistence.Seed.Builders;
 
@@ -13,7 +13,7 @@ public sealed class BusinessBuilder
     private BusinessData _businessData;
     private Address _address;
     private Coords _coords;
-    private TimeSpan _businessHours;
+    private Interval _businessHours;
     private BusinessType _type;
 
     public BusinessBuilder()
@@ -48,9 +48,9 @@ public sealed class BusinessBuilder
         return this;
     }
 
-    public BusinessBuilder WithBusinessHours(string opens, string closes)
+    public BusinessBuilder WithBusinessHours(double opens, double closes)
     {
-        _businessHours = new TimeSpan(opens, closes);
+        _businessHours = new Interval(opens, closes);
 
         return this;
     }

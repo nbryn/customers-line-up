@@ -7,7 +7,6 @@ using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Users;
 using FluentValidation;
 using MediatR;
-using CLup.Application.Shared.Result;
 
 namespace CLup.Application.Auth.Commands.Register;
 

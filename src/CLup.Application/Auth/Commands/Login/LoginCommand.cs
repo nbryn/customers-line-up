@@ -1,4 +1,4 @@
-using CLup.Application.Shared.Result;
+using CLup.Application.Shared;
 using MediatR;
 
 namespace CLup.Application.Auth.Commands.Login;

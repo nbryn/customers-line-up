@@ -12,7 +12,6 @@ using CLup.Domain.Employees;
 using CLup.Domain.Messages;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Shared;
-
 using CLup.Domain.TimeSlots;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
@@ -130,16 +129,16 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
     public async Task<int> AddAndSave(params Entity[] entities)
     {
-        await base.AddRangeAsync(entities);
+        await AddRangeAsync(entities);
 
-        return await SaveChangesAsync();
+        return await SaveChangesAsync(true);
     }
 
     public async Task<int> RemoveAndSave(Entity value)
     {
         Remove(value);
 
-        return await SaveChangesAsync();
+        return await SaveChangesAsync(true);
     }
 
     public async Task<int> UpdateEntity(Guid id, Entity updatedEntity)

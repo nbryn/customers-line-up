@@ -31,7 +31,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("City");
         });
 
-        builder.OwnsOne(b => b.UserData, u =>
+        builder.OwnsOne(user => user.UserData, u =>
         {
             u.Property(userData => userData.Name)
                 .HasColumnName("Name");
@@ -53,9 +53,9 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("Longitude");
         });
 
-        builder.HasMany(user => user.BusinessIds)
+        builder.HasMany<Business>()
             .WithOne()
-            .HasForeignKey(business => business.OwnerId)
+            .HasForeignKey(business  => business.OwnerId)
             .IsRequired();
 
         builder.HasMany(user => user.Bookings)

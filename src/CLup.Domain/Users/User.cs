@@ -9,7 +9,8 @@ using CLup.Domain.Users.Enums;
 using CLup.Domain.Users.ValueObjects;
 using CLup.Domain.Bookings;
 using CLup.Domain.Bookings.ValueObjects;
-using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.TimeSlots;
 using CLup.Domain.TimeSlots.ValueObjects;
 
 namespace CLup.Domain.Users;
@@ -17,8 +18,8 @@ namespace CLup.Domain.Users;
 public sealed class User : Entity, IAggregateRoot
 {
     private readonly List<BusinessMessage> _receivedMessages = new();
-    private readonly List<Business> _businessIds = new();
-    private readonly List<UserMessage> _sentMessage = new();
+    private readonly List<UserMessage> _sentMessages = new();
+    private readonly List<BusinessId> _businessIds = new();
     private readonly List<Booking> _bookings = new();
 
     public UserId Id { get; }
@@ -33,9 +34,9 @@ public sealed class User : Entity, IAggregateRoot
 
     public IReadOnlyList<BusinessMessage> ReceivedMessages => _receivedMessages.AsReadOnly();
 
-    public IReadOnlyList<UserMessage> SentMessages => _sentMessage.AsReadOnly();
+    public IReadOnlyList<UserMessage> SentMessages => _sentMessages.AsReadOnly();
 
-    public IReadOnlyList<Business> BusinessIds => _businessIds.AsReadOnly();
+    public IReadOnlyList<BusinessId> BusinessIds => _businessIds.AsReadOnly();
 
     public IReadOnlyList<Booking> Bookings => _bookings.AsReadOnly();
 
@@ -78,6 +79,24 @@ public sealed class User : Entity, IAggregateRoot
     public bool BookingExists(TimeSlotId timeSlotId) =>
         _bookings.Exists(booking => booking.TimeSlot.Id.Value == timeSlotId.Value);
 
+    public void AddBusiness(BusinessId businessId) => _businessIds.Add(businessId);
+
+    public Result AddBooking(Booking booking)
+    {
+        if (!booking.TimeSlot.IsAvailable())
+        {
+            return new Result(TimeSlotErrors.NoCapacity);
+        }
+
+        if (BookingExists(booking.TimeSlotId))
+        {
+            return new Result(UserErrors.BookingExists);
+        }
+
+        _bookings.Add(booking);
+        return new Result();
+    }
+
     public User Update(string name, string email, (Address address, Coords coords) info)
     {
         UserData = new UserData(name, email, Password);
@@ -95,6 +114,6 @@ public sealed class User : Entity, IAggregateRoot
         var metaData = new MessageMetadata(false, false);
         var message = new UserMessage(Id, booking.Business.Id, messageData, MessageType.BookingDeleted, metaData);
 
-        _sentMessage.Add(message);
+        _sentMessages.Add(message);
     }
 }

@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using CLup.Application.Shared;
 using FluentValidation;
 using MediatR;
 using CLup.Application.Shared.Extensions;
@@ -8,8 +9,6 @@ using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
 using CLup.Domain.Users.Enums;
 using CLup.Domain.Users;
-using CLup.Domain.Users.ValueObjects;
-using CLup.Application.Shared.Result;
 
 namespace CLup.Application.Businesses.Commands.CreateBusiness;
 
@@ -30,10 +29,11 @@ public sealed class CreateBusinessHandler : IRequestHandler<CreateBusinessComman
     }
 
     public async Task<Result> Handle(CreateBusinessCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchUserAggregate(UserId.Create(command.OwnerId))
-            .FailureIf(UserErrors.NotFound(UserId.Create(command.OwnerId)))
+        => await _repository.FetchUserAggregate(command.OwnerId)
+            .FailureIf(UserErrors.NotFound)
             .AndThen(user => user.UpdateRole(Role.Owner))
             .AndThen(_ => _mapper.Map<Business>(command))
             .Validate(_validator)
+            .AndThen()
             .Finally(business => _repository.AddAndSave(business));
 }

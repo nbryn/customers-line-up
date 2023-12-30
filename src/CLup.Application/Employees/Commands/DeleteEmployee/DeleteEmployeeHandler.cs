@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CLup.Application.Shared;
-using CLup.Application.Shared.Result;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
@@ -23,10 +22,9 @@ public sealed class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeComman
 
     public async Task<Result> Handle(DeleteEmployeeCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
-            .FailureIf(BusinessErrors.NotFound())
-            .Ensure(business => business.OwnerId.Value == command.OwnerId, HttpCode.Forbidden,
-                BusinessErrors.InvalidOwner())
-            .FailureIf(business => business.GetEmployeeById(EmployeeId.Create(command.UserId)),
-                EmployeeErrors.NotFound())
+            .FailureIf(BusinessErrors.NotFound)
+            .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden,
+                BusinessErrors.InvalidOwner)
+            .FailureIf(business => business.GetEmployeeById(EmployeeId.Create(command.UserId)), EmployeeErrors.NotFound)
             .Finally(async employee => await _repository.RemoveAndSave(employee));
 }

@@ -7,7 +7,7 @@ public sealed class UpdateBusinessValidator : AbstractValidator<UpdateBusinessCo
 {
     public UpdateBusinessValidator()
     {
-        RuleFor(command => command.Id).NotEmpty();
+        RuleFor(command => command.BusinessId).NotEmpty();
         RuleFor(command => command.Name).NotEmpty();
         RuleFor(command => command.Zip).NotEmpty();
         RuleFor(command => command.Street).NotEmpty();

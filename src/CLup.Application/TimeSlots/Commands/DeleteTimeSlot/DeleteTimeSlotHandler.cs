@@ -6,7 +6,6 @@ using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.ValueObjects;
 using MediatR;
-using CLup.Application.Shared.Result;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.TimeSlots.Events;
 using CLup.Domain.TimeSlots.ValueObjects;
@@ -21,9 +20,9 @@ public sealed class DeleteTimeSlotHandler : IRequestHandler<DeleteTimeSlotComman
 
     public async Task<Result> Handle(DeleteTimeSlotCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
-            .FailureIf(BusinessErrors.NotFound())
-            .Ensure(business => business?.OwnerId.Value == command.OwnerId, HttpCode.Forbidden, TimeSlotErrors.NoAccess())
-            .FailureIf(business => business?.GetTimeSlotById(TimeSlotId.Create(command.TimeSlotId)), TimeSlotErrors.NotFound())
+            .FailureIf(BusinessErrors.NotFound)
+            .Ensure(business => business?.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden, TimeSlotErrors.NoAccess)
+            .FailureIf(business => business?.GetTimeSlotById(TimeSlotId.Create(command.TimeSlotId)), TimeSlotErrors.NotFound)
             // Check if TimeSlot has bookings -> Alert before deleting?
             .AddDomainEvent(timeSlot => timeSlot?.DomainEvents.Add(new TimeSlotDeletedEvent(timeSlot)))
             .Finally(timeSlot => _repository.RemoveAndSave(timeSlot));

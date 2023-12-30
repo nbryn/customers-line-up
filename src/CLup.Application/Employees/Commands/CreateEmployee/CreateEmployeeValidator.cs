@@ -6,7 +6,7 @@ public sealed class CreateEmployeeValidator : AbstractValidator<CreateEmployeeCo
 {
     public CreateEmployeeValidator()
     {
-        RuleFor(x => x.BusinessId).NotEmpty();
-        RuleFor(x => x.UserId).NotEmpty();
+        RuleFor(command => command.BusinessId).NotEmpty();
+        RuleFor(command => command.UserId).NotEmpty();
     }
 }

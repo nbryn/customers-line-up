@@ -15,25 +15,28 @@ namespace CLup.Infrastructure.Persistence.Seed;
 
 public sealed class Seeder
 {
-    private readonly CLupDbContext _context;
+    private readonly CLupDbContext _dbContext;
 
-    public Seeder(CLupDbContext context) => _context = context;
+    public Seeder(CLupDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
 
     public async Task Seed()
     {
         var userIds = AddUsers();
         var businesses = AddBusinesses(userIds);
         var businessTimeSlots = AddTimeSlots(businesses);
-        AddBookings(businessTimeSlots, businesses.Select(b => b.Id).ToList(), userIds);
-        AddEmployees(businesses.Select(b => b.Id).ToList(), userIds);
+        AddBookings(businessTimeSlots, businesses.Select(business => business.Id).ToList(), userIds);
+        AddEmployees(businesses.Select(business => business.Id).ToList(), userIds);
 
-        await _context.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 
     private IList<UserId> AddUsers()
     {
         var ids = new List<UserId>();
-        if (_context.Users.Any())
+        if (_dbContext.Users.Any())
         {
             return ids;
         }
@@ -45,7 +48,7 @@ public sealed class Seeder
             .WithRole(Role.Owner)
             .Build();
 
-        _context.Add(user1);
+        _dbContext.Add(user1);
         ids.Add(user1.Id);
 
         var user2 = new UserBuilder()
@@ -55,7 +58,7 @@ public sealed class Seeder
             .WithRole(Role.Owner)
             .Build();
 
-        _context.Add(user2);
+        _dbContext.Add(user2);
         ids.Add(user2.Id);
 
         var user3 = new UserBuilder()
@@ -64,7 +67,7 @@ public sealed class Seeder
             .WithCoords(55.8075915, 12.3467888)
             .Build();
 
-        _context.Add(user3);
+        _dbContext.Add(user3);
         ids.Add(user3.Id);
 
         var user4 = new UserBuilder()
@@ -73,7 +76,7 @@ public sealed class Seeder
             .WithCoords(55.8200342, 12.3591325)
             .Build();
 
-        _context.Add(user4);
+        _dbContext.Add(user4);
         ids.Add(user4.Id);
 
         var user5 = new UserBuilder()
@@ -82,7 +85,7 @@ public sealed class Seeder
             .WithCoords(55.825272, 12.463181)
             .Build();
 
-        _context.Add(user5);
+        _dbContext.Add(user5);
         ids.Add(user5.Id);
 
         var user6 = new UserBuilder()
@@ -91,7 +94,7 @@ public sealed class Seeder
             .WithCoords(55.81111, 12.471199)
             .Build();
 
-        _context.Add(user6);
+        _dbContext.Add(user6);
         ids.Add(user6.Id);
 
         return ids;
@@ -100,7 +103,7 @@ public sealed class Seeder
     private IList<Business> AddBusinesses(IList<UserId> userIds)
     {
         var businesses = new List<Business>();
-        if (_context.Businesses.Any())
+        if (_dbContext.Businesses.Any())
         {
             return businesses;
         }
@@ -108,7 +111,7 @@ public sealed class Seeder
         var business1 = new BusinessBuilder()
             .WithOwner(userIds[0])
             .WithBusinessData("Super Brugsen", 50, 30)
-            .WithBusinessHours("10.00", "22.00")
+            .WithBusinessHours(10.00, 22.00)
             .WithAddress("Ryttergårdsvej 10", "3520", "Farum")
             .WithCoords(55.8137419, 12.3935222)
             .WithType(BusinessType.Supermarket)
@@ -119,7 +122,7 @@ public sealed class Seeder
         var business2 = new BusinessBuilder()
             .WithOwner(userIds[0])
             .WithBusinessData("Farum Museum", 40, 60)
-            .WithBusinessHours("10.00", "16.00")
+            .WithBusinessHours(10.00, 16.00)
             .WithAddress("Farum Hovedgade 100", "3520", "Farum")
             .WithCoords(55.809127, 12.3544073)
             .WithType(BusinessType.Museum)
@@ -130,7 +133,7 @@ public sealed class Seeder
         var business3 = new BusinessBuilder()
             .WithOwner(userIds[0])
             .WithBusinessData("Kvick Kiosk", 30, 10)
-            .WithBusinessHours("08.30", "23.00")
+            .WithBusinessHours(08.30, 23.00)
             .WithAddress("Vermlandsgade 30", "2300", "København S")
             .WithCoords(55.668442, 12.5988833)
             .WithType(BusinessType.Kiosk)
@@ -141,7 +144,7 @@ public sealed class Seeder
         var business4 = new BusinessBuilder()
             .WithOwner(userIds[1])
             .WithBusinessData("HairCut", 2, 40)
-            .WithBusinessHours("9.00", "18.00")
+            .WithBusinessHours(9.00, 18.00)
             .WithAddress("Amagerbrogade 32", "2840", "Holte")
             .WithCoords(55.8191785, 12.4682046)
             .WithType(BusinessType.Hairdresser)
@@ -152,7 +155,7 @@ public sealed class Seeder
         var business5 = new BusinessBuilder()
             .WithOwner(userIds[1])
             .WithBusinessData("Odense Bibliotek", 75, 80)
-            .WithBusinessHours("08.00", "20.00")
+            .WithBusinessHours(08.00, 20.00)
             .WithAddress("Østre Stationsvej 15", "5000", "Odense")
             .WithCoords(55.40116, 10.388635)
             .WithType(BusinessType.Library)
@@ -163,7 +166,7 @@ public sealed class Seeder
         var business6 = new BusinessBuilder()
             .WithOwner(userIds[1])
             .WithBusinessData("Foto", 8, 15)
-            .WithBusinessHours("10.30", "19.00")
+            .WithBusinessHours(10.30, 19.00)
             .WithAddress("Nord Vej 92", "2605", "Brøndby")
             .WithCoords(55.6678010, 12.4282140)
             .WithType(BusinessType.Other)
@@ -174,7 +177,7 @@ public sealed class Seeder
         var business7 = new BusinessBuilder()
             .WithOwner(userIds[1])
             .WithBusinessData("Netto", 40, 20)
-            .WithBusinessHours("09.00", "14.00")
+            .WithBusinessHours(09.00, 14.00)
             .WithAddress("Lundebjerg 1", "2740", "Skovlunde")
             .WithCoords(55.720478, 12.4016771)
             .WithType(BusinessType.Supermarket)
@@ -185,14 +188,14 @@ public sealed class Seeder
         var business8 = new BusinessBuilder()
             .WithOwner(userIds[1])
             .WithBusinessData("Grab'n'Go", 5, 5)
-            .WithBusinessHours("08.30", "15.30")
+            .WithBusinessHours(08.30, 15.30)
             .WithAddress("Ellemosevej 5", "8370", "Hadsten")
             .WithCoords(56.3306771, 10.0554608)
             .WithType(BusinessType.Kiosk)
             .Build();
 
         businesses.Add(business8);
-        _context.AddRange(businesses);
+        _dbContext.AddRange(businesses);
 
         return businesses;
     }
@@ -200,7 +203,7 @@ public sealed class Seeder
     private Dictionary<BusinessId, List<TimeSlotId>> AddTimeSlots(IList<Business> businesses)
     {
         var businessTimeSlots = new Dictionary<BusinessId, List<TimeSlotId>>();
-        if (_context.TimeSlots.Any())
+        if (_dbContext.TimeSlots.Any())
         {
             return businessTimeSlots;
         }
@@ -210,7 +213,7 @@ public sealed class Seeder
             var timeSlots = business.GenerateTimeSlots(DateTime.Today.AddDays(1));
             businessTimeSlots.Add(business.Id, timeSlots.Select(t => t.Id).ToList());
 
-            _context.AddRange(timeSlots);
+            _dbContext.AddRange(timeSlots);
         }
 
         return businessTimeSlots;
@@ -221,39 +224,39 @@ public sealed class Seeder
         IList<BusinessId> businessIds,
         IList<UserId> userIds)
     {
-        if (_context.Bookings.Any())
+        if (_dbContext.Bookings.Any())
         {
             return;
         }
 
-        _context.Add(BookingCreator.Create(userIds[0], businessIds[0], businessTimeSlots[businessIds[0]].First()));
-        _context.Add(BookingCreator.Create(userIds[0], businessIds[1], businessTimeSlots[businessIds[1]][3]));
-        _context.Add(BookingCreator.Create(userIds[0], businessIds[2], businessTimeSlots[businessIds[2]][5]));
-        _context.Add(BookingCreator.Create(userIds[0], businessIds[3], businessTimeSlots[businessIds[3]][10]));
-        _context.Add(BookingCreator.Create(userIds[0], businessIds[4], businessTimeSlots[businessIds[4]][7]));
-        _context.Add(BookingCreator.Create(userIds[0], businessIds[5], businessTimeSlots[businessIds[5]][8]));
+        _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[0], businessTimeSlots[businessIds[0]].First()));
+        _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[1], businessTimeSlots[businessIds[1]][3]));
+        _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[2], businessTimeSlots[businessIds[2]][5]));
+        _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[3], businessTimeSlots[businessIds[3]][10]));
+        _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[4], businessTimeSlots[businessIds[4]][7]));
+        _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[5], businessTimeSlots[businessIds[5]][8]));
 
         foreach (var businessId in businessIds)
         {
             for (var i = 1; i < 6; i++)
             {
-                _context.Add(BookingCreator.Create(userIds[i], businessId, businessTimeSlots[businessId][i]));
+                _dbContext.Add(BookingCreator.Create(userIds[i], businessId, businessTimeSlots[businessId][i]));
             }
         }
     }
 
     private void AddEmployees(IList<BusinessId> businessIds, IList<UserId> userIds)
     {
-        if (_context.Employees.Any())
+        if (_dbContext.Employees.Any())
         {
             return;
         }
 
-        _context.Add(EmployeeCreator.Create(businessIds[0], userIds[0], "info@brugsen.dk"));
-        _context.Add(EmployeeCreator.Create(businessIds[0], userIds[1], "hej@brugsen.dk"));
-        _context.Add(EmployeeCreator.Create(businessIds[1], userIds[2], "info@farum.dk"));
-        _context.Add(EmployeeCreator.Create(businessIds[1], userIds[3], "hej@farum.dk"));
-        _context.Add(EmployeeCreator.Create(businessIds[2], userIds[4], "info@kiosk.dk"));
-        _context.Add(EmployeeCreator.Create(businessIds[2], userIds[5], "hej@kiosk.dk"));
+        _dbContext.Add(EmployeeCreator.Create(businessIds[0], userIds[0], "info@brugsen.dk"));
+        _dbContext.Add(EmployeeCreator.Create(businessIds[0], userIds[1], "hej@brugsen.dk"));
+        _dbContext.Add(EmployeeCreator.Create(businessIds[1], userIds[2], "info@farum.dk"));
+        _dbContext.Add(EmployeeCreator.Create(businessIds[1], userIds[3], "hej@farum.dk"));
+        _dbContext.Add(EmployeeCreator.Create(businessIds[2], userIds[4], "info@kiosk.dk"));
+        _dbContext.Add(EmployeeCreator.Create(businessIds[2], userIds[5], "hej@kiosk.dk"));
     }
 }

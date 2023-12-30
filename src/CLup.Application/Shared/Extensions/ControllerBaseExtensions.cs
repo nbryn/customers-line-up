@@ -1,10 +1,9 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using CLup.Application.Shared.Result;
 
 namespace CLup.Application.Shared.Extensions;
 
-using Result = Result.Result;
+using Result = Result;
 
 public static class ControllerBaseExtensions
 {

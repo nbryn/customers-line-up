@@ -1,18 +1,19 @@
 using System;
-using CLup.Application.Shared.Result;
+using CLup.Application.Shared;
+using CLup.Domain.Users.ValueObjects;
 using MediatR;
 
 namespace CLup.Application.Employees.Commands.DeleteEmployee;
 
 public sealed class DeleteEmployeeCommand : IRequest<Result>
 {
-    public Guid OwnerId { get; set; }
+    public UserId OwnerId { get; set; }
 
     public Guid BusinessId { get; set; }
 
     public Guid UserId { get; set; }
 
-    public DeleteEmployeeCommand(Guid ownerId, Guid businessId, Guid userId)
+    public DeleteEmployeeCommand(UserId ownerId, Guid businessId, Guid userId)
     {
         OwnerId = ownerId;
         BusinessId = businessId;

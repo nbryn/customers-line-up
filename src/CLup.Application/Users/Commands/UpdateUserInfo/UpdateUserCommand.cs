@@ -1,12 +1,12 @@
-using System;
-using CLup.Application.Shared.Result;
+using CLup.Application.Shared;
+using CLup.Domain.Users.ValueObjects;
 using MediatR;
 
 namespace CLup.Application.Users.Commands.UpdateUserInfo;
 
-public sealed class UpdateUserInfoCommand : IRequest<Result>
+public sealed class UpdateUserCommand : IRequest<Result>
 {
-    public Guid Id { get; set; }
+    public UserId UserId { get; set; }
     public string Email { get; set; }
     public string Name { get; set; }
     public string Zip { get; set; }

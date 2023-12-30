@@ -1,24 +1,17 @@
 using System;
 using System.Threading.Tasks;
-using FluentValidation;
 using CLup.Domain.Shared;
+using FluentValidation;
+using DomainResult = CLup.Domain.Shared.Result;
 
-namespace CLup.Application.Shared.Result;
+namespace CLup.Application.Shared;
 
-public class Result
+public class Result : DomainResult
 {
-    public bool Success { get; private set; }
-
-    public bool Failure => !Success;
-
-    public Error Error { get; private set; }
-
     public HttpCode Code { get; private set; }
 
-    protected Result(bool success, HttpCode code, Error error)
+    protected Result(HttpCode code, Error error) : base(error)
     {
-        Success = success;
-        Error = error;
         Code = code;
     }
 
@@ -35,21 +28,21 @@ public class Result
     public static Result<T> ToResult<T>(T maybe, Error error) =>
         maybe == null ? NotFound<T>(error) : Ok(maybe);
 
-    public static Result<T> Ok<T>(T value) => new(value, true, HttpCode.Ok);
+    public static Result<T> Ok<T>(T value) => new(value, HttpCode.Ok);
 
-    public static Result<T> Fail<T>(HttpCode code, Error error) => new(default, false, code, error);
+    public static Result<T> Fail<T>(HttpCode code, Error error) => new(default, code, error);
 
-    public static Result<T> NotFound<T>(Error error) => new(default, false, HttpCode.NotFound, error);
+    public static Result<T> NotFound<T>(Error error) => new(default, HttpCode.NotFound, error);
 
-    public static Result<T> BadRequest<T>(Error error) => new(default, false, HttpCode.BadRequest, error);
+    public static Result<T> BadRequest<T>(Error error) => new(default, HttpCode.BadRequest, error);
 }
 
-public class Result<T> : Result
+public sealed class Result<T> : Result
 {
     public T Value { get; private set; }
 
-    protected internal Result(T value, bool success, HttpCode code, Error error = null)
-        : base(success, code, error)
+    protected internal Result(T value, HttpCode code, Error error = null)
+        : base(code, error)
     {
         Value = value;
     }
@@ -120,7 +113,7 @@ public class Result<T> : Result
         Task<Result<T>> task,
         Func<T, bool> predicate,
         HttpCode httpCode,
-        Error error)
+        Error? error = null)
     {
         if (Failure)
         {
@@ -139,7 +132,7 @@ public class Result<T> : Result
         Task<Result<T>> task,
         Func<T, Task<bool>> predicate,
         HttpCode httpCode,
-        Error error)
+        Error? error = null)
     {
         if (Failure)
         {

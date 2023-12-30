@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
-using CLup.Application.Shared.Result;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
@@ -29,12 +28,12 @@ public sealed class UpdateBusinessHandler : IRequestHandler<UpdateBusinessComman
     }
 
     public async Task<Result> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchBusinessAggregate(BusinessId.Create(command.Id))
-            .FailureIf(BusinessErrors.NotFound())
-            .Ensure(business => business.OwnerId.Value == command.OwnerId, HttpCode.Forbidden,
-                BusinessErrors.InvalidOwner())
+        => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
+            .FailureIf(BusinessErrors.NotFound)
+            .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden,
+                BusinessErrors.InvalidOwner)
             .AndThen(_ => _mapper.Map<Business>(command))
             .Validate(_businessValidator)
             .Finally(async updatedBusiness =>
-                await _repository.UpdateEntity(command.Id, updatedBusiness));
+                await _repository.UpdateEntity(command.BusinessId, updatedBusiness));
 }

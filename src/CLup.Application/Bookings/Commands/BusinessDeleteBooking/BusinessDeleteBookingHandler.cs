@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
+using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
-using CLup.Application.Shared.Result;
 using CLup.Domain.Bookings;
 using CLup.Domain.Bookings.Events;
 using CLup.Domain.Bookings.ValueObjects;
@@ -21,6 +21,7 @@ public sealed class BusinessDeleteBookingHandler : IRequestHandler<BusinessDelet
     public async Task<Result> Handle(BusinessDeleteBookingCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
             .FailureIf(BusinessErrors.NotFound())
+            .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden, BusinessErrors.InvalidOwner())
             .FailureIf(business => business.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound())
             .AddDomainEvent(booking => booking.DomainEvents.Add(new BusinessDeletedBookingEvent(booking)))
             .Finally(async booking => await _repository.RemoveAndSave(booking));

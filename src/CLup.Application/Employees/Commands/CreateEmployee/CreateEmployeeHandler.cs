@@ -7,8 +7,6 @@ using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Employees;
 using CLup.Domain.Users;
 using CLup.Domain.Users.Enums;
-using CLup.Domain.Users.ValueObjects;
-using CLup.Application.Shared.Result;
 using FluentValidation;
 using MediatR;
 
@@ -31,9 +29,9 @@ public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeComman
     }
 
     public async Task<Result> Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchUserAggregate(UserId.Create(command.OwnerId))
-            .FailureIf(UserErrors.NotFound(UserId.Create(command.OwnerId)))
-            .Ensure(user => user.Role != Role.Owner, HttpCode.BadRequest, EmployeeErrors.OwnerCannotBeEmployee())
+        => await _repository.FetchUserAggregate(command.OwnerId)
+            .FailureIf(UserErrors.NotFound)
+            .Ensure(user => user.Role != Role.Owner, HttpCode.BadRequest, EmployeeErrors.OwnerCannotBeEmployee)
             .AndThen(user => user.UpdateRole(Role.Employee))
             .AndThen(_ => _mapper.Map<Employee>(command))
             .Validate(_validator)

@@ -6,7 +6,6 @@ public sealed class BusinessDeleteBookingValidator : AbstractValidator<BusinessD
 {
     public BusinessDeleteBookingValidator()
     {
-        RuleFor(command => command.OwnerId).NotNull();
         RuleFor(command => command.BookingId).NotNull();
         RuleFor(command => command.BusinessId).NotNull();
     }

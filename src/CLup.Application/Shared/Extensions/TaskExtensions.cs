@@ -5,8 +5,6 @@ using CLup.Domain.Shared;
 
 namespace CLup.Application.Shared.Extensions;
 
-using Result;
-
 public static class TaskExtensions
 {
     public static async Task<Result<T>> ToResult<T>(this Task<T> task)
@@ -23,17 +21,17 @@ public static class TaskExtensions
         return Result.ToResult(maybe, error);
     }
 
-    public static async Task<Result<T>> FailureIf<T, U>(
-        this Task<Result<U>> task,
-        Func<U, Task<T>> f,
-        Error error)
-        => await (await task).Bind(f, error);
-
     public static async Task<Result<U>> FailureIf<T, U>(
         this Task<Result<T>> task,
         Func<T, U> f,
         Error error)
         => (await task).Bind(f, error);
+
+    public static async Task<Result<U>> FailureIf<T, U>(
+        this Task<Result<T>> task,
+        Func<T, Task<U>> f,
+        Error error)
+        => await (await task).Bind(f, error);
 
     public static async Task<Result<T>> AddDomainEvent<T>(this Task<Result<T>> task, Action<T> f)
         => (await task).AddDomainEvent(f);
@@ -54,14 +52,14 @@ public static class TaskExtensions
         this Task<Result<T>> task,
         Func<T, bool> predicate,
         HttpCode httpCode,
-        Error error)
+        Error? error = null)
         => await (await task).Ensure(task, predicate, httpCode, error);
 
     public static async Task<Result<T>> Ensure<T>(
         this Task<Result<T>> task,
         Func<T, Task<bool>> predicate,
         HttpCode httpCode,
-        Error error)
+        Error? error = null)
         => await (await task).Ensure(task, predicate, httpCode, error);
 
     public static async Task<Result<U>> Finally<T, U>(this Task<Result<T>> task, Func<T, U> f)

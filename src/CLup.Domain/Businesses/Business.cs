@@ -14,7 +14,6 @@ using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Employees;
 using CLup.Domain.Employees.ValueObjects;
 using CLup.Domain.TimeSlots.ValueObjects;
-using TimeSpan = CLup.Domain.Shared.ValueObjects.TimeSpan;
 
 namespace CLup.Domain.Businesses;
 
@@ -36,7 +35,7 @@ public sealed class Business : Entity, IAggregateRoot
 
     public Coords Coords { get; private set; }
 
-    public TimeSpan BusinessHours { get; private set; }
+    public Interval BusinessHours { get; private set; }
 
     public BusinessType Type { get; private set; }
 
@@ -59,7 +58,7 @@ public sealed class Business : Entity, IAggregateRoot
         BusinessData businessData,
         Address address,
         Coords coords,
-        TimeSpan businessHours,
+        Interval businessHours,
         BusinessType type)
     {
         OwnerId = ownerId;
@@ -72,9 +71,9 @@ public sealed class Business : Entity, IAggregateRoot
         Id = BusinessId.Create(Guid.NewGuid());
     }
 
-    public string Opens => BusinessHours.Start;
+    public double Opens => BusinessHours.Start;
 
-    public string Closes => BusinessHours.End;
+    public double Closes => BusinessHours.End;
 
     public string Name => BusinessData.Name;
 
@@ -101,8 +100,8 @@ public sealed class Business : Entity, IAggregateRoot
 
     public IList<TimeSlot> GenerateTimeSlots(DateTime start)
     {
-        var opens = start.AddHours(double.Parse(Opens.Substring(0, Opens.IndexOf("."))));
-        var closes = start.AddHours(double.Parse(Closes.Substring(0, Closes.IndexOf("."))));
+        var opens = start.AddHours(Opens);
+        var closes = start.AddHours(Closes);
 
         var timeSlots = new List<TimeSlot>();
         for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(BusinessData.TimeSlotLength))

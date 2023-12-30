@@ -10,7 +10,7 @@ public class BusinessValidator : AbstractValidator<Domain.Businesses.Business>
         IValidator<BusinessData> businessDataValidator,
         IValidator<Address> addressValidator,
         IValidator<Coords> coordsValidator,
-        IValidator<TimeSpan> timeSpanValidator)
+        IValidator<Interval> timeSpanValidator)
     {
         RuleFor(business => business.OwnerId).NotNull();
         RuleFor(business => business.Type).IsInEnum();

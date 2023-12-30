@@ -346,16 +346,6 @@ dotnet_naming_rule.stylecop_local_fields_must_be_camel_case_rule.symbols = style
 dotnet_naming_rule.stylecop_local_fields_must_be_camel_case_rule.style = camel_case_style
 dotnet_naming_rule.stylecop_local_fields_must_be_camel_case_rule.severity = silent
 
-# This rule should never fire.  However, it's included for at least two purposes:
-# First, it helps to understand, reason about, and root-case certain types of issues, such as bugs in .editorconfig parsers.
-# Second, it helps to raise immediate awareness if a new field type is added (as occurred recently in C#).
-dotnet_naming_symbols.sanity_check_uncovered_field_case_group.applicable_accessibilities = *
-dotnet_naming_symbols.sanity_check_uncovered_field_case_group.applicable_kinds = field
-dotnet_naming_rule.sanity_check_uncovered_field_case_rule.symbols = sanity_check_uncovered_field_case_group
-dotnet_naming_rule.sanity_check_uncovered_field_case_rule.style = internal_error_style
-dotnet_naming_rule.sanity_check_uncovered_field_case_rule.severity = error
-
-
 ##########################################
 # Other Naming Rules
 ##########################################

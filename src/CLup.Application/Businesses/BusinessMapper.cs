@@ -22,6 +22,6 @@ public sealed class BusinessMapper : Profile
             .ForMember(dest => dest.TimeSlotLength, opts => opts.MapFrom(src => src.BusinessData.TimeSlotLength))
             .ForMember(dest => dest.Capacity, opts => opts.MapFrom(src => src.BusinessData.Capacity))
             .ForMember(dest => dest.BusinessHours,
-                opts => opts.MapFrom(src => $"{src.BusinessHours.Start} - {src.BusinessHours.End}"));
+                opts => opts.MapFrom(src => $"{src.Opens} - {src.Closes}"));
     }
 }

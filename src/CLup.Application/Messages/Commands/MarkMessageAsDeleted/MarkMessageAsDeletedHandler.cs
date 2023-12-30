@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using CLup.Application.Shared;
-using CLup.Application.Shared.Result;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses.ValueObjects;
@@ -24,8 +23,8 @@ public sealed class MarkMessageAsDeletedHandler : IRequestHandler<MarkMessageAsD
 
     public async Task<Result> Handle(MarkMessageAsDeletedCommand command, CancellationToken cancellationToken)
         => await _repository.FetchMessage(MessageId.Create(command.MessageId), command.RequestMadeByBusiness)
-            .FailureIf(MessageErrors.NotFound())
-            .Ensure(async message => await Validate(message, command), HttpCode.Forbidden, MessageErrors.NoAccess())
+            .FailureIf(MessageErrors.NotFound)
+            .Ensure(async message => await Validate(message, command), HttpCode.Forbidden, MessageErrors.NoAccess)
             .AndThen(message => command.ForSender ? message?.DeletedBySender() : message?.DeletedByReceiver())
             .Finally(message => _repository.UpdateEntity(message.Id.Value, message));
 

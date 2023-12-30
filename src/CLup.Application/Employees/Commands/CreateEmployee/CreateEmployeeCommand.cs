@@ -1,12 +1,13 @@
 using System;
+using CLup.Application.Shared;
 using MediatR;
-using CLup.Application.Shared.Result;
+using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Application.Employees.Commands.CreateEmployee;
 
 public sealed class CreateEmployeeCommand : IRequest<Result>
 {
-    public Guid OwnerId { get; set; }
+    public UserId OwnerId { get; set; }
 
     public Guid BusinessId { get; set; }
 

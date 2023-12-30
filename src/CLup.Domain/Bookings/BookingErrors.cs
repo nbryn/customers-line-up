@@ -1,9 +1,8 @@
-﻿namespace CLup.Domain.Bookings;
+﻿using CLup.Domain.Shared;
 
-using Shared;
+namespace CLup.Domain.Bookings;
 
-public class BookingErrors
+public static class BookingErrors
 {
-    public static Error NotFound() =>
-        new("Bookings.NotFound", "The booking was not found.");
+    public static Error NotFound => new("Bookings.NotFound", "The booking was not found.");
 }

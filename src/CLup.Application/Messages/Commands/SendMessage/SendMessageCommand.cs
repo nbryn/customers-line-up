@@ -1,5 +1,5 @@
 using System;
-using CLup.Application.Shared.Result;
+using CLup.Application.Shared;
 using CLup.Domain.Messages.Enums;
 using MediatR;
 
@@ -16,11 +16,6 @@ public sealed class SendMessageCommand : IRequest<Result>
     public string Content { get; set; }
 
     public MessageType Type { get; set; }
-
-    public SendMessageCommand()
-    {
-
-    }
 
     public SendMessageCommand(
         Guid senderId,

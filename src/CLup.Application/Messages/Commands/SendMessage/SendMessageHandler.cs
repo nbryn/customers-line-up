@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using CLup.Application.Shared;
-using CLup.Application.Shared.Result;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses.ValueObjects;
@@ -38,14 +37,16 @@ public sealed class SendMessageHandler : IRequestHandler<SendMessageCommand, Res
                 var business = await _repository.FetchBusinessAggregate(BusinessId.Create(command.SenderId));
                 return new { business, user };
             })
-            .Ensure(entry => entry.user != null || entry.business != null, HttpCode.BadRequest, MessageErrors.InvalidSender())
+            .Ensure(entry => entry.user != null || entry.business != null, HttpCode.BadRequest,
+                MessageErrors.InvalidSender)
             .AndThen(async _ =>
             {
                 var user = await _repository.FetchUserAggregate(UserId.Create(command.ReceiverId));
                 var business = await _repository.FetchBusinessAggregate(BusinessId.Create(command.ReceiverId));
                 return new { business, user };
             })
-            .Ensure(entry => entry.user != null || entry.business != null, HttpCode.BadRequest, MessageErrors.InvalidReceiver())
+            .Ensure(entry => entry.user != null || entry.business != null, HttpCode.BadRequest,
+                MessageErrors.InvalidReceiver)
             .AndThen(_ => _mapper.Map<Message>(command))
             .Validate(_validator)
             .Finally(message => _repository.AddAndSave(message));

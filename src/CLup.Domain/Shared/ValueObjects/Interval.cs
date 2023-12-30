@@ -1,16 +1,17 @@
+using System;
 using System.Collections.Generic;
 
 namespace CLup.Domain.Shared.ValueObjects;
 
-public sealed class TimeSpan : ValueObject
+public sealed class Interval : ValueObject
 {
-    public string Start { get; private set; }
+    public double Start { get; private set; }
 
-    public string End { get; private set; }
+    public double End { get; private set; }
 
-    public TimeSpan() { }
+    public Interval() { }
 
-    public TimeSpan(string start, string end)
+    public Interval(double start, double end)
     {
         Start = start;
         End = end;

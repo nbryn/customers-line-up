@@ -1,12 +1,13 @@
 using System;
-using CLup.Application.Shared.Result;
+using CLup.Application.Shared;
+using CLup.Domain.Users.ValueObjects;
 using MediatR;
 
 namespace CLup.Application.Businesses.Commands.CreateBusiness;
 
 public sealed class CreateBusinessCommand : IRequest<Result>
 {
-    public Guid OwnerId { get; set; }
+    public UserId OwnerId { get; set; }
 
     public string Name { get; set; }
 
@@ -20,9 +21,9 @@ public sealed class CreateBusinessCommand : IRequest<Result>
 
     public double Latitude { get; set; }
 
-    public string Opens { get; set; }
+    public double Opens { get; set; }
 
-    public string Closes { get; set; }
+    public double Closes { get; set; }
 
     public int Capacity { get; set; }
 

@@ -1,14 +1,15 @@
 using System;
+using CLup.Application.Shared;
 using MediatR;
-using CLup.Application.Shared.Result;
+using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Application.Businesses.Commands.UpdateBusiness;
 
 public sealed class UpdateBusinessCommand : IRequest<Result>
 {
-    public Guid Id { get; set; }
+    public Guid BusinessId { get; set; }
 
-    public Guid OwnerId { get; set; }
+    public UserId OwnerId { get; set; }
 
     public string Name { get; set; }
 
