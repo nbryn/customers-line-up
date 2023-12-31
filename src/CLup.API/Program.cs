@@ -1,4 +1,5 @@
 using CLup.API.Extensions;
+using CLup.API.Middleware;
 using CLup.Application;
 using CLup.Application.Auth;
 using CLup.Domain;
@@ -19,8 +20,6 @@ public class Program
 
         var app = builder.Build();
         await Configure(app, builder.Environment);
-
-        app.Run();
     }
 
     private static void ConfigureServices(
@@ -29,6 +28,7 @@ public class Program
         IWebHostEnvironment environment)
     {
         services
+            .AddExceptionHandler<GlobalExceptionHandler>()
             .AddRouting(options => options.LowercaseUrls = true)
             .ConfigureCors(config)
             .ConfigureJwt(config)
@@ -51,7 +51,7 @@ public class Program
             .ConfigureInfrastructure(config, environment);
     }
 
-    public static async Task Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public static async Task Configure(WebApplication app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
@@ -70,6 +70,7 @@ public class Program
             swaggerUiOptions.DisplayRequestDuration();
         });
 
+        app.UseExceptionHandler();
         app.UseRouting();
         app.UseCors("CorsApi");
         app.UseAuthentication();
@@ -79,5 +80,7 @@ public class Program
         {
             endpoints.MapControllers();
         });
+
+        app.Run();
     }
 }
