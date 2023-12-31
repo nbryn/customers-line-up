@@ -24,7 +24,7 @@ public interface ICLupRepository
 
     Task<IList<Business>> FetchAllBusinesses();
 
-    public Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default);
+    public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     Task<int> AddAndSave(params Entity[] entities);
 

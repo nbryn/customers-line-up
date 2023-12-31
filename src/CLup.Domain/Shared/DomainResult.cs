@@ -1,6 +1,6 @@
 ﻿namespace CLup.Domain.Shared;
 
-public class Result
+public class DomainResult
 {
     public bool Success { get; private set; }
 
@@ -8,9 +8,13 @@ public class Result
 
     public bool Failure => !Success;
 
-    public Result(Error? error = null)
+    protected DomainResult(Error? error = null)
     {
         Success = error == null;
         Error = error;
     }
+
+    public static DomainResult Ok() => new();
+
+    public static DomainResult Fail(Error error) => new(error);
 }

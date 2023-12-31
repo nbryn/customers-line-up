@@ -20,9 +20,9 @@ public sealed class DeleteTimeSlotHandler : IRequestHandler<DeleteTimeSlotComman
 
     public async Task<Result> Handle(DeleteTimeSlotCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
-            .FailureIf(BusinessErrors.NotFound)
+            .FailureIfNotFound(BusinessErrors.NotFound)
             .Ensure(business => business?.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden, TimeSlotErrors.NoAccess)
-            .FailureIf(business => business?.GetTimeSlotById(TimeSlotId.Create(command.TimeSlotId)), TimeSlotErrors.NotFound)
+            .FailureIfNotFound(business => business?.GetTimeSlotById(TimeSlotId.Create(command.TimeSlotId)), TimeSlotErrors.NotFound)
             // Check if TimeSlot has bookings -> Alert before deleting?
             .AddDomainEvent(timeSlot => timeSlot?.DomainEvents.Add(new TimeSlotDeletedEvent(timeSlot)))
             .Finally(timeSlot => _repository.RemoveAndSave(timeSlot));

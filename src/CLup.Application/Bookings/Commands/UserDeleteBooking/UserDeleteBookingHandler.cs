@@ -23,8 +23,8 @@ public sealed class UserDeleteBookingHandler : IRequestHandler<UserDeleteBooking
 
     public async Task<Result> Handle(UserDeleteBookingCommand command, CancellationToken cancellationToken)
         => await _repository.FetchUserAggregate(command.UserId)
-            .FailureIf(UserErrors.NotFound)
-            .FailureIf(user => user.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound)
+            .FailureIfNotFound(UserErrors.NotFound)
+            .FailureIfNotFound(user => user.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound)
             .AddDomainEvent(booking => booking.DomainEvents.Add(new UserDeletedBookingEvent(booking)))
             .Finally(async booking => await _repository.RemoveAndSave(booking));
 }

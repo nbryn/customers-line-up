@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CLup.Application.Shared;
@@ -22,11 +21,9 @@ public sealed class GenerateTimeSlotsHandler : IRequestHandler<GenerateTimeSlots
 
     public async Task<Result> Handle(GenerateTimeSlotsCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
-            .FailureIf(BusinessErrors.NotFound)
+            .FailureIfNotFound(BusinessErrors.NotFound)
             .Ensure(business => business?.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden,
                 TimeSlotErrors.NoAccess)
-            .Ensure(business => business?.GetTimeSlotByDate(command.Start) == null,
-                HttpCode.BadRequest, TimeSlotErrors.TimeSlotsExists)
-            .AndThen(business => business?.GenerateTimeSlots(command.Start))
-            .Finally(timeSlots => _repository.AddAndSave(timeSlots.ToArray()));
+            .Ensure(business => business.GenerateTimeSlots(command.Start).Success, HttpCode.BadRequest)
+            .Finally(_ => _repository.SaveChangesAsync(cancellationToken));
 }

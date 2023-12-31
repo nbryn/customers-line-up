@@ -2,7 +2,6 @@ using System;
 using System.Threading.Tasks;
 using CLup.Domain.Shared;
 using FluentValidation;
-using DomainResult = CLup.Domain.Shared.Result;
 
 namespace CLup.Application.Shared;
 
@@ -10,7 +9,7 @@ public class Result : DomainResult
 {
     public HttpCode Code { get; private set; }
 
-    protected Result(HttpCode code, Error error) : base(error)
+    protected Result(HttpCode code, Error? error = null) : base(error)
     {
         Code = code;
     }
@@ -122,6 +121,11 @@ public sealed class Result<T> : Result
 
         if (!predicate(Value))
         {
+            if (Value is DomainResult result)
+            {
+                return Fail<T>(httpCode, result.Error);
+            }
+
             return Fail<T>(httpCode, error);
         }
 
@@ -141,6 +145,11 @@ public sealed class Result<T> : Result
 
         if (!await predicate(Value))
         {
+            if (Value is DomainResult result)
+            {
+                return Fail<T>(httpCode, result.Error);
+            }
+
             return Fail<T>(httpCode, error);
         }
 

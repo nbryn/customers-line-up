@@ -4,9 +4,11 @@ using AutoMapper;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
+using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Employees;
 using CLup.Domain.Users;
-using CLup.Domain.Users.Enums;
+using CLup.Domain.Users.ValueObjects;
 using FluentValidation;
 using MediatR;
 
@@ -29,11 +31,25 @@ public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeComman
     }
 
     public async Task<Result> Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchUserAggregate(command.OwnerId)
-            .FailureIf(UserErrors.NotFound)
-            .Ensure(user => user.Role != Role.Owner, HttpCode.BadRequest, EmployeeErrors.OwnerCannotBeEmployee)
-            .AndThen(user => user.UpdateRole(Role.Employee))
-            .AndThen(_ => _mapper.Map<Employee>(command))
+        => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
+            .FailureIfNotFound(BusinessErrors.NotFound)
+            .FailureIfNotFound(business => GetUser(business, command), UserErrors.NotFound)
+            .Ensure(entry => entry.Value.business.AddEmployee(entry.Value.user, entry.Value.employee).Success,
+                HttpCode.BadRequest)
+            .AndThen(entry => entry.Value.employee)
             .Validate(_validator)
-            .Finally(async employee => await _repository.AddAndSave(employee));
+            .Finally(_ => _repository.SaveChangesAsync(cancellationToken));
+
+    private async Task<(Business business, User user, Employee employee)?> GetUser(
+        Business business,
+        CreateEmployeeCommand command)
+    {
+        var user = await _repository.FetchUserAggregate(UserId.Create(command.UserId));
+        if (user == null)
+        {
+            return null;
+        }
+
+        return (business, user, _mapper.Map<Employee>(command));
+    }
 }

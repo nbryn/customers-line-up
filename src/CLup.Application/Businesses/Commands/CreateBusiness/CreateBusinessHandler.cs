@@ -30,10 +30,9 @@ public sealed class CreateBusinessHandler : IRequestHandler<CreateBusinessComman
 
     public async Task<Result> Handle(CreateBusinessCommand command, CancellationToken cancellationToken)
         => await _repository.FetchUserAggregate(command.OwnerId)
-            .FailureIf(UserErrors.NotFound)
+            .FailureIfNotFound(UserErrors.NotFound)
             .AndThen(user => user.UpdateRole(Role.Owner))
             .AndThen(_ => _mapper.Map<Business>(command))
             .Validate(_validator)
-            .AndThen()
             .Finally(business => _repository.AddAndSave(business));
 }

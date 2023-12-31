@@ -79,22 +79,20 @@ public sealed class User : Entity, IAggregateRoot
     public bool BookingExists(TimeSlotId timeSlotId) =>
         _bookings.Exists(booking => booking.TimeSlot.Id.Value == timeSlotId.Value);
 
-    public void AddBusiness(BusinessId businessId) => _businessIds.Add(businessId);
-
-    public Result AddBooking(Booking booking)
+    public DomainResult AddBooking(Booking booking)
     {
         if (!booking.TimeSlot.IsAvailable())
         {
-            return new Result(TimeSlotErrors.NoCapacity);
+            return DomainResult.Fail(TimeSlotErrors.NoCapacity);
         }
 
         if (BookingExists(booking.TimeSlotId))
         {
-            return new Result(UserErrors.BookingExists);
+            return DomainResult.Fail(UserErrors.BookingExists);
         }
 
         _bookings.Add(booking);
-        return new Result();
+        return DomainResult.Ok();
     }
 
     public User Update(string name, string email, (Address address, Coords coords) info)

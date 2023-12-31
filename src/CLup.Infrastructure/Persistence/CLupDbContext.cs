@@ -111,9 +111,7 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         return users;
     }
 
-    public override async Task<int> SaveChangesAsync(
-        bool acceptAllChangesOnSuccess,
-        CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         MarkEntitiesAsUpdated();
 
@@ -124,7 +122,7 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
         await DispatchEvents(events);
 
-        return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        return await base.SaveChangesAsync(true, cancellationToken);
     }
 
     public async Task<int> AddAndSave(params Entity[] entities)

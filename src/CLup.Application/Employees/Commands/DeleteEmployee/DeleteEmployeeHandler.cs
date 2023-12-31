@@ -22,9 +22,9 @@ public sealed class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeComman
 
     public async Task<Result> Handle(DeleteEmployeeCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
-            .FailureIf(BusinessErrors.NotFound)
+            .FailureIfNotFound(BusinessErrors.NotFound)
             .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden,
                 BusinessErrors.InvalidOwner)
-            .FailureIf(business => business.GetEmployeeById(EmployeeId.Create(command.UserId)), EmployeeErrors.NotFound)
+            .FailureIfNotFound(business => business.GetEmployeeById(EmployeeId.Create(command.UserId)), EmployeeErrors.NotFound)
             .Finally(async employee => await _repository.RemoveAndSave(employee));
 }

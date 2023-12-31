@@ -20,9 +20,9 @@ public sealed class BusinessDeleteBookingHandler : IRequestHandler<BusinessDelet
 
     public async Task<Result> Handle(BusinessDeleteBookingCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
-            .FailureIf(BusinessErrors.NotFound())
-            .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden, BusinessErrors.InvalidOwner())
-            .FailureIf(business => business.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound())
+            .FailureIfNotFound(BusinessErrors.NotFound)
+            .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden, BusinessErrors.InvalidOwner)
+            .FailureIfNotFound(business => business.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound)
             .AddDomainEvent(booking => booking.DomainEvents.Add(new BusinessDeletedBookingEvent(booking)))
             .Finally(async booking => await _repository.RemoveAndSave(booking));
 }

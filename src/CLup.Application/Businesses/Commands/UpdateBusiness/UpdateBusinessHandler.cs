@@ -29,7 +29,7 @@ public sealed class UpdateBusinessHandler : IRequestHandler<UpdateBusinessComman
 
     public async Task<Result> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
-            .FailureIf(BusinessErrors.NotFound)
+            .FailureIfNotFound(BusinessErrors.NotFound)
             .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden,
                 BusinessErrors.InvalidOwner)
             .AndThen(_ => _mapper.Map<Business>(command))

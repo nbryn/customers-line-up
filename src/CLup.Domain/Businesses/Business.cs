@@ -14,6 +14,8 @@ using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Employees;
 using CLup.Domain.Employees.ValueObjects;
 using CLup.Domain.TimeSlots.ValueObjects;
+using CLup.Domain.Users;
+using CLup.Domain.Users.Enums;
 
 namespace CLup.Domain.Businesses;
 
@@ -89,6 +91,18 @@ public sealed class Business : Entity, IAggregateRoot
     public Employee? GetEmployeeById(EmployeeId employeeId) =>
         _employees.Find(employee => employee.Id.Value == employeeId.Value);
 
+    public DomainResult AddEmployee(User user, Employee employee)
+    {
+        if (user.Role == Role.Owner)
+        {
+            return DomainResult.Fail(EmployeeErrors.OwnerCannotBeEmployee);
+        }
+
+        user.UpdateRole(Role.Employee);
+        _employees.Add(employee);
+        return DomainResult.Ok();
+    }
+
     public void BookingDeletedMessage(UserId receiverId)
     {
         var content = $"Your booking at {Name} was deleted.";
@@ -98,20 +112,23 @@ public sealed class Business : Entity, IAggregateRoot
         _sentMessages.Add(message);
     }
 
-    public IList<TimeSlot> GenerateTimeSlots(DateTime start)
+    public DomainResult GenerateTimeSlots(DateTime start)
     {
+        if (GetTimeSlotByDate(start) != null)
+        {
+            return DomainResult.Fail(TimeSlotErrors.TimeSlotsExists);
+        }
+
         var opens = start.AddHours(Opens);
         var closes = start.AddHours(Closes);
-
-        var timeSlots = new List<TimeSlot>();
         for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(BusinessData.TimeSlotLength))
         {
             var end = date.AddMinutes(BusinessData.TimeSlotLength);
             var timeSlot = new TimeSlot(Id, Name, BusinessData.Capacity, date, end);
 
-            timeSlots.Add(timeSlot);
+            _timeSlots.Add(timeSlot);
         }
 
-        return timeSlots;
+        return DomainResult.Ok();
     }
 }
