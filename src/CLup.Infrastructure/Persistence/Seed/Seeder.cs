@@ -211,7 +211,7 @@ public sealed class Seeder
         foreach (var business in businesses)
         {
             var timeSlots = business.GenerateTimeSlots(DateTime.Today.AddDays(1));
-            businessTimeSlots.Add(business.Id, timeSlots.Select(t => t.Id).ToList());
+            businessTimeSlots.Add(business.Id, business.TimeSlots.Select(timeSlot => timeSlot.Id).ToList());
 
             _dbContext.AddRange(timeSlots);
         }

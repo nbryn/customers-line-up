@@ -16,7 +16,10 @@ public sealed class BusinessDeleteBookingHandler : IRequestHandler<BusinessDelet
 {
     private readonly ICLupRepository _repository;
 
-    public BusinessDeleteBookingHandler(ICLupRepository repository) => _repository = repository;
+    public BusinessDeleteBookingHandler(ICLupRepository repository)
+    {
+        _repository = repository;
+    }
 
     public async Task<Result> Handle(BusinessDeleteBookingCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
@@ -24,5 +27,5 @@ public sealed class BusinessDeleteBookingHandler : IRequestHandler<BusinessDelet
             .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden, BusinessErrors.InvalidOwner)
             .FailureIfNotFound(business => business.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound)
             .AddDomainEvent(booking => booking.DomainEvents.Add(new BusinessDeletedBookingEvent(booking)))
-            .Finally(async booking => await _repository.RemoveAndSave(booking));
+            .Finally(booking => _repository.RemoveAndSave(booking));
 }

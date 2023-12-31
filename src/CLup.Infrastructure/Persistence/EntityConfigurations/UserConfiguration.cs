@@ -1,4 +1,3 @@
-using CLup.Domain.Businesses;
 using CLup.Domain.Employees;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
@@ -53,7 +52,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("Longitude");
         });
 
-        builder.HasMany<Business>()
+        builder.HasMany(user => user.Businesses)
             .WithOne()
             .HasForeignKey(business  => business.OwnerId)
             .IsRequired();

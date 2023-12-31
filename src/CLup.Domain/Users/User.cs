@@ -9,6 +9,7 @@ using CLup.Domain.Users.Enums;
 using CLup.Domain.Users.ValueObjects;
 using CLup.Domain.Bookings;
 using CLup.Domain.Bookings.ValueObjects;
+using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.TimeSlots.ValueObjects;
@@ -19,7 +20,7 @@ public sealed class User : Entity, IAggregateRoot
 {
     private readonly List<BusinessMessage> _receivedMessages = new();
     private readonly List<UserMessage> _sentMessages = new();
-    private readonly List<BusinessId> _businessIds = new();
+    private readonly List<Business> _businesses = new();
     private readonly List<Booking> _bookings = new();
 
     public UserId Id { get; }
@@ -36,7 +37,7 @@ public sealed class User : Entity, IAggregateRoot
 
     public IReadOnlyList<UserMessage> SentMessages => _sentMessages.AsReadOnly();
 
-    public IReadOnlyList<BusinessId> BusinessIds => _businessIds.AsReadOnly();
+    public IReadOnlyList<Business> Businesses => _businesses.AsReadOnly();
 
     public IReadOnlyList<Booking> Bookings => _bookings.AsReadOnly();
 
@@ -64,7 +65,7 @@ public sealed class User : Entity, IAggregateRoot
 
     public string Password => UserData.Password;
 
-    public bool IsBusinessOwner => BusinessIds?.Count > 0;
+    public bool IsBusinessOwner => Businesses?.Count > 0;
 
     public User UpdateRole(Role role)
     {

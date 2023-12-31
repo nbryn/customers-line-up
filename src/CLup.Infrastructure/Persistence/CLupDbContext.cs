@@ -143,6 +143,7 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
     {
         var entity = (Entity)await FindAsync(typeof(Entity), id);
 
+        // Is this necessary?
         // Use reflection
         // updatedEntity.Id = entity.Id;
         Entry(entity).CurrentValues.SetValues(updatedEntity);
