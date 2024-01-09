@@ -28,7 +28,7 @@ public sealed class UpdateUserInfoHandler : IRequestHandler<UpdateUserCommand, R
             .FailureIfNotFound(UserErrors.NotFound)
             .AndThen(user => user.Update(command.Name, command.Email, Convert(command)))
             .Validate(_validator)
-            .Finally(updatedUser => _repository.UpdateEntity(updatedUser.Id.Value, updatedUser));
+            .FinallyAsync(updatedUser => _repository.UpdateEntity(updatedUser.Id.Value, updatedUser));
 
     private (Address, Coords) Convert(UpdateUserCommand command)
         => (new Address(command.Street, command.Zip, command.City),

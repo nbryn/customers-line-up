@@ -34,5 +34,5 @@ public sealed class CreateBusinessHandler : IRequestHandler<CreateBusinessComman
             .AndThen(user => user.UpdateRole(Role.Owner))
             .AndThen(_ => _mapper.Map<Business>(command))
             .Validate(_validator)
-            .Finally(business => _repository.AddAndSave(business));
+            .FinallyAsync(business => _repository.AddAndSave(business));
 }

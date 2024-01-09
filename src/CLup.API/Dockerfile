@@ -1,21 +1,24 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-WORKDIR /app
+WORKDIR /build
 
-COPY *.csproj ./
-RUN dotnet restore
+COPY ["./CLup.API", "./"]
+COPY ["./CLup.Application", "/CLup.Application"]
+COPY ["./CLup.Infrastructure", "/CLup.Infrastructure"]
+COPY ["./CLup.Domain", "/CLup.Domain"]
 
 ENV ASPNETCORE_URLS http://+:5000;https://+:5001
-ENV DOTNET_USE_POLLING_FILE_WATCHER 1
-
 EXPOSE 5000
 EXPOSE 5001
 
-COPY . ./
-RUN dotnet publish -c Release -o out
+RUN dotnet restore
+RUN dotnet build --no-restore --configuration Release .
+RUN dotnet publish --no-restore --no-build --configuration Release -o /out .
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0
+FROM runtime
 WORKDIR /app
-COPY --from=build-env /app/out .
+COPY --from=build /out .
+
 RUN sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf
-ENTRYPOINT ["dotnet", "watch", "run", "CLup.dll"]
+ENTRYPOINT ["dotnet", "CLup.API.dll"]

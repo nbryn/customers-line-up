@@ -32,14 +32,14 @@ public sealed class SendMessageHandler : IRequestHandler<SendMessageCommand, Res
     public async Task<Result> Handle(SendMessageCommand command, CancellationToken cancellationToken)
         => await _repository.FetchUserAggregate(UserId.Create(command.SenderId))
             .ToResult()
-            .AndThen(async user =>
+            .AndThenAsync(async user =>
             {
                 var business = await _repository.FetchBusinessAggregate(BusinessId.Create(command.SenderId));
                 return new { business, user };
             })
             .Ensure(entry => entry.user != null || entry.business != null, HttpCode.BadRequest,
                 MessageErrors.InvalidSender)
-            .AndThen(async _ =>
+            .AndThenAsync(async _ =>
             {
                 var user = await _repository.FetchUserAggregate(UserId.Create(command.ReceiverId));
                 var business = await _repository.FetchBusinessAggregate(BusinessId.Create(command.ReceiverId));
@@ -49,5 +49,5 @@ public sealed class SendMessageHandler : IRequestHandler<SendMessageCommand, Res
                 MessageErrors.InvalidReceiver)
             .AndThen(_ => _mapper.Map<Message>(command))
             .Validate(_validator)
-            .Finally(message => _repository.AddAndSave(message));
+            .FinallyAsync(message => _repository.AddAndSave(message));
 }

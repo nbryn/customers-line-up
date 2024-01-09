@@ -27,5 +27,5 @@ public sealed class DeleteTimeSlotHandler : IRequestHandler<DeleteTimeSlotComman
             .Ensure(business => business?.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden, TimeSlotErrors.NoAccess)
             .FailureIfNotFound(business => business?.GetTimeSlotById(TimeSlotId.Create(command.TimeSlotId)), TimeSlotErrors.NotFound)
             .AddDomainEvent(timeSlot => timeSlot?.DomainEvents.Add(new TimeSlotDeletedEvent(timeSlot)))
-            .Finally(timeSlot => _repository.RemoveAndSave(timeSlot));
+            .FinallyAsync(timeSlot => _repository.RemoveAndSave(timeSlot));
 }

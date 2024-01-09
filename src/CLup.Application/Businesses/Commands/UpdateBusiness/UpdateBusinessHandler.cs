@@ -34,6 +34,6 @@ public sealed class UpdateBusinessHandler : IRequestHandler<UpdateBusinessComman
                 BusinessErrors.InvalidOwner)
             .AndThen(_ => _mapper.Map<Business>(command))
             .Validate(_businessValidator)
-            .Finally(async updatedBusiness =>
+            .FinallyAsync(async updatedBusiness =>
                 await _repository.UpdateEntity(command.BusinessId, updatedBusiness));
 }

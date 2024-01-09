@@ -27,7 +27,7 @@ public static class TaskExtensions
         Error error)
         => (await task).Bind(f, error);
 
-    public static async Task<Result<U>> FailureIfNotFound<T, U>(
+    public static async Task<Result<U>> FailureIfNotFoundAsync<T, U>(
         this Task<Result<T>> task,
         Func<T, Task<U>> f,
         Error error)
@@ -41,8 +41,8 @@ public static class TaskExtensions
 
     public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, U> f) => (await task).Bind(f);
 
-    public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f) =>
-        await (await task).Bind(f);
+    public static async Task<Result<U>> AndThenAsync<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f) =>
+        await (await task).BindAsync(f);
 
     public static async Task<Result<T>> AndThenF<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
         => await (await task).BindF(f);
@@ -54,16 +54,16 @@ public static class TaskExtensions
         Error? error = null)
         => await (await task).Ensure(task, predicate, httpCode, error);
 
-    public static async Task<Result<T>> Ensure<T>(
+    public static async Task<Result<T>> EnsureAsync<T>(
         this Task<Result<T>> task,
         Func<T, Task<bool>> predicate,
         HttpCode httpCode,
         Error? error = null)
-        => await (await task).Ensure(task, predicate, httpCode, error);
+        => await (await task).EnsureAsync(task, predicate, httpCode, error);
 
     public static async Task<Result<U>> Finally<T, U>(this Task<Result<T>> task, Func<T, U> f)
         => (await task).Bind(f);
 
-    public static async Task<Result<U>> Finally<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
-        => await (await task).Bind(f);
+    public static async Task<Result<U>> FinallyAsync<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
+        => await (await task).BindAsync(f);
 }

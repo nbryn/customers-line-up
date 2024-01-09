@@ -38,9 +38,9 @@ public sealed class CreateBookingHandler : IRequestHandler<CreateBookingCommand,
                 TimeSlotErrors.NotFound)
             .AndThen(_ => _mapper.Map<Booking>(command))
             .Validate(_validator)
-            .FailureIfNotFound(
+            .FailureIfNotFoundAsync(
                 async booking => (await _repository.FetchUserAggregate(command.UserId))?.AddBooking(booking),
                 UserErrors.NotFound)
             .Ensure(result => result.Success, HttpCode.BadRequest)
-            .Finally(_ => _repository.SaveChangesAsync(cancellationToken));
+            .FinallyAsync(_ => _repository.SaveChangesAsync(cancellationToken));
 }

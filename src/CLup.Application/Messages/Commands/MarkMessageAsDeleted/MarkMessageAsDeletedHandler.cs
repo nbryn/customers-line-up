@@ -24,9 +24,9 @@ public sealed class MarkMessageAsDeletedHandler : IRequestHandler<MarkMessageAsD
     public async Task<Result> Handle(MarkMessageAsDeletedCommand command, CancellationToken cancellationToken)
         => await _repository.FetchMessage(MessageId.Create(command.MessageId), command.RequestMadeByBusiness)
             .FailureIfNotFound(MessageErrors.NotFound)
-            .Ensure(async message => await Validate(message, command), HttpCode.Forbidden, MessageErrors.NoAccess)
+            .EnsureAsync(async message => await Validate(message, command), HttpCode.Forbidden, MessageErrors.NoAccess)
             .AndThen(message => command.ForSender ? message?.DeletedBySender() : message?.DeletedByReceiver())
-            .Finally(message => _repository.UpdateEntity(message.Id.Value, message));
+            .FinallyAsync(message => _repository.UpdateEntity(message.Id.Value, message));
 
     private async Task<bool> Validate(Message message, MarkMessageAsDeletedCommand command)
     {

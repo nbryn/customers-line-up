@@ -60,7 +60,7 @@ public sealed class Result<T> : Result
         return Ok(Value);
     }
 
-    public async Task<Result<U>> Bind<U>(Func<T, Task<U>> f)
+    public async Task<Result<U>> BindAsync<U>(Func<T, Task<U>> f)
     {
         if (Failure)
         {
@@ -132,7 +132,7 @@ public sealed class Result<T> : Result
         return await task;
     }
 
-    public async Task<Result<T>> Ensure(
+    public async Task<Result<T>> EnsureAsync(
         Task<Result<T>> task,
         Func<T, Task<bool>> predicate,
         HttpCode httpCode,

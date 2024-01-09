@@ -25,5 +25,5 @@ public sealed class GenerateTimeSlotsHandler : IRequestHandler<GenerateTimeSlots
             .Ensure(business => business?.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden,
                 TimeSlotErrors.NoAccess)
             .Ensure(business => business.GenerateTimeSlots(command.Start).Success, HttpCode.BadRequest)
-            .Finally(_ => _repository.SaveChangesAsync(cancellationToken));
+            .FinallyAsync(_ => _repository.SaveChangesAsync(cancellationToken));
 }

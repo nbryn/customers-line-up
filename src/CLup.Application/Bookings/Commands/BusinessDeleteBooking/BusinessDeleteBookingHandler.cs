@@ -27,5 +27,5 @@ public sealed class BusinessDeleteBookingHandler : IRequestHandler<BusinessDelet
             .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden, BusinessErrors.InvalidOwner)
             .FailureIfNotFound(business => business.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound)
             .AddDomainEvent(booking => booking.DomainEvents.Add(new BusinessDeletedBookingEvent(booking)))
-            .Finally(booking => _repository.RemoveAndSave(booking));
+            .FinallyAsync(booking => _repository.RemoveAndSave(booking));
 }

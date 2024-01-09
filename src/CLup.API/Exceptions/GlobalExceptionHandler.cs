@@ -1,16 +1,14 @@
 ﻿using CLup.Application.Shared;
 using Microsoft.AspNetCore.Diagnostics;
 
-namespace CLup.API.Middleware;
+namespace CLup.API.Exceptions;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
     private const string ErrorMessage = "Internal Server Error";
-    private readonly RequestDelegate _next;
 
-    public GlobalExceptionHandler(RequestDelegate next)
+    public GlobalExceptionHandler()
     {
-        _next = next;
     }
 
     public async ValueTask<bool> TryHandleAsync(

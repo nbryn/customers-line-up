@@ -26,5 +26,5 @@ public sealed class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeComman
             .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden,
                 BusinessErrors.InvalidOwner)
             .FailureIfNotFound(business => business.GetEmployeeById(EmployeeId.Create(command.UserId)), EmployeeErrors.NotFound)
-            .Finally(async employee => await _repository.RemoveAndSave(employee));
+            .FinallyAsync(async employee => await _repository.RemoveAndSave(employee));
 }

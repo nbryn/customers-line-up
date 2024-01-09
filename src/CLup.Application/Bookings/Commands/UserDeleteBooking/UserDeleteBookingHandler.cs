@@ -26,5 +26,5 @@ public sealed class UserDeleteBookingHandler : IRequestHandler<UserDeleteBooking
             .FailureIfNotFound(UserErrors.NotFound)
             .FailureIfNotFound(user => user.GetBookingById(BookingId.Create(command.BookingId)), BookingErrors.NotFound)
             .AddDomainEvent(booking => booking.DomainEvents.Add(new UserDeletedBookingEvent(booking)))
-            .Finally(async booking => await _repository.RemoveAndSave(booking));
+            .FinallyAsync(async booking => await _repository.RemoveAndSave(booking));
 }

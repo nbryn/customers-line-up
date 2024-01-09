@@ -33,12 +33,12 @@ public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeComman
     public async Task<Result> Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
             .FailureIfNotFound(BusinessErrors.NotFound)
-            .FailureIfNotFound(business => GetUser(business, command), UserErrors.NotFound)
+            .FailureIfNotFoundAsync(business => GetUser(business, command), UserErrors.NotFound)
             .Ensure(entry => entry.Value.business.AddEmployee(entry.Value.user, entry.Value.employee).Success,
                 HttpCode.BadRequest)
             .AndThen(entry => entry.Value.employee)
             .Validate(_validator)
-            .Finally(_ => _repository.SaveChangesAsync(cancellationToken));
+            .FinallyAsync(_ => _repository.SaveChangesAsync(cancellationToken));
 
     private async Task<(Business business, User user, Employee employee)?> GetUser(
         Business business,

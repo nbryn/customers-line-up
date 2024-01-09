@@ -1,5 +1,5 @@
+using CLup.API.Exceptions;
 using CLup.API.Extensions;
-using CLup.API.Middleware;
 using CLup.Application;
 using CLup.Application.Auth;
 using CLup.Domain;
@@ -75,11 +75,7 @@ public class Program
         app.UseCors("CorsApi");
         app.UseAuthentication();
         app.UseAuthorization();
-
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
+        app.MapControllers();
 
         app.Run();
     }
