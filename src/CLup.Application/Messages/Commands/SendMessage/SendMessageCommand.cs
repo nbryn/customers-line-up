@@ -7,15 +7,15 @@ namespace CLup.Application.Messages.Commands.SendMessage;
 
 public sealed class SendMessageCommand : IRequest<Result>
 {
-    public Guid SenderId { get; set; }
+    public Guid SenderId { get; init; }
 
-    public Guid ReceiverId { get; set; }
+    public Guid ReceiverId { get; init; }
 
-    public string Title { get; set; }
+    public string Title { get; init; }
 
-    public string Content { get; set; }
+    public string Content { get; init; }
 
-    public MessageType Type { get; set; }
+    public MessageType Type { get; init; }
 
     public SendMessageCommand(
         Guid senderId,

@@ -9,7 +9,7 @@ public sealed class UserDeleteBookingCommand : IRequest<Result>
 {
     public UserId UserId { get; set; }
 
-    public Guid BookingId { get; set; }
+    public Guid BookingId { get; init; }
 
     public UserDeleteBookingCommand(UserId userId, Guid bookingId)
     {

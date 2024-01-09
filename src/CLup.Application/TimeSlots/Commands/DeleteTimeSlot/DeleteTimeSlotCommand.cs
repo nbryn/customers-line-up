@@ -9,9 +9,9 @@ public sealed class DeleteTimeSlotCommand : IRequest<Result>
 {
     public UserId OwnerId { get; set; }
 
-    public Guid BusinessId { get; set; }
+    public Guid BusinessId { get; init; }
 
-    public Guid TimeSlotId { get; set; }
+    public Guid TimeSlotId { get; init; }
 
     public DeleteTimeSlotCommand(UserId ownerId, Guid businessId, Guid timeSlotId)
     {

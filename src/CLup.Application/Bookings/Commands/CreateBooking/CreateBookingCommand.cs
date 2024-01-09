@@ -9,9 +9,9 @@ public sealed class CreateBookingCommand : IRequest<Result>
 {
     public UserId UserId { get; set; }
 
-    public Guid BusinessId { get; set; }
+    public Guid BusinessId { get; init; }
 
-    public Guid TimeSlotId { get; set; }
+    public Guid TimeSlotId { get; init; }
 
     public CreateBookingCommand(UserId userId, Guid timeSlotId, Guid businessId)
     {

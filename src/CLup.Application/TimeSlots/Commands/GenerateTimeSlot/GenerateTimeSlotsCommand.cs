@@ -9,7 +9,7 @@ public sealed class GenerateTimeSlotsCommand : IRequest<Result>
 {
     public UserId OwnerId { get; set; }
 
-    public Guid BusinessId { get; set; }
+    public Guid BusinessId { get; init; }
 
-    public DateTime Start { get; set; }
+    public DateTime Start { get; init; }
 }

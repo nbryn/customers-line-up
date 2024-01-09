@@ -7,29 +7,29 @@ namespace CLup.Application.Businesses.Commands.UpdateBusiness;
 
 public sealed class UpdateBusinessCommand : IRequest<Result>
 {
-    public Guid BusinessId { get; set; }
-
     public UserId OwnerId { get; set; }
 
-    public string Name { get; set; }
+    public Guid BusinessId { get; init; }
 
-    public string Zip { get; set; }
+    public string Name { get; init; }
 
-    public string Street { get; set; }
+    public string Zip { get; init; }
 
-    public string City { get; set; }
+    public string Street { get; init; }
 
-    public string Opens { get; set; }
+    public string City { get; init; }
 
-    public string Closes { get; set; }
+    public string Opens { get; init; }
 
-    public int Capacity { get; set; }
+    public string Closes { get; init; }
 
-    public int TimeSlotLength { get; set; }
+    public int Capacity { get; init; }
 
-    public string Type { get; set; }
+    public int TimeSlotLength { get; init; }
 
-    public double Longitude { get; set; }
+    public string Type { get; init; }
 
-    public double Latitude { get; set; }
+    public double Longitude { get; init; }
+
+    public double Latitude { get; init; }
 }

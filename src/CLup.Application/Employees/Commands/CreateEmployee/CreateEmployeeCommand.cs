@@ -9,9 +9,9 @@ public sealed class CreateEmployeeCommand : IRequest<Result>
 {
     public UserId OwnerId { get; set; }
 
-    public Guid BusinessId { get; set; }
+    public Guid BusinessId { get; init; }
 
-    public Guid UserId { get; set; }
+    public Guid UserId { get; init; }
 
-    public string CompanyEmail { get; set; }
+    public string CompanyEmail { get; init; }
 }

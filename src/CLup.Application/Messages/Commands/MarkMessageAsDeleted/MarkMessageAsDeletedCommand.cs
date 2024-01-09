@@ -10,15 +10,15 @@ public sealed class MarkMessageAsDeletedCommand : IRequest<Result>
 {
     public UserId UserId { get; set; }
 
-    public Guid SenderId { get; set; }
+    public Guid SenderId { get; init; }
 
-    public Guid ReceiverId { get; set; }
+    public Guid ReceiverId { get; init; }
 
-    public Guid MessageId { get; set; }
+    public Guid MessageId { get; init; }
 
-    public bool RequestMadeByBusiness { get; set; }
+    public bool RequestMadeByBusiness { get; init; }
 
-    public bool ForSender { get; set; }
+    public bool ForSender { get; init; }
 
     public MarkMessageAsDeletedCommand(
         UserId userId,

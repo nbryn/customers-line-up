@@ -7,11 +7,11 @@ namespace CLup.Application.Users.Commands.UpdateUserInfo;
 public sealed class UpdateUserCommand : IRequest<Result>
 {
     public UserId UserId { get; set; }
-    public string Email { get; set; }
-    public string Name { get; set; }
-    public string Zip { get; set; }
-    public string Street { get; set; }
-    public string City { get; set; }
-    public double Longitude { get; set; }
-    public double Latitude { get; set; }
+    public string Email { get; init; }
+    public string Name { get; init; }
+    public string Zip { get; init; }
+    public string Street { get; init; }
+    public string City { get; init; }
+    public double Longitude { get; init; }
+    public double Latitude { get; init; }
 }

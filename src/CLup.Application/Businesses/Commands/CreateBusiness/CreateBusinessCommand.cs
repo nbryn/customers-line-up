@@ -1,4 +1,3 @@
-using System;
 using CLup.Application.Shared;
 using CLup.Domain.Users.ValueObjects;
 using MediatR;
@@ -9,25 +8,25 @@ public sealed class CreateBusinessCommand : IRequest<Result>
 {
     public UserId OwnerId { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; init; }
 
-    public string Zip { get; set; }
+    public string Zip { get; init; }
 
-    public string City { get; set; }
+    public string City { get; init; }
 
-    public string Street { get; set; }
+    public string Street { get; init; }
 
-    public double Longitude { get; set; }
+    public double Longitude { get; init; }
 
-    public double Latitude { get; set; }
+    public double Latitude { get; init; }
 
-    public double Opens { get; set; }
+    public double Opens { get; init; }
 
-    public double Closes { get; set; }
+    public double Closes { get; init; }
 
-    public int Capacity { get; set; }
+    public int Capacity { get; init; }
 
-    public int TimeSlotLength { get; set; }
+    public int TimeSlotLength { get; init; }
 
-    public string Type { get; set; }
+    public string Type { get; init; }
 }

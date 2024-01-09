@@ -9,9 +9,9 @@ public sealed class DeleteEmployeeCommand : IRequest<Result>
 {
     public UserId OwnerId { get; set; }
 
-    public Guid BusinessId { get; set; }
+    public Guid BusinessId { get; init; }
 
-    public Guid UserId { get; set; }
+    public Guid UserId { get; init; }
 
     public DeleteEmployeeCommand(UserId ownerId, Guid businessId, Guid userId)
     {

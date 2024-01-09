@@ -9,9 +9,9 @@ public sealed class BusinessDeleteBookingCommand : IRequest<Result>
 {
     public UserId OwnerId { get; set; }
 
-    public Guid BookingId { get; set; }
+    public Guid BookingId { get; init; }
 
-    public Guid BusinessId { get; set; }
+    public Guid BusinessId { get; init; }
 
     public BusinessDeleteBookingCommand(
         UserId ownerId,
