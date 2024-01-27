@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CLup.API.Controllers;
 
 [Route("api/employee")]
-public class EmployeeController : BaseController
+public class EmployeeController : AuthorizedControllerBase
 {
     private readonly IMediator _mediator;
 

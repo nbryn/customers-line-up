@@ -39,7 +39,7 @@ public sealed class CreateBookingHandler : IRequestHandler<CreateBookingCommand,
             .AndThen(_ => _mapper.Map<Booking>(command))
             .Validate(_validator)
             .FailureIfNotFoundAsync(
-                async booking => (await _repository.FetchUserAggregate(command.UserId))?.AddBooking(booking),
+                async booking => (await _repository.FetchUserAggregateById(command.UserId))?.AddBooking(booking),
                 UserErrors.NotFound)
             .Ensure(result => result.Success, HttpCode.BadRequest)
             .FinallyAsync(_ => _repository.SaveChangesAsync(cancellationToken));

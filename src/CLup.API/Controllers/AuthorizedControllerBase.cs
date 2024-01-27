@@ -8,7 +8,7 @@ namespace CLup.API.Controllers;
 
 [ApiController]
 [Authorize(Policy = Policies.User)]
-public abstract class BaseController : ControllerBase
+public abstract class AuthorizedControllerBase : ControllerBase
 {
     public UserId GetUserIdFromJwt()
     {

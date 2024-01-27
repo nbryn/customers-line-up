@@ -35,7 +35,6 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             u.Property(userData => userData.Name)
                 .HasColumnName("Name");
 
-
             u.Property(userData => userData.Email)
                 .HasColumnName("Email");
 

@@ -13,7 +13,12 @@ using BC = BCrypt.Net.BCrypt;
 
 namespace CLup.Infrastructure.Persistence.Seed;
 
-public sealed class Seeder
+public interface ISeeder
+{
+    public Task Seed();
+}
+
+public sealed class Seeder : ISeeder
 {
     private readonly CLupDbContext _dbContext;
 
@@ -210,10 +215,8 @@ public sealed class Seeder
 
         foreach (var business in businesses)
         {
-            var timeSlots = business.GenerateTimeSlots(DateTime.Today.AddDays(1));
+            business.GenerateTimeSlots(DateTime.Today.AddDays(1));
             businessTimeSlots.Add(business.Id, business.TimeSlots.Select(timeSlot => timeSlot.Id).ToList());
-
-            _dbContext.AddRange(timeSlots);
         }
 
         return businessTimeSlots;

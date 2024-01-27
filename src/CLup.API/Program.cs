@@ -51,7 +51,7 @@ public class Program
             .ConfigureInfrastructure(config, environment);
     }
 
-    public static async Task Configure(WebApplication app, IWebHostEnvironment env)
+    private static async Task Configure(WebApplication app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
@@ -70,7 +70,11 @@ public class Program
             swaggerUiOptions.DisplayRequestDuration();
         });
 
-        app.UseExceptionHandler();
+        if (!env.IsDevelopment())
+        {
+            app.UseExceptionHandler(_ => { });
+        }
+
         app.UseRouting();
         app.UseCors("CorsApi");
         app.UseAuthentication();

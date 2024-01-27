@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CLup.API.Controllers;
 
 [Route("api/booking")]
-public class BookingController : BaseController
+public class BookingController : AuthorizedControllerBase
 {
     private readonly IMediator _mediator;
 

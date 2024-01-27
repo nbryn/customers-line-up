@@ -42,7 +42,7 @@ public sealed class MarkMessageAsDeletedHandler : IRequestHandler<MarkMessageAsD
             return business?.OwnerId.Value == id;
         }
 
-        var user = await _repository.FetchUserAggregate(UserId.Create(id));
+        var user = await _repository.FetchUserAggregateById(UserId.Create(id));
         return user?.Id.Value == id;
     }
 }

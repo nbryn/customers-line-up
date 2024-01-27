@@ -22,7 +22,7 @@ public static class InfrastructureConfiguration
     {
         services.AddScoped<ICLupRepository, CLupDbContext>();
         services.AddScoped<IDomainEventService, DomainEventService>();
-        services.AddTransient<Seeder>();
+        services.AddTransient<ISeeder, Seeder>();
 
         ConfigureDb(services, configuration, environment);
 
@@ -38,9 +38,8 @@ public static class InfrastructureConfiguration
         if (environment.IsDevelopment())
         {
             var connectionString = configuration.GetConnectionString("development");
-
             services.AddDbContext<CLupDbContext>(options =>
-                    options.UseSqlServer(connectionString),
+                    options.UseNpgsql(connectionString),
                 ServiceLifetime.Transient);
         }
         else

@@ -45,6 +45,7 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         : base(options)
     {
         _domainEventService = domainEventService;
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -74,7 +75,7 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .AsSplitQuery()
             .FirstOrDefaultAsync(business => business.Id == businessId);
 
-    public async Task<User?> FetchUserAggregate(UserId? userId, string? email = null)
+    public async Task<User?> FetchUserAggregateById(UserId userId)
         => await Users
             .Include(user => user.SentMessages)
             .ThenInclude(message => message.MessageData)
@@ -90,7 +91,10 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .ThenInclude(booking => booking.TimeSlot)
             .ThenInclude(timeSlot => timeSlot.Business)
             .AsSplitQuery()
-            .FirstOrDefaultAsync(user => userId != null ? user.Id.Value == userId.Value : user.UserData.Email == email);
+            .FirstOrDefaultAsync(user => user.Id == userId);
+
+    public async Task<bool> EmailExists(string email)
+        => await Users.AnyAsync(user => user.UserData.Email == email);
 
     public async Task<Message?> FetchMessage(MessageId messageId, bool forBusiness) =>
         forBusiness

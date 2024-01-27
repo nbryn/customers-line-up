@@ -30,7 +30,7 @@ public sealed class SendMessageHandler : IRequestHandler<SendMessageCommand, Res
     }
 
     public async Task<Result> Handle(SendMessageCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchUserAggregate(UserId.Create(command.SenderId))
+        => await _repository.FetchUserAggregateById(UserId.Create(command.SenderId))
             .ToResult()
             .AndThenAsync(async user =>
             {
@@ -41,7 +41,7 @@ public sealed class SendMessageHandler : IRequestHandler<SendMessageCommand, Res
                 MessageErrors.InvalidSender)
             .AndThenAsync(async _ =>
             {
-                var user = await _repository.FetchUserAggregate(UserId.Create(command.ReceiverId));
+                var user = await _repository.FetchUserAggregateById(UserId.Create(command.ReceiverId));
                 var business = await _repository.FetchBusinessAggregate(BusinessId.Create(command.ReceiverId));
                 return new { business, user };
             })

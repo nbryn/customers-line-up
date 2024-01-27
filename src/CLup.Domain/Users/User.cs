@@ -23,7 +23,7 @@ public sealed class User : Entity, IAggregateRoot
     private readonly List<Business> _businesses = new();
     private readonly List<Booking> _bookings = new();
 
-    public UserId Id { get; }
+    public UserId Id { get; private set; }
 
     public UserData UserData { get; private set; }
 

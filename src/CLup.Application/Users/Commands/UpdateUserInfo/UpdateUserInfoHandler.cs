@@ -24,7 +24,7 @@ public sealed class UpdateUserInfoHandler : IRequestHandler<UpdateUserCommand, R
     }
 
     public async Task<Result> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchUserAggregate(command.UserId)
+        => await _repository.FetchUserAggregateById(command.UserId)
             .FailureIfNotFound(UserErrors.NotFound)
             .AndThen(user => user.Update(command.Name, command.Email, Convert(command)))
             .Validate(_validator)

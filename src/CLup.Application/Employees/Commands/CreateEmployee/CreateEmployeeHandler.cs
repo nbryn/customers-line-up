@@ -44,7 +44,7 @@ public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeComman
         Business business,
         CreateEmployeeCommand command)
     {
-        var user = await _repository.FetchUserAggregate(UserId.Create(command.UserId));
+        var user = await _repository.FetchUserAggregateById(UserId.Create(command.UserId));
         if (user == null)
         {
             return null;

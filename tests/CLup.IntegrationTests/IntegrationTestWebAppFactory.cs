@@ -1,41 +1,45 @@
 ﻿using CLup.API;
 using CLup.Infrastructure.Persistence;
+using CLup.Infrastructure.Persistence.Seed;
+using DotNet.Testcontainers.Builders;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Testcontainers.MsSql;
+using Testcontainers.PostgreSql;
 
 namespace tests.CLup.IntegrationTests;
 
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly MsSqlContainer _dbContainer = new MsSqlBuilder()
-        .WithImage("mcr.microsoft.com/mssql/server:2019-latest")
-        .WithPassword("Secret_paSS123")
+    private readonly PostgreSqlContainer _dbContainer = new PostgreSqlBuilder()
+        .WithImage("postgres:latest")
+        .WithDatabase("clup")
+        .WithUsername("postgres")
+        .WithPassword("postgres")
+        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
         .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureTestServices(services =>
         {
-            var descriptor =
+            var seederDescriptor = services.SingleOrDefault(service => service.ServiceType == typeof(Seeder));
+            var dbContextDescriptor =
                 services.SingleOrDefault(service => service.ServiceType == typeof(DbContextOptions<CLupDbContext>));
 
-            if (descriptor is not null)
-            {
-                services.Remove(descriptor);
-            }
-
+            services.Remove(seederDescriptor);
+            services.Remove(dbContextDescriptor);
+            services.AddTransient<ISeeder, TestSeeder>();
             services.AddDbContext<CLupDbContext>(options =>
             {
-                options.UseSqlServer(_dbContainer.GetConnectionString());
+                options.UseNpgsql(_dbContainer.GetConnectionString());
             });
         });
     }
 
     public Task InitializeAsync() => _dbContainer.StartAsync();
 
-    public Task DisposeAsync() => _dbContainer.StopAsync();
+    public new Task DisposeAsync() => _dbContainer.StopAsync();
 }

@@ -1,17 +1,18 @@
-using CLup.Application.Auth.Commands.Register;
 using FluentValidation;
 
-namespace CLup.Application.Auth.Validation;
+namespace CLup.Application.Auth.Commands.Register;
 
 public sealed class RegisterValidator : AbstractValidator<RegisterCommand>
 {
     public RegisterValidator()
     {
-        RuleFor(x => x.Email).EmailAddress();
-        RuleFor(x => x.Password).NotEmpty();
-        RuleFor(x => x.Name).NotEmpty();
-        RuleFor(x => x.Zip).NotEmpty();
-        RuleFor(x => x.Street).NotEmpty();
-        RuleFor(x => x.City).NotEmpty();
+        RuleFor(command => command.Email).EmailAddress();
+        RuleFor(command => command.Password).NotEmpty();
+        RuleFor(command => command.Name).NotEmpty();
+        RuleFor(command => command.Zip).NotEmpty();
+        RuleFor(command => command.Street).NotEmpty();
+        RuleFor(command => command.City).NotEmpty();
+        RuleFor(command => command.Latitude).NotEmpty();
+        RuleFor(command => command.Longitude).NotEmpty();
     }
 }

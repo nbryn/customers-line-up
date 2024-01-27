@@ -12,7 +12,10 @@ public sealed class AuthService : IAuthService
 {
     private readonly IConfiguration _config;
 
-    public AuthService(IConfiguration config) => _config = config;
+    public AuthService(IConfiguration config)
+    {
+        _config = config;
+    }
 
     public string GenerateJwtToken(User user)
     {
@@ -24,8 +27,8 @@ public sealed class AuthService : IAuthService
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id.Value.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim("role", "User"),
-            new Claim(JwtRegisteredClaimNames. Jti, Guid.NewGuid().ToString()),
         };
 
         var token = new JwtSecurityToken(

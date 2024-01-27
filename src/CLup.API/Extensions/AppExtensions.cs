@@ -11,7 +11,7 @@ public static class AppExtensions
         var context = scope.ServiceProvider.GetRequiredService<CLupDbContext>();
 
         context.Database.EnsureCreated();
-        var seeder = scope.ServiceProvider.GetRequiredService<Seeder>();
+        var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
 
         await seeder.Seed();
     }

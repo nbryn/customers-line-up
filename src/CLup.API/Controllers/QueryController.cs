@@ -1,97 +1,84 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using AutoMapper;
-using CLup.Application.Auth;
 using CLup.Application.Businesses;
+using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Util;
 using CLup.Application.Users;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using CLup.Application.Shared.Interfaces;
 using CLup.Application.Users.Queries;
 using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
-using CLup.Domain.Users.ValueObjects;
+using Microsoft.AspNetCore.Mvc;
 
-namespace CLup.WebUI.Controllers
+namespace CLup.API.Controllers;
+
+[ApiController]
+[Route("api/query")]
+public class QueryController : AuthorizedControllerBase
 {
-    [ApiController]
-    [Authorize(Policy = Policies.User)]
-    [Route("api/query")]
-    public class QueryController : ControllerBase
+    private readonly ICLupRepository _context;
+    private readonly IMapper _mapper;
+
+    public QueryController(
+        ICLupRepository context,
+        IMapper mapper)
     {
-        private readonly ICLupRepository _context;
-        private readonly IMapper _mapper;
+        _context = context;
+        _mapper = mapper;
+    }
 
-        public QueryController(
-            ICLupRepository context,
-            IMapper mapper)
+    [HttpGet]
+    [Route("user")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> FetchUserAggregate()
+    {
+        var user = await _context.FetchUserAggregateById(GetUserIdFromJwt());
+        if (user == null)
         {
-            _context = context;
-            _mapper = mapper;
+            return NotFound("User was not found");
         }
 
-        [HttpGet]
-        [Route("user")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchUserAggregate()
+        return Ok(_mapper.Map<UserDto>(user));
+    }
+
+    [HttpGet]
+    [Route("business/all")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BusinessDto>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> FetchAllBusinesses()
+    {
+        var businesses = await _context.FetchAllBusinesses();
+
+        return Ok(_mapper.Map<IList<BusinessDto>>(businesses));
+    }
+
+    [HttpGet]
+    [Route("business/types")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public IActionResult FetchBusinessTypes()
+    {
+        var types = EnumUtil
+            .GetValues<BusinessType>()
+            .Select(type => type.ToString("G"))
+            .ToList();
+
+        return Ok(types);
+    }
+
+    [Route("user/notEmployedByBusiness/{businessId}")]
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusiness))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] Guid businessId)
+    {
+        var business = await _context.FetchBusinessAggregate(BusinessId.Create(businessId));
+        if (business == null)
         {
-            var userId = Guid.Parse((ReadOnlySpan<char>)User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var user = await _context.FetchUserAggregate(UserId.Create(userId));
-
-            if (user == null)
-            {
-                return NotFound("User was not found");
-            }
-
-            return Ok(_mapper.Map<UserDto>(user));
+            return NotFound();
         }
 
-        [HttpGet]
-        [Route("business/all")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BusinessDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllBusinesses()
-        {
-            var businesses = await _context.FetchAllBusinesses();
+        var users = await _context.FetchUsersNotEmployedByBusiness(BusinessId.Create(businessId));
 
-            return Ok(_mapper.Map<IList<BusinessDto>>(businesses));
-        }
-
-        [HttpGet]
-        [Route("business/types")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public IActionResult FetchBusinessTypes()
-        {
-            var types = EnumUtil
-                .GetValues<BusinessType>()
-                .Select(type => type.ToString("G"))
-                .ToList();
-
-            return Ok(types);
-        }
-
-        [Route("user/notEmployedByBusiness/{businessId}")]
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusiness))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] Guid businessId)
-        {
-            var business = await _context.FetchBusinessAggregate(BusinessId.Create(businessId));
-            if (business == null)
-            {
-                return NotFound();
-            }
-
-            var users = await _context.FetchUsersNotEmployedByBusiness(BusinessId.Create(businessId));
-
-            return Ok(new UsersNotEmployedByBusiness()
-                { BusinessId = businessId, Users = _mapper.Map<IList<UserDto>>(users) });
-        }
+        return Ok(new UsersNotEmployedByBusiness()
+            { BusinessId = businessId, Users = _mapper.Map<IList<UserDto>>(users) });
     }
 }

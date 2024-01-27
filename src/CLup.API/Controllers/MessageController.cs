@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CLup.API.Controllers;
 
 [Route("api/message")]
-public class MessageController : BaseController
+public class MessageController : AuthorizedControllerBase
 {
     private readonly IMediator _mediator;
 

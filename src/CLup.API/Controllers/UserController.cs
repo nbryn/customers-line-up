@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.API.Controllers;
 
-[Route("api")]
-public class UserController : BaseController
+[Route("api/user")]
+public class UserController : AuthorizedControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -15,7 +15,7 @@ public class UserController : BaseController
         _mediator = mediator;
     }
 
-    [Route("user/update")]
+    [Route("update")]
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

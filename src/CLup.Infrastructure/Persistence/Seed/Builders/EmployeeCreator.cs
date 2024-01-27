@@ -13,7 +13,7 @@ public static class EmployeeCreator
         string companyEmail)
     {
         var employee = new Employee(userId, businessId, companyEmail);
-        employee.UpdatedAt = DateTime.Now;
+        employee.UpdatedAt = DateTime.UtcNow;
 
         return employee;
     }

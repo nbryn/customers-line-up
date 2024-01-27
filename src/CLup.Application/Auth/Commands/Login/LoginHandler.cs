@@ -24,7 +24,7 @@ public sealed class LoginHandler : IRequestHandler<LoginCommand, Result<TokenRes
     }
 
     public async Task<Result<TokenResponse>> Handle(LoginCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchUserAggregate(null, command.Email)
+        => await _repository.FetchUserAggregateById(command.Id)
             .ToResult()
             .Ensure(user => user != null && BC.Verify(command.Password, user.Password), HttpCode.Unauthorized,
                 UserErrors.InvalidCredentials)
