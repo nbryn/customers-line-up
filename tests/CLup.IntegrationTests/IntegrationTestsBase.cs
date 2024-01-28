@@ -57,7 +57,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     {
         var response = await _httpClient.GetAsync($"{Route}/{url}");
         var content = await response.Content.ReadAsStringAsync();
-        Assert.Equal(statusCode, response.StatusCode);
+        response.StatusCode.Should().Be(statusCode);
 
         return JsonConvert.DeserializeObject<TResult>(content);
     }
@@ -72,7 +72,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     {
         var response = await PostAsync(url, request);
         var content = await response.Content.ReadAsStringAsync();
-        Assert.Equal(statusCode, response.StatusCode);
+        response.StatusCode.Should().Be(statusCode);
 
         return JsonConvert.DeserializeObject<TResult>(content);
     }

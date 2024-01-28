@@ -1,6 +1,7 @@
-﻿using CLup.Application.Bookings.Commands.BusinessDeleteBooking;
-using CLup.Application.Bookings.Commands.CreateBooking;
-using CLup.Application.Bookings.Commands.UserDeleteBooking;
+﻿using CLup.API.Contracts.Bookings.CreateBooking;
+using CLup.API.Contracts.Bookings.DeleteBusinessBooking;
+using CLup.API.Contracts.Bookings.DeleteUserBooking;
+using CLup.Application.Bookings.Commands.BusinessDeleteBooking;
 using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -21,34 +22,31 @@ public class BookingController : AuthorizedControllerBase
     [Route("{timeSlotId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateBooking(Guid timeSlotId, [FromQuery] Guid businessId)
+    public async Task<IActionResult> CreateBooking(CreateBookingRequest request)
     {
-        var userId = GetUserIdFromJwt();
-        var response = await _mediator.Send(new CreateBookingCommand(userId, timeSlotId, businessId));
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
-        return this.CreateActionResult(response);
+        return this.CreateActionResult(result);
     }
 
     [HttpDelete]
     [Route("user/{bookingId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteUserBooking(Guid bookingId)
+    public async Task<IActionResult> DeleteUserBooking([FromRoute] DeleteUserBookingRequest request)
     {
-        var userId = GetUserIdFromJwt();
-        var response = await _mediator.Send(new UserDeleteBookingCommand(userId, bookingId));
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
-        return this.CreateActionResult(response);
+        return this.CreateActionResult(result);
     }
 
     [HttpDelete]
     [Route("business/{businessId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteBusinessBooking(Guid businessId, [FromQuery] Guid bookingId)
+    public async Task<IActionResult> DeleteBusinessBooking(DeleteBusinessBookingRequest request)
     {
-        var ownerId = GetUserIdFromJwt();
-        var response = await _mediator.Send(new BusinessDeleteBookingCommand(ownerId, bookingId, businessId));
+        var response = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
         return this.CreateActionResult(response);
     }

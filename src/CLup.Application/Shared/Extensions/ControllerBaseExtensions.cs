@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +14,12 @@ public static class ControllerBaseExtensions
         HttpStatusCode successStatusCode = HttpStatusCode.OK)
         => result.Failure ? Error(controller, result) : controller.StatusCode((int)successStatusCode);
 
-    public static IActionResult CreateActionResult<T>(
+    public static IActionResult CreateActionResult<T, U>(
         this ControllerBase controller,
         Result<T> result,
+        Func<T, U> toResponse,
         HttpStatusCode successStatusCode = HttpStatusCode.OK)
-        => result.Failure ? Error(controller, result) : controller.StatusCode((int)successStatusCode, result.Value);
+        => result.Failure ? Error(controller, result) : controller.StatusCode((int)successStatusCode, toResponse(result.Value));
 
     private static IActionResult Error(
         this ControllerBase controller,

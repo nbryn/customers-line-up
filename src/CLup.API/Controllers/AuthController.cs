@@ -1,9 +1,5 @@
-using System.Security.Claims;
-using CLup.Application.Auth;
-using CLup.Application.Auth.Commands.Login;
-using CLup.Application.Auth.Commands.Register;
+using CLup.API.Contracts.Auth;
 using CLup.Application.Shared.Extensions;
-using CLup.Domain.Users.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,11 +22,11 @@ public class AuthController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> Register([FromBody] RegisterCommand command)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(request.MapToCommand());
 
-        return this.CreateActionResult(result);
+        return this.CreateActionResult(result, token => new TokenResponse(token));
     }
 
     [AllowAnonymous]
@@ -38,11 +34,10 @@ public class AuthController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Login([FromBody] LoginCommand command)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        command.Id = UserId.Create(Guid.Parse((ReadOnlySpan<char>)User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(request.MapToCommand());
 
-        return this.CreateActionResult(result);
+        return this.CreateActionResult(result, token => new TokenResponse(token));
     }
 }

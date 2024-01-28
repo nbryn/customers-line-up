@@ -33,11 +33,11 @@ public sealed class Booking : Entity, IHasDomainEvent
     {
     }
 
-    public Booking(UserId userId, TimeSlotId timeSlotId, BusinessId businessId)
+    public Booking(UserId userId, BusinessId businessId, TimeSlotId timeSlotId)
     {
         UserId = userId;
-        TimeSlotId = timeSlotId;
         BusinessId = businessId;
+        TimeSlotId = timeSlotId;
 
         Id = BookingId.Create(Guid.NewGuid());
     }

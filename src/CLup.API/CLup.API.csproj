@@ -23,4 +23,11 @@
     <ProjectReference Include="..\CLup.Domain\CLup.Domain.csproj"/>
   </ItemGroup>
 
+
+
+
+
+
+
+
 </Project>

@@ -18,7 +18,7 @@ public interface ICLupRepository
 
     Task<User?> FetchUserAggregateById(UserId userId);
 
-    Task<bool> EmailExists(string email);
+    Task<User?> FetchUserByEmail(string email);
 
     Task<Message?> FetchMessage(MessageId messageId, bool forBusiness);
 

@@ -93,8 +93,8 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .AsSplitQuery()
             .FirstOrDefaultAsync(user => user.Id == userId);
 
-    public async Task<bool> EmailExists(string email)
-        => await Users.AnyAsync(user => user.UserData.Email == email);
+    public async Task<User?> FetchUserByEmail(string email)
+        => await Users.FirstOrDefaultAsync(user => user.UserData.Email == email);
 
     public async Task<Message?> FetchMessage(MessageId messageId, bool forBusiness) =>
         forBusiness

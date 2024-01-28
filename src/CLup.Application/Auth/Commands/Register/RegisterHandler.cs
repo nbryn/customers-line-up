@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
@@ -10,28 +9,28 @@ using MediatR;
 
 namespace CLup.Application.Auth.Commands.Register;
 
-public sealed class RegisterHandler : IRequestHandler<RegisterCommand, Result<TokenResponse>>
+public sealed class RegisterHandler : IRequestHandler<RegisterCommand, Result<string>>
 {
     private readonly IValidator<User> _validator;
     private readonly ICLupRepository _repository;
-    private readonly IMapper _mapper;
+    private readonly IAuthService _authService;
 
     public RegisterHandler(
         IValidator<User> validator,
         ICLupRepository repository,
-        IMapper mapper)
+        IAuthService authService)
     {
         _validator = validator;
         _repository = repository;
-        _mapper = mapper;
+        _authService = authService;
     }
 
-    public async Task<Result<TokenResponse>> Handle(RegisterCommand command, CancellationToken cancellationToken)
-        => await _repository.EmailExists(command.Email)
+    public async Task<Result<string>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+        => await _repository.FetchUserByEmail(command.UserData.Email)
             .ToResult()
-            .Ensure(emailExists => !emailExists, HttpCode.BadRequest, UserErrors.EmailExists(command.Email))
-            .AndThen(_ => _mapper.Map<User>(command))
+            .Ensure(user => user != null, HttpCode.BadRequest, UserErrors.EmailExists(command.UserData.Email))
+            .AndThen(_ => command.MapToUser())
             .Validate(_validator)
             .AndThenF(newUser => _repository.AddAndSave(newUser))
-            .Finally(_mapper.Map<TokenResponse>);
+            .Finally(_authService.GenerateJwtToken);
 }

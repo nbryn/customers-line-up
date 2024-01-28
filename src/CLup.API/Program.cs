@@ -5,6 +5,7 @@ using CLup.Application.Auth;
 using CLup.Domain;
 using CLup.Infrastructure;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace CLup.API;
@@ -33,6 +34,10 @@ public class Program
             .ConfigureCors(config)
             .ConfigureJwt(config)
             .ConfigureSwagger()
+            .Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressInferBindingSourcesForParameters = true;
+            })
             .AddAuthorization(config =>
             {
                 config.AddPolicy(Policies.Admin, Policies.AdminPolicy());

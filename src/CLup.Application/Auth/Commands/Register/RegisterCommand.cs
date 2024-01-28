@@ -1,23 +1,26 @@
 using CLup.Application.Shared;
+using CLup.Domain.Shared.ValueObjects;
+using CLup.Domain.Users;
+using CLup.Domain.Users.Enums;
+using CLup.Domain.Users.ValueObjects;
 using MediatR;
 
 namespace CLup.Application.Auth.Commands.Register;
 
-public sealed class RegisterCommand : IRequest<Result<TokenResponse>>
+public sealed class RegisterCommand : IRequest<Result<string>>
 {
-    public string Email { get; init; }
+    public UserData UserData { get; }
 
-    public string Password { get; init; }
+    public Address Address { get; }
 
-    public string Name { get; init; }
+    public Coords Coords { get; }
 
-    public string Zip { get; init; }
+    public RegisterCommand(UserData userData, Address address, Coords coords)
+    {
+        UserData = userData;
+        Address = address;
+        Coords = coords;
+    }
 
-    public string Street { get; init; }
-
-    public string City { get; init; }
-
-    public double Longitude { get; init; }
-
-    public double Latitude { get; init; }
+    public User MapToUser() => new(UserData, Address, Coords, Role.User);
 }

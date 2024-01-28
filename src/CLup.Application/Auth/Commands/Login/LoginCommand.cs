@@ -1,12 +1,17 @@
 using CLup.Application.Shared;
-using CLup.Domain.Users.ValueObjects;
 using MediatR;
 
 namespace CLup.Application.Auth.Commands.Login;
 
-public sealed class LoginCommand : IRequest<Result<TokenResponse>>
+public sealed class LoginCommand : IRequest<Result<string>>
 {
-    public UserId Id { get; set; }
+    public string Email { get; }
 
-    public string Password { get; init; }
+    public string Password { get; }
+
+    public LoginCommand(string email, string password)
+    {
+        Email = email;
+        Password = password;
+    }
 }
