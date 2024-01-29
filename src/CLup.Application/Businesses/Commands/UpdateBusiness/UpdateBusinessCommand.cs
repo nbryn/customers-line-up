@@ -1,5 +1,8 @@
-using System;
 using CLup.Application.Shared;
+using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.Enums;
+using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.Shared.ValueObjects;
 using MediatR;
 using CLup.Domain.Users.ValueObjects;
 
@@ -7,29 +10,37 @@ namespace CLup.Application.Businesses.Commands.UpdateBusiness;
 
 public sealed class UpdateBusinessCommand : IRequest<Result>
 {
-    public UserId OwnerId { get; set; }
+    public UserId OwnerId { get; }
 
-    public Guid BusinessId { get; init; }
+    public BusinessId BusinessId { get; }
 
-    public string Name { get; init; }
+    public BusinessData BusinessData { get; }
 
-    public string Zip { get; init; }
+    public Address Address { get; }
 
-    public string Street { get; init; }
+    public Coords Coords { get; }
 
-    public string City { get; init; }
+    public Interval BusinessHours { get; }
 
-    public string Opens { get; init; }
+    public BusinessType Type { get; }
 
-    public string Closes { get; init; }
+    public UpdateBusinessCommand(
+        UserId ownerId,
+        BusinessId businessId,
+        BusinessData businessData,
+        Address address,
+        Coords coords,
+        Interval businessHours,
+        BusinessType type)
+    {
+        OwnerId = ownerId;
+        BusinessId = businessId;
+        BusinessData = businessData;
+        Address = address;
+        Coords = coords;
+        BusinessHours = businessHours;
+        Type = type;
+    }
 
-    public int Capacity { get; init; }
-
-    public int TimeSlotLength { get; init; }
-
-    public string Type { get; init; }
-
-    public double Longitude { get; init; }
-
-    public double Latitude { get; init; }
+    public Business MapToBusiness() => new(OwnerId, BusinessData, Address, Coords, BusinessHours, Type);
 }

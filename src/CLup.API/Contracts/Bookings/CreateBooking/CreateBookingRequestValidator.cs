@@ -6,7 +6,7 @@ public sealed class CreateBookingRequestValidator : AbstractValidator<CreateBook
 {
     public CreateBookingRequestValidator()
     {
-        RuleFor(request => request.TimeSlotId).NotNull();
         RuleFor(request => request.BusinessId).NotNull();
+        RuleFor(request => request.TimeSlotId).NotNull();
     }
 }

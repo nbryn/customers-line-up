@@ -1,6 +1,6 @@
-﻿using CLup.Application.Shared.Extensions;
-using CLup.Application.TimeSlots.Commands.DeleteTimeSlot;
-using CLup.Application.TimeSlots.Commands.GenerateTimeSlot;
+﻿using CLup.API.Contracts.TimeSlots.DeleteTimeSlot;
+using CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
+using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,12 +19,11 @@ public class TimeSlotController : AuthorizedControllerBase
     [HttpPost]
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
-    public async Task<IActionResult> GenerateTimeSlots([FromBody] GenerateTimeSlotsCommand command)
+    public async Task<IActionResult> GenerateTimeSlots([FromBody] GenerateTimeSlotsRequest request)
     {
-        command.OwnerId = GetUserIdFromJwt();
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
         return this.CreateActionResult(result);
     }
@@ -32,11 +31,11 @@ public class TimeSlotController : AuthorizedControllerBase
     [HttpDelete]
     [Route("{timeSlotId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteTimeSlot(Guid timeSlotId, [FromQuery] Guid businessId)
+    public async Task<IActionResult> DeleteTimeSlot(DeleteTimeSlotRequest request)
     {
-        var ownerId = GetUserIdFromJwt();
-        var result = await _mediator.Send(new DeleteTimeSlotCommand(ownerId, businessId, timeSlotId));
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
         return this.CreateActionResult(result);
     }

@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using CLup.Application.Shared;
 using FluentValidation;
 using MediatR;
@@ -16,23 +15,18 @@ public sealed class CreateBusinessHandler : IRequestHandler<CreateBusinessComman
 {
     private readonly IValidator<Business> _validator;
     private readonly ICLupRepository _repository;
-    private readonly IMapper _mapper;
 
-    public CreateBusinessHandler(
-        IValidator<Business> validator,
-        ICLupRepository repository,
-        IMapper mapper)
+    public CreateBusinessHandler(IValidator<Business> validator, ICLupRepository repository)
     {
         _validator = validator;
         _repository = repository;
-        _mapper = mapper;
     }
 
     public async Task<Result> Handle(CreateBusinessCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchUserAggregateById(command.OwnerId)
+        => await _repository.FetchUserAggregate(command.OwnerId)
             .FailureIfNotFound(UserErrors.NotFound)
             .AndThen(user => user.UpdateRole(Role.Owner))
-            .AndThen(_ => _mapper.Map<Business>(command))
+            .AndThen(_ => command.MapToBusiness())
             .Validate(_validator)
-            .FinallyAsync(business => _repository.AddAndSave(business));
+            .FinallyAsync(business => _repository.AddAndSave(cancellationToken, business));
 }

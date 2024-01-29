@@ -17,7 +17,7 @@ public class QueryControllerTests : IntegrationTestsBase
         await CreateUserAndSetJwtToken(email);
         var user = await GetAsyncAndEnsureSuccess<UserDto>($"{Route}/user");
 
-        Assert.NotNull(user);
-        Assert.Equal(email, user.Email);
+        user.Should().NotBeNull();
+        user.Email.Should().Be(email);
     }
 }

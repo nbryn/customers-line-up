@@ -28,9 +28,9 @@ public sealed class RegisterHandler : IRequestHandler<RegisterCommand, Result<st
     public async Task<Result<string>> Handle(RegisterCommand command, CancellationToken cancellationToken)
         => await _repository.FetchUserByEmail(command.UserData.Email)
             .ToResult()
-            .Ensure(user => user != null, HttpCode.BadRequest, UserErrors.EmailExists(command.UserData.Email))
+            .Ensure(user => user == null, HttpCode.BadRequest, UserErrors.EmailExists(command.UserData.Email))
             .AndThen(_ => command.MapToUser())
             .Validate(_validator)
-            .AndThenF(newUser => _repository.AddAndSave(newUser))
+            .AndThenF(newUser => _repository.AddAndSave(cancellationToken, newUser))
             .Finally(_authService.GenerateJwtToken);
 }

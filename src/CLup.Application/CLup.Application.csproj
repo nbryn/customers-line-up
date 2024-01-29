@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="12.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.0" />
@@ -25,7 +23,6 @@
     <Folder Include="Bookings\Commands\"/>
     <Folder Include="Businesses\Commands\"/>
     <Folder Include="Employees\Commands\"/>
-    <Folder Include="Messages\Commands\"/>
     <Folder Include="TimeSlots\Commands\"/>
   </ItemGroup>
 

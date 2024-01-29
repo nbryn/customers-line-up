@@ -1,8 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using CLup.Application.Auth;
-using CLup.Application.Auth.Commands.Register;
+using CLup.API.Contracts.Auth;
 using CLup.Domain.Users.Enums;
 using CLup.Infrastructure.Persistence.Seed.Builders;
 using Newtonsoft.Json;
@@ -28,11 +27,11 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             .WithRole(Role.User)
             .Build();
 
-        var registerCommand = new RegisterCommand()
+        var registerRequest = new RegisterRequest()
         {
-            Email = user.Email,
-            Password = user.Password,
-            Name = user.Name,
+            Email = user.UserData.Email,
+            Password = user.UserData.Password,
+            Name = user.UserData.Name,
             Zip = user.Address.Zip,
             Street = user.Address.Street,
             City = user.Address.City,
@@ -40,11 +39,11 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             Latitude = user.Coords.Latitude,
         };
 
-        var tokenResponse = await PostAsyncAndEnsureSuccess<RegisterCommand, TokenResponse>(
+        var tokenResponse = await PostAsyncAndEnsureSuccess<RegisterRequest, TokenResponse>(
             $"{Route}/register",
-            registerCommand);
+            registerRequest);
 
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse?.Token);
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenResponse.Token);
     }
 
     protected async Task<TResult?> GetAsyncAndEnsureSuccess<TResult>(string url) =>

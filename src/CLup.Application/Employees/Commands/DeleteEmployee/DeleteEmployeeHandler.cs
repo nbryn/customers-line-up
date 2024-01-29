@@ -4,9 +4,7 @@ using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Employees;
-using CLup.Domain.Employees.ValueObjects;
 using MediatR;
 
 namespace CLup.Application.Employees.Commands.DeleteEmployee;
@@ -21,10 +19,8 @@ public sealed class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeComman
     }
 
     public async Task<Result> Handle(DeleteEmployeeCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
+        => await _repository.FetchBusinessAggregate(command.OwnerId, command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
-            .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden,
-                BusinessErrors.InvalidOwner)
-            .FailureIfNotFound(business => business.GetEmployeeById(EmployeeId.Create(command.UserId)), EmployeeErrors.NotFound)
-            .FinallyAsync(async employee => await _repository.RemoveAndSave(employee));
+            .FailureIfNotFound(business => business.GetEmployeeById(command.EmployeeId), EmployeeErrors.NotFound)
+            .FinallyAsync(employee => _repository.RemoveAndSave(employee, cancellationToken));
 }

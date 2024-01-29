@@ -10,7 +10,6 @@ using CLup.Domain.Users.ValueObjects;
 using CLup.Domain.Bookings;
 using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.TimeSlots.ValueObjects;
 
@@ -59,13 +58,7 @@ public sealed class User : Entity, IAggregateRoot
         Id = UserId.Create(Guid.NewGuid());
     }
 
-    public string Name => UserData.Name;
-
-    public string Email => UserData.Email;
-
-    public string Password => UserData.Password;
-
-    public bool IsBusinessOwner => Businesses?.Count > 0;
+    public bool IsBusinessOwner => Businesses.Count > 0;
 
     public User UpdateRole(Role role)
     {
@@ -80,7 +73,16 @@ public sealed class User : Entity, IAggregateRoot
     public bool BookingExists(TimeSlotId timeSlotId) =>
         _bookings.Exists(booking => booking.TimeSlot.Id.Value == timeSlotId.Value);
 
-    public DomainResult AddBooking(Booking booking)
+    public Message? GetMessageById(MessageId id, bool isSender) =>
+        isSender ? GetSentMessageById(id) : GetReceivedMessageById(id);
+
+    public UserMessage? GetSentMessageById(MessageId id) =>
+        _sentMessages.Find(message => message.Id.Value == id.Value);
+
+    public BusinessMessage? GetReceivedMessageById(MessageId id) =>
+        _receivedMessages.Find(message => message.Id.Value == id.Value);
+
+    public DomainResult CreateBooking(Booking booking)
     {
         if (!booking.TimeSlot.IsAvailable())
         {
@@ -96,11 +98,11 @@ public sealed class User : Entity, IAggregateRoot
         return DomainResult.Ok();
     }
 
-    public User Update(string name, string email, (Address address, Coords coords) info)
+    public User Update(UserData userData, Address address, Coords coords)
     {
-        UserData = new UserData(name, email, Password);
-        Address = info.address;
-        Coords = info.coords;
+        UserData = userData;
+        Address = address;
+        Coords = coords;
 
         return this;
     }
@@ -108,8 +110,8 @@ public sealed class User : Entity, IAggregateRoot
     public void BookingDeletedMessage(Booking booking)
     {
         var content =
-            $"The user with email {Email} deleted her/his booking at {booking.TimeSlot.Start.ToString("dd/MM/yyyy")}.";
-        var messageData = new MessageData($"Booking Deleted - {booking.Business.Name}", content);
+            $"The user with email {UserData.Email} deleted her/his booking at {booking.TimeSlot.Start:dd/MM/yyyy}.";
+        var messageData = new MessageData($"Booking Deleted - {booking.Business.BusinessData.Name}", content);
         var metaData = new MessageMetadata(false, false);
         var message = new UserMessage(Id, booking.Business.Id, messageData, MessageType.BookingDeleted, metaData);
 

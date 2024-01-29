@@ -1,12 +1,10 @@
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using FluentValidation;
 using MediatR;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.ValueObjects;
 using CLup.Application.Shared;
 
 namespace CLup.Application.Businesses.Commands.UpdateBusiness;
@@ -15,25 +13,18 @@ public sealed class UpdateBusinessHandler : IRequestHandler<UpdateBusinessComman
 {
     private readonly IValidator<Business> _businessValidator;
     private readonly ICLupRepository _repository;
-    private readonly IMapper _mapper;
 
-    public UpdateBusinessHandler(
-        IValidator<Business> businessValidator,
-        ICLupRepository repository,
-        IMapper mapper)
+    public UpdateBusinessHandler(IValidator<Business> businessValidator, ICLupRepository repository)
     {
         _businessValidator = businessValidator;
         _repository = repository;
-        _mapper = mapper;
     }
 
     public async Task<Result> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
+        => await _repository.FetchBusinessAggregate(command.OwnerId, command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
-            .Ensure(business => business.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden,
-                BusinessErrors.InvalidOwner)
-            .AndThen(_ => _mapper.Map<Business>(command))
+            .AndThen(_ => command.MapToBusiness())
             .Validate(_businessValidator)
             .FinallyAsync(async updatedBusiness =>
-                await _repository.UpdateEntity(command.BusinessId, updatedBusiness));
+                await _repository.UpdateEntity(command.BusinessId.Value, updatedBusiness, cancellationToken));
 }

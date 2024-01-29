@@ -3,8 +3,6 @@ using System.Threading.Tasks;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
 using CLup.Domain.Bookings.Events;
-using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.ValueObjects;
 using MediatR;
 
 namespace CLup.Application.Bookings.Commands.BusinessDeleteBooking;
@@ -23,6 +21,6 @@ public sealed class BusinessDeletedBookingEventHandler : INotificationHandler<Do
         var domainEvent = @event.DomainEvent;
         domainEvent.BookingOwner.BookingDeletedMessage(domainEvent.Booking.User.Id);
 
-        await _repository.UpdateEntity(domainEvent.BookingOwner.Id.Value, domainEvent.BookingOwner);
+        await _repository.UpdateEntity(domainEvent.BookingOwner.Id.Value, domainEvent.BookingOwner, cancellationToken);
     }
 }

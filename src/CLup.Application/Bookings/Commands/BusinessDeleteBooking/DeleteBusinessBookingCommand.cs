@@ -1,4 +1,3 @@
-using System;
 using CLup.Application.Shared;
 using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Businesses.ValueObjects;

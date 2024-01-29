@@ -20,7 +20,21 @@
   <ItemGroup>
     <ProjectReference Include="..\CLup.Application\CLup.Application.csproj"/>
     <ProjectReference Include="..\CLup.Infrastructure\CLup.Infrastructure.csproj"/>
+
     <ProjectReference Include="..\CLup.Domain\CLup.Domain.csproj"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
   </ItemGroup>
 
 

@@ -4,11 +4,9 @@ using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.ValueObjects;
 using MediatR;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.TimeSlots.Events;
-using CLup.Domain.TimeSlots.ValueObjects;
 
 namespace CLup.Application.TimeSlots.Commands.DeleteTimeSlot;
 
@@ -22,10 +20,9 @@ public sealed class DeleteTimeSlotHandler : IRequestHandler<DeleteTimeSlotComman
     }
 
     public async Task<Result> Handle(DeleteTimeSlotCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
+        => await _repository.FetchBusinessAggregate(command.OwnerId, command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
-            .Ensure(business => business?.OwnerId.Value == command.OwnerId.Value, HttpCode.Forbidden, TimeSlotErrors.NoAccess)
-            .FailureIfNotFound(business => business?.GetTimeSlotById(TimeSlotId.Create(command.TimeSlotId)), TimeSlotErrors.NotFound)
+            .FailureIfNotFound(business => business?.GetTimeSlotById(command.TimeSlotId), TimeSlotErrors.NotFound)
             .AddDomainEvent(timeSlot => timeSlot?.DomainEvents.Add(new TimeSlotDeletedEvent(timeSlot)))
-            .FinallyAsync(timeSlot => _repository.RemoveAndSave(timeSlot));
+            .FinallyAsync(timeSlot => _repository.RemoveAndSave(timeSlot, cancellationToken));
 }

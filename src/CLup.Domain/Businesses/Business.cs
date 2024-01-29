@@ -73,11 +73,14 @@ public sealed class Business : Entity, IAggregateRoot
         Id = BusinessId.Create(Guid.NewGuid());
     }
 
-    public double Opens => BusinessHours.Start;
+    public Message? GetMessageById(MessageId id, bool isSender) =>
+        isSender ? GetSentMessageById(id) : GetReceivedMessageById(id);
 
-    public double Closes => BusinessHours.End;
+    public BusinessMessage? GetSentMessageById(MessageId id) =>
+        _sentMessages.Find(message => message.Id == id);
 
-    public string Name => BusinessData.Name;
+    public UserMessage? GetReceivedMessageById(MessageId id) =>
+        _receivedMessages.Find(message => message.Id == id);
 
     public TimeSlot? GetTimeSlotById(TimeSlotId timeSlotId) =>
         _timeSlots.Find(timeSlot => timeSlot.Id.Value == timeSlotId.Value);
@@ -100,12 +103,13 @@ public sealed class Business : Entity, IAggregateRoot
 
         user.UpdateRole(Role.Employee);
         _employees.Add(employee);
+
         return DomainResult.Ok();
     }
 
     public void BookingDeletedMessage(UserId receiverId)
     {
-        var content = $"Your booking at {Name} was deleted.";
+        var content = $"Your booking at {BusinessData.Name} was deleted.";
         var messageData = new MessageData("Booking Deleted", content);
         var metadata = new MessageMetadata(false, false);
         var message = new BusinessMessage(Id, receiverId, messageData, MessageType.BookingDeleted, metadata);
@@ -119,12 +123,12 @@ public sealed class Business : Entity, IAggregateRoot
             return DomainResult.Fail(TimeSlotErrors.TimeSlotsExists);
         }
 
-        var opens = start.AddHours(Opens);
-        var closes = start.AddHours(Closes);
+        var opens = start.AddHours(BusinessHours.Start);
+        var closes = start.AddHours(BusinessHours.End);
         for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(BusinessData.TimeSlotLength))
         {
             var end = date.AddMinutes(BusinessData.TimeSlotLength);
-            var timeSlot = new TimeSlot(Id, Name, BusinessData.Capacity, date, end);
+            var timeSlot = new TimeSlot(Id, BusinessData.Name, BusinessData.Capacity, date, end);
 
             _timeSlots.Add(timeSlot);
         }

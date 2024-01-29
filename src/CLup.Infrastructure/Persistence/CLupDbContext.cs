@@ -10,7 +10,6 @@ using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Employees;
 using CLup.Domain.Messages;
-using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Shared;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.Users;
@@ -25,19 +24,19 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
     public const string DEFAULT_SCHEMA = "CLup";
 
-    public DbSet<Business> Businesses { get; private set; }
+    public DbSet<Business> Businesses { get; }
 
-    public DbSet<Employee> Employees { get; private set; }
+    public DbSet<Employee> Employees { get; }
 
-    public DbSet<TimeSlot> TimeSlots { get; private set; }
+    public DbSet<TimeSlot> TimeSlots { get; }
 
-    public DbSet<UserMessage> UserMessages { get; private set; }
+    public DbSet<UserMessage> UserMessages { get; }
 
-    public DbSet<BusinessMessage> BusinessMessages { get; private set; }
+    public DbSet<BusinessMessage> BusinessMessages { get; }
 
-    public DbSet<Booking> Bookings { get; private set; }
+    public DbSet<Booking> Bookings { get; }
 
-    public DbSet<User> Users { get; private set; }
+    public DbSet<User> Users { get; }
 
     public CLupDbContext(
         DbContextOptions<CLupDbContext> options,
@@ -65,7 +64,7 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .AsNoTracking()
             .ToListAsync();
 
-    public async Task<Business?> FetchBusinessAggregate(BusinessId businessId)
+    public async Task<Business?> FetchBusinessAggregate(UserId userId, BusinessId businessId)
         => await Businesses
             .Include(business => business.Bookings)
             .ThenInclude(booking => booking.TimeSlot)
@@ -73,9 +72,14 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .Include(business => business.Bookings)
             .ThenInclude(booking => booking.User)
             .AsSplitQuery()
+            .FirstOrDefaultAsync(business => business.OwnerId == userId && business.Id == businessId);
+
+    public Task<Business?> FetchBusinessById(BusinessId businessId)
+        => Businesses
+            .Include(business => business.TimeSlots)
             .FirstOrDefaultAsync(business => business.Id == businessId);
 
-    public async Task<User?> FetchUserAggregateById(UserId userId)
+    public async Task<User?> FetchUserAggregate(UserId userId)
         => await Users
             .Include(user => user.SentMessages)
             .ThenInclude(message => message.MessageData)
@@ -95,11 +99,6 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
     public async Task<User?> FetchUserByEmail(string email)
         => await Users.FirstOrDefaultAsync(user => user.UserData.Email == email);
-
-    public async Task<Message?> FetchMessage(MessageId messageId, bool forBusiness) =>
-        forBusiness
-            ? await BusinessMessages.FirstOrDefaultAsync(message => message.Id.Value == messageId.Value)
-            : await UserMessages.FirstOrDefaultAsync(message => message.Id.Value == messageId.Value);
 
     public async Task<IList<User>> FetchUsersNotEmployedByBusiness(BusinessId businessId)
     {
@@ -129,21 +128,21 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         return await base.SaveChangesAsync(true, cancellationToken);
     }
 
-    public async Task<int> AddAndSave(params Entity[] entities)
+    public async Task<int> AddAndSave(CancellationToken cancellationToken, params Entity[] entities)
     {
         await AddRangeAsync(entities);
 
         return await SaveChangesAsync(true);
     }
 
-    public async Task<int> RemoveAndSave(Entity value)
+    public async Task<int> RemoveAndSave(Entity value, CancellationToken cancellationToken)
     {
         Remove(value);
 
-        return await SaveChangesAsync(true);
+        return await SaveChangesAsync(true, cancellationToken);
     }
 
-    public async Task<int> UpdateEntity(Guid id, Entity updatedEntity)
+    public async Task<int> UpdateEntity(Guid id, Entity updatedEntity, CancellationToken cancellationToken)
     {
         var entity = (Entity)await FindAsync(typeof(Entity), id);
 
@@ -152,7 +151,7 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         // updatedEntity.Id = entity.Id;
         Entry(entity).CurrentValues.SetValues(updatedEntity);
 
-        return await SaveChangesAsync();
+        return await SaveChangesAsync(cancellationToken);
     }
 
     private void MarkEntitiesAsUpdated()

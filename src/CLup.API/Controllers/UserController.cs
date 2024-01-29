@@ -1,5 +1,5 @@
-﻿using CLup.Application.Shared.Extensions;
-using CLup.Application.Users.Commands.UpdateUserInfo;
+﻿using CLup.API.Contracts.Users.UpdateUser;
+using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,10 +19,9 @@ public class UserController : AuthorizedControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update([FromBody] UpdateUserCommand command)
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
     {
-        command.UserId = GetUserIdFromJwt();
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
         return this.CreateActionResult(result);
     }

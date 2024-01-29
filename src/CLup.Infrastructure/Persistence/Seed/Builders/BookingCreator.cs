@@ -10,7 +10,7 @@ public static class BookingCreator
 {
     public static Booking Create(UserId userId, BusinessId businessId, TimeSlotId timeSlotId)
     {
-        var booking = new Booking(userId, timeSlotId, businessId);
+        var booking = new Booking(userId, businessId, timeSlotId);
         booking.UpdatedAt = DateTime.Now;
 
         return booking;

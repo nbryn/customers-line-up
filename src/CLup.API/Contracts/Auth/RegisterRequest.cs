@@ -15,7 +15,7 @@ public readonly record struct RegisterRequest(
     double Latitude)
 {
     public RegisterCommand MapToCommand() =>
-        new(new UserData(Email, Password, Name),
+        new(new UserData(Name, Email, Password),
             new Address(Street, Zip, City),
             new Coords(Longitude, Latitude));
 }

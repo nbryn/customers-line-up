@@ -1,5 +1,5 @@
-﻿using CLup.Application.Businesses.Commands.CreateBusiness;
-using CLup.Application.Businesses.Commands.UpdateBusiness;
+﻿using CLup.API.Contracts.Businesses.CreateBusiness;
+using CLup.API.Contracts.Businesses.UpdateBusiness;
 using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +19,9 @@ public class BusinessController : AuthorizedControllerBase
     [HttpPost]
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateBusiness([FromBody] CreateBusinessCommand command)
+    public async Task<IActionResult> CreateBusiness([FromBody] CreateBusinessRequest request)
     {
-        command.OwnerId = GetUserIdFromJwt();
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
         return this.CreateActionResult(result);
     }
@@ -31,10 +30,9 @@ public class BusinessController : AuthorizedControllerBase
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateBusiness([FromBody] UpdateBusinessCommand command)
+    public async Task<IActionResult> UpdateBusiness([FromBody] UpdateBusinessRequest request)
     {
-        command.OwnerId = GetUserIdFromJwt();
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
         return this.CreateActionResult(result);
     }

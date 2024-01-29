@@ -3,8 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
-using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.TimeSlots.Events;
 using MediatR;
 
@@ -30,6 +28,6 @@ public sealed class TimeSlotDeletedEventHandler : INotificationHandler<DomainEve
             domainEvent.TimeSlot.Business.BookingDeletedMessage(user.Id);
         }
 
-        await _repository.UpdateEntity(domainEvent.TimeSlot.Business.Id.Value, domainEvent.TimeSlot.Business);
+        await _repository.UpdateEntity(domainEvent.TimeSlot.Business.Id.Value, domainEvent.TimeSlot.Business, cancellationToken);
     }
 }

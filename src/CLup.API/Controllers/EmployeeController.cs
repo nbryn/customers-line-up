@@ -1,5 +1,5 @@
-﻿using CLup.Application.Employees.Commands.CreateEmployee;
-using CLup.Application.Employees.Commands.DeleteEmployee;
+﻿using CLup.API.Contracts.Businesses.CreateBusiness;
+using CLup.API.Contracts.Employees.DeleteEmployee;
 using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,22 +20,20 @@ public class EmployeeController : AuthorizedControllerBase
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateEmployee(CreateEmployeeCommand command)
+    public async Task<IActionResult> CreateEmployee([FromBody] CreateBusinessRequest request)
     {
-        command.OwnerId = GetUserIdFromJwt();
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
         return this.CreateActionResult(result);
     }
 
     [HttpDelete]
-    [Route("{userId:guid}")]
+    [Route("{employeeId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RemoveEmployee(Guid userId, [FromQuery] Guid businessId)
+    public async Task<IActionResult> DeleteEmployee(DeleteEmployeeRequest request)
     {
-        var ownerId = GetUserIdFromJwt();
-        var result = await _mediator.Send(new DeleteEmployeeCommand(ownerId, businessId, userId));
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
         return this.CreateActionResult(result);
     }

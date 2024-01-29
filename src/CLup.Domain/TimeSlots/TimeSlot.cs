@@ -52,5 +52,8 @@ namespace CLup.Domain.TimeSlots
         }
 
         public bool IsAvailable() => Bookings.Count() < Capacity && (Start - DateTime.Now).TotalDays is < 14 and >= 0;
+
+        public string FormatInterval() =>
+            $"{Start.TimeOfDay.ToString().Substring(0, 5)} - {End.TimeOfDay.ToString().Substring(0, 5)}";
     }
 }

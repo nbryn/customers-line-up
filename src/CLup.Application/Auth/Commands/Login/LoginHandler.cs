@@ -23,7 +23,7 @@ public sealed class LoginHandler : IRequestHandler<LoginCommand, Result<string>>
     public async Task<Result<string>> Handle(LoginCommand command, CancellationToken cancellationToken)
         => await _repository.FetchUserByEmail(command.Email)
             .ToResult()
-            .Ensure(user => user != null && BC.Verify(command.Password, user.Password), HttpCode.Unauthorized,
+            .Ensure(user => user != null && BC.Verify(command.Password, user.UserData.Password), HttpCode.Unauthorized,
                 UserErrors.InvalidCredentials)
             .Finally(_authService.GenerateJwtToken);
 }

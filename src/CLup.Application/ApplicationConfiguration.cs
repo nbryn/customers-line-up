@@ -10,7 +10,6 @@ public static class ApplicationConfiguration
 {
     public static IServiceCollection ConfigureApplication(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
         services.AddScoped<IAuthService, AuthService>();

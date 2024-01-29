@@ -1,11 +1,14 @@
-using AutoMapper;
+using CLup.API.Contracts.Businesses.FetchAllBusinesses;
+using CLup.API.Contracts.Users.FetchUserAggregate;
+using CLup.API.Contracts.Users.UsersNotEmployedByBusiness;
 using CLup.Application.Businesses;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Util;
 using CLup.Application.Users;
-using CLup.Application.Users.Queries;
+using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.API.Controllers;
@@ -14,41 +17,37 @@ namespace CLup.API.Controllers;
 [Route("api/query")]
 public class QueryController : AuthorizedControllerBase
 {
-    private readonly ICLupRepository _context;
-    private readonly IMapper _mapper;
+    private readonly ICLupRepository _repository;
 
-    public QueryController(
-        ICLupRepository context,
-        IMapper mapper)
+    public QueryController(ICLupRepository repository)
     {
-        _context = context;
-        _mapper = mapper;
+        _repository = repository;
     }
 
     [HttpGet]
     [Route("user")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserDto))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FetchUserAggregateResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> FetchUserAggregate()
     {
-        var user = await _context.FetchUserAggregateById(GetUserIdFromJwt());
+        var user = await _repository.FetchUserAggregate(GetUserIdFromJwt());
         if (user == null)
         {
-            return NotFound("User was not found");
+            return NotFound(UserErrors.NotFound);
         }
 
-        return Ok(_mapper.Map<UserDto>(user));
+        return Ok(new FetchUserAggregateResponse(new UserDto().FromUser(user)));
     }
 
     [HttpGet]
     [Route("business/all")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BusinessDto>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FetchAllBusinessesResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> FetchAllBusinesses()
     {
-        var businesses = await _context.FetchAllBusinesses();
+        var businesses = await _repository.FetchAllBusinesses();
 
-        return Ok(_mapper.Map<IList<BusinessDto>>(businesses));
+        return Ok(new FetchAllBusinessesResponse(businesses.Select(new BusinessDto().FromBusiness).ToList()));
     }
 
     [HttpGet]
@@ -66,19 +65,20 @@ public class QueryController : AuthorizedControllerBase
 
     [Route("user/notEmployedByBusiness/{businessId}")]
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusiness))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusinessResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] Guid businessId)
+    public async Task<IActionResult> FetchAllUsersNotAlreadyEmployedByBusiness([FromRoute] UsersNotEmployedByBusinessRequest request)
     {
-        var business = await _context.FetchBusinessAggregate(BusinessId.Create(businessId));
+        var businessId = BusinessId.Create(request.BusinessId);
+        var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), businessId);
         if (business == null)
         {
-            return NotFound();
+            return NotFound(BusinessErrors.NotFound);
         }
 
-        var users = await _context.FetchUsersNotEmployedByBusiness(BusinessId.Create(businessId));
+        var users = await _repository.FetchUsersNotEmployedByBusiness(businessId);
 
-        return Ok(new UsersNotEmployedByBusiness()
-            { BusinessId = businessId, Users = _mapper.Map<IList<UserDto>>(users) });
+        return Ok(new UsersNotEmployedByBusinessResponse()
+            { BusinessId = request.BusinessId, Users = users.Select(new UserDto().FromUser).ToList() });
     }
 }

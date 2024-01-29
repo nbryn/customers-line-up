@@ -24,13 +24,13 @@ public sealed class CreateBookingHandler : IRequestHandler<CreateBookingCommand,
     }
 
     public async Task<Result> Handle(CreateBookingCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchBusinessAggregate(command.BusinessId)
+        => await _repository.FetchBusinessById(command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
             .FailureIfNotFound(business => business.GetTimeSlotById(command.TimeSlotId), TimeSlotErrors.NotFound)
             .AndThen(_ => command.MapToBooking())
             .Validate(_validator)
             .FailureIfNotFoundAsync(
-                async booking => (await _repository.FetchUserAggregateById(command.UserId))?.AddBooking(booking),
+                async booking => (await _repository.FetchUserAggregate(command.UserId))?.CreateBooking(booking),
                 UserErrors.NotFound)
             .Ensure(result => result.Success, HttpCode.BadRequest)
             .FinallyAsync(_ => _repository.SaveChangesAsync(cancellationToken));

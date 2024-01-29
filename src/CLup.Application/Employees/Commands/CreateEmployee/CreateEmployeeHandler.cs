@@ -1,14 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Employees;
 using CLup.Domain.Users;
-using CLup.Domain.Users.ValueObjects;
 using FluentValidation;
 using MediatR;
 
@@ -18,20 +15,15 @@ public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeComman
 {
     private readonly IValidator<Employee> _validator;
     private readonly ICLupRepository _repository;
-    private readonly IMapper _mapper;
 
-    public CreateEmployeeHandler(
-        IValidator<Employee> validator,
-        ICLupRepository repository,
-        IMapper mapper)
+    public CreateEmployeeHandler(IValidator<Employee> validator, ICLupRepository repository)
     {
         _repository = repository;
         _validator = validator;
-        _mapper = mapper;
     }
 
     public async Task<Result> Handle(CreateEmployeeCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchBusinessAggregate(BusinessId.Create(command.BusinessId))
+        => await _repository.FetchBusinessAggregate(command.OwnerId, command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
             .FailureIfNotFoundAsync(business => GetUser(business, command), UserErrors.NotFound)
             .Ensure(entry => entry.Value.business.AddEmployee(entry.Value.user, entry.Value.employee).Success,
@@ -44,12 +36,12 @@ public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeComman
         Business business,
         CreateEmployeeCommand command)
     {
-        var user = await _repository.FetchUserAggregateById(UserId.Create(command.UserId));
+        var user = await _repository.FetchUserAggregate(command.UserId);
         if (user == null)
         {
             return null;
         }
 
-        return (business, user, _mapper.Map<Employee>(command));
+        return (business, user, command.MapToEmployee());
     }
 }
