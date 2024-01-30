@@ -18,7 +18,7 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         // TODO: Add logging
         var problemDetails =
-            new ProblemDetails(HttpCode.InternalServerError, new Dictionary<string, string>(), ErrorMessage);
+            new ProblemDetails(HttpCode.InternalServerError, new Dictionary<string, IList<string>>(), ErrorMessage);
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
         await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 

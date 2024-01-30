@@ -1,11 +1,9 @@
-using CLup.Application.Users;
+using CLup.API.Contracts.Businesses.GetAllBusinesses;
 
 namespace tests.CLup.IntegrationTests.Tests;
 
 public class QueryControllerTests : IntegrationTestsBase
 {
-    private const string Route = "query";
-
     public QueryControllerTests(IntegrationTestWebAppFactory factory) : base(factory)
     {
     }
@@ -15,9 +13,23 @@ public class QueryControllerTests : IntegrationTestsBase
     {
         const string email = "test@test.com";
         await CreateUserAndSetJwtToken(email);
-        var user = await GetAsyncAndEnsureSuccess<UserDto>($"{Route}/user");
+        var user = await GetUser();
 
         user.Should().NotBeNull();
         user.Email.Should().Be(email);
     }
+
+    [Fact]
+    public async Task BusinessExists_GetAllBusinesses_ReturnsBusiness()
+    {
+        const string email = "test@test.com";
+        var userId = await CreateUserWithBusiness(email);
+
+        var response = await GetAsyncAndEnsureSuccess<GetAllBusinessesResponse>($"{QueryRoute}/business/all");
+
+        response.Should().NotBeNull();
+        response.Businesses.Count.Should().Be(1);
+        response.Businesses.First().OwnerId.Should().Be(userId);
+    }
+
 }

@@ -12,12 +12,12 @@ namespace CLup.Application.Auth.Commands.Login;
 public sealed class LoginHandler : IRequestHandler<LoginCommand, Result<string>>
 {
     private readonly ICLupRepository _repository;
-    private readonly IAuthService _authService;
+    private readonly IJwtTokenService _jwtTokenService;
 
-    public LoginHandler(ICLupRepository repository, IAuthService authService)
+    public LoginHandler(ICLupRepository repository, IJwtTokenService jwtTokenService)
     {
         _repository = repository;
-        _authService = authService;
+        _jwtTokenService = jwtTokenService;
     }
 
     public async Task<Result<string>> Handle(LoginCommand command, CancellationToken cancellationToken)
@@ -25,5 +25,5 @@ public sealed class LoginHandler : IRequestHandler<LoginCommand, Result<string>>
             .ToResult()
             .Ensure(user => user != null && BC.Verify(command.Password, user.UserData.Password), HttpCode.Unauthorized,
                 UserErrors.InvalidCredentials)
-            .Finally(_authService.GenerateJwtToken);
+            .Finally(_jwtTokenService.GenerateJwtToken);
 }

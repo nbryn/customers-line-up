@@ -22,5 +22,6 @@ public sealed class RegisterCommand : IRequest<Result<string>>
         Coords = coords;
     }
 
-    public User MapToUser() => new(UserData, Address, Coords, Role.User);
+    public User MapToUser(string hashedPassword) =>
+        new(new UserData(UserData.Name, UserData.Email, hashedPassword), Address, Coords, Role.User);
 }

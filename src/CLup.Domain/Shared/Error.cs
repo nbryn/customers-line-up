@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class Error
 {
-    public string Code { get; set; }
-    public string Message { get; set; }
+    public string Code { get; init; }
+    public string Message { get; init; }
 
     public Error(string code, string message)
     {
@@ -13,5 +13,6 @@ public class Error
         Message = message;
     }
 
-    public IDictionary<string, string> ToErrorDictionary() => new Dictionary<string, string>() { { Code, Message } };
+    public IDictionary<string, IList<string>> ToErrorDictionary() =>
+        new Dictionary<string, IList<string>>() { { Code, new[] { Message } } };
 }

@@ -10,9 +10,9 @@ public sealed class ProblemDetails
 
     public HttpCode StatusCode { get; }
 
-    public IDictionary<string, string> Errors { get; }
+    public IDictionary<string, IList<string>> Errors { get; }
 
-    public ProblemDetails(HttpCode statusCode, IDictionary<string, string> errors, string title = "Invalid Request")
+    public ProblemDetails(HttpCode statusCode, IDictionary<string, IList<string>> errors, string title = "Invalid Request")
     {
         StatusCode = statusCode;
         Errors = errors;

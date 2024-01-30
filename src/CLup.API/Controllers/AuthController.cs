@@ -1,5 +1,5 @@
 using CLup.API.Contracts.Auth;
-using CLup.Application.Shared.Extensions;
+using CLup.API.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +21,7 @@ public class AuthController : ControllerBase
     [Route("register")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
@@ -33,6 +34,7 @@ public class AuthController : ControllerBase
     [Route("login")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {

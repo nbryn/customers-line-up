@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace CLup.Application.Shared.Extensions;
 
-public static class EnumerableExtensions
+public static class MappingExtensions
 {
     public static async Task<List<T>> ToListAsync<T>(this IAsyncEnumerable<T> items)
     {

@@ -8,11 +8,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace CLup.Application.Auth;
 
-public sealed class AuthService : IAuthService
+public sealed class JwtTokenService : IJwtTokenService
 {
     private readonly IConfiguration _config;
 
-    public AuthService(IConfiguration config)
+    public JwtTokenService(IConfiguration config)
     {
         _config = config;
     }

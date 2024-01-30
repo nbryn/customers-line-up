@@ -1,8 +1,8 @@
-using System;
 using System.Net;
+using CLup.Application.Shared;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CLup.Application.Shared.Extensions;
+namespace CLup.API.Extensions;
 
 using Result = Result;
 

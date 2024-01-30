@@ -24,19 +24,19 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
     public const string DEFAULT_SCHEMA = "CLup";
 
-    public DbSet<Business> Businesses { get; }
+    public DbSet<Business> Businesses { get; private set; }
 
-    public DbSet<Employee> Employees { get; }
+    public DbSet<Employee> Employees { get; private set; }
 
-    public DbSet<TimeSlot> TimeSlots { get; }
+    public DbSet<TimeSlot> TimeSlots { get; private set; }
 
-    public DbSet<UserMessage> UserMessages { get; }
+    public DbSet<UserMessage> UserMessages { get; private set; }
 
-    public DbSet<BusinessMessage> BusinessMessages { get; }
+    public DbSet<BusinessMessage> BusinessMessages { get; private set; }
 
-    public DbSet<Booking> Bookings { get; }
+    public DbSet<Booking> Bookings { get; private set; }
 
-    public DbSet<User> Users { get; }
+    public DbSet<User> Users { get; private set; }
 
     public CLupDbContext(
         DbContextOptions<CLupDbContext> options,

@@ -2,6 +2,7 @@
 using CLup.API.Contracts.Messages.SendBusinessMessage;
 using CLup.API.Contracts.Messages.SendUserMessage;
 using CLup.API.Contracts.Messages.UserMarksMessageAsDeleted;
+using CLup.API.Extensions;
 using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

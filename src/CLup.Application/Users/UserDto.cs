@@ -6,52 +6,51 @@ using CLup.Application.Messages;
 using CLup.Domain.Users;
 
 namespace CLup.Application.Users;
-
 public sealed class UserDto
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; init; }
 
-    public string Name { get; private set; }
+    public string Name { get; init; }
 
-    public string Email { get; private set; }
+    public string Email { get; init; }
 
-    public string City { get; private set; }
+    public string City { get; init; }
 
-    public string Zip { get; private set; }
+    public string Zip { get; init; }
 
-    public string Street { get; private set; }
+    public string Street { get; init; }
 
-    public double Longitude { get; private set; }
+    public double Longitude { get; init; }
 
-    public double Latitude { get; private set; }
+    public double Latitude { get; init; }
 
-    public string Role { get; private set; }
+    public string Role { get; init; }
 
-    public IList<BookingDto> Bookings { get; private set; }
+    public IList<BookingDto> Bookings { get; init; }
 
-    public IList<Guid> BusinessIds { get; private set; }
+    public IList<Guid> BusinessIds { get; init; }
 
-    public IList<MessageDto> ReceivedMessages { get; private set; }
+    public IList<MessageDto> ReceivedMessages { get; init; }
 
-    public IList<MessageDto> SentMessages { get; private set; }
+    public IList<MessageDto> SentMessages { get; init; }
 
-    public UserDto FromUser(User user)
+    public static UserDto FromUser(User user)
     {
-        Id = user.Id.Value;
-        Name = user.UserData.Name;
-        Email = user.UserData.Email;
-        City = user.Address.City;
-        Zip = user.Address.Zip;
-        Street = user.Address.Street;
-        Longitude = user.Coords.Longitude;
-        Latitude = user.Coords.Latitude;
-        Role = user.Role.ToString();
-
-        Bookings = user.Bookings.Select(new BookingDto().FromBooking).ToList();
-        BusinessIds = user.Businesses.Select(business => business.Id.Value).ToList();
-        ReceivedMessages = user.ReceivedMessages.Select(new MessageDto().FromMessage).ToList();
-        SentMessages = user.SentMessages.Select(new MessageDto().FromMessage).ToList();
-
-        return this;
+        return new UserDto
+        {
+            Id = user.Id.Value,
+            Name = user.UserData.Name,
+            Email = user.UserData.Email,
+            City = user.Address.City,
+            Zip = user.Address.Zip,
+            Street = user.Address.Street,
+            Longitude = user.Coords.Longitude,
+            Latitude = user.Coords.Latitude,
+            Role = user.Role.ToString(),
+            Bookings = user.Bookings.Select(BookingDto.FromBooking).ToList(),
+            BusinessIds = user.Businesses.Select(business => business.Id.Value).ToList(),
+            ReceivedMessages = user.ReceivedMessages.Select(MessageDto.FromMessage).ToList(),
+            SentMessages = user.SentMessages.Select(MessageDto.FromMessage).ToList(),
+        };
     }
 }

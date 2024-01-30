@@ -1,5 +1,5 @@
-using CLup.API.Contracts.Businesses.FetchAllBusinesses;
-using CLup.API.Contracts.Users.FetchUserAggregate;
+using CLup.API.Contracts.Businesses.GetAllBusinesses;
+using CLup.API.Contracts.Users.GetUser;
 using CLup.API.Contracts.Users.UsersNotEmployedByBusiness;
 using CLup.Application.Businesses;
 using CLup.Application.Shared.Interfaces;
@@ -26,7 +26,7 @@ public class QueryController : AuthorizedControllerBase
 
     [HttpGet]
     [Route("user")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FetchUserAggregateResponse))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> FetchUserAggregate()
     {
@@ -36,18 +36,18 @@ public class QueryController : AuthorizedControllerBase
             return NotFound(UserErrors.NotFound);
         }
 
-        return Ok(new FetchUserAggregateResponse(new UserDto().FromUser(user)));
+        return Ok(new GetUserResponse(UserDto.FromUser(user)));
     }
 
     [HttpGet]
     [Route("business/all")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FetchAllBusinessesResponse))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAllBusinessesResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> FetchAllBusinesses()
     {
         var businesses = await _repository.FetchAllBusinesses();
 
-        return Ok(new FetchAllBusinessesResponse(businesses.Select(new BusinessDto().FromBusiness).ToList()));
+        return Ok(new GetAllBusinessesResponse(businesses.Select(BusinessDto.FromBusiness).ToList()));
     }
 
     [HttpGet]
@@ -79,6 +79,6 @@ public class QueryController : AuthorizedControllerBase
         var users = await _repository.FetchUsersNotEmployedByBusiness(businessId);
 
         return Ok(new UsersNotEmployedByBusinessResponse()
-            { BusinessId = request.BusinessId, Users = users.Select(new UserDto().FromUser).ToList() });
+            { BusinessId = request.BusinessId, Users = users.Select(UserDto.FromUser).ToList() });
     }
 }

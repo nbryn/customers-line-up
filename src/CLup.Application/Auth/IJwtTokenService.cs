@@ -2,7 +2,7 @@ using CLup.Domain.Users;
 
 namespace CLup.Application.Auth;
 
-public interface IAuthService
+public interface IJwtTokenService
 {
     string GenerateJwtToken(User user);
 }

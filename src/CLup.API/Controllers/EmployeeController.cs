@@ -1,5 +1,6 @@
 ﻿using CLup.API.Contracts.Businesses.CreateBusiness;
 using CLup.API.Contracts.Employees.DeleteEmployee;
+using CLup.API.Extensions;
 using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

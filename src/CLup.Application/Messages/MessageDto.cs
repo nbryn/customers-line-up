@@ -5,27 +5,28 @@ namespace CLup.Application.Messages;
 
 public sealed class MessageDto
 {
-    public Guid Id { get; private set; }
+    public Guid Id { get; init; }
 
-    public Guid SenderId { get; private set; }
+    public Guid SenderId { get; init; }
 
-    public Guid ReceiverId { get; private set; }
+    public Guid ReceiverId { get; init; }
 
-    public string Title { get; private set; }
+    public string Title { get; init; }
 
-    public string Content { get; private set; }
+    public string Content { get; init; }
 
-    public string Date { get; private set; }
+    public string Date { get; init; }
 
-    public MessageDto FromMessage(Message message)
+    public static MessageDto FromMessage(Message message)
     {
-        Id = message.Id.Value;
-        SenderId = message.SenderId.Value;
-        ReceiverId = message.ReceiverId.Value;
-        Title = message.MessageData.Title;
-        Content = message.MessageData.Content;
-        Date = message.CreatedAt.ToString("MM/dd/yyyy");
-
-        return this;
+        return new MessageDto()
+        {
+            Id = message.Id.Value,
+            SenderId = message.SenderId.Value,
+            ReceiverId = message.ReceiverId.Value,
+            Title = message.MessageData.Title,
+            Content = message.MessageData.Content,
+            Date = message.CreatedAt.ToString("MM/dd/yyyy"),
+        };
     }
 }

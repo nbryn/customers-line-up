@@ -11,11 +11,11 @@ public readonly record struct RegisterRequest(
     string Zip,
     string Street,
     string City,
-    double Longitude,
-    double Latitude)
+    double? Longitude,
+    double? Latitude)
 {
     public RegisterCommand MapToCommand() =>
         new(new UserData(Name, Email, Password),
             new Address(Street, Zip, City),
-            new Coords(Longitude, Latitude));
+            new Coords(Longitude.Value, Latitude.Value));
 }
