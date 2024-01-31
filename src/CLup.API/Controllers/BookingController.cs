@@ -2,7 +2,6 @@
 using CLup.API.Contracts.Bookings.DeleteBusinessBooking;
 using CLup.API.Contracts.Bookings.DeleteUserBooking;
 using CLup.API.Extensions;
-using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,10 +18,10 @@ public class BookingController : AuthorizedControllerBase
     }
 
     [HttpPost]
-    [Route("{timeSlotId:guid}")]
+    [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateBooking(CreateBookingRequest request)
+    public async Task<IActionResult> CreateBooking([FromBody] CreateBookingRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 

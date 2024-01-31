@@ -20,6 +20,8 @@ public interface ICLupRepository
 
     Task<Business?> FetchBusinessById(BusinessId businessId);
 
+    Task<IList<Business>> FetchBusinessesByOwner(UserId ownerId);
+
     Task<IList<User>> FetchUsersNotEmployedByBusiness(BusinessId businessId);
 
     Task<IList<Business>> FetchAllBusinesses();

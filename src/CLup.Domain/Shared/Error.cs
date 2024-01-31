@@ -13,6 +13,6 @@ public class Error
         Message = message;
     }
 
-    public IDictionary<string, IList<string>> ToErrorDictionary() =>
-        new Dictionary<string, IList<string>>() { { Code, new[] { Message } } };
+    public IDictionary<string, List<string>> ToErrorDictionary() =>
+        new Dictionary<string, List<string>>() { { Code, new List<string>() { Message } } };
 }

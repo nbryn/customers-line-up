@@ -1,9 +1,11 @@
+using System.Reflection;
 using CLup.API.Exceptions;
 using CLup.API.Extensions;
 using CLup.Application;
 using CLup.Application.Auth;
 using CLup.Domain;
 using CLup.Infrastructure;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -50,6 +52,7 @@ public class Program
             });
 
         services.AddSingleton(config);
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services
             .ConfigureDomain(config)
             .ConfigureApplication(config)

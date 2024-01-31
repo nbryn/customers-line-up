@@ -10,7 +10,6 @@ using CLup.Domain.Users.ValueObjects;
 using CLup.Domain.Bookings;
 using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Businesses;
-using CLup.Domain.TimeSlots;
 using CLup.Domain.TimeSlots.ValueObjects;
 
 namespace CLup.Domain.Users;
@@ -84,14 +83,9 @@ public sealed class User : Entity, IAggregateRoot
 
     public DomainResult CreateBooking(Booking booking)
     {
-        if (!booking.TimeSlot.IsAvailable())
-        {
-            return DomainResult.Fail(TimeSlotErrors.NoCapacity);
-        }
-
         if (BookingExists(booking.TimeSlotId))
         {
-            return DomainResult.Fail(UserErrors.BookingExists);
+            return DomainResult.Fail(new List<Error>() { UserErrors.BookingExists });
         }
 
         _bookings.Add(booking);

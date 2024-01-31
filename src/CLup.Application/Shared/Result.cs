@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CLup.Domain.Shared;
 using FluentValidation;
@@ -9,7 +11,7 @@ public class Result : DomainResult
 {
     public HttpCode Code { get; private set; }
 
-    protected Result(HttpCode code, Error? error = null) : base(error)
+    protected Result(HttpCode code, List<Error> errors) : base(errors)
     {
         Code = code;
     }
@@ -21,38 +23,39 @@ public class Result : DomainResult
             throw new InvalidOperationException("Can't convert result to problem details.");
         }
 
-        return new ProblemDetails(Code, Error.ToErrorDictionary());
+        return new ProblemDetails(Code,
+            Errors.ToDictionary(k => k.Code, error => new List<string>() { error.Message }));
     }
 
-    public static Result<T> ToResult<T>(T maybe, Error error) =>
-        maybe == null ? NotFound<T>(error) : Ok(maybe);
+    public static Result<T> ToResult<T>(T maybe, List<Error> errors) =>
+        maybe == null ? NotFound<T>(errors) : Ok(maybe);
 
-    public static Result<T> Ok<T>(T value) => new(value, HttpCode.Ok);
+    public static Result<T> Ok<T>(T value) => new(value, HttpCode.Ok, new List<Error>());
 
-    public static Result<T> Fail<T>(HttpCode code, Error error) => new(default, code, error);
+    public static Result<T> Fail<T>(HttpCode code, List<Error> errors) => new(default, code, errors);
 
-    public static Result<T> NotFound<T>(Error error) => new(default, HttpCode.NotFound, error);
+    public static Result<T> NotFound<T>(List<Error> errors) => new(default, HttpCode.NotFound, errors);
 
-    public static Result<T> BadRequest<T>(Error error) => new(default, HttpCode.BadRequest, error);
+    public static Result<T> BadRequest<T>(List<Error> errors) => new(default, HttpCode.BadRequest, errors);
 }
 
 public sealed class Result<T> : Result
 {
     public T Value { get; private set; }
 
-    protected internal Result(T value, HttpCode code, Error error = null)
-        : base(code, error)
+    protected internal Result(T value, HttpCode code, List<Error> errors)
+        : base(code, errors)
     {
         Value = value;
     }
 
-    public Result<U> Bind<U>(Func<T, U> f) => Success ? Ok(f(Value)) : Fail<U>(Code, Error);
+    public Result<U> Bind<U>(Func<T, U> f) => Success ? Ok(f(Value)) : Fail<U>(Code, Errors);
 
     public Result<T> AddDomainEvent(Action<T> f)
     {
         if (Failure)
         {
-            return Fail<T>(Code, Error);
+            return Fail<T>(Code, Errors);
         }
 
         f(Value);
@@ -64,7 +67,7 @@ public sealed class Result<T> : Result
     {
         if (Failure)
         {
-            return Fail<U>(Code, Error);
+            return Fail<U>(Code, Errors);
         }
 
         var maybe = await f(Value);
@@ -75,32 +78,42 @@ public sealed class Result<T> : Result
     public Result<U> Bind<U>(Func<T, U> f, Error error)
     {
         var maybe = f(Value);
-
         if (maybe == null)
         {
-            return NotFound<U>(error);
+            Errors.Add(error);
+            return NotFound<U>(Errors);
         }
 
-        return Success ? Ok(maybe) : Fail<U>(Code, Error);
+        if (Failure)
+        {
+            return Fail<U>(Code, Errors);
+        }
+
+        return Success ? Ok(maybe) : Fail<U>(Code, Errors);
     }
 
     public async Task<Result<U>> Bind<U>(Func<T, Task<U>> f, Error error)
     {
         var maybe = await f(Value);
-
         if (maybe == null)
         {
-            return NotFound<U>(error);
+            Errors.Add(error);
+            return NotFound<U>(Errors);
         }
 
-        return Success ? Ok(maybe) : Fail<U>(Code, Error);
+        if (Failure)
+        {
+            return Fail<U>(Code, Errors);
+        }
+
+        return Success ? Ok(maybe) : Fail<U>(Code, Errors);
     }
 
     public async Task<Result<T>> BindF<U>(Func<T, Task<U>> f)
     {
         if (Failure)
         {
-            return Fail<T>(Code, Error);
+            return Fail<T>(Code, Errors);
         }
 
         await f(Value);
@@ -114,19 +127,15 @@ public sealed class Result<T> : Result
         HttpCode httpCode,
         Error? error = null)
     {
-        if (Failure)
-        {
-            return Fail<T>(Code, Error);
-        }
-
         if (!predicate(Value))
         {
-            if (Value is DomainResult result)
-            {
-                return Fail<T>(httpCode, result.Error);
-            }
+            Errors.Add(error);
+            return Fail<T>(httpCode, Errors);
+        }
 
-            return Fail<T>(httpCode, error);
+        if (Failure)
+        {
+            return Fail<T>(Code, Errors);
         }
 
         return await task;
@@ -138,19 +147,15 @@ public sealed class Result<T> : Result
         HttpCode httpCode,
         Error? error = null)
     {
-        if (Failure)
-        {
-            return Fail<T>(Code, Error);
-        }
-
         if (!await predicate(Value))
         {
-            if (Value is DomainResult result)
-            {
-                return Fail<T>(httpCode, result.Error);
-            }
+            Errors.Add(error);
+            return Fail<T>(httpCode, Errors);
+        }
 
-            return Fail<T>(httpCode, error);
+        if (Failure)
+        {
+            return Fail<T>(Code, Errors);
         }
 
         return await task;
@@ -160,12 +165,13 @@ public sealed class Result<T> : Result
     {
         if (Failure)
         {
-            return Fail<T>(Code, Error);
+            return Fail<T>(Code, Errors);
         }
 
         var validationResult = validator.Validate(Value);
         return !validationResult.IsValid
-            ? BadRequest<T>(new Error(validationResult.Errors[0].PropertyName, validationResult.Errors[0].ErrorMessage))
+            ? BadRequest<T>(validationResult.Errors.Select(error => new Error(error.PropertyName, error.ErrorMessage))
+                .ToList())
             : Ok(Value);
     }
 }

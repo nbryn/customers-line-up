@@ -98,7 +98,7 @@ public sealed class Business : Entity, IAggregateRoot
     {
         if (user.Role == Role.Owner)
         {
-            return DomainResult.Fail(EmployeeErrors.OwnerCannotBeEmployee);
+            return DomainResult.Fail(new List<Error>() { EmployeeErrors.OwnerCannotBeEmployee });
         }
 
         user.UpdateRole(Role.Employee);
@@ -120,7 +120,7 @@ public sealed class Business : Entity, IAggregateRoot
     {
         if (GetTimeSlotByDate(start) != null)
         {
-            return DomainResult.Fail(TimeSlotErrors.TimeSlotsExists);
+            return DomainResult.Fail(new List<Error>() { TimeSlotErrors.TimeSlotsExists });
         }
 
         var opens = start.AddHours(BusinessHours.Start);

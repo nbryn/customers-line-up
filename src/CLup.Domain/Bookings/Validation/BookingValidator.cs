@@ -6,8 +6,8 @@ public class BookingValidator : AbstractValidator<Booking>
 {
     public BookingValidator()
     {
-        RuleFor(booking => booking.User).NotEmpty();
-        RuleFor(booking => booking.TimeSlot).NotEmpty();
-        RuleFor(booking => booking.Business).NotEmpty();
+        RuleFor(booking => booking.UserId).NotEmpty();
+        RuleFor(booking => booking.TimeSlotId).NotEmpty();
+        RuleFor(booking => booking.BusinessId).NotEmpty();
     }
 }

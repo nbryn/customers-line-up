@@ -69,15 +69,21 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .Include(business => business.Bookings)
             .ThenInclude(booking => booking.TimeSlot)
             .ThenInclude(timeSlot => timeSlot.Business)
+            .Include(business => business.TimeSlots)
             .Include(business => business.Bookings)
             .ThenInclude(booking => booking.User)
             .AsSplitQuery()
             .FirstOrDefaultAsync(business => business.OwnerId == userId && business.Id == businessId);
 
-    public Task<Business?> FetchBusinessById(BusinessId businessId)
-        => Businesses
+    public async Task<Business?> FetchBusinessById(BusinessId businessId)
+        => await Businesses
             .Include(business => business.TimeSlots)
             .FirstOrDefaultAsync(business => business.Id == businessId);
+
+    public async Task<IList<Business>> FetchBusinessesByOwner(UserId ownerId)
+        => await Businesses
+            .Where(business => business.OwnerId == ownerId)
+            .ToListAsync();
 
     public async Task<User?> FetchUserAggregate(UserId userId)
         => await Users

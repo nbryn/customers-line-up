@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentValidation;
 using CLup.Domain.Shared;
@@ -18,7 +19,7 @@ public static class TaskExtensions
     {
         var maybe = await task;
 
-        return Result.ToResult(maybe, error);
+        return Result.ToResult(maybe, new List<Error>() { error });
     }
 
     public static async Task<Result<U>> FailureIfNotFound<T, U>(
@@ -40,9 +41,6 @@ public static class TaskExtensions
         => (await task).Validate(validator);
 
     public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, U> f) => (await task).Bind(f);
-
-    public static async Task<Result<U>> AndThenAsync<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f) =>
-        await (await task).BindAsync(f);
 
     public static async Task<Result<T>> AndThenF<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
         => await (await task).BindF(f);
