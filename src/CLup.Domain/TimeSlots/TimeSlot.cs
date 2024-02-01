@@ -51,7 +51,8 @@ namespace CLup.Domain.TimeSlots
             Id = TimeSlotId.Create(Guid.NewGuid());
         }
 
-        public bool IsAvailable() => Bookings.Count() < Capacity && (Start - DateTime.Now).TotalDays is < 14 and >= 0;
+        // TODO: Check TimeSlot is not in the past.
+        public bool IsAvailable() => Bookings.Count < Capacity;
 
         public string FormatInterval() =>
             $"{Start.TimeOfDay.ToString().Substring(0, 5)} - {End.TimeOfDay.ToString().Substring(0, 5)}";

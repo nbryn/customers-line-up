@@ -116,19 +116,20 @@ public sealed class Business : Entity, IAggregateRoot
         _sentMessages.Add(message);
     }
 
-    public DomainResult GenerateTimeSlots(DateTime start)
+    public DomainResult GenerateTimeSlots(DateOnly date)
     {
-        if (GetTimeSlotByDate(start) != null)
+        var midnight = date.ToDateTime(TimeOnly.MinValue);
+        if (GetTimeSlotByDate(midnight) != null)
         {
             return DomainResult.Fail(new List<Error>() { TimeSlotErrors.TimeSlotsExists });
         }
 
-        var opens = start.AddHours(BusinessHours.Start);
-        var closes = start.AddHours(BusinessHours.End);
-        for (var date = opens; date.TimeOfDay <= closes.TimeOfDay; date = date.AddMinutes(BusinessData.TimeSlotLength))
+        var opens = midnight.AddHours(BusinessHours.Start);
+        var closes = midnight.AddHours(BusinessHours.End);
+        for (var curr = opens; curr.TimeOfDay <= closes.TimeOfDay; curr = curr.AddMinutes(BusinessData.TimeSlotLength))
         {
-            var end = date.AddMinutes(BusinessData.TimeSlotLength);
-            var timeSlot = new TimeSlot(Id, BusinessData.Name, BusinessData.Capacity, date, end);
+            var end = curr.AddMinutes(BusinessData.TimeSlotLength);
+            var timeSlot = new TimeSlot(Id, BusinessData.Name, BusinessData.Capacity, curr, end);
 
             _timeSlots.Add(timeSlot);
         }

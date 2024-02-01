@@ -7,20 +7,20 @@ using CLup.Domain.Users;
 
 namespace tests.CLup.IntegrationTests.Tests;
 
-public class BookingControllerTests : IntegrationTestsBase
+public sealed class BookingControllerTests : IntegrationTestsBase
 {
     public BookingControllerTests(IntegrationTestWebAppFactory factory) : base(factory)
     {
     }
 
     [Fact]
-    public async Task TimeSlotIsNotFull_And_ValidBusinessAndTimeSlotId_CreateBookingSucceeds()
+    public async Task ValidBusinessAndTimeSlotId_TimeSlotIsNotFull_CreateBookingSucceeds()
     {
-        const string email = "test@test.com";
+        const string email = "test2@test.com";
         var userId = await CreateUserWithBusiness(email);
         var business = (await GetBusinessesByOwner(userId)).First();
 
-        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(business.Id, DateTime.Now);
+        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.Today));
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
         var businessWithTimeSlots = await GetBusiness(business.Id);
         var timeSlot = businessWithTimeSlots.TimeSlots.First();
@@ -34,13 +34,13 @@ public class BookingControllerTests : IntegrationTestsBase
     }
 
     [Fact]
-    public async Task BookingExists_CreateBooking_Fails()
+    public async Task ValidBusinessAndTimeSlotId_BookingExists_CreateBookingFails()
     {
-        const string email = "test@test.com";
+        const string email = "test3@test.com";
         var userId = await CreateUserWithBusiness(email);
         var business = (await GetBusinessesByOwner(userId)).First();
 
-        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(business.Id, DateTime.Now);
+        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.Today));
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
         var businessWithTimeSlots = await GetBusiness(business.Id);
         var timeSlot = businessWithTimeSlots.TimeSlots.First();
@@ -54,14 +54,14 @@ public class BookingControllerTests : IntegrationTestsBase
     }
 
     [Fact]
-    public async Task TimeSlotIsFull_CreateBooking_Fails()
+    public async Task ValidBusinessAndTimeSlotId_TimeSlotIsFull_CreateBookingFails()
     {
-        const string email = "test@test.com";
+        const string email = "test4@test.com";
         var firstUserId = await CreateUserWithBusiness(email, 1);
 
         var business = (await GetBusinessesByOwner(firstUserId)).First();
 
-        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(business.Id, DateTime.Now);
+        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.Today));
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
         var businessWithTimeSlots = await GetBusiness(business.Id);
         var timeSlot = businessWithTimeSlots.TimeSlots.First();
@@ -69,17 +69,17 @@ public class BookingControllerTests : IntegrationTestsBase
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
         await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
 
-        await CreateUserAndSetJwtToken("test1@test.com");
+        await CreateUserAndSetJwtToken("test5@test.com");
         var problemDetails = await PostAsyncAndEnsureBadRequest<CreateBookingRequest, ProblemDetails>(BookingRoute, createBookingRequest);
 
         problemDetails.Errors.Count.Should().Be(1);
-        problemDetails.Errors.First().Key.Should().Be(UserErrors.BookingExists.Code);
+        problemDetails.Errors.First().Key.Should().Be(TimeSlotErrors.NoCapacity.Code);
     }
 
     [Fact]
     public async Task RequestWithNoIds_CreateBooking_ReturnsBadRequest()
     {
-        const string email = "test@test.com";
+        const string email = "test6@test.com";
         await CreateUserAndSetJwtToken(email);
         var request = new CreateBookingRequest(Guid.Empty, Guid.Empty);
 
@@ -90,9 +90,9 @@ public class BookingControllerTests : IntegrationTestsBase
     }
 
     [Fact]
-    public async Task RequestWithInvalidBusinessId_CreateBooking_ReturnsNotFound()
+    public async Task RequestWithInvalidBusinessId_CreateBooking_ReturnsBusinessNotFound()
     {
-        const string email = "test@test.com";
+        const string email = "test7@test.com";
         await CreateUserAndSetJwtToken(email);
 
         var request = new CreateBookingRequest(Guid.NewGuid(), Guid.NewGuid());
@@ -104,9 +104,9 @@ public class BookingControllerTests : IntegrationTestsBase
     }
 
     [Fact]
-    public async Task RequestWithInvalidTimeSlotId_CreateBooking_ReturnsNotFound()
+    public async Task RequestWithInvalidTimeSlotId_CreateBooking_ReturnsTimeSlotNotFound()
     {
-        const string email = "test@test.com";
+        const string email = "test8@test.com";
         var userId = await CreateUserWithBusiness(email);
         var business = (await GetBusinessesByOwner(userId)).First();
 

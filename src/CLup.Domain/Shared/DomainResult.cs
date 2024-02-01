@@ -4,19 +4,18 @@ namespace CLup.Domain.Shared;
 
 public class DomainResult
 {
-    public bool Success { get; private set; }
+    public IList<Error> Errors { get; private set; }
 
-    public List<Error> Errors { get; private set; }
+    public bool Success => Errors.Count == 0;
 
-    public bool Failure => !Success;
+    public bool Failure => Errors.Count > 0;
 
-    protected DomainResult(List<Error> errors)
+    protected DomainResult(IList<Error> errors)
     {
-        Success = errors.Count == 0;
         Errors = errors;
     }
 
     public static DomainResult Ok() => new(new List<Error>());
 
-    public static DomainResult Fail(List<Error> errors) => new(errors);
+    public static DomainResult Fail(IList<Error> errors) => new(errors);
 }

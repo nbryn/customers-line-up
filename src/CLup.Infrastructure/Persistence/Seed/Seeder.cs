@@ -215,7 +215,7 @@ public sealed class Seeder : ISeeder
 
         foreach (var business in businesses)
         {
-            business.GenerateTimeSlots(DateTime.Today.AddDays(1));
+            business.GenerateTimeSlots(DateOnly.FromDateTime(DateTime.Today.AddDays(1)));
             businessTimeSlots.Add(business.Id, business.TimeSlots.Select(timeSlot => timeSlot.Id).ToList());
         }
 

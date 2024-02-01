@@ -4,7 +4,7 @@ using CLup.Application.Shared;
 
 namespace tests.CLup.IntegrationTests.Tests;
 
-public class AuthControllerTests : IntegrationTestsBase
+public sealed class AuthControllerTests : IntegrationTestsBase
 {
     public AuthControllerTests(IntegrationTestWebAppFactory factory) : base(factory)
     {
@@ -34,7 +34,7 @@ public class AuthControllerTests : IntegrationTestsBase
     [Fact]
     public async Task GivenInvalidCredentials_LoginFails()
     {
-        const string email = "test@test.com";
+        const string email = "test1@test.com";
         const string password = "1234";
 
         await CreateUserAndSetJwtToken(email, password);

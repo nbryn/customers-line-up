@@ -7,6 +7,6 @@ public sealed class GenerateTimeSlotsValidator : AbstractValidator<GenerateTimeS
     public GenerateTimeSlotsValidator()
     {
         RuleFor(command => command.BusinessId).NotEmpty();
-        RuleFor(command => command.Start).NotEmpty();
+        RuleFor(command => command.Date).NotEmpty();
     }
 }

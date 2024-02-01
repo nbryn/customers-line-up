@@ -7,6 +7,6 @@ public class GenerateTimeSlotsRequestValidator : AbstractValidator<GenerateTimeS
     public GenerateTimeSlotsRequestValidator()
     {
         RuleFor(request => request.BusinessId).NotNull();
-        RuleFor(request => request.Start).NotNull();
+        RuleFor(request => request.Date).NotNull();
     }
 }

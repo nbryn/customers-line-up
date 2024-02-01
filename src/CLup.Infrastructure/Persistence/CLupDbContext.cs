@@ -78,6 +78,7 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
     public async Task<Business?> FetchBusinessById(BusinessId businessId)
         => await Businesses
             .Include(business => business.TimeSlots)
+            .ThenInclude(timeSlot => timeSlot.Bookings)
             .FirstOrDefaultAsync(business => business.Id == businessId);
 
     public async Task<IList<Business>> FetchBusinessesByOwner(UserId ownerId)

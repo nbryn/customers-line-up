@@ -137,17 +137,11 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     protected async Task<TResult?> GetAsyncAndEnsureSuccess<TResult>(string url) =>
         await GetAsyncAndEnsureStatus<TResult>(url, HttpStatusCode.OK);
 
-    protected async Task<TResult?> GetAsyncAndEnsureNotFound<TResult>(string url) =>
-        await GetAsyncAndEnsureStatus<TResult>(url, HttpStatusCode.NotFound);
-
     protected async Task PostAsyncAndEnsureSuccess<TRequest>(string url, TRequest request) =>
         await PostAsyncAndEnsureStatus(url, request, HttpStatusCode.OK);
 
     protected async Task<TResult?> PostAsyncAndEnsureSuccess<TRequest, TResult>(string url, TRequest request) =>
         await PostAsyncAndEnsureStatus<TRequest, TResult>(url, request, HttpStatusCode.OK);
-
-    protected async Task<TResponse?> PostAsyncAndEnsureNotFound<TResponse>(string url) =>
-        await PostAsyncAndEnsureStatus<TResponse>(url, HttpStatusCode.NotFound);
 
     protected async Task<TResponse?> PostAsyncAndEnsureNotFound<TRequest, TResponse>(string url, TRequest request) =>
         await PostAsyncAndEnsureStatus<TRequest, TResponse>(url, request, HttpStatusCode.NotFound);

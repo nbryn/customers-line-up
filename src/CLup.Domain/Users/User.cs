@@ -29,7 +29,7 @@ public sealed class User : Entity, IAggregateRoot
 
     public Coords Coords { get; private set; }
 
-    public Role Role { get; set; }
+    public Role Role { get; private set; }
 
     public IReadOnlyList<BusinessMessage> ReceivedMessages => _receivedMessages.AsReadOnly();
 
@@ -38,6 +38,8 @@ public sealed class User : Entity, IAggregateRoot
     public IReadOnlyList<Business> Businesses => _businesses.AsReadOnly();
 
     public IReadOnlyList<Booking> Bookings => _bookings.AsReadOnly();
+
+    public bool IsBusinessOwner => Businesses.Count > 0;
 
     protected User()
     {
@@ -57,12 +59,9 @@ public sealed class User : Entity, IAggregateRoot
         Id = UserId.Create(Guid.NewGuid());
     }
 
-    public bool IsBusinessOwner => Businesses.Count > 0;
-
     public User UpdateRole(Role role)
     {
         Role = role;
-
         return this;
     }
 

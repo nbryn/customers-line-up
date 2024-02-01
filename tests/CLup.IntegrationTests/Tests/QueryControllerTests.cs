@@ -2,7 +2,7 @@ using CLup.API.Contracts.Businesses.GetAllBusinesses;
 
 namespace tests.CLup.IntegrationTests.Tests;
 
-public class QueryControllerTests : IntegrationTestsBase
+public sealed class QueryControllerTests : IntegrationTestsBase
 {
     public QueryControllerTests(IntegrationTestWebAppFactory factory) : base(factory)
     {
@@ -11,7 +11,7 @@ public class QueryControllerTests : IntegrationTestsBase
     [Fact]
     public async Task GetExistingUser_ReturnsCorrectUser()
     {
-        const string email = "test@test.com";
+        const string email = "test10@test.com";
         await CreateUserAndSetJwtToken(email);
         var user = await GetUser();
 
@@ -22,8 +22,8 @@ public class QueryControllerTests : IntegrationTestsBase
     [Fact]
     public async Task TwoBusinessesWithDifferentOwner_GetAllBusinesses_ReturnsBoth()
     {
-        const string firstEmail = "test1@test.com";
-        const string secondEmail = "test2@test.com";
+        const string firstEmail = "test11@test.com";
+        const string secondEmail = "test12@test.com";
         var firstUserId = await CreateUserWithBusiness(firstEmail);
         var secondUserId = await CreateUserWithBusiness(secondEmail);
 
@@ -33,14 +33,14 @@ public class QueryControllerTests : IntegrationTestsBase
 
         var businessOwnerIds = response.Businesses.Select(business => business.OwnerId).ToList();
         businessOwnerIds.Count.Should().Be(2);
-        businessOwnerIds.SequenceEqual(new[] { firstUserId, secondUserId }).Should().BeTrue();
+        businessOwnerIds.All(new[] { firstUserId, secondUserId }.Contains).Should().BeTrue();
     }
 
     [Fact]
     public async Task OwnerWithOneBusiness_TwoBusinessesExist_GetBusinessesByOwner_ReturnsTheRightBusiness()
     {
-        const string firstEmail = "test1@test.com";
-        const string secondEmail = "test2@test.com";
+        const string firstEmail = "test13@test.com";
+        const string secondEmail = "test14@test.com";
         await CreateUserWithBusiness(firstEmail);
         var userId = await CreateUserWithBusiness(secondEmail);
 

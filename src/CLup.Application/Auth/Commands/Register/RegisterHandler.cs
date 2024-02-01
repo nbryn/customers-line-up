@@ -32,6 +32,6 @@ public sealed class RegisterHandler : IRequestHandler<RegisterCommand, Result<st
             .Ensure(user => user == null, HttpCode.BadRequest, UserErrors.EmailExists(command.UserData.Email))
             .AndThen(_ => command.MapToUser(BC.HashPassword(command.UserData.Password)))
             .Validate(_validator)
-            .AndThenF(newUser => _repository.AddAndSave(cancellationToken, newUser))
+            .AndThenAsync(newUser => _repository.AddAndSave(cancellationToken, newUser))
             .Finally(_jwtTokenService.GenerateJwtToken);
 }
