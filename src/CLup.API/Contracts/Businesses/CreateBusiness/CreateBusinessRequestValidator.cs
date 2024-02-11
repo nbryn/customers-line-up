@@ -11,11 +11,11 @@ public sealed class CreateBusinessRequestValidator : AbstractValidator<CreateBus
         RuleFor(command => command.City).NotEmpty();
         RuleFor(command => command.Street).NotEmpty();
         RuleFor(command => command.Opens).NotEmpty();
-        RuleFor(command => command.Longitude).NotEmpty();
-        RuleFor(command => command.Latitude).NotEmpty();
         RuleFor(command => command.Closes).NotEmpty();
         RuleFor(command => command.Capacity).NotEmpty();
         RuleFor(command => command.TimeSlotLength).NotEmpty();
-        RuleFor(command => command.Type).IsInEnum();
+        RuleFor(command => command.Type).NotEmpty().IsInEnum();
+        RuleFor(coords => coords.Latitude).NotEmpty().InclusiveBetween(-90, 90);
+        RuleFor(coords => coords.Longitude).NotEmpty().InclusiveBetween(-180, 180);
     }
 }

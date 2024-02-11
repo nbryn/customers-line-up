@@ -6,6 +6,6 @@ public sealed class DeleteUserBookingRequestValidator : AbstractValidator<Delete
 {
     public DeleteUserBookingRequestValidator()
     {
-        RuleFor(request => request.BookingId).NotNull();
+        RuleFor(request => request.BookingId).NotEmpty();
     }
 }

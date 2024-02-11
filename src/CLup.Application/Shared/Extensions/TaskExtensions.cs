@@ -52,8 +52,15 @@ public static class TaskExtensions
         Error? error = null)
         => await (await task).Ensure(task, predicate, httpCode, error);
 
-    public static async Task<Result> FlattenAndEnsureSuccess(this Task<Result<DomainResult>> task)
-        => await (await task).FlattenAndEnsureSuccess(task);
+    public static async Task<Result<T>> Ensure<T>(
+        this Task<Result<T>> task,
+        Func<T, DomainResult> predicate,
+        HttpCode httpCode,
+        Error? error = null)
+        => await (await task).Ensure(task, predicate, httpCode, error);
+
+    public static async Task<Result> FlatMap(this Task<Result<DomainResult>> task)
+        => await (await task).FlatMap(task);
 
     public static async Task<Result<U>> Finally<T, U>(this Task<Result<T>> task, Func<T, U> f)
         => (await task).Bind(f);

@@ -80,6 +80,12 @@ public sealed class User : Entity, IAggregateRoot
     public BusinessMessage? GetReceivedMessageById(MessageId id) =>
         _receivedMessages.Find(message => message.Id.Value == id.Value);
 
+    public Booking RemoveBooking(Booking? booking)
+    {
+        _bookings.Remove(booking);
+        return booking;
+    }
+
     public DomainResult CreateBooking(Booking booking)
     {
         if (BookingExists(booking.TimeSlotId))

@@ -6,7 +6,7 @@ public class CoordsValidator : AbstractValidator<Coords>
 {
     public CoordsValidator()
     {
-        RuleFor(coords => coords.Latitude).InclusiveBetween(-90, 90);
-        RuleFor(coords => coords.Longitude).InclusiveBetween(-180, 180);
+        RuleFor(coords => coords.Latitude).NotEmpty().InclusiveBetween(-90, 90);
+        RuleFor(coords => coords.Longitude).NotEmpty().InclusiveBetween(-180, 180);
     }
 }

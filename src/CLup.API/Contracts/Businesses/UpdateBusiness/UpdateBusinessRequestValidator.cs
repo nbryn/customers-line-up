@@ -11,12 +11,12 @@ public sealed class UpdateBusinessRequestValidator : AbstractValidator<UpdateBus
         RuleFor(request => request.Zip).NotEmpty();
         RuleFor(request => request.Street).NotEmpty();
         RuleFor(request => request.City).NotEmpty();
-        RuleFor(request => request.Longitude).NotEmpty();
-        RuleFor(request => request.Latitude).NotEmpty();
         RuleFor(request => request.Opens).NotEmpty();
         RuleFor(request => request.Closes).NotEmpty();
         RuleFor(request => request.Capacity).NotEmpty();
         RuleFor(request => request.TimeSlotLength).NotEmpty();
-        RuleFor(request => request.Type).IsInEnum();
+        RuleFor(command => command.Type).NotEmpty().IsInEnum();
+        RuleFor(coords => coords.Latitude).NotEmpty().InclusiveBetween(-90, 90);
+        RuleFor(coords => coords.Longitude).NotEmpty().InclusiveBetween(-180, 180);
     }
 }

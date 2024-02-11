@@ -27,12 +27,12 @@ public sealed class CreateBookingHandler : IRequestHandler<CreateBookingCommand,
         => await _repository.FetchBusinessById(command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
             .FailureIfNotFound(business => business?.GetTimeSlotById(command.TimeSlotId), TimeSlotErrors.NotFound)
-            .Ensure(timeSlot => timeSlot.IsAvailable(), HttpCode.BadRequest, TimeSlotErrors.NoCapacity)
+            .Ensure(timeSlot => timeSlot.IsAvailable(), HttpCode.BadRequest)
             .AndThen(_ => command.MapToBooking())
             .Validate(_validator)
             .FailureIfNotFoundAsync(
                 async booking => (await _repository.FetchUserAggregate(command.UserId))?.CreateBooking(booking),
                 UserErrors.NotFound)
-            .FlattenAndEnsureSuccess()
-            .FinallyAsync(() => _repository.SaveChangesAsync(cancellationToken));
+            .FlatMap()
+            .FinallyAsync(() => _repository.SaveChangesAsync(true, cancellationToken));
 }

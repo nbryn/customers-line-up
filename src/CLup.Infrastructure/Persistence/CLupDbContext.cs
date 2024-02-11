@@ -11,6 +11,7 @@ using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Employees;
 using CLup.Domain.Messages;
 using CLup.Domain.Shared;
+using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
@@ -121,7 +122,7 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         return users;
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(bool acceptChanges = true, CancellationToken cancellationToken = default)
     {
         MarkEntitiesAsUpdated();
 
@@ -132,33 +133,14 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
         await DispatchEvents(events);
 
-        return await base.SaveChangesAsync(true, cancellationToken);
+        return await base.SaveChangesAsync(acceptChanges, cancellationToken);
     }
 
     public async Task<int> AddAndSave(CancellationToken cancellationToken, params Entity[] entities)
     {
         await AddRangeAsync(entities);
 
-        return await SaveChangesAsync(true);
-    }
-
-    public async Task<int> RemoveAndSave(Entity value, CancellationToken cancellationToken)
-    {
-        Remove(value);
-
         return await SaveChangesAsync(true, cancellationToken);
-    }
-
-    public async Task<int> UpdateEntity(Guid id, Entity updatedEntity, CancellationToken cancellationToken)
-    {
-        var entity = (Entity)await FindAsync(typeof(Entity), id);
-
-        // Is this necessary?
-        // Use reflection
-        // updatedEntity.Id = entity.Id;
-        Entry(entity).CurrentValues.SetValues(updatedEntity);
-
-        return await SaveChangesAsync(cancellationToken);
     }
 
     private void MarkEntitiesAsUpdated()

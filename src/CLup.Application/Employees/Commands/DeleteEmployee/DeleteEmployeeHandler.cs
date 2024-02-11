@@ -21,6 +21,7 @@ public sealed class DeleteEmployeeHandler : IRequestHandler<DeleteEmployeeComman
     public async Task<Result> Handle(DeleteEmployeeCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(command.OwnerId, command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
-            .FailureIfNotFound(business => business.GetEmployeeById(command.EmployeeId), EmployeeErrors.NotFound)
-            .FinallyAsync(employee => _repository.RemoveAndSave(employee, cancellationToken));
+            .FailureIfNotFound(business => business?.GetEmployeeById(command.EmployeeId), EmployeeErrors.NotFound)
+            .AndThen(employee => employee?.Business.RemoveEmployee(employee))
+            .FinallyAsync(_ => _repository.SaveChangesAsync(true, cancellationToken));
 }

@@ -4,7 +4,9 @@ using BId = CLup.Domain.Bookings.ValueObjects.BookingId;
 
 namespace CLup.API.Contracts.Bookings.DeleteUserBooking;
 
-public readonly record struct DeleteUserBookingRequest(Guid BookingId)
+public sealed class DeleteUserBookingRequest
 {
+    public Guid BookingId { get; set; }
+
     public DeleteUserBookingCommand MapToCommand(UserId userId) => new(userId, BId.Create(BookingId));
 }

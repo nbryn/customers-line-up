@@ -35,7 +35,7 @@ public sealed class Seeder : ISeeder
         AddBookings(businessTimeSlots, businesses.Select(business => business.Id).ToList(), userIds);
         AddEmployees(businesses.Select(business => business.Id).ToList(), userIds);
 
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync(true);
     }
 
     private IList<UserId> AddUsers()

@@ -4,9 +4,11 @@ namespace CLup.Domain.TimeSlots;
 
 public static class TimeSlotErrors
 {
-    public static readonly Error NotFound = new("TimeSlots.NotFound", "The time slot was not found.");
+    public static readonly Error NotFound = new("TimeSlot.NotFound", "The time slot was not found.");
 
-    public static readonly Error NoCapacity = new("TimeSlots.NoCapacity", "This time slot is full.");
+    public static readonly Error NoCapacity = new("TimeSlot.NoCapacity", "This time slot is full.");
 
-    public static readonly Error TimeSlotsExists = new("TimeSlots.Exists", "Time slots already generated for this date.");
+    public static readonly Error Exists = new("TimeSlot.Exists", "Time slots already generated for this date.");
+
+    public static readonly Error InThePast = new("TimeSlot.IsInThePast", "Time slot not available.");
 }

@@ -94,6 +94,40 @@ public sealed class Business : Entity, IAggregateRoot
     public Employee? GetEmployeeById(EmployeeId employeeId) =>
         _employees.Find(employee => employee.Id.Value == employeeId.Value);
 
+    public Booking RemoveBooking(Booking booking)
+    {
+        _bookings.Remove(booking);
+        return booking;
+    }
+
+    public TimeSlot RemoveTimeSlot(TimeSlot timeSlot)
+    {
+        _timeSlots.Remove(timeSlot);
+        return timeSlot;
+    }
+
+    public Employee RemoveEmployee(Employee employee)
+    {
+        _employees.Remove(employee);
+        return employee;
+    }
+
+    public Business Update(
+        BusinessData businessData,
+        Address address,
+        Coords coords,
+        Interval businessHours,
+        BusinessType type)
+    {
+        BusinessData = businessData;
+        Address = address;
+        Coords = coords;
+        BusinessHours = businessHours;
+        Type = type;
+
+        return this;
+    }
+
     public DomainResult AddEmployee(User user, Employee employee)
     {
         if (user.Role == Role.Owner)
@@ -121,7 +155,7 @@ public sealed class Business : Entity, IAggregateRoot
         var midnight = date.ToDateTime(TimeOnly.MinValue);
         if (GetTimeSlotByDate(midnight) != null)
         {
-            return DomainResult.Fail(new List<Error>() { TimeSlotErrors.TimeSlotsExists });
+            return DomainResult.Fail(new List<Error>() { TimeSlotErrors.Exists });
         }
 
         var opens = midnight.AddHours(BusinessHours.Start);

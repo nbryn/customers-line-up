@@ -21,7 +21,7 @@ public sealed class UserMarksMessageAsDeletedHandler : IRequestHandler<UserMarks
     public async Task<Result> Handle(UserMarksMessageAsDeletedCommand command, CancellationToken cancellationToken)
         => await _repository.FetchUserAggregate(command.UserId)
             .FailureIfNotFound(UserErrors.NotFound)
-            .FailureIfNotFound(user => user.GetMessageById(command.MessageId, command.ForSender), MessageErrors.NotFound)
+            .FailureIfNotFound(user => user?.GetMessageById(command.MessageId, command.ForSender), MessageErrors.NotFound)
             .AndThen(message => command.ForSender ? message?.DeletedBySender() : message?.DeletedByReceiver())
-            .FinallyAsync(message => _repository.UpdateEntity(message.Id.Value, message, cancellationToken));
+            .FinallyAsync(_ => _repository.SaveChangesAsync(true, cancellationToken));
 }

@@ -6,6 +6,7 @@ using CLup.Application.Employees;
 using CLup.Application.Messages;
 using CLup.Application.TimeSlots;
 using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.Enums;
 
 namespace CLup.Application.Businesses;
 
@@ -27,15 +28,15 @@ public sealed class BusinessDto
 
     public double Latitude { get; init; }
 
-    public string Opens { get; init; }
+    public double Opens { get; init; }
 
-    public string Closes { get; init; }
+    public double Closes { get; init; }
 
     public int TimeSlotLength { get; init; }
 
     public string BusinessHours { get; init; }
 
-    public string Type { get; init; }
+    public BusinessType Type { get; init; }
 
     public int Capacity { get; init; }
 
@@ -61,11 +62,11 @@ public sealed class BusinessDto
             Street = business.Address.Street,
             Longitude = business.Coords.Longitude,
             Latitude = business.Coords.Latitude,
-            Opens = business.BusinessHours.Start.ToString(),
-            Closes = business.BusinessHours.End.ToString(),
+            Opens = business.BusinessHours.Start,
+            Closes = business.BusinessHours.End,
             Capacity = business.BusinessData.Capacity,
             TimeSlotLength = business.BusinessData.TimeSlotLength,
-            Type = business.Type.ToString(),
+            Type = business.Type,
             BusinessHours = $"{business.BusinessHours.Start} - {business.BusinessHours.End}",
             Bookings = business.Bookings.Select(BookingDto.FromBooking).ToList(),
             Employees = business.Employees.Select(EmployeeDto.FromEmployee).ToList(),

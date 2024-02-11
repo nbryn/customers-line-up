@@ -6,6 +6,7 @@ using CLup.Domain.Users;
 using System;
 using System.Threading;
 using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Application.Shared.Interfaces;
@@ -26,11 +27,7 @@ public interface ICLupRepository
 
     Task<IList<Business>> FetchAllBusinesses();
 
-    public Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    public Task<int> SaveChangesAsync(bool acceptChanges, CancellationToken cancellationToken = default);
 
     Task<int> AddAndSave(CancellationToken cancellationToken, params Entity[] entities);
-
-    Task<int> RemoveAndSave(Entity value, CancellationToken cancellationToken);
-
-    Task<int> UpdateEntity(Guid id, Entity updatedEntity, CancellationToken cancellationToken);
 }

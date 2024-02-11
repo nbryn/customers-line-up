@@ -54,7 +54,8 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             Longitude = business.Coords.Longitude,
             Latitude = business.Coords.Latitude,
             Opens = business.BusinessHours.Start,
-            Closes = business.BusinessHours.End
+            Closes = business.BusinessHours.End,
+            Type = business.Type
         };
 
         await PostAsyncAndEnsureSuccess(BusinessRoute, request);
@@ -106,14 +107,14 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
         return response.User;
     }
 
-    protected async Task<BusinessDto> GetBusiness(Guid businessId)
+    protected async Task<BusinessDto> GetBusiness(BusinessDto business)
     {
         if (_httpClient.DefaultRequestHeaders.Authorization == null)
         {
             throw new InvalidOperationException("Not authenticated");
         }
 
-        var response = await GetAsyncAndEnsureSuccess<GetBusinessResponse>($"{QueryRoute}/user/business/{businessId}");
+        var response = await GetAsyncAndEnsureSuccess<GetBusinessResponse>($"{QueryRoute}/user/business/{business.Id}");
         response.Should().NotBeNull();
 
         return response.Business;
@@ -137,6 +138,24 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     protected async Task<TResult?> GetAsyncAndEnsureSuccess<TResult>(string url) =>
         await GetAsyncAndEnsureStatus<TResult>(url, HttpStatusCode.OK);
 
+    protected async Task DeleteAsyncAndEnsureSuccess(string url) =>
+        await DeleteAsyncAndEnsureStatus(url, HttpStatusCode.OK);
+
+    protected async Task<TResponse?> DeleteAsyncAndEnsureNotFound<TResponse>(string url) =>
+        await DeleteAsyncAndEnsureStatus<TResponse>(url, HttpStatusCode.NotFound);
+
+    protected async Task<TResponse?> DeleteAsyncAndEnsureBadRequest<TResponse>(string url) =>
+        await DeleteAsyncAndEnsureStatus<TResponse>(url, HttpStatusCode.BadRequest);
+
+    protected async Task PutAsyncAndEnsureSuccess<TRequest>(string url, TRequest request) =>
+        await PutAsyncAndEnsureStatus<TRequest>(url, request, HttpStatusCode.OK);
+
+    protected async Task<TResponse> PutAsyncAndEnsureSuccess<TRequest, TResponse>(string url, TRequest request) =>
+        await PutAsyncAndEnsureStatus<TRequest, TResponse>(url, request, HttpStatusCode.OK);
+
+    protected async Task<TResponse?> PutAsyncAndEnsureBadRequest<TRequest, TResponse>(string url, TRequest request) =>
+        await PutAsyncAndEnsureStatus<TRequest, TResponse>(url, request, HttpStatusCode.BadRequest);
+
     protected async Task PostAsyncAndEnsureSuccess<TRequest>(string url, TRequest request) =>
         await PostAsyncAndEnsureStatus(url, request, HttpStatusCode.OK);
 
@@ -149,36 +168,18 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     protected async Task<TResponse?> PostAsyncAndEnsureBadRequest<TRequest, TResponse>(string url, TRequest request) =>
         await PostAsyncAndEnsureStatus<TRequest, TResponse>(url, request, HttpStatusCode.BadRequest);
 
-    protected async Task<TResult?> GetAsyncAndEnsureStatus<TResult>(string url, HttpStatusCode statusCode)
-    {
-        var response = await _httpClient.GetAsync(url);
-        var content = await response.Content.ReadAsStringAsync();
-        response.StatusCode.Should().Be(statusCode);
-
-        return JsonConvert.DeserializeObject<TResult>(content);
-    }
-
-    protected async Task<TResponse?> PostAsyncAndEnsureStatus<TResponse>(
-        string url,
-        HttpStatusCode statusCode)
-    {
-        var response = await PostAsync(url);
-        var content = await response.Content.ReadAsStringAsync();
-        response.StatusCode.Should().Be(statusCode);
-
-        return JsonConvert.DeserializeObject<TResponse>(content);
-    }
-
     protected async Task PostAsyncAndEnsureStatus<TRequest>(
         string url,
         TRequest request,
         HttpStatusCode statusCode)
     {
         var response = await PostAsync(url, request);
+        var content = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(content);
         response.StatusCode.Should().Be(statusCode);
     }
 
-    protected async Task<TResult?> PostAsyncAndEnsureStatus<TRequest, TResult>(
+    private async Task<TResult?> PostAsyncAndEnsureStatus<TRequest, TResult>(
         string url,
         TRequest request,
         HttpStatusCode statusCode)
@@ -188,12 +189,6 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
         response.StatusCode.Should().Be(statusCode);
 
         return JsonConvert.DeserializeObject<TResult>(content);
-    }
-
-    private async Task<HttpResponseMessage> PostAsync(string url)
-    {
-        var response = await _httpClient.PostAsync(url, null);
-        return response;
     }
 
     private async Task<HttpResponseMessage> PostAsync<TRequest>(string url, TRequest request)
@@ -204,4 +199,67 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
 
         return response;
     }
+
+    private async Task<TResult?> GetAsyncAndEnsureStatus<TResult>(string url, HttpStatusCode statusCode)
+    {
+        var response = await _httpClient.GetAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+        response.StatusCode.Should().Be(statusCode);
+
+        return JsonConvert.DeserializeObject<TResult>(content);
+    }
+
+    private async Task<TResult?> DeleteAsyncAndEnsureStatus<TResult>(string url, HttpStatusCode statusCode)
+    {
+        var response = await DeleteAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+        response.StatusCode.Should().Be(statusCode);
+
+        return JsonConvert.DeserializeObject<TResult>(content);
+    }
+
+    private async Task DeleteAsyncAndEnsureStatus(string url, HttpStatusCode statusCode)
+    {
+        var response = await DeleteAsync(url);
+        response.StatusCode.Should().Be(statusCode);
+    }
+
+    private async Task<HttpResponseMessage> DeleteAsync(string url)
+    {
+        var response = await _httpClient.DeleteAsync(url);
+        return response;
+    }
+
+    private async Task<TResult?> PutAsyncAndEnsureStatus<TRequest, TResult>(
+        string url,
+        TRequest request,
+        HttpStatusCode statusCode)
+    {
+        var response = await PutAsync(url, request);
+        var content = await response.Content.ReadAsStringAsync();
+        response.StatusCode.Should().Be(statusCode);
+
+        return JsonConvert.DeserializeObject<TResult>(content);
+    }
+
+    private async Task PutAsyncAndEnsureStatus<TRequest>(
+        string url,
+        TRequest request,
+        HttpStatusCode statusCode)
+    {
+        var response = await PutAsync(url, request);
+        var content = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(content);
+        response.StatusCode.Should().Be(statusCode);
+    }
+
+    private async Task<HttpResponseMessage> PutAsync<TRequest>(string url, TRequest request)
+    {
+        var json = JsonConvert.SerializeObject(request);
+        var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PutAsync(url, stringContent);
+
+        return response;
+    }
+
 }

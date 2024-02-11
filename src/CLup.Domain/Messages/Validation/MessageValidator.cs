@@ -11,7 +11,7 @@ public class MessageValidator : AbstractValidator<Message>
     {
         RuleFor(message => message.MessageData).SetValidator(messageDataValidator);
         RuleFor(message => message.Metadata).SetValidator(metadataValidator);
-        RuleFor(message => message.Type).IsInEnum();
+        RuleFor(message => message.Type).NotEmpty().IsInEnum();
         RuleFor(message => message.SenderId).NotNull();
         RuleFor(message => message.ReceiverId).NotNull();
     }

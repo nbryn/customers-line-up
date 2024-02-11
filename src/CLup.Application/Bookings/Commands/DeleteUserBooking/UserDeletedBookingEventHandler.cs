@@ -23,6 +23,6 @@ public sealed class UserDeletedBookingEventHandler : INotificationHandler<Domain
         var domainEvent = @event.DomainEvent;
         domainEvent.Owner.BookingDeletedMessage(domainEvent.Booking);
 
-        await _repository.UpdateEntity(domainEvent.Booking.User.Id.Value, domainEvent.Booking.User, cancellationToken);
+        await _repository.SaveChangesAsync(true, cancellationToken);
     }
 }

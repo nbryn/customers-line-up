@@ -23,6 +23,7 @@ public sealed class DeleteTimeSlotHandler : IRequestHandler<DeleteTimeSlotComman
         => await _repository.FetchBusinessAggregate(command.OwnerId, command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
             .FailureIfNotFound(business => business?.GetTimeSlotById(command.TimeSlotId), TimeSlotErrors.NotFound)
+            .AndThen(timeSlot => timeSlot.Business.RemoveTimeSlot(timeSlot))
             .AddDomainEvent(timeSlot => timeSlot?.DomainEvents.Add(new TimeSlotDeletedEvent(timeSlot)))
-            .FinallyAsync(timeSlot => _repository.RemoveAndSave(timeSlot, cancellationToken));
+            .FinallyAsync(_ => _repository.SaveChangesAsync(false, cancellationToken));
 }

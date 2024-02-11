@@ -30,7 +30,7 @@ public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeComman
                 HttpCode.BadRequest)
             .AndThen(entry => entry.Value.employee)
             .Validate(_validator)
-            .FinallyAsync(_ => _repository.SaveChangesAsync(cancellationToken));
+            .FinallyAsync(_ => _repository.SaveChangesAsync(true, cancellationToken));
 
     private async Task<(Business business, User user, Employee employee)?> GetUser(
         Business business,

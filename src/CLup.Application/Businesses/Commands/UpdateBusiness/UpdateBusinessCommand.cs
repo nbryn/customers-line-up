@@ -41,6 +41,4 @@ public sealed class UpdateBusinessCommand : IRequest<Result>
         BusinessHours = businessHours;
         Type = type;
     }
-
-    public Business MapToBusiness() => new(OwnerId, BusinessData, Address, Coords, BusinessHours, Type);
 }

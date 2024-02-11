@@ -35,7 +35,7 @@ public sealed class TimeSlotDto
             End = timeSlot.End.TimeOfDay.ToString().Substring(0, 5),
             Interval = timeSlot.FormatInterval(),
             Capacity = $"{timeSlot.Bookings.Count}/{timeSlot.Capacity.ToString()}",
-            Available = timeSlot.IsAvailable(),
+            Available = timeSlot.IsAvailable().Success,
         };
     }
 }

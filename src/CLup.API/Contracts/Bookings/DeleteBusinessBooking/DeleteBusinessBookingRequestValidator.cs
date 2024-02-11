@@ -6,7 +6,7 @@ public class DeleteBusinessBookingRequestValidator : AbstractValidator<DeleteBus
 {
     public DeleteBusinessBookingRequestValidator()
     {
-        RuleFor(request => request.BusinessId).NotNull();
-        RuleFor(request => request.BookingId).NotNull();
+        RuleFor(request => request.BusinessId).NotEmpty();
+        RuleFor(request => request.BookingId).NotEmpty();
     }
 }

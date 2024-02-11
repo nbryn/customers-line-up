@@ -27,5 +27,5 @@ public sealed class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Resul
             .FailureIfNotFound(UserErrors.NotFound)
             .AndThen(user => user.Update(command.UserData, command.Address, command.Coords))
             .Validate(_validator)
-            .FinallyAsync(updatedUser => _repository.UpdateEntity(updatedUser.Id.Value, updatedUser, cancellationToken));
+            .FinallyAsync(_ => _repository.SaveChangesAsync(true, cancellationToken));
 }

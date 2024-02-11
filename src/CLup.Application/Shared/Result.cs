@@ -41,7 +41,7 @@ public class Result : DomainResult
         return this;
     }
 
-    public async Task<Result> FlattenAndEnsureSuccess(Task<Result<DomainResult>> task)
+    public async Task<Result> FlatMap(Task<Result<DomainResult>> task)
     {
         var result = await task;
         if (result.Value?.Failure ?? false)
@@ -167,6 +167,28 @@ public sealed class Result<T> : Result
             {
                 Errors.Add(error);
             }
+        }
+
+        return this;
+    }
+
+    public async Task<Result<T>> Ensure(
+        Task<Result<T>> task,
+        Func<T, DomainResult> predicate,
+        HttpCode httpCode,
+        Error? error = null)
+    {
+        await task;
+        if (Failure)
+        {
+            return this;
+        }
+
+        var result = predicate(Value);
+        if (result.Failure)
+        {
+            Code = httpCode;
+            Errors.AddRange(result.Errors);
         }
 
         return this;

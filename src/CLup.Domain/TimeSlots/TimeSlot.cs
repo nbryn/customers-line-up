@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.Arm;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Bookings;
 using CLup.Domain.Businesses;
@@ -51,8 +52,20 @@ namespace CLup.Domain.TimeSlots
             Id = TimeSlotId.Create(Guid.NewGuid());
         }
 
-        // TODO: Check TimeSlot is not in the past.
-        public bool IsAvailable() => Bookings.Count < Capacity;
+        public DomainResult IsAvailable()
+        {
+            if (Bookings.Count >= Capacity)
+            {
+                return DomainResult.Fail(new[] { TimeSlotErrors.NoCapacity });
+            }
+
+            if (DateOnly.FromDateTime(Start) < DateOnly.FromDateTime(DateTime.Now))
+            {
+                return DomainResult.Fail(new[] { TimeSlotErrors.InThePast });
+            }
+
+            return DomainResult.Ok();
+        }
 
         public string FormatInterval() =>
             $"{Start.TimeOfDay.ToString().Substring(0, 5)} - {End.TimeOfDay.ToString().Substring(0, 5)}";
