@@ -1,7 +1,6 @@
-using CLup.Application.Bookings.Commands.DeleteUserBooking;
 using FluentValidation;
 
-namespace CLup.Application.Bookings.Commands.UserDeleteBooking;
+namespace CLup.Application.Bookings.Commands.DeleteUserBooking;
 
 public sealed class DeleteUserBookingValidator : AbstractValidator<DeleteUserBookingCommand>
 {

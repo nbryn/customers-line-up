@@ -8,7 +8,7 @@ namespace CLup.API.Contracts.Employees.CreateEmployee;
 public readonly record struct CreateEmployeeRequest(
     Guid BusinessId,
     Guid UserId,
-    string CompanyEmail)
+    string? CompanyEmail = null)
 {
     public CreateEmployeeCommand MapToCommand(UserId ownerId) =>
         new(ownerId, BId.Create(BusinessId), UId.Create(UserId), CompanyEmail);

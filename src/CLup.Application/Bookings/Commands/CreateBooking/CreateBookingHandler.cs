@@ -27,7 +27,7 @@ public sealed class CreateBookingHandler : IRequestHandler<CreateBookingCommand,
         => await _repository.FetchBusinessById(command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
             .FailureIfNotFound(business => business?.GetTimeSlotById(command.TimeSlotId), TimeSlotErrors.NotFound)
-            .Ensure(timeSlot => timeSlot.IsAvailable(), HttpCode.BadRequest)
+            .FlatMap(timeSlot => timeSlot.IsAvailable(), HttpCode.BadRequest)
             .AndThen(_ => command.MapToBooking())
             .Validate(_validator)
             .FailureIfNotFoundAsync(

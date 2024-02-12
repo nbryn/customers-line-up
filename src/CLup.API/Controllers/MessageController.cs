@@ -1,7 +1,7 @@
-﻿using CLup.API.Contracts.Messages.BusinessMarksMessageAsDeleted;
+﻿using CLup.API.Contracts.Messages.MarkBusinessMessageAsDeleted;
+using CLup.API.Contracts.Messages.MarkUserMessageAsDeleted;
 using CLup.API.Contracts.Messages.SendBusinessMessage;
 using CLup.API.Contracts.Messages.SendUserMessage;
-using CLup.API.Contracts.Messages.UserMarksMessageAsDeleted;
 using CLup.API.Extensions;
 using CLup.Application.Shared.Extensions;
 using MediatR;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CLup.API.Controllers;
 
 [Route("api/message")]
-public class MessageController : AuthorizedControllerBase
+public sealed class MessageController : AuthorizedControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -22,6 +22,7 @@ public class MessageController : AuthorizedControllerBase
     [HttpPost]
     [Route("user")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SendUserMessage([FromBody] SendUserMessageRequest request)
     {
@@ -33,6 +34,7 @@ public class MessageController : AuthorizedControllerBase
     [HttpPost]
     [Route("business")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SendBusinessMessage([FromBody] SendBusinessMessageRequest request)
     {
@@ -42,10 +44,11 @@ public class MessageController : AuthorizedControllerBase
     }
 
     [HttpPut]
-    [Route("user/delete")]
+    [Route("user")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UserMarksMessageAsDeleted([FromBody] UserMarksMessageAsDeletedRequest request)
+    public async Task<IActionResult> MarkUserMessageAsDeleted([FromBody] MarkUserMessageAsDeletedRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
@@ -53,11 +56,12 @@ public class MessageController : AuthorizedControllerBase
     }
 
     [HttpPut]
-    [Route("business/delete")]
+    [Route("business")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> BusinessMarksMessageAsDeleted(
-        [FromBody] BusinessMarksMessageAsDeletedRequest request)
+    public async Task<IActionResult> MarkBusinessMessageAsDeleted(
+        [FromBody] MarkBusinessMessageAsDeletedRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 

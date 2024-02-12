@@ -17,7 +17,7 @@ namespace CLup.API.Controllers;
 
 [ApiController]
 [Route("api/query")]
-public class QueryController : AuthorizedControllerBase
+public sealed class QueryController : AuthorizedControllerBase
 {
     private readonly ICLupRepository _repository;
 

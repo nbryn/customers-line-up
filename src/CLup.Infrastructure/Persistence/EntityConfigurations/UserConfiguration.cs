@@ -61,8 +61,9 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(booking => booking.UserId)
             .IsRequired();
 
+
         builder.HasMany(user => user.SentMessages)
-            .WithOne()
+            .WithOne(message => message.Sender)
             .HasForeignKey(message => message.SenderId)
             .IsRequired();
 

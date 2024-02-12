@@ -19,7 +19,7 @@ public sealed class BusinessDeletedBookingEventHandler : INotificationHandler<Do
     public async Task Handle(DomainEventNotification<BusinessDeletedBookingEvent> @event, CancellationToken cancellationToken)
     {
         var domainEvent = @event.DomainEvent;
-        domainEvent.BookingOwner.BookingDeletedMessage(domainEvent.Booking.User.Id);
+        domainEvent.BookingOwner.BookingDeletedMessage(domainEvent.Booking.UserId);
 
         await _repository.SaveChangesAsync(true, cancellationToken);
     }

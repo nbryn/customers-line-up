@@ -22,6 +22,8 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     protected static string BaseRoute = "api";
     protected string BookingRoute = $"{BaseRoute}/booking";
     protected string BusinessRoute = $"{BaseRoute}/business";
+    protected string EmployeeRoute = $"{BaseRoute}/employee";
+    protected string MessageRoute = $"{BaseRoute}/message";
     protected string TimeSlotRoute = $"{BaseRoute}/timeslot";
     protected string QueryRoute = $"{BaseRoute}/query";
     protected string UserRoute = $"{BaseRoute}/user";
@@ -148,10 +150,10 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
         await DeleteAsyncAndEnsureStatus<TResponse>(url, HttpStatusCode.BadRequest);
 
     protected async Task PutAsyncAndEnsureSuccess<TRequest>(string url, TRequest request) =>
-        await PutAsyncAndEnsureStatus<TRequest>(url, request, HttpStatusCode.OK);
+        await PutAsyncAndEnsureStatus(url, request, HttpStatusCode.OK);
 
-    protected async Task<TResponse> PutAsyncAndEnsureSuccess<TRequest, TResponse>(string url, TRequest request) =>
-        await PutAsyncAndEnsureStatus<TRequest, TResponse>(url, request, HttpStatusCode.OK);
+    protected async Task<TResponse?> PutAsyncAndEnsureNotFound<TRequest, TResponse>(string url, TRequest request) =>
+        await PutAsyncAndEnsureStatus<TRequest, TResponse>(url, request, HttpStatusCode.NotFound);
 
     protected async Task<TResponse?> PutAsyncAndEnsureBadRequest<TRequest, TResponse>(string url, TRequest request) =>
         await PutAsyncAndEnsureStatus<TRequest, TResponse>(url, request, HttpStatusCode.BadRequest);
@@ -221,12 +223,16 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     private async Task DeleteAsyncAndEnsureStatus(string url, HttpStatusCode statusCode)
     {
         var response = await DeleteAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(content);
         response.StatusCode.Should().Be(statusCode);
     }
 
     private async Task<HttpResponseMessage> DeleteAsync(string url)
     {
         var response = await _httpClient.DeleteAsync(url);
+        var content = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(content);
         return response;
     }
 

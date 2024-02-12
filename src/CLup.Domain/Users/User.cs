@@ -80,7 +80,7 @@ public sealed class User : Entity, IAggregateRoot
     public BusinessMessage? GetReceivedMessageById(MessageId id) =>
         _receivedMessages.Find(message => message.Id.Value == id.Value);
 
-    public Booking RemoveBooking(Booking? booking)
+    public Booking RemoveBooking(Booking booking)
     {
         _bookings.Remove(booking);
         return booking;
@@ -104,6 +104,21 @@ public sealed class User : Entity, IAggregateRoot
         Coords = coords;
 
         return this;
+    }
+
+    public Message MarkMessageAsDeleted(UserMessage message, bool forSender)
+    {
+        var messageMetaData = new MessageMetadata(
+            forSender || message.Metadata.DeletedBySender,
+            !forSender || message.Metadata.DeletedByReceiver);
+
+        message.UpdateMetadata(messageMetaData);
+        if (message.Metadata is { DeletedBySender: true, DeletedByReceiver: true })
+        {
+            _sentMessages.Remove(message);
+        }
+
+        return message;
     }
 
     public void BookingDeletedMessage(Booking booking)

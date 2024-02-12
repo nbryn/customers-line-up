@@ -10,9 +10,9 @@ public abstract class Message : Entity
 {
     public MessageId Id { get; }
 
-    public Id SenderId { get; private set; }
+    public virtual Id SenderId { get; }
 
-    public Id ReceiverId { get; private set; }
+    public virtual Id ReceiverId { get; }
 
     public MessageData MessageData { get; private set; }
 
@@ -41,17 +41,5 @@ public abstract class Message : Entity
         Id = MessageId.Create(Guid.NewGuid());
     }
 
-    public Message DeletedBySender()
-    {
-        Metadata = new MessageMetadata(true);
-
-        return this;
-    }
-
-    public Message DeletedByReceiver()
-    {
-        Metadata = new MessageMetadata(false, true);
-
-        return this;
-    }
+    public void UpdateMetadata(MessageMetadata metadata) => Metadata = metadata;
 }

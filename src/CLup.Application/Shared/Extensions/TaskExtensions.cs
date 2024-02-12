@@ -32,7 +32,7 @@ public static class TaskExtensions
         this Task<Result<T>> task,
         Func<T, Task<U>> f,
         Error error)
-        => await (await task).BindAsync(f, error);
+        => await (await task).FailureIfNotFoundAsync(f, error);
 
     public static async Task<Result<T>> AddDomainEvent<T>(this Task<Result<T>> task, Action<T> f) =>
         (await task).AddDomainEvent(f);
@@ -52,12 +52,11 @@ public static class TaskExtensions
         Error? error = null)
         => await (await task).Ensure(task, predicate, httpCode, error);
 
-    public static async Task<Result<T>> Ensure<T>(
+    public static async Task<Result<T>> FlatMap<T>(
         this Task<Result<T>> task,
         Func<T, DomainResult> predicate,
-        HttpCode httpCode,
-        Error? error = null)
-        => await (await task).Ensure(task, predicate, httpCode, error);
+        HttpCode httpCode)
+        => await (await task).FlatMap(task, predicate, httpCode);
 
     public static async Task<Result> FlatMap(this Task<Result<DomainResult>> task)
         => await (await task).FlatMap(task);

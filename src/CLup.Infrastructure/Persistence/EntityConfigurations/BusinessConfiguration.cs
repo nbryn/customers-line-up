@@ -81,7 +81,7 @@ internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
             .IsRequired();
 
         builder.HasMany(business => business.SentMessages)
-            .WithOne()
+            .WithOne(message => message.Sender)
             .HasForeignKey(message => message.SenderId)
             .IsRequired();
 

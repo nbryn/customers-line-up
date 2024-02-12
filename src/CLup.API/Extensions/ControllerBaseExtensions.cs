@@ -27,8 +27,6 @@ public static class ControllerBaseExtensions
         => result.Code switch
         {
             HttpCode.NotFound => controller.NotFound(result.ToProblemDetails()),
-            HttpCode.Forbidden => controller.Forbid(),
-            HttpCode.Conflict => controller.Conflict(result.ToProblemDetails()),
             HttpCode.Unauthorized => controller.Unauthorized(result.ToProblemDetails()),
             _ => controller.BadRequest(result.ToProblemDetails())
         };

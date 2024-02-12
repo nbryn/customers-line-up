@@ -26,7 +26,7 @@ public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeComman
         => await _repository.FetchBusinessAggregate(command.OwnerId, command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
             .FailureIfNotFoundAsync(business => GetUser(business, command), UserErrors.NotFound)
-            .Ensure(entry => entry.Value.business.AddEmployee(entry.Value.user, entry.Value.employee).Success,
+            .FlatMap(entry => entry.Value.business.AddEmployee(entry.Value.user, entry.Value.employee),
                 HttpCode.BadRequest)
             .AndThen(entry => entry.Value.employee)
             .Validate(_validator)
@@ -42,6 +42,6 @@ public sealed class CreateEmployeeHandler : IRequestHandler<CreateEmployeeComman
             return null;
         }
 
-        return (business, user, command.MapToEmployee());
+        return (business, user, command.MapToEmployee(user));
     }
 }

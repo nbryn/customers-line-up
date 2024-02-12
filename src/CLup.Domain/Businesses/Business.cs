@@ -77,10 +77,10 @@ public sealed class Business : Entity, IAggregateRoot
         isSender ? GetSentMessageById(id) : GetReceivedMessageById(id);
 
     public BusinessMessage? GetSentMessageById(MessageId id) =>
-        _sentMessages.Find(message => message.Id == id);
+        _sentMessages.Find(message => message.Id.Value == id.Value);
 
     public UserMessage? GetReceivedMessageById(MessageId id) =>
-        _receivedMessages.Find(message => message.Id == id);
+        _receivedMessages.Find(message => message.Id.Value == id.Value);
 
     public TimeSlot? GetTimeSlotById(TimeSlotId timeSlotId) =>
         _timeSlots.Find(timeSlot => timeSlot.Id.Value == timeSlotId.Value);
@@ -93,12 +93,6 @@ public sealed class Business : Entity, IAggregateRoot
 
     public Employee? GetEmployeeById(EmployeeId employeeId) =>
         _employees.Find(employee => employee.Id.Value == employeeId.Value);
-
-    public Booking RemoveBooking(Booking booking)
-    {
-        _bookings.Remove(booking);
-        return booking;
-    }
 
     public TimeSlot RemoveTimeSlot(TimeSlot timeSlot)
     {
@@ -139,6 +133,21 @@ public sealed class Business : Entity, IAggregateRoot
         _employees.Add(employee);
 
         return DomainResult.Ok();
+    }
+
+    public Message MarkMessageAsDeleted(BusinessMessage message, bool forSender)
+    {
+        var messageMetaData = new MessageMetadata(
+            forSender || message.Metadata.DeletedBySender,
+            !forSender || message.Metadata.DeletedByReceiver);
+
+        message.UpdateMetadata(messageMetaData);
+        if (message.Metadata is { DeletedBySender: true, DeletedByReceiver: true })
+        {
+            _sentMessages.Remove(message);
+        }
+
+        return message;
     }
 
     public void BookingDeletedMessage(UserId receiverId)

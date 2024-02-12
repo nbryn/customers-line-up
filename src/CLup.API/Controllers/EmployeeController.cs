@@ -1,14 +1,13 @@
-﻿using CLup.API.Contracts.Businesses.CreateBusiness;
+﻿using CLup.API.Contracts.Employees.CreateEmployee;
 using CLup.API.Contracts.Employees.DeleteEmployee;
 using CLup.API.Extensions;
-using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.API.Controllers;
 
 [Route("api/employee")]
-public class EmployeeController : AuthorizedControllerBase
+public sealed class EmployeeController : AuthorizedControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -20,8 +19,9 @@ public class EmployeeController : AuthorizedControllerBase
     [HttpPost]
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateEmployee([FromBody] CreateBusinessRequest request)
+    public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 

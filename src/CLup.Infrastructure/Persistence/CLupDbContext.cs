@@ -57,10 +57,11 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
     public async Task<IList<Business>> FetchAllBusinesses()
         => await Businesses
             .Include(business => business.Bookings)
-            .ThenInclude(booking => booking.TimeSlot)
-            .ThenInclude(timeSlot => timeSlot.Business)
-            .Include(business => business.Bookings)
             .ThenInclude(booking => booking.User)
+            .Include(business => business.TimeSlots)
+            .Include(business => business.Employees)
+            .Include(business => business.SentMessages)
+            .Include(business => business.ReceivedMessages)
             .AsSplitQuery()
             .AsNoTracking()
             .ToListAsync();
@@ -68,11 +69,16 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
     public async Task<Business?> FetchBusinessAggregate(UserId userId, BusinessId businessId)
         => await Businesses
             .Include(business => business.Bookings)
-            .ThenInclude(booking => booking.TimeSlot)
-            .ThenInclude(timeSlot => timeSlot.Business)
-            .Include(business => business.TimeSlots)
-            .Include(business => business.Bookings)
             .ThenInclude(booking => booking.User)
+            .Include(business => business.Employees)
+            .ThenInclude(employee => employee.User)
+            .Include(business => business.TimeSlots)
+            .Include(user => user.SentMessages)
+            .ThenInclude(message => message.Metadata)
+            .Include(user => user.ReceivedMessages)
+            .ThenInclude(message => message.Sender)
+            .Include(user => user.ReceivedMessages)
+            .ThenInclude(message => message.Metadata)
             .AsSplitQuery()
             .FirstOrDefaultAsync(business => business.OwnerId == userId && business.Id == businessId);
 
@@ -89,19 +95,17 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
     public async Task<User?> FetchUserAggregate(UserId userId)
         => await Users
-            .Include(user => user.SentMessages)
-            .ThenInclude(message => message.MessageData)
-            .Include(user => user.SentMessages)
-            .ThenInclude(message => message.Metadata)
-            .Include(user => user.ReceivedMessages)
-            .ThenInclude(message => message.MessageData)
-            .Include(user => user.ReceivedMessages)
-            .ThenInclude(message => message.Metadata)
             .Include(user => user.Bookings)
             .ThenInclude(booking => booking.Business)
             .Include(user => user.Bookings)
             .ThenInclude(booking => booking.TimeSlot)
             .ThenInclude(timeSlot => timeSlot.Business)
+            .Include(user => user.SentMessages)
+            .ThenInclude(message => message.Metadata)
+            .Include(user => user.ReceivedMessages)
+            .ThenInclude(message => message.Sender)
+            .Include(user => user.ReceivedMessages)
+            .ThenInclude(message => message.Metadata)
             .AsSplitQuery()
             .FirstOrDefaultAsync(user => user.Id == userId);
 
@@ -122,7 +126,8 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         return users;
     }
 
-    public override async Task<int> SaveChangesAsync(bool acceptChanges = true, CancellationToken cancellationToken = default)
+    public override async Task<int> SaveChangesAsync(bool acceptChanges = true,
+        CancellationToken cancellationToken = default)
     {
         MarkEntitiesAsUpdated();
 

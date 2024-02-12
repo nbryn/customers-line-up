@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CLup.API.Controllers;
 
 [Route("api/user")]
-public class UserController : AuthorizedControllerBase
+public sealed class UserController : AuthorizedControllerBase
 {
     private readonly IMediator _mediator;
 

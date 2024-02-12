@@ -6,10 +6,10 @@ public class SendBusinessMessageRequestValidator : AbstractValidator<SendBusines
 {
     public SendBusinessMessageRequestValidator()
     {
-        RuleFor(request => request.SenderId).NotNull();
-        RuleFor(request => request.ReceiverId).NotNull();
-        RuleFor(request => request.Title).NotNull();
-        RuleFor(request => request.Content).NotNull().Length(5, 150);
+        RuleFor(request => request.SenderId).NotEmpty();
+        RuleFor(request => request.ReceiverId).NotEmpty();
+        RuleFor(request => request.Title).NotEmpty();
+        RuleFor(request => request.Content).NotEmpty().Length(5, 150);
         RuleFor(request => request.Type).NotEmpty().IsInEnum();
     }
 }

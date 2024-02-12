@@ -125,6 +125,17 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         var booking = user.Bookings.First();
 
         await DeleteAsyncAndEnsureSuccess($"{BookingRoute}/user/{booking.Id}");
+
+        var updatedUser = await GetUser();
+        var updatedBusiness = (await GetBusinessesByOwner(userId)).First();
+
+        updatedUser.Bookings.Should().BeEmpty();
+        updatedUser.SentMessages.Should().HaveCount(1);
+        updatedUser.SentMessages.First().ReceiverId.Should().Be(business.Id);
+
+        updatedBusiness.Bookings.Should().BeEmpty();
+        updatedBusiness.ReceivedMessages.Should().HaveCount(1);
+        updatedBusiness.ReceivedMessages.First().SenderId.Should().Be(userId);
     }
 
     [Fact]
@@ -163,6 +174,17 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         var booking = user.Bookings.First();
 
         await DeleteAsyncAndEnsureSuccess($"{BookingRoute}/business/{business.Id}?bookingId={booking.Id}");
+
+        var updatedUser = await GetUser();
+        var updatedBusiness = (await GetBusinessesByOwner(userId)).First();
+
+        updatedUser.Bookings.Should().BeEmpty();
+        updatedUser.ReceivedMessages.Should().HaveCount(1);
+        updatedUser.ReceivedMessages.First().SenderId.Should().Be(business.Id);
+
+        updatedBusiness.Bookings.Should().BeEmpty();
+        updatedBusiness.SentMessages.Should().HaveCount(1);
+        updatedBusiness.SentMessages.First().ReceiverId.Should().Be(userId);
     }
 
     [Fact]

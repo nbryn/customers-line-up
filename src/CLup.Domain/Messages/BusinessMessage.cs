@@ -1,4 +1,5 @@
-﻿using CLup.Domain.Businesses.ValueObjects;
+﻿using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Messages.Enums;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
@@ -7,9 +8,11 @@ namespace CLup.Domain.Messages;
 
 public sealed class BusinessMessage : Message
 {
-    public new BusinessId SenderId { get; private set; }
+    public override BusinessId SenderId { get; }
 
-    public new UserId ReceiverId { get; private set; }
+    public Business Sender { get; }
+
+    public override UserId ReceiverId { get; }
 
     protected BusinessMessage()
     {

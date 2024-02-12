@@ -8,7 +8,7 @@ namespace CLup.API.Controllers;
 
 [ApiController]
 [Route("api/")]
-public class AuthController : ControllerBase
+public sealed class AuthController : ControllerBase
 {
     private readonly IMediator _mediator;
 
@@ -22,7 +22,6 @@ public class AuthController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand());
@@ -34,8 +33,8 @@ public class AuthController : ControllerBase
     [Route("login")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand());

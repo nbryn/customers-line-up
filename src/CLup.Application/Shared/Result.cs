@@ -66,11 +66,12 @@ public sealed class Result<T> : Result
 
     public Result<U> Bind<U>(Func<T, U> f)
     {
-        var value = f(Value);
         if (Failure)
         {
-            return Fail(Code, Errors, value);
+            return Fail<U>(Code, Errors);
         }
+
+        var value = f(Value);
 
         return Ok(value);
     }
@@ -120,7 +121,7 @@ public sealed class Result<T> : Result
         return Ok(maybe);
     }
 
-    public async Task<Result<U>> BindAsync<U>(Func<T, Task<U>> f, Error error)
+    public async Task<Result<U>> FailureIfNotFoundAsync<U>(Func<T, Task<U>> f, Error error)
     {
         if (Failure)
         {
@@ -131,7 +132,7 @@ public sealed class Result<T> : Result
         if (maybe == null)
         {
             Errors.Add(error);
-            return Fail(Code, Errors, maybe);
+            return Fail(HttpCode.NotFound, Errors, maybe);
         }
 
         return Ok(maybe);
@@ -172,11 +173,10 @@ public sealed class Result<T> : Result
         return this;
     }
 
-    public async Task<Result<T>> Ensure(
+    public async Task<Result<T>> FlatMap(
         Task<Result<T>> task,
         Func<T, DomainResult> predicate,
-        HttpCode httpCode,
-        Error? error = null)
+        HttpCode httpCode)
     {
         await task;
         if (Failure)
@@ -209,6 +209,7 @@ public sealed class Result<T> : Result
                 new List<Error>();
 
             Errors.AddRange(validationErrors);
+            Code = HttpCode.BadRequest;
         }
 
         return this;

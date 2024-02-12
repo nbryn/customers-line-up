@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CLup.API.Controllers;
 
 [Route("api/timeslot")]
-public class TimeSlotController : AuthorizedControllerBase
+public sealed class TimeSlotController : AuthorizedControllerBase
 {
     private readonly IMediator _mediator;
 

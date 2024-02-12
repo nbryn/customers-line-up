@@ -5,7 +5,7 @@ using CLup.Domain.Businesses.Enums;
 
 namespace tests.CLup.IntegrationTests.Tests;
 
-public class BusinessControllerTests : IntegrationTestsBase
+public sealed class BusinessControllerTests : IntegrationTestsBase
 {
     public BusinessControllerTests(IntegrationTestWebAppFactory factory) : base(factory)
     {
@@ -54,7 +54,7 @@ public class BusinessControllerTests : IntegrationTestsBase
             Closes = business.Closes,
         };
 
-        await PutAsyncAndEnsureSuccess<UpdateBusinessRequest, ProblemDetails>(BusinessRoute, updateBusinessRequest);
+        await PutAsyncAndEnsureSuccess(BusinessRoute, updateBusinessRequest);
         var updatedBusiness = await GetBusiness(business);
 
         updatedBusiness.Name.Should().Be(updateBusinessRequest.Name);

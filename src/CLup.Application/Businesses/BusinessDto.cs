@@ -70,9 +70,17 @@ public sealed class BusinessDto
             BusinessHours = $"{business.BusinessHours.Start} - {business.BusinessHours.End}",
             Bookings = business.Bookings.Select(BookingDto.FromBooking).ToList(),
             Employees = business.Employees.Select(EmployeeDto.FromEmployee).ToList(),
-            ReceivedMessages = business.ReceivedMessages.Select(MessageDto.FromMessage).ToList(),
-            SentMessages = business.SentMessages.Select(MessageDto.FromMessage).ToList(),
             TimeSlots = business.TimeSlots.Select(TimeSlotDto.FromTimeSlot).ToList(),
+
+            ReceivedMessages = business.ReceivedMessages
+                .Where(message => !message.Metadata.DeletedByReceiver)
+                .Select(MessageDto.FromMessage)
+                .ToList(),
+
+            SentMessages = business.SentMessages
+                .Where(message => !message.Metadata.DeletedBySender)
+                .Select(MessageDto.FromMessage)
+                .ToList(),
         };
     }
 }

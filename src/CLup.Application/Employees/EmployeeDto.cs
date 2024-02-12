@@ -5,6 +5,7 @@ namespace CLup.Application.Employees;
 
 public sealed class EmployeeDto
 {
+    public Guid Id { get; init; }
     public Guid UserId { get; init; }
 
     public Guid BusinessId { get; init; }
@@ -23,6 +24,7 @@ public sealed class EmployeeDto
     {
         return new EmployeeDto()
         {
+            Id = employee.Id.Value,
             UserId = employee.UserId.Value,
             BusinessId = employee.BusinessId.Value,
             Name = employee.User.UserData.Name,

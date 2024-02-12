@@ -6,6 +6,7 @@ using CLup.Application.Messages;
 using CLup.Domain.Users;
 
 namespace CLup.Application.Users;
+
 public sealed class UserDto
 {
     public Guid Id { get; init; }
@@ -49,8 +50,15 @@ public sealed class UserDto
             Role = user.Role.ToString(),
             Bookings = user.Bookings.Select(BookingDto.FromBooking).ToList(),
             BusinessIds = user.Businesses.Select(business => business.Id.Value).ToList(),
-            ReceivedMessages = user.ReceivedMessages.Select(MessageDto.FromMessage).ToList(),
-            SentMessages = user.SentMessages.Select(MessageDto.FromMessage).ToList(),
+            ReceivedMessages = user.ReceivedMessages
+                    .Where(message => !message.Metadata.DeletedByReceiver)
+                    .Select(MessageDto.FromMessage)
+                    .ToList(),
+
+            SentMessages = user.SentMessages
+                .Where(message => !message.Metadata.DeletedBySender)
+                .Select(MessageDto.FromMessage)
+                .ToList(),
         };
     }
 }
