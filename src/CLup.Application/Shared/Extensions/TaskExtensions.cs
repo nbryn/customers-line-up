@@ -22,15 +22,15 @@ public static class TaskExtensions
         return maybe == null ? Result.NotFound<T>(new List<Error>() { error }) : Result.Ok(maybe);
     }
 
-    public static async Task<Result<U>> FailureIfNotFound<T, U>(
+    public static async Task<Result<TU>> FailureIfNotFound<T, TU>(
         this Task<Result<T>> task,
-        Func<T, U> f,
+        Func<T, TU> f,
         Error error)
         => (await task).Bind(f, error);
 
-    public static async Task<Result<U>> FailureIfNotFoundAsync<T, U>(
+    public static async Task<Result<TU>> FailureIfNotFoundAsync<T, TU>(
         this Task<Result<T>> task,
-        Func<T, Task<U>> f,
+        Func<T, Task<TU>> f,
         Error error)
         => await (await task).FailureIfNotFoundAsync(f, error);
 
@@ -40,9 +40,10 @@ public static class TaskExtensions
     public static async Task<Result<T>> Validate<T>(this Task<Result<T>> task, IValidator<T> validator)
         => (await task).Validate(validator);
 
-    public static async Task<Result<U>> AndThen<T, U>(this Task<Result<T>> task, Func<T, U> f) => (await task).Bind(f);
+    public static async Task<Result<TU>> AndThen<T, TU>(this Task<Result<T>> task, Func<T, TU> f) =>
+        (await task).Bind(f);
 
-    public static async Task<Result<T>> AndThenAsync<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
+    public static async Task<Result<T>> AndThenAsync<T, TU>(this Task<Result<T>> task, Func<T, Task<TU>> f)
         => await (await task).BindF(f);
 
     public static async Task<Result<T>> Ensure<T>(
@@ -54,19 +55,19 @@ public static class TaskExtensions
 
     public static async Task<Result<T>> FlatMap<T>(
         this Task<Result<T>> task,
-        Func<T, DomainResult> predicate,
+        Func<T, DomainResult> f,
         HttpCode httpCode)
-        => await (await task).FlatMap(task, predicate, httpCode);
+        => await (await task).FlatMap(task, f, httpCode);
 
     public static async Task<Result> FlatMap(this Task<Result<DomainResult>> task)
         => await (await task).FlatMap(task);
 
-    public static async Task<Result<U>> Finally<T, U>(this Task<Result<T>> task, Func<T, U> f)
+    public static async Task<Result<TU>> Finally<T, TU>(this Task<Result<T>> task, Func<T, TU> f)
         => (await task).Bind(f);
 
     public static async Task<Result> FinallyAsync<T>(this Task<Result> task, Func<Task<T>> f)
         => await (await task).BindAsync(f);
 
-    public static async Task<Result<U>> FinallyAsync<T, U>(this Task<Result<T>> task, Func<T, Task<U>> f)
+    public static async Task<Result<TU>> FinallyAsync<T, TU>(this Task<Result<T>> task, Func<T, Task<TU>> f)
         => await (await task).BindAsync(f);
 }

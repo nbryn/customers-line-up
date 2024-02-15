@@ -37,7 +37,7 @@ public sealed class Business : Entity, IAggregateRoot
 
     public Coords Coords { get; private set; }
 
-    public Interval BusinessHours { get; private set; }
+    public TimeInterval BusinessHours { get; private set; }
 
     public BusinessType Type { get; private set; }
 
@@ -60,7 +60,7 @@ public sealed class Business : Entity, IAggregateRoot
         BusinessData businessData,
         Address address,
         Coords coords,
-        Interval businessHours,
+        TimeInterval businessHours,
         BusinessType type)
     {
         OwnerId = ownerId;
@@ -73,8 +73,10 @@ public sealed class Business : Entity, IAggregateRoot
         Id = BusinessId.Create(Guid.NewGuid());
     }
 
-    public Message? GetMessageById(MessageId id, bool isSender) =>
-        isSender ? GetSentMessageById(id) : GetReceivedMessageById(id);
+    public Message? GetMessageById(MessageId messageId, bool receivedMessage)
+        => receivedMessage
+            ? GetReceivedMessageById(messageId)
+            : GetSentMessageById(messageId);
 
     public BusinessMessage? GetSentMessageById(MessageId id) =>
         _sentMessages.Find(message => message.Id.Value == id.Value);
@@ -110,7 +112,7 @@ public sealed class Business : Entity, IAggregateRoot
         BusinessData businessData,
         Address address,
         Coords coords,
-        Interval businessHours,
+        TimeInterval businessHours,
         BusinessType type)
     {
         BusinessData = businessData;
@@ -135,11 +137,11 @@ public sealed class Business : Entity, IAggregateRoot
         return DomainResult.Ok();
     }
 
-    public Message MarkMessageAsDeleted(BusinessMessage message, bool forSender)
+    public Message MarkMessageAsDeleted(BusinessMessage message, bool receivedMessage)
     {
         var messageMetaData = new MessageMetadata(
-            forSender || message.Metadata.DeletedBySender,
-            !forSender || message.Metadata.DeletedByReceiver);
+            !receivedMessage || message.Metadata.DeletedBySender,
+            receivedMessage || message.Metadata.DeletedByReceiver);
 
         message.UpdateMetadata(messageMetaData);
         if (message.Metadata is { DeletedBySender: true, DeletedByReceiver: true })
@@ -167,9 +169,9 @@ public sealed class Business : Entity, IAggregateRoot
             return DomainResult.Fail(new List<Error>() { TimeSlotErrors.Exists });
         }
 
-        var opens = midnight.AddHours(BusinessHours.Start);
-        var closes = midnight.AddHours(BusinessHours.End);
-        for (var curr = opens; curr.TimeOfDay <= closes.TimeOfDay; curr = curr.AddMinutes(BusinessData.TimeSlotLength))
+        var opens = midnight.AddHours(BusinessHours.Start.Hours).AddMinutes(BusinessHours.Start.Minutes);
+        var closes = midnight.AddHours(BusinessHours.End.Hours).AddMinutes(BusinessHours.End.Minutes);
+        for (var curr = opens; curr.AddMinutes(BusinessData.TimeSlotLength).TimeOfDay < closes.TimeOfDay; curr = curr.AddMinutes(BusinessData.TimeSlotLength))
         {
             var end = curr.AddMinutes(BusinessData.TimeSlotLength);
             var timeSlot = new TimeSlot(Id, BusinessData.Name, BusinessData.Capacity, curr, end);

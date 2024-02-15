@@ -15,8 +15,10 @@ public readonly record struct UpdateBusinessRequest(
     string Street,
     double Longitude,
     double Latitude,
-    double Opens,
-    double Closes,
+    int OpensAtHour,
+    int OpensAtMinutes,
+    int ClosesAtHour,
+    int ClosesAtMinutes,
     int Capacity,
     int TimeSlotLength,
     BusinessType Type)
@@ -27,6 +29,6 @@ public readonly record struct UpdateBusinessRequest(
             new BusinessData(Name, Capacity, TimeSlotLength),
             new Address(Street, Zip, City),
             new Coords(Longitude, Latitude),
-            new Interval(Opens, Closes),
+            new TimeInterval(OpensAtHour, OpensAtMinutes, ClosesAtHour, ClosesAtMinutes),
             Type);
 }

@@ -18,8 +18,8 @@ public sealed class GenerateTimeSlotsHandler : IRequestHandler<GenerateTimeSlots
     }
 
     public async Task<Result> Handle(GenerateTimeSlotsCommand command, CancellationToken cancellationToken)
-        => await _repository.FetchBusinessAggregate(command.OwnerId, command.BusinessId)
+        => await _repository.FetchBusinessAggregate(command.UserId, command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
-            .Ensure(business => business.GenerateTimeSlots(command.Date).Success, HttpCode.BadRequest)
+            .FlatMap(business => business?.GenerateTimeSlots(command.Date), HttpCode.BadRequest)
             .FinallyAsync(_ => _repository.SaveChangesAsync(true, cancellationToken));
 }

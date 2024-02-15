@@ -1,5 +1,4 @@
 using CLup.API.Contracts.Businesses;
-using CLup.API.Contracts.Businesses.GetAllBusinesses;
 using CLup.API.Contracts.Businesses.GetBusiness;
 using CLup.API.Contracts.Users.GetUser;
 using CLup.API.Contracts.Users.UsersNotEmployedByBusiness;

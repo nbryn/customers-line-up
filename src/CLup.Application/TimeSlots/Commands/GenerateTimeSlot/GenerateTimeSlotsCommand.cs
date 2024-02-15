@@ -8,15 +8,15 @@ namespace CLup.Application.TimeSlots.Commands.GenerateTimeSlot;
 
 public sealed class GenerateTimeSlotsCommand : IRequest<Result>
 {
-    public UserId OwnerId { get; }
+    public UserId UserId { get; }
 
     public BusinessId BusinessId { get; }
 
     public DateOnly Date { get; }
 
-    public GenerateTimeSlotsCommand(UserId ownerId, BusinessId businessId, DateOnly date)
+    public GenerateTimeSlotsCommand(UserId userId, BusinessId businessId, DateOnly date)
     {
-        OwnerId = ownerId;
+        UserId = userId;
         BusinessId = businessId;
         Date = date;
     }

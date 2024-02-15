@@ -1,5 +1,5 @@
-﻿using CLup.API.Contracts.Messages.MarkBusinessMessageAsDeleted;
-using CLup.API.Contracts.Messages.MarkUserMessageAsDeleted;
+﻿using CLup.API.Contracts.Messages.MarkMessageAsDeletedForBusiness;
+using CLup.API.Contracts.Messages.MarkMessageAsDeletedForUser;
 using CLup.API.Contracts.Messages.SendBusinessMessage;
 using CLup.API.Contracts.Messages.SendUserMessage;
 using CLup.API.Extensions;
@@ -48,7 +48,7 @@ public sealed class MessageController : AuthorizedControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> MarkUserMessageAsDeleted([FromBody] MarkUserMessageAsDeletedRequest request)
+    public async Task<IActionResult> MarkMessageAsDeletedForUser([FromBody] MarkMessageAsDeletedForUserRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
@@ -60,8 +60,8 @@ public sealed class MessageController : AuthorizedControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> MarkBusinessMessageAsDeleted(
-        [FromBody] MarkBusinessMessageAsDeletedRequest request)
+    public async Task<IActionResult> MarkMessageAsDeletedForBusiness(
+        [FromBody] MarkMessageAsDeletedForBusinessRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 

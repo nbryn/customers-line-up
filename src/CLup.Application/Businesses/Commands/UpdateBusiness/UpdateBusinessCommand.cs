@@ -20,7 +20,7 @@ public sealed class UpdateBusinessCommand : IRequest<Result>
 
     public Coords Coords { get; }
 
-    public Interval BusinessHours { get; }
+    public TimeInterval BusinessHours { get; }
 
     public BusinessType Type { get; }
 
@@ -30,7 +30,7 @@ public sealed class UpdateBusinessCommand : IRequest<Result>
         BusinessData businessData,
         Address address,
         Coords coords,
-        Interval businessHours,
+        TimeInterval businessHours,
         BusinessType type)
     {
         OwnerId = ownerId;

@@ -28,9 +28,9 @@ public sealed class BusinessDto
 
     public double Latitude { get; init; }
 
-    public double Opens { get; init; }
+    public string Opens { get; init; }
 
-    public double Closes { get; init; }
+    public string Closes { get; init; }
 
     public int TimeSlotLength { get; init; }
 
@@ -62,12 +62,12 @@ public sealed class BusinessDto
             Street = business.Address.Street,
             Longitude = business.Coords.Longitude,
             Latitude = business.Coords.Latitude,
-            Opens = business.BusinessHours.Start,
-            Closes = business.BusinessHours.End,
+            Opens = business.BusinessHours.Start.ToString(),
+            Closes = business.BusinessHours.End.ToString(),
             Capacity = business.BusinessData.Capacity,
             TimeSlotLength = business.BusinessData.TimeSlotLength,
             Type = business.Type,
-            BusinessHours = $"{business.BusinessHours.Start} - {business.BusinessHours.End}",
+            BusinessHours = $"{business.BusinessHours.Start.ToString()} - {business.BusinessHours.End.ToString()}",
             Bookings = business.Bookings.Select(BookingDto.FromBooking).ToList(),
             Employees = business.Employees.Select(EmployeeDto.FromEmployee).ToList(),
             TimeSlots = business.TimeSlots.Select(TimeSlotDto.FromTimeSlot).ToList(),

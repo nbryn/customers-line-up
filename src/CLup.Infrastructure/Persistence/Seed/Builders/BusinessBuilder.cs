@@ -13,7 +13,7 @@ public sealed class BusinessBuilder
     private BusinessData _businessData;
     private Address _address;
     private Coords _coords;
-    private Interval _businessHours;
+    private TimeInterval _businessHours;
     private BusinessType _type;
 
     public BusinessBuilder()
@@ -48,9 +48,9 @@ public sealed class BusinessBuilder
         return this;
     }
 
-    public BusinessBuilder WithBusinessHours(double opens, double closes)
+    public BusinessBuilder WithBusinessHours(int opensAtHour, int opensAtMinutes, int closesAtHour, int closesAtMinutes)
     {
-        _businessHours = new Interval(opens, closes);
+        _businessHours = new TimeInterval(opensAtHour, opensAtMinutes, closesAtHour, closesAtMinutes);
 
         return this;
     }

@@ -4,9 +4,9 @@ using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
 using MediatR;
 
-namespace CLup.Application.Messages.Commands.MarkBusinessMessageAsDeleted;
+namespace CLup.Application.Messages.Commands.MarkMessageAsForBusinessDeleted;
 
-public sealed class MarkBusinessMessageAsDeletedCommand : IRequest<Result>
+public sealed class MarkMessageAsDeletedForBusinessCommand : IRequest<Result>
 {
     public UserId RequesterId { get; }
 
@@ -14,21 +14,17 @@ public sealed class MarkBusinessMessageAsDeletedCommand : IRequest<Result>
 
     public BusinessId SenderId { get; }
 
-    public UserId ReceiverId { get; }
+    public bool ReceivedMessage { get; }
 
-    public bool ForSender { get; }
-
-    public MarkBusinessMessageAsDeletedCommand(
+    public MarkMessageAsDeletedForBusinessCommand(
         UserId requesterId,
         MessageId messageId,
         BusinessId senderId,
-        UserId receiverId,
-        bool forSender)
+        bool receivedMessage)
     {
         RequesterId = requesterId;
-        ReceiverId = receiverId;
         SenderId = senderId;
         MessageId = messageId;
-        ForSender = forSender;
+        ReceivedMessage = receivedMessage;
     }
 }

@@ -4,19 +4,19 @@ using FluentValidation;
 
 namespace CLup.Domain.Businesses.Validation;
 
-public class BusinessValidator : AbstractValidator<Domain.Businesses.Business>
+public class BusinessValidator : AbstractValidator<Business>
 {
     public BusinessValidator(
         IValidator<BusinessData> businessDataValidator,
         IValidator<Address> addressValidator,
         IValidator<Coords> coordsValidator,
-        IValidator<Interval> timeSpanValidator)
+        IValidator<TimeInterval> timeSpanValidator)
     {
-        RuleFor(business => business.OwnerId).NotNull();
+        RuleFor(business => business.OwnerId).NotEmpty();
         RuleFor(business => business.Type).NotEmpty().IsInEnum();
-        RuleFor(business => business.BusinessData).NotNull().SetValidator(businessDataValidator);
-        RuleFor(business => business.Address).NotNull().SetValidator(addressValidator);
-        RuleFor(business => business.Coords).NotNull().SetValidator(coordsValidator);
-        RuleFor(business => business.BusinessHours).NotNull().SetValidator(timeSpanValidator);
+        RuleFor(business => business.BusinessData).NotEmpty().SetValidator(businessDataValidator);
+        RuleFor(business => business.Address).NotEmpty().SetValidator(addressValidator);
+        RuleFor(business => business.Coords).NotEmpty().SetValidator(coordsValidator);
+        RuleFor(business => business.BusinessHours).NotEmpty().SetValidator(timeSpanValidator);
     }
 }

@@ -28,7 +28,7 @@ public sealed class AuthControllerTests : IntegrationTestsBase
             await PostAsyncAndEnsureBadRequest<RegisterRequest, ProblemDetails>($"{BaseRoute}/register", request);
 
         response.Should().NotBeNull();
-        response.Errors.Count.Should().Be(typeof(RegisterRequest).GetProperties().Length);
+        response?.Errors.Count.Should().Be(typeof(RegisterRequest).GetProperties().Length);
     }
 
     [Fact]

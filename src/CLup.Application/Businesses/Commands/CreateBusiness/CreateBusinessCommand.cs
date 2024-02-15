@@ -18,12 +18,12 @@ public sealed class CreateBusinessCommand : IRequest<Result>
 
     public Coords Coords { get; }
 
-    public Interval BusinessHours { get; }
+    public TimeInterval BusinessHours { get; }
 
     public BusinessType Type { get; }
 
     public CreateBusinessCommand(UserId ownerId, BusinessData businessData, Address address, Coords coords,
-        Interval businessHours, BusinessType type)
+        TimeInterval businessHours, BusinessType type)
     {
         OwnerId = ownerId;
         BusinessData = businessData;

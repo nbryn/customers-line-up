@@ -1,4 +1,4 @@
-using CLup.API.Contracts.Businesses.GetAllBusinesses;
+using CLup.API.Contracts.Businesses;
 
 namespace tests.CLup.IntegrationTests.Tests;
 

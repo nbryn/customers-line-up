@@ -21,7 +21,7 @@ public sealed class User : Entity, IAggregateRoot
     private readonly List<Business> _businesses = new();
     private readonly List<Booking> _bookings = new();
 
-    public UserId Id { get; private set; }
+    public UserId Id { get; }
 
     public UserData UserData { get; private set; }
 
@@ -71,10 +71,12 @@ public sealed class User : Entity, IAggregateRoot
     public bool BookingExists(TimeSlotId timeSlotId) =>
         _bookings.Exists(booking => booking.TimeSlot.Id.Value == timeSlotId.Value);
 
-    public Message? GetMessageById(MessageId id, bool isSender) =>
-        isSender ? GetSentMessageById(id) : GetReceivedMessageById(id);
+    public Message? GetMessageById(MessageId messageId, bool receivedMessage) =>
+        receivedMessage
+            ? GetReceivedMessageById(messageId)
+            : GetSendMessageById(messageId);
 
-    public UserMessage? GetSentMessageById(MessageId id) =>
+    public UserMessage? GetSendMessageById(MessageId id) =>
         _sentMessages.Find(message => message.Id.Value == id.Value);
 
     public BusinessMessage? GetReceivedMessageById(MessageId id) =>
@@ -106,11 +108,11 @@ public sealed class User : Entity, IAggregateRoot
         return this;
     }
 
-    public Message MarkMessageAsDeleted(UserMessage message, bool forSender)
+    public Message MarkMessageAsDeleted(UserMessage message, bool receivedMessage)
     {
         var messageMetaData = new MessageMetadata(
-            forSender || message.Metadata.DeletedBySender,
-            !forSender || message.Metadata.DeletedByReceiver);
+            !receivedMessage || message.Metadata.DeletedBySender,
+            receivedMessage || message.Metadata.DeletedByReceiver);
 
         message.UpdateMetadata(messageMetaData);
         if (message.Metadata is { DeletedBySender: true, DeletedByReceiver: true })
@@ -126,8 +128,8 @@ public sealed class User : Entity, IAggregateRoot
         var content =
             $"The user with email {UserData.Email} deleted her/his booking at {booking.TimeSlot.Start:dd/MM/yyyy}.";
         var messageData = new MessageData($"Booking Deleted - {booking.Business.BusinessData.Name}", content);
-        var metaData = new MessageMetadata(false, false);
-        var message = new UserMessage(Id, booking.Business.Id, messageData, MessageType.BookingDeleted, metaData);
+        var metadata = new MessageMetadata(false, false);
+        var message = new UserMessage(Id, booking.Business.Id, messageData, MessageType.BookingDeleted, metadata);
 
         _sentMessages.Add(message);
     }

@@ -2,13 +2,14 @@
 using System.Net.Http.Headers;
 using System.Text;
 using CLup.API.Contracts.Auth;
+using CLup.API.Contracts.Businesses;
 using CLup.API.Contracts.Businesses.CreateBusiness;
-using CLup.API.Contracts.Businesses.GetAllBusinesses;
 using CLup.API.Contracts.Businesses.GetBusiness;
 using CLup.API.Contracts.Users.GetUser;
 using CLup.Application.Businesses;
 using CLup.Application.Users;
 using CLup.Domain.Businesses.Enums;
+using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users.Enums;
 using CLup.Domain.Users.ValueObjects;
 using CLup.Infrastructure.Persistence.Seed.Builders;
@@ -33,13 +34,20 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
         _httpClient = factory.CreateClient();
     }
 
-    protected async Task<Guid> CreateUserWithBusiness(string ownerEmail, int capacity = 50)
+    protected async Task<Guid> CreateUserWithBusiness(
+        string ownerEmail,
+        int capacity = 50,
+        int opensAtHour = 10,
+        int opensAtMinutes = 0,
+        int closesAtHour = 22,
+        int closesAtMinutes = 0,
+        int timeSlotLength = 30)
     {
         var userId = await CreateUserAndSetJwtToken(ownerEmail);
         var business = new BusinessBuilder()
             .WithOwner(UserId.Create(userId))
-            .WithBusinessData("Super Brugsen", capacity, 30)
-            .WithBusinessHours(10.00, 22.00)
+            .WithBusinessData("Super Brugsen", capacity, timeSlotLength)
+            .WithBusinessHours(opensAtHour, opensAtMinutes, closesAtHour, closesAtMinutes)
             .WithAddress("Ryttergårdsvej 10", "3520", "Farum")
             .WithCoords(55.8137419, 12.3935222)
             .WithType(BusinessType.Supermarket)
@@ -55,8 +63,10 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             Street = business.Address.Street,
             Longitude = business.Coords.Longitude,
             Latitude = business.Coords.Latitude,
-            Opens = business.BusinessHours.Start,
-            Closes = business.BusinessHours.End,
+            OpensAtHour = opensAtHour,
+            OpensAtMinutes = opensAtMinutes,
+            ClosesAtHour = closesAtHour,
+            ClosesAtMinutes = closesAtMinutes,
             Type = business.Type
         };
 
