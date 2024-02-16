@@ -11,7 +11,6 @@ using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Employees;
 using CLup.Domain.Messages;
 using CLup.Domain.Shared;
-using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
@@ -25,19 +24,19 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
     public const string DEFAULT_SCHEMA = "CLup";
 
-    public DbSet<Business> Businesses { get; private set; }
+    public DbSet<Business> Businesses { get; private set; } = null!;
 
-    public DbSet<Employee> Employees { get; private set; }
+    public DbSet<Employee> Employees { get; private set; } = null!;
 
-    public DbSet<TimeSlot> TimeSlots { get; private set; }
+    public DbSet<TimeSlot> TimeSlots { get; private set; } = null!;
 
-    public DbSet<UserMessage> UserMessages { get; private set; }
+    public DbSet<UserMessage> UserMessages { get; private set; } = null!;
 
-    public DbSet<BusinessMessage> BusinessMessages { get; private set; }
+    public DbSet<BusinessMessage> BusinessMessages { get; private set; } = null!;
 
-    public DbSet<Booking> Bookings { get; private set; }
+    public DbSet<Booking> Bookings { get; private set; } = null!;
 
-    public DbSet<User> Users { get; private set; }
+    public DbSet<User> Users { get; private set; } = null!;
 
     public CLupDbContext(
         DbContextOptions<CLupDbContext> options,
@@ -76,8 +75,6 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .Include(user => user.SentMessages)
             .ThenInclude(message => message.Metadata)
             .Include(user => user.ReceivedMessages)
-            .ThenInclude(message => message.Sender)
-            .Include(user => user.ReceivedMessages)
             .ThenInclude(message => message.Metadata)
             .AsSplitQuery()
             .FirstOrDefaultAsync(business => business.OwnerId == userId && business.Id == businessId);
@@ -103,8 +100,6 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .Include(user => user.SentMessages)
             .ThenInclude(message => message.Metadata)
             .Include(user => user.ReceivedMessages)
-            .ThenInclude(message => message.Sender)
-            .Include(user => user.ReceivedMessages)
             .ThenInclude(message => message.Metadata)
             .AsSplitQuery()
             .FirstOrDefaultAsync(user => user.Id == userId);
@@ -126,17 +121,13 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         return users;
     }
 
-    public override async Task<int> SaveChangesAsync(bool acceptChanges = true,
+    public override async Task<int> SaveChangesAsync(
+        bool acceptChanges = true,
         CancellationToken cancellationToken = default)
     {
         MarkEntitiesAsUpdated();
-
-        var events = ChangeTracker.Entries<IHasDomainEvent>()
-            .SelectMany(x => x.Entity.DomainEvents)
-            .Where(domainEvent => !domainEvent.IsPublished)
-            .ToList();
-
-        await DispatchEvents(events);
+        DeleteOrphanMessages();
+        await DispatchEvents();
 
         return await base.SaveChangesAsync(acceptChanges, cancellationToken);
     }
@@ -146,6 +137,27 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         await AddRangeAsync(entities);
 
         return await SaveChangesAsync(true, cancellationToken);
+    }
+
+    private void DeleteOrphanMessages()
+    {
+        var messagesDeletedBySenderAndReceiver = ChangeTracker.Entries()
+            .Where(entry => entry.Entity is Message { Metadata: { DeletedBySender: true, DeletedByReceiver: true } })
+            .Select(entry => entry.Entity as Message)
+            .ToList();
+
+        foreach (var message in messagesDeletedBySenderAndReceiver)
+        {
+            if (message is BusinessMessage businessMessage)
+            {
+                BusinessMessages.Remove(businessMessage);
+            }
+
+            if (message is UserMessage userMessage)
+            {
+                UserMessages.Remove(userMessage);
+            }
+        }
     }
 
     private void MarkEntitiesAsUpdated()
@@ -162,11 +174,11 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             }
         });
 
-        var editedEntities = ChangeTracker.Entries()
+        var updatedEntities = ChangeTracker.Entries()
             .Where(entry => entry.State == EntityState.Modified)
             .ToList();
 
-        editedEntities.ForEach(e =>
+        updatedEntities.ForEach(e =>
         {
             if (e.Entity.ToString() != "ValueObject")
             {
@@ -175,8 +187,13 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         });
     }
 
-    private async Task DispatchEvents(IList<DomainEvent> events)
+    private async Task DispatchEvents()
     {
+        var events = ChangeTracker.Entries<IHasDomainEvent>()
+            .SelectMany(x => x.Entity.DomainEvents)
+            .Where(domainEvent => !domainEvent.IsPublished)
+            .ToList();
+
         foreach (var @event in events)
         {
             @event.IsPublished = true;

@@ -1,6 +1,5 @@
 using System;
 using CLup.Domain.Bookings;
-using CLup.Domain.TimeSlots;
 
 namespace CLup.Application.Bookings;
 
@@ -39,7 +38,7 @@ public sealed class BookingDto
             BusinessId = booking.BusinessId.Value,
             TimeSlotId = booking.TimeSlotId.Value,
             Business = $"{booking.Business.BusinessData.Name} - {booking.Business.Address.Zip}",
-            Date = booking.TimeSlot.Start.ToString("dd/MM/yyyy"),
+            Date = booking.TimeSlot.Date.ToString("dd/MM/yyyy"),
             Interval = booking.TimeSlot.FormatInterval(),
             Capacity = $"{booking.TimeSlot.Bookings.Count}/{booking.TimeSlot.Capacity}",
             Latitude = booking.Business.Coords.Latitude,

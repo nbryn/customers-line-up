@@ -10,11 +10,9 @@ public sealed class BusinessMessage : Message
 {
     public override BusinessId SenderId { get; }
 
-    public Business Sender { get; }
-
     public override UserId ReceiverId { get; }
 
-    protected BusinessMessage()
+    private BusinessMessage()
     {
     }
 

@@ -14,7 +14,7 @@ public sealed class UpdateBusinessRequestValidator : AbstractValidator<UpdateBus
         RuleFor(request => request.Opens).NotEmpty();
         RuleFor(request => request.Closes).NotEmpty();
         RuleFor(request => request.Capacity).NotEmpty();
-        RuleFor(request => request.TimeSlotLength).NotEmpty();
+        RuleFor(request => request.TimeSlotLengthInMinutes).NotEmpty();
         RuleFor(command => command.Type).NotEmpty().IsInEnum();
         RuleFor(coords => coords.Latitude).NotEmpty().InclusiveBetween(-90, 90);
         RuleFor(coords => coords.Longitude).NotEmpty().InclusiveBetween(-180, 180);

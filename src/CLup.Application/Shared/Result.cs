@@ -26,7 +26,9 @@ public class Result : DomainResult
 
         return new ProblemDetails(
             Code,
-            Errors.ToDictionary(k => k.Code, error => new List<string>() { error.Message }));
+            Errors
+                .GroupBy(error => error.Code)
+                .ToDictionary(group => group.Key, group => group.Select(item => item.Message).ToList()));
     }
 
     public static Result<T> Ok<T>(T value) => new(value, HttpCode.Ok, new List<Error>());

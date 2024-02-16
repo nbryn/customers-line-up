@@ -65,7 +65,7 @@ public sealed class BusinessDto
             Opens = business.BusinessHours.Start.ToString(),
             Closes = business.BusinessHours.End.ToString(),
             Capacity = business.BusinessData.Capacity,
-            TimeSlotLength = business.BusinessData.TimeSlotLength,
+            TimeSlotLength = business.BusinessData.TimeSlotLengthInMinutes,
             Type = business.Type,
             BusinessHours = $"{business.BusinessHours.Start.ToString()} - {business.BusinessHours.End.ToString()}",
             Bookings = business.Bookings.Select(BookingDto.FromBooking).ToList(),

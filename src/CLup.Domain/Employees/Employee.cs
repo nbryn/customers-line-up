@@ -14,11 +14,11 @@ public sealed class Employee : Entity
 
     public UserId UserId { get; private set; }
 
-    public User User { get; private set; }
+    public User? User { get; private set; }
 
     public BusinessId BusinessId { get; private set; }
 
-    public Business Business { get; private set; }
+    public Business? Business { get; private set; }
 
     public string CompanyEmail { get; private set; }
 

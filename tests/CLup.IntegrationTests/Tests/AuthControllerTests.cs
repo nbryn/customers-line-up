@@ -24,8 +24,7 @@ public sealed class AuthControllerTests : IntegrationTestsBase
     public async Task GivenInvalidRequest_RegisterFails()
     {
         var request = new RegisterRequest();
-        var response =
-            await PostAsyncAndEnsureBadRequest<RegisterRequest, ProblemDetails>($"{BaseRoute}/register", request);
+        var response = await PostAsyncAndEnsureBadRequest($"{BaseRoute}/register", request);
 
         response.Should().NotBeNull();
         response?.Errors.Count.Should().Be(typeof(RegisterRequest).GetProperties().Length);

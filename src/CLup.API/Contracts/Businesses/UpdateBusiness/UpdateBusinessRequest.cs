@@ -15,20 +15,18 @@ public readonly record struct UpdateBusinessRequest(
     string Street,
     double Longitude,
     double Latitude,
-    int OpensAtHour,
-    int OpensAtMinutes,
-    int ClosesAtHour,
-    int ClosesAtMinutes,
+    TimeOnly Opens,
+    TimeOnly Closes,
     int Capacity,
-    int TimeSlotLength,
+    int TimeSlotLengthInMinutes,
     BusinessType Type)
 {
     public UpdateBusinessCommand MapToCommand(UserId userId)
         => new(userId,
             BId.Create(BusinessId),
-            new BusinessData(Name, Capacity, TimeSlotLength),
+            new BusinessData(Name, Capacity, TimeSlotLengthInMinutes),
             new Address(Street, Zip, City),
             new Coords(Longitude, Latitude),
-            new TimeInterval(OpensAtHour, OpensAtMinutes, ClosesAtHour, ClosesAtMinutes),
+            new TimeInterval(Opens, Closes),
             Type);
 }

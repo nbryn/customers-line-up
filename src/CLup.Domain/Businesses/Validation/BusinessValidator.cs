@@ -18,5 +18,16 @@ public class BusinessValidator : AbstractValidator<Business>
         RuleFor(business => business.Address).NotEmpty().SetValidator(addressValidator);
         RuleFor(business => business.Coords).NotEmpty().SetValidator(coordsValidator);
         RuleFor(business => business.BusinessHours).NotEmpty().SetValidator(timeSpanValidator);
+
+        RuleFor(business => business.BusinessHours.Start.Minute).Must(minute => minute % 5 == 0);
+        RuleFor(business => business.BusinessHours.End.Minute).Must(minute => minute % 5 == 0);
+
+        RuleFor(business => business)
+            .Must(business => business.BusinessData.TimeSlotLengthInMinutes <= (business.BusinessHours.End - business.BusinessHours.Start).TotalMinutes)
+            .WithMessage(BusinessErrors.TimeSlotLengthExceedsOpeningHours.Message);
+
+        RuleFor(business => business.BusinessData.TimeSlotLengthInMinutes)
+            .Must(timeSlotLength => timeSlotLength % 5 == 0)
+            .WithMessage(BusinessErrors.InvalidTimeSlotLength.Message);
     }
 }

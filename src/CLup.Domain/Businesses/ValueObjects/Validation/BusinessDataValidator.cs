@@ -8,6 +8,6 @@ public class BusinessDataValidator : AbstractValidator<BusinessData>
     {
         RuleFor(data => data.Name).NotEmpty().MaximumLength(50);
         RuleFor(data => data.Capacity).NotEmpty().GreaterThan(0);
-        RuleFor(data => data.TimeSlotLength).NotEmpty().GreaterThan(0);
+        RuleFor(data => data.TimeSlotLengthInMinutes).NotEmpty().GreaterThanOrEqualTo(5);
     }
 }

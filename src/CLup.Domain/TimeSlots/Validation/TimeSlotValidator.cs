@@ -1,14 +1,15 @@
+using CLup.Domain.Shared.ValueObjects;
 using FluentValidation;
 
 namespace CLup.Domain.TimeSlots.Validation;
 
 public class TimeSlotValidator : AbstractValidator<TimeSlot>
 {
-    public TimeSlotValidator()
+    public TimeSlotValidator(IValidator<TimeInterval> timeSpanValidator)
     {
         RuleFor(timeSlot => timeSlot.BusinessId).NotEmpty();
-        RuleFor(timeSlot => timeSlot.Start).NotEmpty();
-        RuleFor(timeSlot => timeSlot.End).NotEmpty();
-        RuleFor(timeSlot => timeSlot.Start < timeSlot.End);
+        RuleFor(timeSlot => timeSlot.Capacity).NotEmpty().GreaterThan(0);
+        RuleFor(timeSlot => timeSlot.Date).NotEmpty();
+        RuleFor(timeSlot => timeSlot.TimeInterval).NotEmpty().SetValidator(timeSpanValidator);
     }
 }

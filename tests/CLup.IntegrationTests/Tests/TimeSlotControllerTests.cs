@@ -9,27 +9,50 @@ public class TimeSlotControllerTests : IntegrationTestsBase
     }
 
     [Theory]
-    [InlineData("test@test.com", 8, 12, 60, 0)]
-    [InlineData("test1@test.com", 10, 16, 30, 1)]
-    [InlineData("test2@test.com", 12, 20, 20, 2)]
-    [InlineData("test3@test.com", 17.30, 18.15, 5, 3)]
+    [InlineData("test@test.com", 8, 0, 12, 0, 5, 0)]
+    [InlineData("test1@test.com", 10, 15, 14, 15, 15, 1)]
+    [InlineData("test2@test.com", 12, 30, 18, 30, 30, 2)]
+    [InlineData("test3@test.com", 18, 45, 22, 45, 60, 3)]
     public async Task ValidRequest_GenerateTimeSlotsSucceeds(
         string email,
-        double opens,
-        double closes,
+        int opensHour,
+        int opensMinute,
+        int closesHour,
+        int closesMinute,
         int timeSlotLength,
         int addDays)
     {
-        var userId = await CreateUserWithBusiness(email, 50, opens, closes, timeSlotLength);
-        var business = (await GetBusinessesByOwner(userId)).First();
+        await CreateUserWithBusiness(
+            email,
+            50,
+            new TimeOnly(opensHour, opensMinute),
+            new TimeOnly(closesHour, closesMinute),
+            timeSlotLength);
+
+        var business = (await GetBusinessesForCurrentUser()).First();
         var generateTimeSlotsRequest =
-            new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.Now.AddDays(addDays)));
+            new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.UtcNow.AddDays(addDays)));
 
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
 
         var updatedBusiness = await GetBusiness(business);
-        var expectedNumberOfTimeSlotsGenerated =
-            Convert.ToInt32((closes - opens) * Convert.ToDouble(60 / timeSlotLength));
+        var expectedNumberOfTimeSlotsGenerated = (closesHour - opensHour) * (60 / timeSlotLength);
+
+        var firstTimeSlot = updatedBusiness.TimeSlots.First();
         updatedBusiness.TimeSlots.Should().HaveCount(expectedNumberOfTimeSlotsGenerated);
+        firstTimeSlot.BusinessId.Should().Be(business.Id);
+        firstTimeSlot.Date.Should().Be(DateOnly.FromDateTime(DateTime.UtcNow).AddDays(addDays).ToString("dd/MM/yyyy"));
+    }
+
+    [Fact]
+    public async Task EmptyRequest_GenerateTimeSlotsFails()
+    {
+        const string email = "test4@test.com";
+        await CreateUserAndSetJwtToken(email);
+
+        var emptyRequest = new GenerateTimeSlotsRequest();
+        var problemDetails = await PostAsyncAndEnsureBadRequest(TimeSlotRoute, emptyRequest);
+
+        problemDetails?.Errors.Should().HaveCount(typeof(GenerateTimeSlotsRequest).GetProperties().Length);
     }
 }

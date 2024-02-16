@@ -29,10 +29,6 @@ public sealed class Booking : Entity, IHasDomainEvent
 
     public List<DomainEvent> DomainEvents { get; set; } = new();
 
-    protected Booking()
-    {
-    }
-
     public Booking(UserId userId, BusinessId businessId, TimeSlotId timeSlotId)
     {
         UserId = userId;
@@ -40,5 +36,9 @@ public sealed class Booking : Entity, IHasDomainEvent
         TimeSlotId = timeSlotId;
 
         Id = BookingId.Create(Guid.NewGuid());
+    }
+
+    private Booking()
+    {
     }
 }

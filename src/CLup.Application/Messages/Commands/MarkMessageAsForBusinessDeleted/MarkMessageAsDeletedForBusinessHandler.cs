@@ -24,15 +24,6 @@ public class MarkMessageAsDeletedForBusinessHandler : IRequestHandler<MarkMessag
         => await _repository.FetchBusinessAggregate(command.RequesterId, command.SenderId)
             .FailureIfNotFound(BusinessErrors.NotFound)
             .FailureIfNotFound(business => business?.GetMessageById(command.MessageId, command.ReceivedMessage), MessageErrors.NotFound)
-            .AndThen(message => MarkMessageAsDeleted(message, command.ReceivedMessage))
+            .AndThen(message => message.MarkAsDeleted(command.ReceivedMessage))
             .FinallyAsync(_ => _repository.SaveChangesAsync(true, cancellationToken));
-
-    private Message MarkMessageAsDeleted(Message? message, bool receivedMessage)
-        => message switch
-        {
-            UserMessage userMessage => userMessage.Sender.MarkMessageAsDeleted(userMessage, receivedMessage),
-            BusinessMessage businessMessage => businessMessage.Sender.MarkMessageAsDeleted(businessMessage, receivedMessage),
-            _ => throw new ArgumentOutOfRangeException(nameof(message), message, null)
-        };
-
 }

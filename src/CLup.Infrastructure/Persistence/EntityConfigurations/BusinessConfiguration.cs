@@ -40,7 +40,7 @@ internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
             b.Property(businessData => businessData.Capacity)
                 .HasColumnName("Capacity");
 
-            b.Property(businessData => businessData.TimeSlotLength)
+            b.Property(businessData => businessData.TimeSlotLengthInMinutes)
                 .HasColumnName("TimeSlotLength");
         });
 
@@ -81,7 +81,7 @@ internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
             .IsRequired();
 
         builder.HasMany(business => business.SentMessages)
-            .WithOne(message => message.Sender)
+            .WithOne()
             .HasForeignKey(message => message.SenderId)
             .IsRequired();
 

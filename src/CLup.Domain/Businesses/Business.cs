@@ -87,8 +87,8 @@ public sealed class Business : Entity, IAggregateRoot
     public TimeSlot? GetTimeSlotById(TimeSlotId timeSlotId) =>
         _timeSlots.Find(timeSlot => timeSlot.Id.Value == timeSlotId.Value);
 
-    public TimeSlot? GetTimeSlotByDate(DateTime start) =>
-        _timeSlots.Find(timeSlot => timeSlot.Start == start);
+    public bool TimeSlotsGeneratedOnDate(DateOnly date) =>
+        _timeSlots.Exists(timeSlot => timeSlot.Date == date);
 
     public Booking? GetBookingById(BookingId bookingId) =>
         _bookings.Find(booking => booking.Id.Value == bookingId.Value);
@@ -137,44 +137,31 @@ public sealed class Business : Entity, IAggregateRoot
         return DomainResult.Ok();
     }
 
-    public Message MarkMessageAsDeleted(BusinessMessage message, bool receivedMessage)
-    {
-        var messageMetaData = new MessageMetadata(
-            !receivedMessage || message.Metadata.DeletedBySender,
-            receivedMessage || message.Metadata.DeletedByReceiver);
-
-        message.UpdateMetadata(messageMetaData);
-        if (message.Metadata is { DeletedBySender: true, DeletedByReceiver: true })
-        {
-            _sentMessages.Remove(message);
-        }
-
-        return message;
-    }
-
     public void BookingDeletedMessage(UserId receiverId)
     {
         var content = $"Your booking at {BusinessData.Name} was deleted.";
         var messageData = new MessageData("Booking Deleted", content);
         var metadata = new MessageMetadata(false, false);
         var message = new BusinessMessage(Id, receiverId, messageData, MessageType.BookingDeleted, metadata);
+
         _sentMessages.Add(message);
     }
 
     public DomainResult GenerateTimeSlots(DateOnly date)
     {
-        var midnight = date.ToDateTime(TimeOnly.MinValue);
-        if (GetTimeSlotByDate(midnight) != null)
+        if (TimeSlotsGeneratedOnDate(date))
         {
             return DomainResult.Fail(new List<Error>() { TimeSlotErrors.Exists });
         }
 
-        var opens = midnight.AddHours(BusinessHours.Start.Hours).AddMinutes(BusinessHours.Start.Minutes);
-        var closes = midnight.AddHours(BusinessHours.End.Hours).AddMinutes(BusinessHours.End.Minutes);
-        for (var curr = opens; curr.AddMinutes(BusinessData.TimeSlotLength).TimeOfDay < closes.TimeOfDay; curr = curr.AddMinutes(BusinessData.TimeSlotLength))
+        var midnight = TimeOnly.FromDateTime(date.ToDateTime(TimeOnly.MinValue));
+        var opens = midnight.Add(BusinessHours.Start.ToTimeSpan());
+        var closes = midnight.Add(BusinessHours.End.ToTimeSpan());
+        for (var curr = opens; curr.AddMinutes(BusinessData.TimeSlotLengthInMinutes) <= closes; curr = curr.AddMinutes(BusinessData.TimeSlotLengthInMinutes))
         {
-            var end = curr.AddMinutes(BusinessData.TimeSlotLength);
-            var timeSlot = new TimeSlot(Id, BusinessData.Name, BusinessData.Capacity, curr, end);
+            var end = curr.AddMinutes(BusinessData.TimeSlotLengthInMinutes);
+            var interval = new TimeInterval(curr, end);
+            var timeSlot = new TimeSlot(Id, BusinessData.Name, BusinessData.Capacity, date, interval);
 
             _timeSlots.Add(timeSlot);
         }

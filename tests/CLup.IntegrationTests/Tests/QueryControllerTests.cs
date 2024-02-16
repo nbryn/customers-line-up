@@ -44,10 +44,10 @@ public sealed class QueryControllerTests : IntegrationTestsBase
         await CreateUserWithBusiness(firstEmail);
         var userId = await CreateUserWithBusiness(secondEmail);
 
-        var businesses = await GetBusinessesByOwner(userId);
+        var businesses = await GetBusinessesForCurrentUser();
 
         businesses.Should().NotBeNull();
-        businesses.Count.Should().Be(1);
+        businesses.Should().HaveCount(1);
         businesses.First().OwnerId.Should().Be(userId);
     }
 

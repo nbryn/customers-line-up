@@ -1,6 +1,7 @@
 ﻿using CLup.API.Contracts.Businesses.CreateBusiness;
 using CLup.API.Contracts.Businesses.UpdateBusiness;
 using CLup.Application.Shared;
+using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
 
 namespace tests.CLup.IntegrationTests.Tests;
@@ -24,9 +25,9 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
     {
         const string email = "test1@test.com";
         await CreateUserAndSetJwtToken(email);
+
         var emptyRequest = new CreateBusinessRequest();
-        var problemDetails =
-            await PostAsyncAndEnsureBadRequest<CreateBusinessRequest, ProblemDetails>(BusinessRoute, emptyRequest);
+        var problemDetails = await PostAsyncAndEnsureBadRequest(BusinessRoute, emptyRequest);
 
         problemDetails?.Errors.Count.Should().Be(typeof(CreateBusinessRequest).GetProperties().Length);
     }
@@ -35,23 +36,23 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
     public async Task ValidRequest_UpdateBusinessSucceeds()
     {
         const string email = "test2@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesByOwner(userId)).First();
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
 
         var updateBusinessRequest = new UpdateBusinessRequest
         {
             BusinessId = business.Id,
             Name = "Shoppers",
             Capacity = 2,
-            TimeSlotLength = 15,
+            TimeSlotLengthInMinutes = 15,
             Type = BusinessType.Hairdresser,
             Zip = business.Zip,
             City = business.City,
             Street = business.Street,
             Longitude = business.Longitude,
             Latitude = business.Latitude,
-            Opens = business.Opens,
-            Closes = business.Closes,
+            Opens = TimeOnly.Parse(business.Opens),
+            Closes = TimeOnly.Parse(business.Closes),
         };
 
         await PutAsyncAndEnsureSuccess(BusinessRoute, updateBusinessRequest);
@@ -59,7 +60,7 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
 
         updatedBusiness.Name.Should().Be(updateBusinessRequest.Name);
         updatedBusiness.Capacity.Should().Be(updateBusinessRequest.Capacity);
-        updatedBusiness.TimeSlotLength.Should().Be(updateBusinessRequest.TimeSlotLength);
+        updatedBusiness.TimeSlotLength.Should().Be(updateBusinessRequest.TimeSlotLengthInMinutes);
         updatedBusiness.Type.Should().Be(updateBusinessRequest.Type);
     }
 
@@ -68,9 +69,74 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
     {
         await CreateUserAndSetJwtToken("test3@test.com");
         var emptyRequest = new UpdateBusinessRequest();
-        var problemDetails =
-            await PutAsyncAndEnsureBadRequest<UpdateBusinessRequest, ProblemDetails>(BusinessRoute, emptyRequest);
+        var problemDetails =await PutAsyncAndEnsureBadRequest(BusinessRoute, emptyRequest);
 
         problemDetails?.Errors.Count.Should().Be(typeof(UpdateBusinessRequest).GetProperties().Length);
+    }
+
+    [Theory]
+    [InlineData("test4@test.com", 7)]
+    [InlineData("test5@test.com", 11)]
+    [InlineData("test6@test.com", 61)]
+    public async Task RequestWithTimeSlotLength_ThatIsNotDivisibleBy5_UpdateBusinessFails(string email, int timeSlotLengthInMinutes)
+    {
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
+        var updateBusinessRequest = new UpdateBusinessRequest
+        {
+            BusinessId = business.Id,
+            Name = business.Name,
+            Capacity = business.Capacity,
+            TimeSlotLengthInMinutes = timeSlotLengthInMinutes,
+            Type = business.Type,
+            Zip = business.Zip,
+            City = business.City,
+            Street = business.Street,
+            Longitude = business.Longitude,
+            Latitude = business.Latitude,
+            Opens = TimeOnly.Parse(business.Opens),
+            Closes = TimeOnly.Parse(business.Closes),
+        };
+
+        var problemDetails =
+            await PutAsyncAndEnsureBadRequest(BusinessRoute, updateBusinessRequest);
+
+        problemDetails?.Errors.Should().HaveCount(1);
+        problemDetails?.Errors.First().Value.First().Should().Be(BusinessErrors.InvalidTimeSlotLength.Message);
+    }
+
+    [Theory]
+    [InlineData("test7@test.com", 65, 10, 11)]
+    [InlineData("test8@test.com", 125, 12, 14)]
+    [InlineData("test9@test.com", 550, 15, 19)]
+    public async Task RequestWithTimeSlotLength_ThatExceedsOpeningHours_UpdateBusinessFails(
+        string email,
+        int timeSlotLengthInMinutes,
+        int opens,
+        int closes)
+    {
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
+        var updateBusinessRequest = new UpdateBusinessRequest
+        {
+            BusinessId = business.Id,
+            Name = business.Name,
+            Capacity = business.Capacity,
+            TimeSlotLengthInMinutes = timeSlotLengthInMinutes,
+            Type = business.Type,
+            Zip = business.Zip,
+            City = business.City,
+            Street = business.Street,
+            Longitude = business.Longitude,
+            Latitude = business.Latitude,
+            Opens = new TimeOnly(opens, 0),
+            Closes = new TimeOnly(closes, 0),
+        };
+
+        var problemDetails =
+            await PutAsyncAndEnsureBadRequest(BusinessRoute, updateBusinessRequest);
+
+        problemDetails?.Errors.Should().HaveCount(1);
+        problemDetails?.Errors.First().Value.First().Should().Be(BusinessErrors.TimeSlotLengthExceedsOpeningHours.Message);
     }
 }

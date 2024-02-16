@@ -5,25 +5,23 @@ namespace CLup.Domain.Businesses.ValueObjects;
 
 public sealed class BusinessData : ValueObject
 {
-    public string Name { get; private set; }
+    public string Name { get; }
 
-    public int Capacity { get; private set; }
+    public int Capacity { get; }
 
-    public int TimeSlotLength { get; private set; }
+    public int TimeSlotLengthInMinutes { get; }
 
-    public BusinessData() { }
-
-    public BusinessData(string name, int capacity, int timeSlotLength)
+    public BusinessData(string name, int capacity, int timeSlotLengthInMinutes)
     {
         Name = name;
         Capacity = capacity;
-        TimeSlotLength = timeSlotLength;
+        TimeSlotLengthInMinutes = timeSlotLengthInMinutes;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Name;
         yield return Capacity;
-        yield return TimeSlotLength;
+        yield return TimeSlotLengthInMinutes;
     }
 }

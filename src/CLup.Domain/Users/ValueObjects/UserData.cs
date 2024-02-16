@@ -5,16 +5,11 @@ namespace CLup.Domain.Users.ValueObjects;
 
 public sealed class UserData : ValueObject
 {
-    public string Name { get; private set; }
+    public string Name { get; }
 
-    public string Email { get; private set; }
+    public string Email { get; }
 
-    public string Password { get; private set; }
-
-    public UserData()
-    {
-
-    }
+    public string Password { get; }
 
     public UserData(string name, string email)
     {

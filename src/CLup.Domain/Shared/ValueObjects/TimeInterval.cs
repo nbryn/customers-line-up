@@ -5,18 +5,29 @@ namespace CLup.Domain.Shared.ValueObjects;
 
 public sealed class TimeInterval : ValueObject
 {
-    public TimeSpan Start { get; }
+    public TimeOnly Start { get; }
 
-    public TimeSpan End { get; }
+    public TimeOnly End { get; }
 
-    public TimeInterval(int startHour, int startMinutes, int endHour, int endMinutes)
+    public TimeInterval(TimeOnly start, TimeOnly end)
     {
-        if (startHour >= endHour)
+        if (start >= end)
         {
-            throw new ArgumentOutOfRangeException(nameof(startHour));
+            throw new ArgumentOutOfRangeException(nameof(start));
         }
-        Start = new TimeSpan(startHour, startMinutes, 0);
-        End = new TimeSpan(endHour, endMinutes, 0);
+
+        if (start.Second != 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(start));
+        }
+
+        if (end.Second != 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(end));
+        }
+
+        Start = start;
+        End = end;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

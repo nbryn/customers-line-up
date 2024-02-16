@@ -108,25 +108,10 @@ public sealed class User : Entity, IAggregateRoot
         return this;
     }
 
-    public Message MarkMessageAsDeleted(UserMessage message, bool receivedMessage)
-    {
-        var messageMetaData = new MessageMetadata(
-            !receivedMessage || message.Metadata.DeletedBySender,
-            receivedMessage || message.Metadata.DeletedByReceiver);
-
-        message.UpdateMetadata(messageMetaData);
-        if (message.Metadata is { DeletedBySender: true, DeletedByReceiver: true })
-        {
-            _sentMessages.Remove(message);
-        }
-
-        return message;
-    }
-
     public void BookingDeletedMessage(Booking booking)
     {
         var content =
-            $"The user with email {UserData.Email} deleted her/his booking at {booking.TimeSlot.Start:dd/MM/yyyy}.";
+            $"The user with email {UserData.Email} deleted her/his booking at {booking.TimeSlot.Date:dd/MM/yyyy}.";
         var messageData = new MessageData($"Booking Deleted - {booking.Business.BusinessData.Name}", content);
         var metadata = new MessageMetadata(false, false);
         var message = new UserMessage(Id, booking.Business.Id, messageData, MessageType.BookingDeleted, metadata);

@@ -22,15 +22,15 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     public async Task ValidBusinessAndTimeSlotId_TimeSlotIsNotFull_CreateBookingSucceeds()
     {
         const string email = "test2@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesByOwner(userId)).First();
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
 
         var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
         await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
         var user = await GetUser();
 
-        user.Bookings.Count.Should().Be(1);
+        user.Bookings.Should().HaveCount(1);
         user.Bookings.First().TimeSlotId.Should().Be(timeSlot.Id);
     }
 
@@ -38,15 +38,15 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     public async Task ValidBusinessAndTimeSlotId_BookingExists_CreateBookingFails()
     {
         const string email = "test3@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesByOwner(userId)).First();
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
 
         var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
         await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
-        var problemDetails = await PostAsyncAndEnsureBadRequest<CreateBookingRequest, ProblemDetails>(BookingRoute, createBookingRequest);
+        var problemDetails = await PostAsyncAndEnsureBadRequest(BookingRoute, createBookingRequest);
 
-        problemDetails?.Errors.Count.Should().Be(1);
+        problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(UserErrors.BookingExists.Code);
     }
 
@@ -54,17 +54,17 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     public async Task ValidBusinessAndTimeSlotId_TimeSlotIsFull_CreateBookingFails()
     {
         const string email = "test4@test.com";
-        var firstUserId = await CreateUserWithBusiness(email, 1);
-        var business = (await GetBusinessesByOwner(firstUserId)).First();
+        await CreateUserWithBusiness(email, 1);
+        var business = (await GetBusinessesForCurrentUser()).First();
 
         var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
         await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
 
         await CreateUserAndSetJwtToken("test5@test.com");
-        var problemDetails = await PostAsyncAndEnsureBadRequest<CreateBookingRequest, ProblemDetails>(BookingRoute, createBookingRequest);
+        var problemDetails = await PostAsyncAndEnsureBadRequest(BookingRoute, createBookingRequest);
 
-        problemDetails?.Errors.Count.Should().Be(1);
+        problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(TimeSlotErrors.NoCapacity.Code);
     }
 
@@ -73,10 +73,9 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     {
         const string email = "test6@test.com";
         await CreateUserAndSetJwtToken(email);
-        var request = new CreateBookingRequest(Guid.Empty, Guid.Empty);
 
-        var problemDetails =
-            await PostAsyncAndEnsureBadRequest<CreateBookingRequest, ProblemDetails>(BookingRoute, request);
+        var request = new CreateBookingRequest(Guid.Empty, Guid.Empty);
+        var problemDetails = await PostAsyncAndEnsureBadRequest(BookingRoute, request);
 
         problemDetails?.Errors.Count.Should().Be(typeof(CreateBookingRequest).GetProperties().Length);
     }
@@ -88,10 +87,9 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         await CreateUserAndSetJwtToken(email);
 
         var request = new CreateBookingRequest(Guid.NewGuid(), Guid.NewGuid());
-        var problemDetails =
-            await PostAsyncAndEnsureNotFound<CreateBookingRequest, ProblemDetails>(BookingRoute, request);
+        var problemDetails = await PostAsyncAndEnsureNotFound(BookingRoute, request);
 
-        problemDetails?.Errors.Count.Should().Be(1);
+        problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(BusinessErrors.NotFound.Code);
     }
 
@@ -99,14 +97,13 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     public async Task RequestWithInvalidTimeSlotId_CreateBooking_ReturnsTimeSlotNotFound()
     {
         const string email = "test8@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesByOwner(userId)).First();
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
 
         var request = new CreateBookingRequest(business.Id, Guid.NewGuid());
-        var problemDetails =
-            await PostAsyncAndEnsureNotFound<CreateBookingRequest, ProblemDetails>(BookingRoute, request);
+        var problemDetails = await PostAsyncAndEnsureNotFound(BookingRoute, request);
 
-        problemDetails?.Errors.Count.Should().Be(1);
+        problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(TimeSlotErrors.NotFound.Code);
     }
 
@@ -115,7 +112,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     {
         const string email = "test9@test.com";
         var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesByOwner(userId)).First();
+        var business = (await GetBusinessesForCurrentUser()).First();
 
         var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
@@ -127,7 +124,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         await DeleteAsyncAndEnsureSuccess($"{BookingRoute}/user/{booking.Id}");
 
         var updatedUser = await GetUser();
-        var updatedBusiness = (await GetBusinessesByOwner(userId)).First();
+        var updatedBusiness = (await GetBusinessesForCurrentUser()).First();
 
         updatedUser.Bookings.Should().BeEmpty();
         updatedUser.SentMessages.Should().HaveCount(1);
@@ -144,7 +141,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         const string email = "test10@test.com";
         await CreateUserAndSetJwtToken(email);
 
-        var problemDetails = await DeleteAsyncAndEnsureBadRequest<ProblemDetails>($"{BookingRoute}/user/{Guid.Empty}");
+        var problemDetails = await DeleteAsyncAndEnsureBadRequest($"{BookingRoute}/user/{Guid.Empty}");
         problemDetails?.Errors.Count.Should().Be(typeof(DeleteUserBookingRequest).GetProperties().Length);
     }
 
@@ -154,8 +151,8 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         const string email = "test11@test.com";
         await CreateUserAndSetJwtToken(email);
 
-        var problemDetails = await DeleteAsyncAndEnsureNotFound<ProblemDetails>($"{BookingRoute}/user/{Guid.NewGuid()}");
-        problemDetails?.Errors.Count.Should().Be(1);
+        var problemDetails = await DeleteAsyncAndEnsureNotFound($"{BookingRoute}/user/{Guid.NewGuid()}");
+        problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(BookingErrors.NotFound.Code);
     }
 
@@ -164,7 +161,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     {
         const string email = "test12@test.com";
         var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesByOwner(userId)).First();
+        var business = (await GetBusinessesForCurrentUser()).First();
 
         var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
@@ -176,7 +173,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         await DeleteAsyncAndEnsureSuccess($"{BookingRoute}/business/{business.Id}?bookingId={booking.Id}");
 
         var updatedUser = await GetUser();
-        var updatedBusiness = (await GetBusinessesByOwner(userId)).First();
+        var updatedBusiness = (await GetBusinessesForCurrentUser()).First();
 
         updatedUser.Bookings.Should().BeEmpty();
         updatedUser.ReceivedMessages.Should().HaveCount(1);
@@ -193,7 +190,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         const string email = "test13@test.com";
         await CreateUserAndSetJwtToken(email);
 
-        var problemDetails = await DeleteAsyncAndEnsureBadRequest<ProblemDetails>($"{BookingRoute}/business/{Guid.Empty}?bookingId={Guid.Empty}");
+        var problemDetails = await DeleteAsyncAndEnsureBadRequest($"{BookingRoute}/business/{Guid.Empty}?bookingId={Guid.Empty}");
         problemDetails?.Errors.Count.Should().Be(typeof(DeleteBusinessBookingRequest).GetProperties().Length);
     }
 
@@ -203,8 +200,8 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         const string email = "test14@test.com";
         await CreateUserAndSetJwtToken(email);
 
-        var problemDetails = await DeleteAsyncAndEnsureNotFound<ProblemDetails>($"{BookingRoute}/business/{Guid.NewGuid()}?bookingId={Guid.NewGuid()}");
-        problemDetails?.Errors.Count.Should().Be(1);
+        var problemDetails = await DeleteAsyncAndEnsureNotFound($"{BookingRoute}/business/{Guid.NewGuid()}?bookingId={Guid.NewGuid()}");
+        problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(BusinessErrors.NotFound.Code);
     }
 
@@ -212,11 +209,11 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     public async Task RequestWithInvalidBookingId_DeleteBusinessBooking_ReturnsBookingNotFound()
     {
         const string email = "test15@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesByOwner(userId)).First();
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
 
-        var problemDetails = await DeleteAsyncAndEnsureNotFound<ProblemDetails>($"{BookingRoute}/business/{business.Id}?bookingId={Guid.NewGuid()}");
-        problemDetails?.Errors.Count.Should().Be(1);
+        var problemDetails = await DeleteAsyncAndEnsureNotFound($"{BookingRoute}/business/{business.Id}?bookingId={Guid.NewGuid()}");
+        problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(BookingErrors.NotFound.Code);
     }
 

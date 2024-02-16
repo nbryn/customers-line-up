@@ -18,6 +18,15 @@ internal sealed class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
             timeSlotId => timeSlotId.Value,
             value => TimeSlotId.Create(value));
 
+        builder.OwnsOne(timeSlot => timeSlot.TimeInterval, t =>
+        {
+            t.Property(timeSpan => timeSpan.Start)
+                .HasColumnName("Start");
+
+            t.Property(timeSpan => timeSpan.End)
+                .HasColumnName("End");
+        });
+
         builder.HasMany(timeSlot => timeSlot.Bookings)
             .WithOne(booking => booking.TimeSlot)
             .HasForeignKey(booking => booking.TimeSlotId)

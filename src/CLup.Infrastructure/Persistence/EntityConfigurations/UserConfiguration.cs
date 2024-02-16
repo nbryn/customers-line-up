@@ -63,7 +63,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
 
         builder.HasMany(user => user.SentMessages)
-            .WithOne(message => message.Sender)
+            .WithOne()
             .HasForeignKey(message => message.SenderId)
             .IsRequired();
 
