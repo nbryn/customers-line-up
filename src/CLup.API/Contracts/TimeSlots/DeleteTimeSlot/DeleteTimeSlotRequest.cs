@@ -6,11 +6,13 @@ using TId = CLup.Domain.TimeSlots.ValueObjects.TimeSlotId;
 
 namespace CLup.API.Contracts.TimeSlots.DeleteTimeSlot;
 
-public record struct DeleteTimeSlotRequest()
+public sealed class DeleteTimeSlotRequest()
 {
-    [FromQuery] public Guid BusinessId { get; set; }
+    [FromRoute]
+    public Guid TimeSlotId { get; set; }
 
-    [FromRoute] public Guid TimeSlotId { get; set; }
+    [FromQuery]
+    public Guid BusinessId { get; set; }
 
     public DeleteTimeSlotCommand MapToCommand(UserId userId) =>
         new(userId, BId.Create(BusinessId), TId.Create(TimeSlotId));

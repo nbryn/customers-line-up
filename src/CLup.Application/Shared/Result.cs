@@ -177,7 +177,7 @@ public sealed class Result<T> : Result
 
     public async Task<Result<T>> FlatMap(
         Task<Result<T>> task,
-        Func<T, DomainResult> predicate,
+        Func<T, DomainResult> f,
         HttpCode httpCode)
     {
         await task;
@@ -186,7 +186,7 @@ public sealed class Result<T> : Result
             return this;
         }
 
-        var result = predicate(Value);
+        var result = f(Value);
         if (result.Failure)
         {
             Code = httpCode;

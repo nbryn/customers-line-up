@@ -1,4 +1,7 @@
-﻿using CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
+﻿using CLup.API.Contracts.TimeSlots.DeleteTimeSlot;
+using CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
+using CLup.Domain.Businesses;
+using CLup.Domain.TimeSlots;
 
 namespace tests.CLup.IntegrationTests.Tests;
 
@@ -19,7 +22,7 @@ public class TimeSlotControllerTests : IntegrationTestsBase
         int opensMinute,
         int closesHour,
         int closesMinute,
-        int timeSlotLength,
+        int timeSlotLengthInMinutes,
         int addDays)
     {
         await CreateUserWithBusiness(
@@ -27,7 +30,7 @@ public class TimeSlotControllerTests : IntegrationTestsBase
             50,
             new TimeOnly(opensHour, opensMinute),
             new TimeOnly(closesHour, closesMinute),
-            timeSlotLength);
+            timeSlotLengthInMinutes);
 
         var business = (await GetBusinessesForCurrentUser()).First();
         var generateTimeSlotsRequest =
@@ -36,7 +39,7 @@ public class TimeSlotControllerTests : IntegrationTestsBase
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
 
         var updatedBusiness = await GetBusiness(business);
-        var expectedNumberOfTimeSlotsGenerated = (closesHour - opensHour) * (60 / timeSlotLength);
+        var expectedNumberOfTimeSlotsGenerated = (closesHour - opensHour) * (60 / timeSlotLengthInMinutes);
 
         var firstTimeSlot = updatedBusiness.TimeSlots.First();
         updatedBusiness.TimeSlots.Should().HaveCount(expectedNumberOfTimeSlotsGenerated);
@@ -45,14 +48,94 @@ public class TimeSlotControllerTests : IntegrationTestsBase
     }
 
     [Fact]
-    public async Task EmptyRequest_GenerateTimeSlotsFails()
+    public async Task RequestWithDateInThePast_GenerateTimeSlotsFails()
     {
-        const string email = "test4@test.com";
+        const string email = "test5@test.com";
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
+
+        var generateTimeSlotsRequest =
+            new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.UtcNow).AddDays(-1));
+        var problemDetails = await PostAsyncAndEnsureBadRequest(TimeSlotRoute, generateTimeSlotsRequest);
+
+        problemDetails?.Errors.Should().HaveCount(1);
+        problemDetails?.Errors
+            .First().Value
+            .First()
+            .Should().Be(TimeSlotErrors.TimeSlotCannotBeGeneratedOnDateInThePast.Message);
+    }
+
+    [Fact]
+    public async Task RequestWithInvalidBusiness_GenerateTimeSlots_ReturnsBusinessNotFound()
+    {
+        const string email = "test6@test.com";
         await CreateUserAndSetJwtToken(email);
 
-        var emptyRequest = new GenerateTimeSlotsRequest();
-        var problemDetails = await PostAsyncAndEnsureBadRequest(TimeSlotRoute, emptyRequest);
+        var generateTimeSlotsRequest =
+            new GenerateTimeSlotsRequest(Guid.NewGuid(), DateOnly.FromDateTime(DateTime.UtcNow));
+        var problemDetails = await PostAsyncAndEnsureNotFound(TimeSlotRoute, generateTimeSlotsRequest);
 
-        problemDetails?.Errors.Should().HaveCount(typeof(GenerateTimeSlotsRequest).GetProperties().Length);
+        problemDetails?.Errors.Should().HaveCount(1);
+        problemDetails?.Errors.First().Key.Should().Be(BusinessErrors.NotFound.Code);
+    }
+
+    [Fact]
+    public async Task ValidRequest_DeleteTimeSlotSucceeds()
+    {
+        const string email = "test7@test.com";
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
+
+        var generateTimeSlotsRequest =
+            new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.UtcNow));
+        await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
+        var businessWithTimeSlots = await GetBusiness(business);
+        var timeSlotToBeDeleted = businessWithTimeSlots.TimeSlots.First();
+
+        var deleteTimeSlotRoute = $"{TimeSlotRoute}/{timeSlotToBeDeleted.Id}?businessId={business.Id}";
+        await DeleteAsyncAndEnsureSuccess(deleteTimeSlotRoute);
+
+        var updatedBusiness = await GetBusiness(business);
+        updatedBusiness.TimeSlots.Should().HaveCount(businessWithTimeSlots.TimeSlots.Count - 1);
+        updatedBusiness.TimeSlots.Select(timeSlot => timeSlot.Id).Should().NotContain(timeSlotToBeDeleted.Id);
+    }
+
+    [Fact]
+    public async Task InvalidRequest_DeleteTimeSlotFails()
+    {
+        const string email = "test8@test.com";
+        await CreateUserAndSetJwtToken(email);
+
+        var deleteTimeSlotRoute = $"{TimeSlotRoute}/{Guid.Empty}?businessId={Guid.Empty}";
+        var problemDetails = await DeleteAsyncAndEnsureBadRequest(deleteTimeSlotRoute);
+
+        problemDetails?.Errors.Should().HaveCount(typeof(DeleteTimeSlotRequest).GetProperties().Length);
+    }
+
+    [Fact]
+    public async Task RequestWithInvalidBusinessId_DeleteTimeSlot_ReturnsTimeSlotNotFound()
+    {
+        const string email = "test9@test.com";
+        await CreateUserAndSetJwtToken(email);
+
+        var deleteTimeSlotRoute = $"{TimeSlotRoute}/{Guid.NewGuid()}?businessId={Guid.NewGuid()}";
+        var problemDetails = await DeleteAsyncAndEnsureNotFound(deleteTimeSlotRoute);
+
+        problemDetails?.Errors.Should().HaveCount(1);
+        problemDetails?.Errors.First().Key.Should().Be(BusinessErrors.NotFound.Code);
+    }
+
+    [Fact]
+    public async Task RequestWithInvalidTimeSlotId_DeleteTimeSlot_ReturnsTimeSlotNotFound()
+    {
+        const string email = "test10@test.com";
+        await CreateUserWithBusiness(email);
+        var business = (await GetBusinessesForCurrentUser()).First();
+
+        var deleteTimeSlotRoute = $"{TimeSlotRoute}/{Guid.NewGuid()}?businessId={business.Id}";
+        var problemDetails = await DeleteAsyncAndEnsureNotFound(deleteTimeSlotRoute);
+
+        problemDetails?.Errors.Should().HaveCount(1);
+        problemDetails?.Errors.First().Key.Should().Be(TimeSlotErrors.NotFound.Code);
     }
 }

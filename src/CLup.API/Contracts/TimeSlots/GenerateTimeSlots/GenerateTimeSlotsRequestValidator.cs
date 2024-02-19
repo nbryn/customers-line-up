@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using CLup.Domain.TimeSlots;
+using FluentValidation;
 
 namespace CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
 
@@ -7,6 +8,9 @@ public class GenerateTimeSlotsRequestValidator : AbstractValidator<GenerateTimeS
     public GenerateTimeSlotsRequestValidator()
     {
         RuleFor(request => request.BusinessId).NotEmpty();
-        RuleFor(request => request.Date).NotEmpty().GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow));
+        RuleFor(request => request.Date)
+            .NotEmpty()
+            .GreaterThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow))
+            .WithMessage(TimeSlotErrors.TimeSlotCannotBeGeneratedOnDateInThePast.Message);
     }
 }

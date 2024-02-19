@@ -6,7 +6,7 @@ public class DeleteTimeSlotRequestValidator : AbstractValidator<DeleteTimeSlotRe
 {
     public DeleteTimeSlotRequestValidator()
     {
-        RuleFor(request => request.BusinessId).NotNull();
-        RuleFor(request => request.TimeSlotId).NotNull();
+        RuleFor(request => request.BusinessId).NotEmpty();
+        RuleFor(request => request.TimeSlotId).NotEmpty();
     }
 }
