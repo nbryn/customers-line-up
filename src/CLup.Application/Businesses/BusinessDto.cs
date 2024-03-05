@@ -18,7 +18,7 @@ public sealed class BusinessDto
 
     public string Name { get; init; }
 
-    public string Zip { get; init; }
+    public int Zip { get; init; }
 
     public string City { get; init; }
 

@@ -48,7 +48,7 @@ public sealed class Seeder : ISeeder
 
         var user1 = new UserBuilder()
             .WithUserData("Peter", "test@test.com", BC.HashPassword("1234"))
-            .WithAddress("Farum Hovedgade 15", "3520", "Farum")
+            .WithAddress("Farum Hovedgade 15", 3520, "Farum")
             .WithCoords(55.8122540, 12.3706760)
             .WithRole(Role.Owner)
             .Build();
@@ -58,7 +58,7 @@ public sealed class Seeder : ISeeder
 
         var user2 = new UserBuilder()
             .WithUserData("Jens", "h@h.com", BC.HashPassword("1234"))
-            .WithAddress("Farum Hovedgade 50", "3520", "Farum")
+            .WithAddress("Farum Hovedgade 50", 3520, "Farum")
             .WithCoords(55.810706, 12.3640744)
             .WithRole(Role.Owner)
             .Build();
@@ -68,7 +68,7 @@ public sealed class Seeder : ISeeder
 
         var user3 = new UserBuilder()
             .WithUserData("Mads", "mads@hotmail.com", BC.HashPassword("1234"))
-            .WithAddress("Gedevasevej 15", "3520", "Farum")
+            .WithAddress("Gedevasevej 15", 3520, "Farum")
             .WithCoords(55.8075915, 12.3467888)
             .Build();
 
@@ -77,7 +77,7 @@ public sealed class Seeder : ISeeder
 
         var user4 = new UserBuilder()
             .WithUserData("Emil", "emil@live.com", BC.HashPassword("1234"))
-            .WithAddress("Farum Hovedgade 20", "3520", "Farum")
+            .WithAddress("Farum Hovedgade 20", 3520, "Farum")
             .WithCoords(55.8200342, 12.3591325)
             .Build();
 
@@ -86,7 +86,7 @@ public sealed class Seeder : ISeeder
 
         var user5 = new UserBuilder()
             .WithUserData("Niels", "niels@google.com", BC.HashPassword("1234"))
-            .WithAddress("Kongevejen 466", "2840", "Holte")
+            .WithAddress("Kongevejen 466", 2840, "Holte")
             .WithCoords(55.825272, 12.463181)
             .Build();
 
@@ -95,7 +95,7 @@ public sealed class Seeder : ISeeder
 
         var user6 = new UserBuilder()
             .WithUserData("Kasper", "kasper@yahoo.com", BC.HashPassword("1234"))
-            .WithAddress("Holte Midtpunkt 30", "2840", "Holte")
+            .WithAddress("Holte Midtpunkt 30", 2840, "Holte")
             .WithCoords(55.81111, 12.471199)
             .Build();
 
@@ -117,7 +117,7 @@ public sealed class Seeder : ISeeder
             .WithOwner(userIds[0])
             .WithBusinessData("Super Brugsen", 50, 30)
             .WithBusinessHours(new TimeOnly(10, 0), new TimeOnly(22, 0))
-            .WithAddress("Ryttergårdsvej 10", "3520", "Farum")
+            .WithAddress("Ryttergårdsvej 10", 3520, "Farum")
             .WithCoords(55.8137419, 12.3935222)
             .WithType(BusinessType.Supermarket)
             .Build();
@@ -128,7 +128,7 @@ public sealed class Seeder : ISeeder
             .WithOwner(userIds[0])
             .WithBusinessData("Farum Museum", 40, 60)
             .WithBusinessHours(new TimeOnly(10, 0), new TimeOnly(16, 0))
-            .WithAddress("Farum Hovedgade 100", "3520", "Farum")
+            .WithAddress("Farum Hovedgade 100", 3520, "Farum")
             .WithCoords(55.809127, 12.3544073)
             .WithType(BusinessType.Museum)
             .Build();
@@ -139,7 +139,7 @@ public sealed class Seeder : ISeeder
             .WithOwner(userIds[0])
             .WithBusinessData("Kvick Kiosk", 30, 10)
             .WithBusinessHours(new TimeOnly(8, 30), new TimeOnly(23, 0))
-            .WithAddress("Vermlandsgade 30", "2300", "København S")
+            .WithAddress("Vermlandsgade 30", 2300, "København S")
             .WithCoords(55.668442, 12.5988833)
             .WithType(BusinessType.Kiosk)
             .Build();
@@ -150,7 +150,7 @@ public sealed class Seeder : ISeeder
             .WithOwner(userIds[1])
             .WithBusinessData("HairCut", 2, 40)
             .WithBusinessHours(new TimeOnly(9, 0), new TimeOnly(18, 0))
-            .WithAddress("Amagerbrogade 32", "2840", "Holte")
+            .WithAddress("Amagerbrogade 32", 2840, "Holte")
             .WithCoords(55.8191785, 12.4682046)
             .WithType(BusinessType.Hairdresser)
             .Build();
@@ -161,7 +161,7 @@ public sealed class Seeder : ISeeder
             .WithOwner(userIds[1])
             .WithBusinessData("Odense Bibliotek", 75, 80)
             .WithBusinessHours(new TimeOnly(8, 0), new TimeOnly(20, 0))
-            .WithAddress("Østre Stationsvej 15", "5000", "Odense")
+            .WithAddress("Østre Stationsvej 15", 5000, "Odense")
             .WithCoords(55.40116, 10.388635)
             .WithType(BusinessType.Library)
             .Build();
@@ -172,7 +172,7 @@ public sealed class Seeder : ISeeder
             .WithOwner(userIds[1])
             .WithBusinessData("Foto", 8, 15)
             .WithBusinessHours(new TimeOnly(10, 30), new TimeOnly(19, 0))
-            .WithAddress("Nord Vej 92", "2605", "Brøndby")
+            .WithAddress("Nord Vej 92", 2605, "Brøndby")
             .WithCoords(55.6678010, 12.4282140)
             .WithType(BusinessType.Other)
             .Build();
@@ -183,7 +183,7 @@ public sealed class Seeder : ISeeder
             .WithOwner(userIds[1])
             .WithBusinessData("Netto", 40, 20)
             .WithBusinessHours(new TimeOnly(9, 0), new TimeOnly(14, 0))
-            .WithAddress("Lundebjerg 1", "2740", "Skovlunde")
+            .WithAddress("Lundebjerg 1", 2740, "Skovlunde")
             .WithCoords(55.720478, 12.4016771)
             .WithType(BusinessType.Supermarket)
             .Build();
@@ -194,7 +194,7 @@ public sealed class Seeder : ISeeder
             .WithOwner(userIds[1])
             .WithBusinessData("Grab'n'Go", 5, 5)
             .WithBusinessHours(new TimeOnly(8, 0), new TimeOnly(15, 30))
-            .WithAddress("Ellemosevej 5", "8370", "Hadsten")
+            .WithAddress("Ellemosevej 5", 8370, "Hadsten")
             .WithCoords(56.3306771, 10.0554608)
             .WithType(BusinessType.Kiosk)
             .Build();

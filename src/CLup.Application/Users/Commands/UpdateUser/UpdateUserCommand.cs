@@ -9,17 +9,20 @@ public sealed class UpdateUserCommand : IRequest<Result>
 {
     public UserId UserId { get; }
 
-    public UserData UserData { get; }
-
     public Address Address { get; }
 
     public Coords Coords { get; }
 
-    public UpdateUserCommand(UserId userId, UserData userData, Address address, Coords coords)
+    public string Name { get; }
+
+    public string Email { get; }
+
+    public UpdateUserCommand(UserId userId, Address address, Coords coords, string name, string email)
     {
         UserId = userId;
-        UserData = userData;
         Address = address;
         Coords = coords;
+        Email = email;
+        Name = name;
     }
 }

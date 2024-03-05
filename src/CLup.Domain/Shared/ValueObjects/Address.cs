@@ -6,13 +6,13 @@ public sealed class Address : ValueObject
 {
     public string Street { get; private set; }
 
-    public string Zip { get; private set; }
+    public int Zip { get; private set; }
 
     public string City { get; private set; }
 
     public Address() { }
 
-    public Address(string street, string zip, string city)
+    public Address(string street, int zip, string city)
     {
         Street = street;
         Zip = zip;

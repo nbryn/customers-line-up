@@ -99,11 +99,11 @@ public sealed class User : Entity, IAggregateRoot
         return DomainResult.Ok();
     }
 
-    public User Update(UserData userData, Address address, Coords coords)
+    public User Update(Address address, Coords coords, string name, string email)
     {
-        UserData = userData;
         Address = address;
         Coords = coords;
+        UserData = new UserData(name, email, UserData.Password);
 
         return this;
     }

@@ -7,7 +7,7 @@ namespace CLup.API.Contracts.Users.UpdateUser;
 public readonly record struct UpdateUserRequest(
     string Email,
     string Name,
-    string Zip,
+    int Zip,
     string Street,
     string City,
     double Longitude,
@@ -15,7 +15,8 @@ public readonly record struct UpdateUserRequest(
 {
     public UpdateUserCommand MapToCommand(UserId userId) =>
         new(userId,
-            new UserData(Name, Email),
             new Address(Street, Zip, City),
-            new Coords(Longitude, Latitude));
+            new Coords(Longitude, Latitude),
+            Name,
+            Email);
 }

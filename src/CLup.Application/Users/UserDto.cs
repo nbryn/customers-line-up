@@ -17,7 +17,7 @@ public sealed class UserDto
 
     public string City { get; init; }
 
-    public string Zip { get; init; }
+    public int Zip { get; init; }
 
     public string Street { get; init; }
 

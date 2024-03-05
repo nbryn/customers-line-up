@@ -11,12 +11,6 @@ public sealed class UserData : ValueObject
 
     public string Password { get; }
 
-    public UserData(string name, string email)
-    {
-        Name = name;
-        Email = email;
-    }
-
     public UserData(string name, string email, string password)
     {
         Name = name;

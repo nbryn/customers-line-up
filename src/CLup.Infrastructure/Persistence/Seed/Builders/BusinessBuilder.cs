@@ -28,7 +28,7 @@ public sealed class BusinessBuilder
         return this;
     }
 
-    public BusinessBuilder WithAddress(string street, string zip, string city)
+    public BusinessBuilder WithAddress(string street, int zip, string city)
     {
         _address = new Address(street, zip, city);
         return this;

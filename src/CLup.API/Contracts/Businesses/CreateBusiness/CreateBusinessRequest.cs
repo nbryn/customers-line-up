@@ -8,7 +8,7 @@ namespace CLup.API.Contracts.Businesses.CreateBusiness;
 
 public readonly record struct CreateBusinessRequest(
     string Name,
-    string Zip,
+    int Zip,
     string City,
     string Street,
     double Longitude,

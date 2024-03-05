@@ -1,6 +1,5 @@
 ﻿using CLup.API.Contracts.Users.UpdateUser;
 using CLup.API.Extensions;
-using CLup.Application.Shared.Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

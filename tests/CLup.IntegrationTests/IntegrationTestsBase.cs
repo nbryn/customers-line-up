@@ -46,7 +46,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             .WithOwner(UserId.Create(userId))
             .WithBusinessData("Super Brugsen", capacity, timeSlotLengthInMinutes)
             .WithBusinessHours(opens ?? new TimeOnly(10, 0), closes ?? new TimeOnly(22, 0))
-            .WithAddress("Ryttergårdsvej 10", "3520", "Farum")
+            .WithAddress("Ryttergårdsvej 10", 3520, "Farum")
             .WithCoords(55.8137419, 12.3935222)
             .WithType(BusinessType.Supermarket)
             .Build();
@@ -75,7 +75,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     {
         var newUser = new UserBuilder()
             .WithUserData("Peter", email, password ?? "1234")
-            .WithAddress("Farum Hovedgade 15", "3520", "Farum")
+            .WithAddress("Farum Hovedgade 15", 3520, "Farum")
             .WithCoords(55.8122540, 12.3706760)
             .WithRole(Role.User)
             .Build();

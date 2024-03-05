@@ -10,7 +10,7 @@ namespace CLup.API.Contracts.Businesses.UpdateBusiness;
 public readonly record struct UpdateBusinessRequest(
     Guid BusinessId,
     string Name,
-    string Zip,
+    int Zip,
     string City,
     string Street,
     double Longitude,

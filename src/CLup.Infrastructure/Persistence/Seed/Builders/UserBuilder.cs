@@ -24,7 +24,7 @@ public sealed class UserBuilder
         return this;
     }
 
-    public UserBuilder WithAddress(string street, string zip, string city)
+    public UserBuilder WithAddress(string street, int zip, string city)
     {
         _address = new Address(street, zip, city);
 
