@@ -2,7 +2,6 @@
 using CLup.API.Contracts.Bookings.DeleteBusinessBooking;
 using CLup.API.Contracts.Bookings.DeleteUserBooking;
 using CLup.API.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.API.Controllers;

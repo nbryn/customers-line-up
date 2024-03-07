@@ -1,5 +1,4 @@
 ﻿using CLup.Domain.TimeSlots;
-using FluentValidation;
 
 namespace CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
 

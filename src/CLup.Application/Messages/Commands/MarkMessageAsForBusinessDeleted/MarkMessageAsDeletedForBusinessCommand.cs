@@ -2,7 +2,6 @@
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using MediatR;
 
 namespace CLup.Application.Messages.Commands.MarkMessageAsForBusinessDeleted;
 

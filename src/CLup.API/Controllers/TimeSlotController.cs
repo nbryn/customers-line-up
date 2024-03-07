@@ -1,7 +1,6 @@
 ﻿using CLup.API.Contracts.TimeSlots.DeleteTimeSlot;
 using CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
 using CLup.API.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.API.Controllers;

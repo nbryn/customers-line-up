@@ -1,4 +1,3 @@
-using System;
 using CLup.Domain.Bookings;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.TimeSlots.ValueObjects;

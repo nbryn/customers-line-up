@@ -1,5 +1,4 @@
 using CLup.Domain.Shared.ValueObjects;
-using FluentValidation;
 
 namespace CLup.Domain.TimeSlots.Validation;
 

@@ -1,9 +1,7 @@
-using CLup.Domain.Users;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
+using CLup.Domain.Users;
 using Microsoft.IdentityModel.Tokens;
 
 namespace CLup.Application.Auth;

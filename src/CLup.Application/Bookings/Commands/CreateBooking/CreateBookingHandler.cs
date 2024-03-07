@@ -1,14 +1,11 @@
-using System.Threading;
-using System.Threading.Tasks;
+using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Bookings;
-using FluentValidation;
-using MediatR;
-using CLup.Domain.Users;
-using CLup.Domain.TimeSlots;
-using CLup.Application.Shared;
 using CLup.Domain.Businesses;
+using CLup.Domain.TimeSlots;
+using CLup.Domain.Users;
+using FluentValidation;
 
 namespace CLup.Application.Bookings.Commands.CreateBooking;
 

@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.API.Extensions;
 
-using Result = Result;
-
 public static class ControllerBaseExtensions
 {
     public static IActionResult CreateActionResult(

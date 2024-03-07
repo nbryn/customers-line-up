@@ -1,6 +1,5 @@
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using FluentValidation;
 
 namespace CLup.Domain.Users.Validation;
 

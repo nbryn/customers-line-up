@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.API.Contracts.Bookings.CreateBooking;
 
 public sealed class CreateBookingRequestValidator : AbstractValidator<CreateBookingRequest>

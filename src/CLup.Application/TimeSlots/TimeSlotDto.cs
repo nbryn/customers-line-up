@@ -1,4 +1,3 @@
-using System;
 using CLup.Domain.TimeSlots;
 
 namespace CLup.Application.TimeSlots;

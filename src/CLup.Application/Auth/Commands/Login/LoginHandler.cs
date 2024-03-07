@@ -1,9 +1,6 @@
-using System.Threading;
-using System.Threading.Tasks;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
-using MediatR;
 using CLup.Domain.Users;
 using BC = BCrypt.Net.BCrypt;
 

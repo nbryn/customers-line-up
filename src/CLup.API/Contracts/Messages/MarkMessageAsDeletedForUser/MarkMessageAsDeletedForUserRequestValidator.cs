@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace CLup.API.Contracts.Messages.MarkMessageAsDeletedForUser;
+﻿namespace CLup.API.Contracts.Messages.MarkMessageAsDeletedForUser;
 
 public sealed class MarkMessageAsDeletedForUserRequestValidator : AbstractValidator<MarkMessageAsDeletedForUserRequest>
 {

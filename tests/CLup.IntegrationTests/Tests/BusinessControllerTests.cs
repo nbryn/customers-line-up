@@ -1,6 +1,5 @@
 ﻿using CLup.API.Contracts.Businesses.CreateBusiness;
 using CLup.API.Contracts.Businesses.UpdateBusiness;
-using CLup.Application.Shared;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
 

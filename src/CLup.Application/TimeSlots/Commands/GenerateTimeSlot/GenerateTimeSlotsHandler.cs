@@ -1,10 +1,7 @@
-using System.Threading;
-using System.Threading.Tasks;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
-using MediatR;
 
 namespace CLup.Application.TimeSlots.Commands.GenerateTimeSlot;
 

@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace CLup.API.Contracts.Messages.SendBusinessMessage;
+﻿namespace CLup.API.Contracts.Messages.SendBusinessMessage;
 
 public class SendBusinessMessageRequestValidator : AbstractValidator<SendBusinessMessageRequest>
 {

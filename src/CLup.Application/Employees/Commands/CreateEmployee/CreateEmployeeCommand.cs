@@ -2,7 +2,6 @@ using CLup.Application.Shared;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Employees;
 using CLup.Domain.Users;
-using MediatR;
 using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Application.Employees.Commands.CreateEmployee;
@@ -20,10 +19,10 @@ public sealed class CreateEmployeeCommand : IRequest<Result>
     public CreateEmployeeCommand(UserId ownerId, BusinessId businessId, UserId userId, string? companyEmail)
     {
         OwnerId = ownerId;
-        BusinessId = businessId;
-        UserId = userId;
+        Domain.Businesses.ValueObjects.BusinessId = businessId;
+        Domain.Users.ValueObjects.UserId = userId;
         CompanyEmail = companyEmail;
     }
 
-    public Employee MapToEmployee(User user) => new(UserId, BusinessId, CompanyEmail ?? user.UserData.Email);
+    public Employee MapToEmployee(User user) => new(Domain.Users.ValueObjects.UserId, Domain.Businesses.ValueObjects.BusinessId, CompanyEmail ?? user.UserData.Email);
 }

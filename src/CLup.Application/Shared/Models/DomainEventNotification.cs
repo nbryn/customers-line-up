@@ -1,5 +1,4 @@
 ﻿using CLup.Domain.Shared;
-using MediatR;
 
 namespace CLup.Application.Shared.Models;
 

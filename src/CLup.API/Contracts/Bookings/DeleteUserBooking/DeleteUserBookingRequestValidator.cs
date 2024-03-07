@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace CLup.API.Contracts.Bookings.DeleteUserBooking;
+﻿namespace CLup.API.Contracts.Bookings.DeleteUserBooking;
 
 public sealed class DeleteUserBookingRequestValidator : AbstractValidator<DeleteUserBookingRequest>
 {

@@ -1,5 +1,3 @@
-using System;
-
 namespace CLup.Domain.Shared;
 
 public abstract class Entity

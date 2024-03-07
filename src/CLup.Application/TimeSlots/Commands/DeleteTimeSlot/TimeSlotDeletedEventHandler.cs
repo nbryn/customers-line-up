@@ -1,10 +1,6 @@
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
 using CLup.Domain.TimeSlots.Events;
-using MediatR;
 
 namespace CLup.Application.TimeSlots.Commands.DeleteTimeSlot;
 

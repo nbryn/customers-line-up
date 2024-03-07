@@ -1,6 +1,5 @@
 ﻿using CLup.API.Contracts.Employees.CreateEmployee;
 using CLup.API.Contracts.Employees.DeleteEmployee;
-using CLup.Application.Shared;
 using CLup.Domain.Businesses;
 using CLup.Domain.Employees;
 using CLup.Domain.Users;

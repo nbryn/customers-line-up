@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.API.Contracts.Employees.CreateEmployee;
 
 public sealed class CreateEmployeeRequestValidator : AbstractValidator<CreateEmployeeRequest>

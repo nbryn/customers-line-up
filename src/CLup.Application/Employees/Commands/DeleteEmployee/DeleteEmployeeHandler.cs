@@ -1,11 +1,8 @@
-using System.Threading;
-using System.Threading.Tasks;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
 using CLup.Domain.Employees;
-using MediatR;
 
 namespace CLup.Application.Employees.Commands.DeleteEmployee;
 

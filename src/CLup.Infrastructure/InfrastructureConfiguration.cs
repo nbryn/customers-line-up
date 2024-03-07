@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
-using CLup.Application.Shared.Interfaces;
+﻿using CLup.Application.Shared.Interfaces;
 using CLup.Infrastructure.Persistence;
 using CLup.Infrastructure.Persistence.Seed;
 using CLup.Infrastructure.Services;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Bookings;
 using CLup.Domain.Businesses;
@@ -14,7 +9,6 @@ using CLup.Domain.Shared;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
-using Microsoft.EntityFrameworkCore;
 
 namespace CLup.Infrastructure.Persistence;
 

@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.API.Contracts.Employees.DeleteEmployee;
 
 public sealed class DeleteEmployeeRequestValidator : AbstractValidator<DeleteEmployeeRequest>

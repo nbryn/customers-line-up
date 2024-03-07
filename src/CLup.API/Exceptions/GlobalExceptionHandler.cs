@@ -1,5 +1,4 @@
 ﻿using CLup.Application.Shared;
-using CLup.Domain.Shared;
 using Microsoft.AspNetCore.Diagnostics;
 
 namespace CLup.API.Exceptions;

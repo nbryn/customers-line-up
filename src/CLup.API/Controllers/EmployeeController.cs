@@ -1,7 +1,6 @@
 ﻿using CLup.API.Contracts.Employees.CreateEmployee;
 using CLup.API.Contracts.Employees.DeleteEmployee;
 using CLup.API.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.API.Controllers;

@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.API.Contracts.Businesses.CreateBusiness;
 
 public sealed class CreateBusinessRequestValidator : AbstractValidator<CreateBusinessRequest>

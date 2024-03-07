@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace CLup.API.Contracts.Users.UsersNotEmployedByBusiness;
+﻿namespace CLup.API.Contracts.Users.UsersNotEmployedByBusiness;
 
 public class UsersNotEmployedByBusinessRequestValidator : AbstractValidator<UsersNotEmployedByBusinessRequest>
 {

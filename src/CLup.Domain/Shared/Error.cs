@@ -1,7 +1,5 @@
 namespace CLup.Domain.Shared;
 
-using System.Collections.Generic;
-
 public class Error
 {
     public string Code { get; init; }

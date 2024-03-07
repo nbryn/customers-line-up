@@ -1,6 +1,5 @@
 using CLup.API.Contracts.Auth;
 using CLup.API.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

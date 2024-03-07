@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using CLup.Domain.Shared;
+﻿using CLup.Domain.Shared;
 
 namespace CLup.Application.Shared.Interfaces;
 

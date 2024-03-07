@@ -2,7 +2,6 @@
 using CLup.API.Contracts.Messages.MarkMessageAsDeletedForUser;
 using CLup.API.Contracts.Messages.SendBusinessMessage;
 using CLup.API.Contracts.Messages.SendUserMessage;
-using CLup.Application.Shared;
 using CLup.Domain.Businesses;
 using CLup.Domain.Messages.Enums;
 using CLup.Domain.Users;

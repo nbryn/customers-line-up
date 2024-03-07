@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using CLup.Application.Shared.Interfaces;
+﻿using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
 using CLup.Domain.Shared;
 using MediatR;

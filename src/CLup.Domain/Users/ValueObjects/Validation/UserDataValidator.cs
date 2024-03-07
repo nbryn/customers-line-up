@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.Domain.Users.ValueObjects.Validation;
 
 public class UserDataValidator : AbstractValidator<UserData>

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CLup.Domain.Shared.ValueObjects;
+﻿namespace CLup.Domain.Shared.ValueObjects;
 
 public abstract class Id : ValueObject
 {

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace CLup.Domain.Shared.ValueObjects;
 
 public sealed class TimeInterval : ValueObject

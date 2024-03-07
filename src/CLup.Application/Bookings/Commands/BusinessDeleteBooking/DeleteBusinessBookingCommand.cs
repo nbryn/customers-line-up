@@ -1,7 +1,6 @@
 using CLup.Application.Shared;
 using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Businesses.ValueObjects;
-using MediatR;
 using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Application.Bookings.Commands.BusinessDeleteBooking;

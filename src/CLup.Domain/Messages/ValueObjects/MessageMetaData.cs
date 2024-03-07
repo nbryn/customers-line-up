@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using CLup.Domain.Shared.ValueObjects;
 
 namespace CLup.Domain.Messages.ValueObjects;

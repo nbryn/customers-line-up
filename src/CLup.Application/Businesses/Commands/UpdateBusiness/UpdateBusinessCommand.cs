@@ -1,9 +1,7 @@
 using CLup.Application.Shared;
-using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Shared.ValueObjects;
-using MediatR;
 using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Application.Businesses.Commands.UpdateBusiness;

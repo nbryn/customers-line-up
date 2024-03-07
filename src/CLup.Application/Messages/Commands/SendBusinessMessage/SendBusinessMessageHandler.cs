@@ -1,13 +1,10 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using CLup.Application.Shared;
+﻿using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
 using CLup.Domain.Messages;
 using CLup.Domain.Users;
 using FluentValidation;
-using MediatR;
 
 namespace CLup.Application.Messages.Commands.SendBusinessMessage;
 

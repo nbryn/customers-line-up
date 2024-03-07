@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using CLup.Application.Bookings;
 using CLup.Application.Messages;
 using CLup.Domain.Users;

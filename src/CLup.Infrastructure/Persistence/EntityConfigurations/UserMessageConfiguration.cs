@@ -1,11 +1,8 @@
-using System;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Messages;
 using CLup.Domain.Messages.Enums;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CLup.Infrastructure.Persistence.EntityConfigurations;
 

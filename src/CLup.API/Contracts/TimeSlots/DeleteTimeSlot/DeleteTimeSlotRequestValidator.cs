@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace CLup.API.Contracts.TimeSlots.DeleteTimeSlot;
+﻿namespace CLup.API.Contracts.TimeSlots.DeleteTimeSlot;
 
 public class DeleteTimeSlotRequestValidator : AbstractValidator<DeleteTimeSlotRequest>
 {

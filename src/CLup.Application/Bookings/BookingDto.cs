@@ -1,4 +1,3 @@
-using System;
 using CLup.Domain.Bookings;
 
 namespace CLup.Application.Bookings;

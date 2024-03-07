@@ -1,11 +1,8 @@
-using System.Threading;
-using System.Threading.Tasks;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Users;
 using FluentValidation;
-using MediatR;
 using BC = BCrypt.Net.BCrypt;
 
 namespace CLup.Application.Auth.Commands.Register;

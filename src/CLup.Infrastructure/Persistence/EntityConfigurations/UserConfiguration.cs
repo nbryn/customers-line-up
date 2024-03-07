@@ -1,8 +1,6 @@
 using CLup.Domain.Employees;
 using CLup.Domain.Users;
 using CLup.Domain.Users.ValueObjects;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CLup.Infrastructure.Persistence.EntityConfigurations;
 

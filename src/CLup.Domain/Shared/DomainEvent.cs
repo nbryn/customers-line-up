@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CLup.Domain.Shared;
+﻿namespace CLup.Domain.Shared;
 
 public interface IHasDomainEvent
 {

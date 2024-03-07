@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using CLup.Domain.Businesses;
+﻿using CLup.Domain.Businesses;
+using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Shared;
 using CLup.Domain.Users;
-using System;
-using System.Threading;
-using CLup.Domain.Businesses.ValueObjects;
-using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Application.Shared.Interfaces;

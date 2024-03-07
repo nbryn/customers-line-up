@@ -3,7 +3,6 @@ using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users;
 using CLup.Domain.Users.Enums;
 using CLup.Domain.Users.ValueObjects;
-using MediatR;
 
 namespace CLup.Application.Auth.Commands.Register;
 

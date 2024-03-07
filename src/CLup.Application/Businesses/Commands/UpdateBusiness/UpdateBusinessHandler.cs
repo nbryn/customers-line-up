@@ -1,11 +1,8 @@
-using System.Threading;
-using System.Threading.Tasks;
-using FluentValidation;
-using MediatR;
+using CLup.Application.Shared;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
-using CLup.Application.Shared;
+using FluentValidation;
 
 namespace CLup.Application.Businesses.Commands.UpdateBusiness;
 

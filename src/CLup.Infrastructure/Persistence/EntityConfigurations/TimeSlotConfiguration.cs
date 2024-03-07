@@ -1,7 +1,5 @@
 using CLup.Domain.TimeSlots;
 using CLup.Domain.TimeSlots.ValueObjects;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CLup.Infrastructure.Persistence.EntityConfigurations;
 

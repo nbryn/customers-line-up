@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.Domain.Businesses.ValueObjects.Validation;
 
 public class BusinessDataValidator : AbstractValidator<BusinessData>

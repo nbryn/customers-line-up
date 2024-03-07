@@ -1,9 +1,6 @@
-using System.Threading;
-using System.Threading.Tasks;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Models;
 using CLup.Domain.Bookings.Events;
-using MediatR;
 
 namespace CLup.Application.Bookings.Commands.BusinessDeleteBooking;
 

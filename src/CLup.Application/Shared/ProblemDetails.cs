@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace CLup.Application.Shared;
+﻿namespace CLup.Application.Shared;
 
 public sealed class ProblemDetails
 {

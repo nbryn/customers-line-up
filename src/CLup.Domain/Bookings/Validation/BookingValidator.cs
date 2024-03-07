@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.Domain.Bookings.Validation;
 
 public class BookingValidator : AbstractValidator<Booking>

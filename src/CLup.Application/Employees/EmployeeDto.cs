@@ -1,4 +1,3 @@
-using System;
 using CLup.Domain.Employees;
 
 namespace CLup.Application.Employees;

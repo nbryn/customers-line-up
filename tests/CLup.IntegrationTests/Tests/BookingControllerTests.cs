@@ -3,7 +3,6 @@ using CLup.API.Contracts.Bookings.DeleteBusinessBooking;
 using CLup.API.Contracts.Bookings.DeleteUserBooking;
 using CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
 using CLup.Application.Businesses;
-using CLup.Application.Shared;
 using CLup.Application.TimeSlots;
 using CLup.Domain.Bookings;
 using CLup.Domain.Businesses;

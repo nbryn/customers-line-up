@@ -4,7 +4,6 @@ using CLup.Domain.Messages;
 using CLup.Domain.Messages.Enums;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using MediatR;
 
 namespace CLup.Application.Messages.Commands.SendBusinessMessage;
 

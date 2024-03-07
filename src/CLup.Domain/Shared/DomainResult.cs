@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace CLup.Domain.Shared;
+﻿namespace CLup.Domain.Shared;
 
 public class DomainResult
 {

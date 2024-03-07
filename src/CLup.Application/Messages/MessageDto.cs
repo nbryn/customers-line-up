@@ -1,4 +1,3 @@
-using System;
 using CLup.Domain.Messages;
 
 namespace CLup.Application.Messages;

@@ -1,21 +1,19 @@
-using System;
-using System.Collections.Generic;
+using CLup.Domain.Bookings;
+using CLup.Domain.Bookings.ValueObjects;
 using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.Employees;
+using CLup.Domain.Employees.ValueObjects;
 using CLup.Domain.Messages;
 using CLup.Domain.Messages.Enums;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Shared;
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.TimeSlots;
-using CLup.Domain.Users.ValueObjects;
-using CLup.Domain.Bookings;
-using CLup.Domain.Bookings.ValueObjects;
-using CLup.Domain.Employees;
-using CLup.Domain.Employees.ValueObjects;
 using CLup.Domain.TimeSlots.ValueObjects;
 using CLup.Domain.Users;
 using CLup.Domain.Users.Enums;
+using CLup.Domain.Users.ValueObjects;
 
 namespace CLup.Domain.Businesses;
 

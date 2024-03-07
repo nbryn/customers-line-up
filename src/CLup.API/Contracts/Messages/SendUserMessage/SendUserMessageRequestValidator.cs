@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.API.Contracts.Messages.SendUserMessage;
 
 public sealed class SendUserMessageRequestValidator : AbstractValidator<SendUserMessageRequest>

@@ -1,7 +1,6 @@
 using CLup.Application.Shared;
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using MediatR;
 
 namespace CLup.Application.Users.Commands.UpdateUser;
 

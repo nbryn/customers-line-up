@@ -1,4 +1,3 @@
-using System;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Employees.ValueObjects;

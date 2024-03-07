@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
 namespace CLup.Application.Shared.Extensions;
 
 public static class MappingExtensions

@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.Domain.Messages.ValueObjects.Validation;
 
 public class MessageDataValidator : AbstractValidator<MessageData>

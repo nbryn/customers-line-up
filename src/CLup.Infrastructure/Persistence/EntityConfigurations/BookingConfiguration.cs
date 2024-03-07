@@ -1,7 +1,5 @@
 using CLup.Domain.Bookings;
 using CLup.Domain.Bookings.ValueObjects;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CLup.Infrastructure.Persistence.EntityConfigurations;
 

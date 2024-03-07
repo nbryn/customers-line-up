@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using FluentValidation;
 using CLup.Domain.Shared;
+using FluentValidation;
 
 namespace CLup.Application.Shared.Extensions;
 

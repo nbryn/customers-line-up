@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.API.Contracts.Auth.Validation;
 
 public sealed class RegisterRequestValidator : AbstractValidator<RegisterRequest>

@@ -4,7 +4,6 @@ using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using MediatR;
 
 namespace CLup.Application.Businesses.Commands.CreateBusiness;
 

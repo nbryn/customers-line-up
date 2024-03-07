@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using CLup.API.Contracts.Auth;
-using CLup.Application.Shared;
 
 namespace tests.CLup.IntegrationTests.Tests;
 

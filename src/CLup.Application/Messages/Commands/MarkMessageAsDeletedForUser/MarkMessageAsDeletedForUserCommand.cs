@@ -1,7 +1,6 @@
 ﻿using CLup.Application.Shared;
 using CLup.Domain.Messages.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using MediatR;
 
 namespace CLup.Application.Messages.Commands.MarkMessageAsDeletedForUser;
 

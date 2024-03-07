@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace CLup.Domain.Employees.Validation;
 
 public class EmployeeValidator : AbstractValidator<Employee>

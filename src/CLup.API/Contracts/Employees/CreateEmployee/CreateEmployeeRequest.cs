@@ -1,5 +1,4 @@
 ﻿using CLup.Application.Employees.Commands.CreateEmployee;
-using CLup.Domain.Users.ValueObjects;
 using BId = CLup.Domain.Businesses.ValueObjects.BusinessId;
 using UId = CLup.Domain.Users.ValueObjects.UserId;
 
@@ -10,6 +9,6 @@ public readonly record struct CreateEmployeeRequest(
     Guid UserId,
     string? CompanyEmail = null)
 {
-    public CreateEmployeeCommand MapToCommand(UserId ownerId) =>
+    public CreateEmployeeCommand MapToCommand(UId ownerId) =>
         new(ownerId, BId.Create(BusinessId), UId.Create(UserId), CompanyEmail);
 }

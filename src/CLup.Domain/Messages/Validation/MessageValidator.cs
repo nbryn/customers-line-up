@@ -1,5 +1,4 @@
 using CLup.Domain.Messages.ValueObjects;
-using FluentValidation;
 
 namespace CLup.Domain.Messages.Validation;
 

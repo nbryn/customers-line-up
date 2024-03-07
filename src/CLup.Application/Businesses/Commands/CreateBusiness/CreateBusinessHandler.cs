@@ -1,13 +1,10 @@
-using System.Threading;
-using System.Threading.Tasks;
 using CLup.Application.Shared;
-using FluentValidation;
-using MediatR;
 using CLup.Application.Shared.Extensions;
 using CLup.Application.Shared.Interfaces;
 using CLup.Domain.Businesses;
-using CLup.Domain.Users.Enums;
 using CLup.Domain.Users;
+using CLup.Domain.Users.Enums;
+using FluentValidation;
 
 namespace CLup.Application.Businesses.Commands.CreateBusiness;
 

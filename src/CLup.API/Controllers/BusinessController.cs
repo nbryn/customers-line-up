@@ -1,7 +1,6 @@
 ﻿using CLup.API.Contracts.Businesses.CreateBusiness;
 using CLup.API.Contracts.Businesses.UpdateBusiness;
 using CLup.API.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.API.Controllers;

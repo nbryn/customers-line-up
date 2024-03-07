@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace CLup.API.Contracts.Users.UpdateUser;
+﻿namespace CLup.API.Contracts.Users.UpdateUser;
 
 public class UpdateUserRequestValidator : AbstractValidator<UpdateUserRequest>
 {

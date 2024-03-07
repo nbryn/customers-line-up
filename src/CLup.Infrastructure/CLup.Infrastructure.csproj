@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -15,14 +13,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.9"/>
     <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.8"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.9"/>
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0"/>
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CLup.Application\CLup.Application.csproj"/>
     <ProjectReference Include="..\CLup.Domain\CLup.Domain.csproj"/>
   </ItemGroup>
-
-
 
 </Project>

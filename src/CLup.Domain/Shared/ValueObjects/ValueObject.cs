@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-
 namespace CLup.Domain.Shared.ValueObjects;
 
 public abstract class ValueObject

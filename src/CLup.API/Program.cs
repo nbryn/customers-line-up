@@ -5,7 +5,6 @@ using CLup.Application;
 using CLup.Application.Auth;
 using CLup.Domain;
 using CLup.Infrastructure;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.SwaggerUI;

@@ -3,7 +3,6 @@ using CLup.Domain.Bookings;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.TimeSlots.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using MediatR;
 
 namespace CLup.Application.Bookings.Commands.CreateBooking;
 

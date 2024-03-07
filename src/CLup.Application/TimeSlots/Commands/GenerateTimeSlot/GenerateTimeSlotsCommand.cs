@@ -1,8 +1,6 @@
-using System;
 using CLup.Application.Shared;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Users.ValueObjects;
-using MediatR;
 
 namespace CLup.Application.TimeSlots.Commands.GenerateTimeSlot;
 
