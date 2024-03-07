@@ -1,12 +1,14 @@
 using System.Reflection;
 using CLup.API.Exceptions;
 using CLup.API.Extensions;
+using CLup.API.Middleware;
 using CLup.Application;
 using CLup.Application.Auth;
 using CLup.Domain;
 using CLup.Infrastructure;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace CLup.API;
@@ -19,6 +21,10 @@ public class Program
         // TODO: Load from AppSettings.
         builder.WebHost.UseUrls("http://localhost:5001");
         ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+
+        // TODO: Don't use in production
+        builder.Host.UseSerilog((context, loggerConfiguration) =>
+            loggerConfiguration.ReadFrom.Configuration(context.Configuration));
 
         var app = builder.Build();
         await Configure(app, builder.Environment);
@@ -67,6 +73,9 @@ public class Program
 
         await app.ConfigureSeed();
         app.UseHttpsRedirection();
+
+        app.UseMiddleware<RequestLogContextMiddleware>();
+        app.UseSerilogRequestLogging();
 
         app.UseSwagger();
         app.UseSwaggerUI(swaggerUiOptions =>

@@ -2,8 +2,8 @@ version: "3.4"
 
 services:
   db:
-    container_name: clup_db
-    image: postgres
+    container_name: clup-db
+    image: postgres:latest
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -12,7 +12,7 @@ services:
       - '5432:5432'
 
   server:
-    container_name: clup_server
+    container_name: clup-server
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     build:
@@ -25,7 +25,7 @@ services:
       - db
 
   client:
-    container_name: clup_client
+    container_name: clup-client
     build:
       context: ./src/CLup.WebUI
       dockerfile: Dockerfile
@@ -36,3 +36,13 @@ services:
       - server
     links:
       - server
+
+  seq:
+    container_name: clup-seq
+    image: datalust/seq:latest
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5341:5341"
+      - "8081:80"
+    restart: always

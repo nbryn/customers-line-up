@@ -8,6 +8,6 @@ public sealed class TimeSlotDeletedEvent : DomainEvent
 
     public TimeSlotDeletedEvent(TimeSlot timeSlot)
     {
-        TimeSlots.TimeSlot = timeSlot;
+        TimeSlot = timeSlot;
     }
 }

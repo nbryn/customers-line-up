@@ -19,10 +19,10 @@ public sealed class CreateEmployeeCommand : IRequest<Result>
     public CreateEmployeeCommand(UserId ownerId, BusinessId businessId, UserId userId, string? companyEmail)
     {
         OwnerId = ownerId;
-        Domain.Businesses.ValueObjects.BusinessId = businessId;
-        Domain.Users.ValueObjects.UserId = userId;
+        BusinessId = businessId;
+        UserId = userId;
         CompanyEmail = companyEmail;
     }
 
-    public Employee MapToEmployee(User user) => new(Domain.Users.ValueObjects.UserId, Domain.Businesses.ValueObjects.BusinessId, CompanyEmail ?? user.UserData.Email);
+    public Employee MapToEmployee(User user) => new(UserId, BusinessId, CompanyEmail ?? user.UserData.Email);
 }

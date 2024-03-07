@@ -6,9 +6,11 @@ namespace CLup.API.Exceptions;
 public class GlobalExceptionHandler : IExceptionHandler
 {
     private const string ErrorMessage = "Internal Server Error";
+    private readonly ILogger<GlobalExceptionHandler> _logger;
 
-    public GlobalExceptionHandler()
+    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
     {
+        _logger = logger;
     }
 
     public async ValueTask<bool> TryHandleAsync(
@@ -16,7 +18,8 @@ public class GlobalExceptionHandler : IExceptionHandler
         Exception exception,
         CancellationToken cancellationToken)
     {
-        // TODO: Add logging
+        _logger.LogError(exception, "An unhandled exception has occurred: {Message}", exception.Message);
+
         var problemDetails =
             new ProblemDetails(HttpCode.InternalServerError, new Dictionary<string, List<string>>(), ErrorMessage);
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
