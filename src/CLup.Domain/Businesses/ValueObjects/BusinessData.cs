@@ -12,6 +12,10 @@ public sealed class BusinessData : ValueObject
 
     public BusinessData(string name, int capacity, int timeSlotLengthInMinutes)
     {
+        Guard.Against.NullOrWhiteSpace(name);
+        Guard.Against.NegativeOrZero(capacity);
+        Guard.Against.NegativeOrZero(timeSlotLengthInMinutes);
+
         Name = name;
         Capacity = capacity;
         TimeSlotLengthInMinutes = timeSlotLengthInMinutes;

@@ -4,9 +4,8 @@ namespace CLup.Domain.Messages.ValueObjects;
 
 public sealed class MessageId : Id
 {
-    private MessageId(Guid value)
+    private MessageId(Guid value) : base(value)
     {
-        Value = value;
     }
 
     public static MessageId Create(Guid value) => new(value);

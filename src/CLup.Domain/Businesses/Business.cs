@@ -33,8 +33,6 @@ public sealed class Business : Entity, IAggregateRoot
 
     public Address Address { get; private set; }
 
-    public Coords Coords { get; private set; }
-
     public TimeInterval BusinessHours { get; private set; }
 
     public BusinessType Type { get; private set; }
@@ -49,26 +47,30 @@ public sealed class Business : Entity, IAggregateRoot
 
     public IReadOnlyList<Booking> Bookings => _bookings.AsReadOnly();
 
-    protected Business()
-    {
-    }
-
     public Business(
         UserId ownerId,
         BusinessData businessData,
         Address address,
-        Coords coords,
         TimeInterval businessHours,
         BusinessType type)
     {
+        Guard.Against.Null(ownerId);
+        Guard.Against.Null(businessData);
+        Guard.Against.Null(address);
+        Guard.Against.Null(businessHours);
+        Guard.Against.EnumOutOfRange(type);
+
         OwnerId = ownerId;
         BusinessData = businessData;
         Address = address;
-        Coords = coords;
         BusinessHours = businessHours;
         Type = type;
 
         Id = BusinessId.Create(Guid.NewGuid());
+    }
+
+    private Business()
+    {
     }
 
     public Message? GetMessageById(MessageId messageId, bool receivedMessage)
@@ -109,13 +111,11 @@ public sealed class Business : Entity, IAggregateRoot
     public Business Update(
         BusinessData businessData,
         Address address,
-        Coords coords,
         TimeInterval businessHours,
         BusinessType type)
     {
         BusinessData = businessData;
         Address = address;
-        Coords = coords;
         BusinessHours = businessHours;
         Type = type;
 
@@ -155,7 +155,9 @@ public sealed class Business : Entity, IAggregateRoot
         var midnight = TimeOnly.FromDateTime(date.ToDateTime(TimeOnly.MinValue));
         var opens = midnight.Add(BusinessHours.Start.ToTimeSpan());
         var closes = midnight.Add(BusinessHours.End.ToTimeSpan());
-        for (var curr = opens; curr.AddMinutes(BusinessData.TimeSlotLengthInMinutes) <= closes; curr = curr.AddMinutes(BusinessData.TimeSlotLengthInMinutes))
+        for (var curr = opens;
+             curr.AddMinutes(BusinessData.TimeSlotLengthInMinutes) <= closes;
+             curr = curr.AddMinutes(BusinessData.TimeSlotLengthInMinutes))
         {
             var end = curr.AddMinutes(BusinessData.TimeSlotLengthInMinutes);
             var interval = new TimeInterval(curr, end);

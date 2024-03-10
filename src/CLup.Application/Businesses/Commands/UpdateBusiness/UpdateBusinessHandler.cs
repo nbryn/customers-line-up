@@ -20,7 +20,7 @@ public sealed class UpdateBusinessHandler : IRequestHandler<UpdateBusinessComman
     public async Task<Result> Handle(UpdateBusinessCommand command, CancellationToken cancellationToken)
         => await _repository.FetchBusinessAggregate(command.OwnerId, command.BusinessId)
             .FailureIfNotFound(BusinessErrors.NotFound)
-            .AndThen(business => business.Update(command.BusinessData, command.Address, command.Coords, command.BusinessHours, command.Type))
+            .AndThen(business => business.Update(command.BusinessData, command.Address, command.BusinessHours, command.Type))
             .Validate(_businessValidator)
             .FinallyAsync(_ => _repository.SaveChangesAsync(true, cancellationToken));
 }

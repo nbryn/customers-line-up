@@ -11,10 +11,6 @@ public sealed class UserMessage : Message
 
     public override BusinessId ReceiverId { get; }
 
-    private UserMessage()
-    {
-    }
-
     public UserMessage(
         UserId senderId,
         BusinessId receiverId,
@@ -24,5 +20,9 @@ public sealed class UserMessage : Message
     {
         SenderId = senderId;
         ReceiverId = receiverId;
+    }
+
+    private UserMessage()
+    {
     }
 }

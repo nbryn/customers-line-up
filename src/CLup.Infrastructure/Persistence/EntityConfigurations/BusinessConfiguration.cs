@@ -27,6 +27,12 @@ internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
 
             a.Property(address => address.City)
                 .HasColumnName("City");
+
+            a.Property(address => address.Coords.Latitude)
+                .HasColumnName("Latitude");
+
+            a.Property(address => address.Coords.Longitude)
+                .HasColumnName("Longitude");
         });
 
         builder.OwnsOne(business => business.BusinessData, b =>
@@ -39,15 +45,6 @@ internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
 
             b.Property(businessData => businessData.TimeSlotLengthInMinutes)
                 .HasColumnName("TimeSlotLength");
-        });
-
-        builder.OwnsOne(business => business.Coords, c =>
-        {
-            c.Property(coords => coords.Latitude)
-                .HasColumnName("Latitude");
-
-            c.Property(coords => coords.Longitude)
-                .HasColumnName("Longitude");
         });
 
         builder.OwnsOne(business => business.BusinessHours, t =>

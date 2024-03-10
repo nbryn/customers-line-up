@@ -4,9 +4,8 @@ namespace CLup.Domain.Users.ValueObjects;
 
 public sealed class UserId : Id
 {
-    private UserId(Guid value)
+    private UserId(Guid value) : base(value)
     {
-        Value = value;
     }
 
     public static UserId Create(Guid value) => new(value);

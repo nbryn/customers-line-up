@@ -8,16 +8,11 @@ public sealed class MessageData : ValueObject
 
     public string Content { get; private set; }
 
-    public MessageData()
+    public MessageData(string title, string content)
     {
+        Guard.Against.NullOrWhiteSpace(title);
+        Guard.Against.NullOrWhiteSpace(content);
 
-    }
-
-    public MessageData(
-        string title,
-        string content)
-        : base()
-    {
         Title = title;
         Content = content;
     }

@@ -36,11 +36,16 @@ public class Program
         IWebHostEnvironment environment)
     {
         services
+            .ConfigureSwagger()
+            .ConfigureJwt(config)
+            .AddSingleton(config)
+            .ConfigureCors(config)
+            .ConfigureDomain(config)
+            .ConfigureApplication(config)
+            .ConfigureInfrastructure(config, environment)
             .AddExceptionHandler<GlobalExceptionHandler>()
             .AddRouting(options => options.LowercaseUrls = true)
-            .ConfigureCors(config)
-            .ConfigureJwt(config)
-            .ConfigureSwagger()
+            .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
             .Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressInferBindingSourcesForParameters = true;
@@ -55,13 +60,6 @@ public class Program
             {
                 fv.ImplicitlyValidateChildProperties = true;
             });
-
-        services.AddSingleton(config);
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services
-            .ConfigureDomain(config)
-            .ConfigureApplication(config)
-            .ConfigureInfrastructure(config, environment);
     }
 
     private static async Task Configure(WebApplication app, IWebHostEnvironment env)

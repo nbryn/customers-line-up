@@ -4,9 +4,8 @@ namespace CLup.Domain.Bookings.ValueObjects;
 
 public sealed class BookingId : Id
 {
-    private BookingId(Guid value)
+    private BookingId(Guid value) : base(value)
     {
-        Value = value;
     }
 
     public static BookingId Create(Guid value) => new(value);

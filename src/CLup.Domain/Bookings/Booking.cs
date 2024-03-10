@@ -29,6 +29,10 @@ public sealed class Booking : Entity, IHasDomainEvent
 
     public Booking(UserId userId, BusinessId businessId, TimeSlotId timeSlotId)
     {
+        Guard.Against.Null(userId);
+        Guard.Against.Null(businessId);
+        Guard.Against.Null(timeSlotId);
+
         UserId = userId;
         BusinessId = businessId;
         TimeSlotId = timeSlotId;

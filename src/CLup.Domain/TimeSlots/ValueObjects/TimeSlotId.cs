@@ -4,9 +4,8 @@ namespace CLup.Domain.TimeSlots.ValueObjects;
 
 public sealed class TimeSlotId : Id
 {
-    private TimeSlotId(Guid value)
+    private TimeSlotId(Guid value) : base(value)
     {
-        Value = value;
     }
 
     public static TimeSlotId Create(Guid value) => new(value);

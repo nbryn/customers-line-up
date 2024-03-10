@@ -22,8 +22,7 @@ public readonly record struct CreateBusinessRequest(
     public CreateBusinessCommand MapToCommand(UserId userId) =>
         new(userId,
             new BusinessData(Name, Capacity, TimeSlotLengthInMinutes),
-            new Address(Street, Zip, City),
-            new Coords(Longitude, Latitude),
+            new Address(Street, Zip, City, new Coords(Longitude, Latitude)),
             new TimeInterval(Opens, Closes),
             Type);
 }

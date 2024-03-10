@@ -25,8 +25,7 @@ public readonly record struct UpdateBusinessRequest(
         => new(userId,
             BId.Create(BusinessId),
             new BusinessData(Name, Capacity, TimeSlotLengthInMinutes),
-            new Address(Street, Zip, City),
-            new Coords(Longitude, Latitude),
+            new Address(Street, Zip, City, new Coords(Longitude, Latitude)),
             new TimeInterval(Opens, Closes),
             Type);
 }

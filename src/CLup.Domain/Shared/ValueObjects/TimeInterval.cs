@@ -8,6 +8,9 @@ public sealed class TimeInterval : ValueObject
 
     public TimeInterval(TimeOnly start, TimeOnly end)
     {
+        Guard.Against.Null(start);
+        Guard.Against.Null(end);
+
         if (start >= end)
         {
             throw new ArgumentOutOfRangeException(nameof(start));

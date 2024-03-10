@@ -26,6 +26,12 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
             a.Property(address => address.City)
                 .HasColumnName("City");
+
+            a.Property(address => address.Coords.Latitude)
+                .HasColumnName("Latitude");
+
+            a.Property(address => address.Coords.Longitude)
+                .HasColumnName("Longitude");
         });
 
         builder.OwnsOne(user => user.UserData, u =>
@@ -38,15 +44,6 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
             u.Property(userData => userData.Password)
                 .HasColumnName("Password");
-        });
-
-        builder.OwnsOne(user => user.Coords, c =>
-        {
-            c.Property(coords => coords.Latitude)
-                .HasColumnName("Latitude");
-
-            c.Property(coords => coords.Longitude)
-                .HasColumnName("Longitude");
         });
 
         builder.HasMany(user => user.Businesses)

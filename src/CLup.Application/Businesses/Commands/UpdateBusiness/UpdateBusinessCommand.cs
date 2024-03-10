@@ -16,8 +16,6 @@ public sealed class UpdateBusinessCommand : IRequest<Result>
 
     public Address Address { get; }
 
-    public Coords Coords { get; }
-
     public TimeInterval BusinessHours { get; }
 
     public BusinessType Type { get; }
@@ -27,7 +25,6 @@ public sealed class UpdateBusinessCommand : IRequest<Result>
         BusinessId businessId,
         BusinessData businessData,
         Address address,
-        Coords coords,
         TimeInterval businessHours,
         BusinessType type)
     {
@@ -35,7 +32,6 @@ public sealed class UpdateBusinessCommand : IRequest<Result>
         BusinessId = businessId;
         BusinessData = businessData;
         Address = address;
-        Coords = coords;
         BusinessHours = businessHours;
         Type = type;
     }

@@ -11,7 +11,6 @@ public sealed class BusinessBuilder
     private UserId _owner;
     private BusinessData _businessData;
     private Address _address;
-    private Coords _coords;
     private TimeInterval _businessHours;
     private BusinessType _type;
 
@@ -27,15 +26,9 @@ public sealed class BusinessBuilder
         return this;
     }
 
-    public BusinessBuilder WithAddress(string street, int zip, string city)
+    public BusinessBuilder WithAddress(string street, int zip, string city, Coords coords)
     {
-        _address = new Address(street, zip, city);
-        return this;
-    }
-
-    public BusinessBuilder WithCoords(double longitude, double latitude)
-    {
-        _coords = new Coords(longitude, latitude);
+        _address = new Address(street, zip, city, coords);
         return this;
     }
 
@@ -51,5 +44,5 @@ public sealed class BusinessBuilder
         return this;
     }
 
-    public Business Build() => new(_owner, _businessData, _address, _coords, _businessHours, _type);
+    public Business Build() => new(_owner, _businessData, _address, _businessHours, _type);
 }

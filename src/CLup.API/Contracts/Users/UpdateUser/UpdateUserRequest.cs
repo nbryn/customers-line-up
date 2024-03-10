@@ -15,8 +15,7 @@ public readonly record struct UpdateUserRequest(
 {
     public UpdateUserCommand MapToCommand(UserId userId) =>
         new(userId,
-            new Address(Street, Zip, City),
-            new Coords(Longitude, Latitude),
+            new Address(Street, Zip, City, new Coords(Longitude, Latitude)),
             Name,
             Email);
 }

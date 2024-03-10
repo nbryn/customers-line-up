@@ -21,16 +21,20 @@ public sealed class Employee : Entity
 
     public string CompanyEmail { get; private set; }
 
-    protected Employee()
-    {
-    }
-
     public Employee(UserId userId, BusinessId businessId, string companyEmail)
     {
+        Guard.Against.Null(userId);
+        Guard.Against.Null(businessId);
+        Guard.Against.NullOrWhiteSpace(companyEmail);
+
         UserId = userId;
         BusinessId = businessId;
         CompanyEmail = companyEmail;
 
         Id = EmployeeId.Create(Guid.NewGuid());
+    }
+
+    private Employee()
+    {
     }
 }

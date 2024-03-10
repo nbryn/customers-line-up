@@ -10,17 +10,14 @@ public sealed class UpdateUserCommand : IRequest<Result>
 
     public Address Address { get; }
 
-    public Coords Coords { get; }
-
     public string Name { get; }
 
     public string Email { get; }
 
-    public UpdateUserCommand(UserId userId, Address address, Coords coords, string name, string email)
+    public UpdateUserCommand(UserId userId, Address address, string name, string email)
     {
         UserId = userId;
         Address = address;
-        Coords = coords;
         Email = email;
         Name = name;
     }

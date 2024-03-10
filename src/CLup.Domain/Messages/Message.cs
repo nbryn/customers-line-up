@@ -19,10 +19,6 @@ public abstract class Message : Entity
 
     public MessageMetadata Metadata { get; private set; }
 
-    protected Message()
-    {
-    }
-
     protected Message(
         Id senderId,
         Id receiverId,
@@ -30,6 +26,12 @@ public abstract class Message : Entity
         MessageType type,
         MessageMetadata metadata)
     {
+        Guard.Against.Null(senderId);
+        Guard.Against.Null(receiverId);
+        Guard.Against.Null(messageData);
+        Guard.Against.EnumOutOfRange(type);
+        Guard.Against.Null(metadata);
+
         SenderId = senderId;
         ReceiverId = receiverId;
         MessageData = messageData;
@@ -38,6 +40,10 @@ public abstract class Message : Entity
         CreatedAt = DateTime.Now;
 
         Id = MessageId.Create(Guid.NewGuid());
+    }
+
+    protected Message()
+    {
     }
 
     public Message MarkAsDeleted(bool forReceiver)

@@ -40,8 +40,8 @@ public sealed class BookingDto
             Date = booking.TimeSlot.Date.ToString("dd/MM/yyyy"),
             Interval = booking.TimeSlot.FormatInterval(),
             Capacity = $"{booking.TimeSlot.Bookings.Count}/{booking.TimeSlot.Capacity}",
-            Latitude = booking.Business.Coords.Latitude,
-            Longitude = booking.Business.Coords.Longitude,
+            Latitude = booking.Business.Address.Coords.Latitude,
+            Longitude = booking.Business.Address.Coords.Longitude,
             Street = booking.Business.Address.Street,
             UserEmail = booking.User.UserData.Email,
         };

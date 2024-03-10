@@ -8,9 +8,7 @@ public sealed class MessageMetadata : ValueObject
 
     public bool DeletedByReceiver { get; private set; }
 
-    public MessageMetadata(
-        bool deletedBySender = false,
-        bool deletedByReceiver = false)
+    public MessageMetadata(bool deletedBySender = false, bool deletedByReceiver = false)
     {
         DeletedBySender = deletedBySender;
         DeletedByReceiver = deletedByReceiver;

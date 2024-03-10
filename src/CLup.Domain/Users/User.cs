@@ -25,8 +25,6 @@ public sealed class User : Entity, IAggregateRoot
 
     public Address Address { get; private set; }
 
-    public Coords Coords { get; private set; }
-
     public Role Role { get; private set; }
 
     public IReadOnlyList<BusinessMessage> ReceivedMessages => _receivedMessages.AsReadOnly();
@@ -39,22 +37,21 @@ public sealed class User : Entity, IAggregateRoot
 
     public bool IsBusinessOwner => Businesses.Count > 0;
 
-    protected User()
+    public User(UserData userData, Address address, Role role)
     {
-    }
+        Guard.Against.Null(userData);
+        Guard.Against.Null(address);
+        Guard.Against.EnumOutOfRange(role);
 
-    public User(
-        UserData userData,
-        Address address,
-        Coords coords,
-        Role role)
-    {
         UserData = userData;
         Address = address;
-        Coords = coords;
         Role = role;
 
         Id = UserId.Create(Guid.NewGuid());
+    }
+
+    private User()
+    {
     }
 
     public User UpdateRole(Role role)
@@ -97,10 +94,9 @@ public sealed class User : Entity, IAggregateRoot
         return DomainResult.Ok();
     }
 
-    public User Update(Address address, Coords coords, string name, string email)
+    public User Update(Address address, string name, string email)
     {
         Address = address;
-        Coords = coords;
         UserData = new UserData(name, email, UserData.Password);
 
         return this;

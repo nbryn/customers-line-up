@@ -12,6 +12,10 @@ public sealed class UserData : ValueObject
 
     public UserData(string name, string email, string password)
     {
+        Guard.Against.NullOrWhiteSpace(name);
+        Guard.Against.NullOrWhiteSpace(email);
+        Guard.Against.NullOrWhiteSpace(password);
+
         Name = name;
         Email = email;
         Password = password;

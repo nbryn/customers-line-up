@@ -29,10 +29,6 @@ public sealed class TimeSlot : Entity, IHasDomainEvent
 
     public IReadOnlyList<Booking> Bookings => _bookings.AsReadOnly();
 
-    protected TimeSlot()
-    {
-    }
-
     public TimeSlot(
         BusinessId businessId,
         string businessName,
@@ -40,6 +36,12 @@ public sealed class TimeSlot : Entity, IHasDomainEvent
         DateOnly date,
         TimeInterval timeInterval)
     {
+        Guard.Against.Null(businessId);
+        Guard.Against.NullOrWhiteSpace(businessName);
+        Guard.Against.NegativeOrZero(capacity);
+        Guard.Against.Null(date);
+        Guard.Against.Null(timeInterval);
+
         BusinessId = businessId;
         BusinessName = businessName;
         Capacity = capacity;
@@ -47,6 +49,10 @@ public sealed class TimeSlot : Entity, IHasDomainEvent
         TimeInterval = timeInterval;
 
         Id = TimeSlotId.Create(Guid.NewGuid());
+    }
+
+    private TimeSlot()
+    {
     }
 
     public DomainResult IsAvailable()

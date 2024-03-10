@@ -12,15 +12,12 @@ public sealed class RegisterCommand : IRequest<Result<string>>
 
     public Address Address { get; }
 
-    public Coords Coords { get; }
-
-    public RegisterCommand(UserData userData, Address address, Coords coords)
+    public RegisterCommand(UserData userData, Address address)
     {
         UserData = userData;
         Address = address;
-        Coords = coords;
     }
 
     public User MapToUser(string hashedPassword) =>
-        new(new UserData(UserData.Name, UserData.Email, hashedPassword), Address, Coords, Role.User);
+        new(new UserData(UserData.Name, UserData.Email, hashedPassword), Address, Role.User);
 }

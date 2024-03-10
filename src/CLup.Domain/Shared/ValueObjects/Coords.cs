@@ -6,12 +6,11 @@ public sealed class Coords : ValueObject
 
     public double Longitude { get; }
 
-    public Coords()
-    {
-    }
-
     public Coords(double longitude, double latitude)
     {
+        Guard.Against.Zero(longitude);
+        Guard.Against.Zero(latitude);
+
         Latitude = latitude;
         Longitude = longitude;
     }

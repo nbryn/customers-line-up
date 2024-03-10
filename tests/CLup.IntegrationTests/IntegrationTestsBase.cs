@@ -10,6 +10,7 @@ using CLup.Application.Businesses;
 using CLup.Application.Shared;
 using CLup.Application.Users;
 using CLup.Domain.Businesses.Enums;
+using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users.Enums;
 using CLup.Domain.Users.ValueObjects;
 using CLup.Infrastructure.Persistence.Seed.Builders;
@@ -46,8 +47,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             .WithOwner(UserId.Create(userId))
             .WithBusinessData("Super Brugsen", capacity, timeSlotLengthInMinutes)
             .WithBusinessHours(opens ?? new TimeOnly(10, 0), closes ?? new TimeOnly(22, 0))
-            .WithAddress("Ryttergårdsvej 10", 3520, "Farum")
-            .WithCoords(55.8137419, 12.3935222)
+            .WithAddress("Ryttergårdsvej 10", 3520, "Farum", new Coords(55.8137419, 12.3935222))
             .WithType(BusinessType.Supermarket)
             .Build();
 
@@ -59,8 +59,8 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             Zip = business.Address.Zip,
             City = business.Address.City,
             Street = business.Address.Street,
-            Longitude = business.Coords.Longitude,
-            Latitude = business.Coords.Latitude,
+            Longitude = business.Address.Coords.Longitude,
+            Latitude = business.Address.Coords.Latitude,
             Opens = business.BusinessHours.Start,
             Closes = business.BusinessHours.End,
             Type = business.Type
@@ -75,8 +75,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     {
         var newUser = new UserBuilder()
             .WithUserData("Peter", email, password ?? "1234")
-            .WithAddress("Farum Hovedgade 15", 3520, "Farum")
-            .WithCoords(55.8122540, 12.3706760)
+            .WithAddress("Farum Hovedgade 15", 3520, "Farum", new Coords(55.8122540, 12.3706760))
             .WithRole(Role.User)
             .Build();
 
@@ -88,8 +87,8 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             Zip = newUser.Address.Zip,
             Street = newUser.Address.Street,
             City = newUser.Address.City,
-            Longitude = newUser.Coords.Longitude,
-            Latitude = newUser.Coords.Latitude,
+            Longitude = newUser.Address.Coords.Longitude,
+            Latitude = newUser.Address.Coords.Latitude,
         };
 
         var tokenResponse = await PostAsyncAndEnsureSuccess<RegisterRequest, TokenResponse>(

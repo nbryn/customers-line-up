@@ -15,22 +15,23 @@ public sealed class CreateBusinessCommand : IRequest<Result>
 
     public Address Address { get; }
 
-    public Coords Coords { get; }
-
     public TimeInterval BusinessHours { get; }
 
     public BusinessType Type { get; }
 
-    public CreateBusinessCommand(UserId ownerId, BusinessData businessData, Address address, Coords coords,
-        TimeInterval businessHours, BusinessType type)
+    public CreateBusinessCommand(
+        UserId ownerId,
+        BusinessData businessData,
+        Address address,
+        TimeInterval businessHours,
+        BusinessType type)
     {
         OwnerId = ownerId;
         BusinessData = businessData;
         Address = address;
-        Coords = coords;
         BusinessHours = businessHours;
         Type = type;
     }
 
-    public Business MapToBusiness() => new(OwnerId, BusinessData, Address, Coords, BusinessHours, Type);
+    public Business MapToBusiness() => new(OwnerId, BusinessData, Address, BusinessHours, Type);
 }
