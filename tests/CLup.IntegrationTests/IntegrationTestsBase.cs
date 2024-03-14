@@ -157,11 +157,17 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
     protected async Task PutAsyncAndEnsureSuccess<TRequest>(string url, TRequest request) =>
         await PutAsyncAndEnsureStatus(url, request, HttpStatusCode.OK);
 
-    protected async Task<ProblemDetails?> PutAsyncAndEnsureNotFound<TRequest>(string url, TRequest request) =>
-        await PutAsyncAndEnsureStatus<TRequest, ProblemDetails>(url, request, HttpStatusCode.NotFound);
-
     protected async Task<ProblemDetails?> PutAsyncAndEnsureBadRequest<TRequest>(string url, TRequest request) =>
         await PutAsyncAndEnsureStatus<TRequest, ProblemDetails>(url, request, HttpStatusCode.BadRequest);
+
+    protected async Task PatchAsyncAndEnsureSuccess<TRequest>(string url, TRequest request) =>
+        await PatchAsyncAndEnsureStatus(url, request, HttpStatusCode.OK);
+
+    protected async Task<ProblemDetails?> PatchAsyncAndEnsureNotFound<TRequest>(string url, TRequest request) =>
+        await PatchAsyncAndEnsureStatus<TRequest, ProblemDetails>(url, request, HttpStatusCode.NotFound);
+
+    protected async Task<ProblemDetails?> PatchAsyncAndEnsureBadRequest<TRequest>(string url, TRequest request) =>
+        await PatchAsyncAndEnsureStatus<TRequest, ProblemDetails>(url, request, HttpStatusCode.BadRequest);
 
     protected async Task PostAsyncAndEnsureSuccess<TRequest>(string url, TRequest request) =>
         await PostAsyncAndEnsureStatus(url, request, HttpStatusCode.OK);
@@ -273,4 +279,35 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
         return response;
     }
 
+    private async Task<TResult?> PatchAsyncAndEnsureStatus<TRequest, TResult>(
+        string url,
+        TRequest request,
+        HttpStatusCode statusCode)
+    {
+        var response = await PatchAsync(url, request);
+        var content = await response.Content.ReadAsStringAsync();
+        response.StatusCode.Should().Be(statusCode);
+
+        return JsonConvert.DeserializeObject<TResult>(content);
+    }
+
+    private async Task PatchAsyncAndEnsureStatus<TRequest>(
+        string url,
+        TRequest request,
+        HttpStatusCode statusCode)
+    {
+        var response = await PatchAsync(url, request);
+        var content = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(content);
+        response.StatusCode.Should().Be(statusCode);
+    }
+
+    private async Task<HttpResponseMessage> PatchAsync<TRequest>(string url, TRequest request)
+    {
+        var json = JsonConvert.SerializeObject(request);
+        var stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PatchAsync(url, stringContent);
+
+        return response;
+    }
 }

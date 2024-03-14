@@ -97,14 +97,13 @@ public sealed class QueryController : AuthorizedControllerBase
         return Ok(types);
     }
 
-    [Route("user/notEmployedByBusiness/{businessId:guid}")]
+    [Route("user/notEmployedByBusiness/{id:guid}")]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusinessResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUsersNotAlreadyEmployedByBusiness(
-        [FromRoute] UsersNotEmployedByBusinessRequest request)
+    public async Task<IActionResult> GetUsersNotAlreadyEmployedByBusiness([FromRoute] Guid id)
     {
-        var businessId = BusinessId.Create(request.BusinessId);
+        var businessId = BusinessId.Create(id);
         var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), businessId);
         if (business == null)
         {
@@ -115,7 +114,7 @@ public sealed class QueryController : AuthorizedControllerBase
 
         return Ok(new UsersNotEmployedByBusinessResponse()
         {
-            BusinessId = request.BusinessId, Users = users.Select(UserDto.FromUser).ToList()
+            BusinessId = id, Users = users.Select(UserDto.FromUser).ToList()
         });
     }
 }

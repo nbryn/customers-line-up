@@ -10,7 +10,7 @@ namespace CLup.API.Controllers;
 [Authorize(Policy = Policies.User)]
 public abstract class AuthorizedControllerBase : ControllerBase
 {
-    public UserId GetUserIdFromJwt()
+    protected UserId GetUserIdFromJwt()
     {
         var id = Guid.Parse((ReadOnlySpan<char>)User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
         return UserId.Create(id);

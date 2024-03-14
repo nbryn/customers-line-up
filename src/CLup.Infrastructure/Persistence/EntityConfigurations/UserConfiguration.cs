@@ -16,22 +16,25 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
             userId => userId.Value,
             value => UserId.Create(value));
 
-        builder.OwnsOne(user => user.Address, a =>
+        builder.OwnsOne(user => user.Address, address =>
         {
-            a.Property(address => address.Street)
+            address.Property(a => a.Street)
                 .HasColumnName("Street");
 
-            a.Property(address => address.Zip)
+            address.Property(a => a.Zip)
                 .HasColumnName("Zip");
 
-            a.Property(address => address.City)
+            address.Property(a => a.City)
                 .HasColumnName("City");
 
-            a.Property(address => address.Coords.Latitude)
-                .HasColumnName("Latitude");
+            address.OwnsOne(a => a.Coords, coords =>
+            {
+                coords.Property(c => c.Latitude)
+                    .HasColumnName("Latitude");
 
-            a.Property(address => address.Coords.Longitude)
-                .HasColumnName("Longitude");
+                coords.Property(c => c.Longitude)
+                    .HasColumnName("Longitude");
+            });
         });
 
         builder.OwnsOne(user => user.UserData, u =>

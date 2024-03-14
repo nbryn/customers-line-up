@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using CLup.Application;
 using CLup.Application.Auth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -44,7 +45,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigureJwt(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureJwt(this IServiceCollection services, AppSettings appSettings)
     {
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -59,7 +60,7 @@ public static class ServiceCollectionExtensions
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey =
-                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"])),
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.JwtSecretKey)),
                     ClockSkew = TimeSpan.Zero
                 };
             });

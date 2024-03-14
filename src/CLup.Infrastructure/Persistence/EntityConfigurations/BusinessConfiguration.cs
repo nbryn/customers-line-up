@@ -28,11 +28,14 @@ internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
             a.Property(address => address.City)
                 .HasColumnName("City");
 
-            a.Property(address => address.Coords.Latitude)
-                .HasColumnName("Latitude");
+            a.OwnsOne(address => address.Coords, coords =>
+            {
+                coords.Property(c => c.Latitude)
+                    .HasColumnName("Latitude");
 
-            a.Property(address => address.Coords.Longitude)
-                .HasColumnName("Longitude");
+                coords.Property(c => c.Longitude)
+                    .HasColumnName("Longitude");
+            });
         });
 
         builder.OwnsOne(business => business.BusinessData, b =>

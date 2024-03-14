@@ -25,7 +25,6 @@ public sealed class Employee : Entity
     {
         Guard.Against.Null(userId);
         Guard.Against.Null(businessId);
-        Guard.Against.NullOrWhiteSpace(companyEmail);
 
         UserId = userId;
         BusinessId = businessId;

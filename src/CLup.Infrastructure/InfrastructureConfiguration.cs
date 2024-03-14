@@ -1,9 +1,9 @@
-﻿using CLup.Application.Shared.Interfaces;
+﻿using CLup.Application;
+using CLup.Application.Shared.Interfaces;
 using CLup.Infrastructure.Persistence;
 using CLup.Infrastructure.Persistence.Seed;
 using CLup.Infrastructure.Services;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -14,34 +14,33 @@ public static class InfrastructureConfiguration
 {
     public static IServiceCollection ConfigureInfrastructure(
         this IServiceCollection services,
-        IConfiguration configuration,
+        AppSettings appSettings,
         IWebHostEnvironment environment)
     {
         services.AddScoped<ICLupRepository, CLupDbContext>();
         services.AddScoped<IDomainEventService, DomainEventService>();
         services.AddTransient<ISeeder, Seeder>();
 
-        ConfigureDb(services, configuration, environment);
+        ConfigureDb(services, appSettings, environment);
 
         return services;
     }
 
-    private static IServiceCollection ConfigureDb(
+    private static void ConfigureDb(
         IServiceCollection services,
-        IConfiguration configuration,
+        AppSettings appSettings,
         IWebHostEnvironment environment)
     {
 
         if (environment.IsDevelopment())
         {
-            var connectionString = configuration.GetConnectionString("development");
             services.AddDbContext<CLupDbContext>(options =>
-                    options.UseNpgsql(connectionString),
+                    options.UseNpgsql(appSettings.ConnectionStrings.Development),
                 ServiceLifetime.Transient);
         }
         else
         {
-            var connectionString = configuration.GetConnectionString("localdb");
+            var connectionString = appSettings.ConnectionStrings.Production;
             var normalizedConnString = NormalizeConnString(connectionString);
             services.AddDbContext<CLupDbContext>(options =>
                     options.UseMySQL(normalizedConnString)
@@ -76,7 +75,5 @@ public static class InfrastructureConfiguration
                 return conn;
             }
         }
-
-        return services;
     }
 }

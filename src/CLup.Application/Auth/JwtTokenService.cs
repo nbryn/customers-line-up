@@ -8,17 +8,17 @@ namespace CLup.Application.Auth;
 
 public sealed class JwtTokenService : IJwtTokenService
 {
-    private readonly IConfiguration _config;
+    private readonly AppSettings _appSettings;
 
-    public JwtTokenService(IConfiguration config)
+    public JwtTokenService(AppSettings appSettings)
     {
-        _config = config;
+        _appSettings = appSettings;
     }
 
     public string GenerateJwtToken(User user)
     {
         var securityKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));
+            Encoding.UTF8.GetBytes(_appSettings.JwtSecretKey));
 
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var claims = new[]

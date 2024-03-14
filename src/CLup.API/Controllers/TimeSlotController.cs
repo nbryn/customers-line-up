@@ -32,8 +32,11 @@ public sealed class TimeSlotController : AuthorizedControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteTimeSlot(DeleteTimeSlotRequest request)
+    public async Task<IActionResult> DeleteTimeSlot([FromRoute] Guid timeSlotId, [FromQuery] Guid businessId)
     {
+        var request = new DeleteTimeSlotRequest(timeSlotId, businessId);
+        // TODO: Move this to mediator?
+        var validationResult = new DeleteTimeSlotRequestValidator().Validate(request);
         var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
 
         return this.CreateActionResult(result);

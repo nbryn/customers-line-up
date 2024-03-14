@@ -139,7 +139,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
         var message = user.SentMessages.First();
 
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForUserRequest(message.Id, false);
-        await PutAsyncAndEnsureSuccess($"{MessageRoute}/user", markMessageAsDeletedRequest);
+        await PatchAsyncAndEnsureSuccess($"{MessageRoute}/user", markMessageAsDeletedRequest);
 
         var updatedUser = await GetUser();
         var updatedBusiness = (await GetBusinessesForCurrentUser()).First();
@@ -155,7 +155,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
         await CreateUserAndSetJwtToken(email);
 
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForUserRequest(Guid.Empty, null);
-        var problemDetails = await PutAsyncAndEnsureBadRequest($"{MessageRoute}/user", markMessageAsDeletedRequest);
+        var problemDetails = await PatchAsyncAndEnsureBadRequest($"{MessageRoute}/user", markMessageAsDeletedRequest);
 
         problemDetails?.Errors.Should().HaveCount(typeof(MarkMessageAsDeletedForUserRequest).GetProperties().Length);
     }
@@ -167,7 +167,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
         await CreateUserAndSetJwtToken(email);
 
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForUserRequest(Guid.NewGuid(), false);
-        var problemDetails = await PutAsyncAndEnsureNotFound($"{MessageRoute}/user", markMessageAsDeletedRequest);
+        var problemDetails = await PatchAsyncAndEnsureNotFound($"{MessageRoute}/user", markMessageAsDeletedRequest);
 
         problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(MessageErrors.NotFound.Code);
@@ -188,7 +188,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
         var message = updatedBusiness.SentMessages.First();
 
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForBusinessRequest(business.Id, message.Id, false);
-        await PutAsyncAndEnsureSuccess($"{MessageRoute}/business", markMessageAsDeletedRequest);
+        await PatchAsyncAndEnsureSuccess($"{MessageRoute}/business", markMessageAsDeletedRequest);
 
         var updatedUser = await GetUser();
         var businessWithMessage = (await GetBusinessesForCurrentUser()).First();
@@ -204,7 +204,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
         await CreateUserAndSetJwtToken(email);
 
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForBusinessRequest(Guid.Empty, Guid.Empty, null);
-        var problemDetails = await PutAsyncAndEnsureBadRequest($"{MessageRoute}/business", markMessageAsDeletedRequest);
+        var problemDetails = await PatchAsyncAndEnsureBadRequest($"{MessageRoute}/business", markMessageAsDeletedRequest);
 
         problemDetails?.Errors.Should()
             .HaveCount(typeof(MarkMessageAsDeletedForBusinessRequest).GetProperties().Length);
@@ -218,7 +218,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
 
         var markMessageAsDeletedRequest =
             new MarkMessageAsDeletedForBusinessRequest(Guid.NewGuid(), Guid.NewGuid(), false);
-        var problemDetails = await PutAsyncAndEnsureNotFound($"{MessageRoute}/business", markMessageAsDeletedRequest);
+        var problemDetails = await PatchAsyncAndEnsureNotFound($"{MessageRoute}/business", markMessageAsDeletedRequest);
 
         problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(BusinessErrors.NotFound.Code);
@@ -233,7 +233,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
 
         var markMessageAsDeletedRequest =
             new MarkMessageAsDeletedForBusinessRequest(business.Id, Guid.NewGuid(), false);
-        var problemDetails = await PutAsyncAndEnsureNotFound($"{MessageRoute}/business", markMessageAsDeletedRequest);
+        var problemDetails = await PatchAsyncAndEnsureNotFound($"{MessageRoute}/business", markMessageAsDeletedRequest);
 
         problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(MessageErrors.NotFound.Code);
@@ -253,10 +253,10 @@ public sealed class MessageControllerTests : IntegrationTestsBase
         var message = user.SentMessages.First();
 
         var markMessageAsDeletedRequest1 = new MarkMessageAsDeletedForUserRequest(message.Id, false);
-        await PutAsyncAndEnsureSuccess($"{MessageRoute}/user", markMessageAsDeletedRequest1);
+        await PatchAsyncAndEnsureSuccess($"{MessageRoute}/user", markMessageAsDeletedRequest1);
 
         var markMessageAsDeletedRequest2 = new MarkMessageAsDeletedForBusinessRequest(business.Id, message.Id, true);
-        await PutAsyncAndEnsureSuccess($"{MessageRoute}/business", markMessageAsDeletedRequest2);
+        await PatchAsyncAndEnsureSuccess($"{MessageRoute}/business", markMessageAsDeletedRequest2);
 
         var updatedUser = await GetUser();
         var updatedBusiness = (await GetBusinessesForCurrentUser()).First();

@@ -18,9 +18,13 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        // TODO: Load from AppSettings.
-        builder.WebHost.UseUrls("http://localhost:5001");
-        ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+
+        var appSettings = new AppSettings();
+        builder.Configuration.GetSection("settings").Bind(appSettings);
+        builder.Services.AddSingleton(appSettings);
+        builder.WebHost.UseUrls(appSettings.Url);
+
+        ConfigureServices(builder.Services, builder.Configuration, appSettings, builder.Environment);
 
         // TODO: Don't use in production
         builder.Host.UseSerilog((context, loggerConfiguration) =>
@@ -28,21 +32,23 @@ public class Program
 
         var app = builder.Build();
         await Configure(app, builder.Environment);
+        app.Run();
     }
 
     private static void ConfigureServices(
         IServiceCollection services,
-        IConfiguration config,
+        IConfiguration configuration,
+        AppSettings appSettings,
         IWebHostEnvironment environment)
     {
         services
             .ConfigureSwagger()
-            .ConfigureJwt(config)
-            .AddSingleton(config)
-            .ConfigureCors(config)
-            .ConfigureDomain(config)
-            .ConfigureApplication(config)
-            .ConfigureInfrastructure(config, environment)
+            .ConfigureJwt(appSettings)
+            .AddSingleton(configuration)
+            .ConfigureCors(configuration)
+            .ConfigureDomain(configuration)
+            .ConfigureApplication(configuration)
+            .ConfigureInfrastructure(appSettings, environment)
             .AddExceptionHandler<GlobalExceptionHandler>()
             .AddRouting(options => options.LowercaseUrls = true)
             .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
@@ -94,7 +100,5 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
-
-        app.Run();
     }
 }

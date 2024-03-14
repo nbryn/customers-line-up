@@ -23,6 +23,10 @@ public sealed class Address : ValueObject
         Coords = coords;
     }
 
+    private Address()
+    {
+    }
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Street;
