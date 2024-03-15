@@ -26,4 +26,13 @@ public abstract class AuthorizedControllerBase : ControllerBase
         var validationResult = Result.Validate<TRequest, TRequestValidator>(request);
         return this.CreateActionResult(validationResult.Failure ? validationResult : await onSuccess());
     }
+
+    protected async Task<IActionResult> ValidateAndContinueOnSuccess<TRequest, TRequestValidator>(
+        TRequest request,
+        Func<Task<IActionResult>> onSuccess)
+        where TRequestValidator : AbstractValidator<TRequest>, new()
+    {
+        var validationResult = Result.Validate<TRequest, TRequestValidator>(request);
+        return validationResult.Failure ? this.CreateActionResult(validationResult) : await onSuccess();
+    }
 };

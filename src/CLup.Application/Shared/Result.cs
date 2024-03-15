@@ -27,6 +27,9 @@ public class Result : DomainResult
 
     public static Result<T> NotFound<T>(IList<Error> errors) => new(default, HttpCode.NotFound, errors);
 
+    public static Result<T> FromValue<T>(T? value, Error? error = null)
+        => value is null ? NotFound<T>(new List<Error>() { error }) : Ok<T>(value);
+
     public static Result Validate<TRequest, TValidator>(TRequest request) where TValidator : AbstractValidator<TRequest>, new()
     {
         var validationResult = new TValidator().Validate(request);

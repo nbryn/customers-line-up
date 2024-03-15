@@ -2,6 +2,7 @@ using CLup.API.Contracts.Businesses;
 using CLup.API.Contracts.Businesses.GetBusiness;
 using CLup.API.Contracts.Users.GetUser;
 using CLup.API.Contracts.Users.UsersNotEmployedByBusiness;
+using CLup.API.Extensions;
 using CLup.Application.Businesses;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Interfaces;
@@ -54,9 +55,9 @@ public sealed class QueryController : AuthorizedControllerBase
             async () =>
             {
                 var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), BusinessId.Create(businessId));
-                return business == null
-                    ? Result.NotFound(new List<Error>() { BusinessErrors.NotFound })
-                    : Result.Ok(new GetBusinessResponse(BusinessDto.FromBusiness(business)));
+                return this.CreateActionResult(
+                    Result.FromValue(new GetBusinessResponse(BusinessDto.FromBusiness(business)),
+                        BusinessErrors.NotFound));
             });
     }
 
@@ -118,15 +119,14 @@ public sealed class QueryController : AuthorizedControllerBase
                 var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), businessId);
                 if (business == null)
                 {
-                    return Result.BadRequest(new List<Error>() { BusinessErrors.NotFound });
+                    return this.CreateActionResult(Result.BadRequest(new List<Error>() { BusinessErrors.NotFound }));
                 }
 
                 var users = await _repository.FetchUsersNotEmployedByBusiness(businessId);
-
-                return Result.Ok(new UsersNotEmployedByBusinessResponse()
+                return this.CreateActionResult(Result.FromValue(new UsersNotEmployedByBusinessResponse()
                 {
                     BusinessId = request.BusinessId, Users = users.Select(UserDto.FromUser).ToList()
-                });
+                }));
             });
     }
 }
