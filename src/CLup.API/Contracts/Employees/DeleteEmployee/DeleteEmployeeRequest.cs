@@ -6,14 +6,8 @@ using EId = CLup.Domain.Employees.ValueObjects.EmployeeId;
 
 namespace CLup.API.Contracts.Employees.DeleteEmployee;
 
-public sealed class DeleteEmployeeRequest()
+public readonly record struct DeleteEmployeeRequest(Guid EmployeeId, Guid BusinessId)
 {
-    [FromRoute]
-    public Guid EmployeeId { get; set; }
-
-    [FromQuery]
-    public Guid BusinessId { get; set; }
-
     public DeleteEmployeeCommand MapToCommand(UserId userId) =>
         new(userId, BId.Create(BusinessId), EId.Create(EmployeeId));
 }

@@ -13,25 +13,31 @@ public class Result : DomainResult
         Code = code;
     }
 
-    public ProblemDetails ToProblemDetails()
-    {
-        if (Success)
-        {
-            throw new InvalidOperationException("Can't convert result to problem details.");
-        }
-
-        return new ProblemDetails(
-            Code,
-            Errors
-                .GroupBy(error => error.Code)
-                .ToDictionary(group => group.Key, group => group.Select(item => item.Message).ToList()));
-    }
+    public static new Result Ok() => new(HttpCode.Ok, new List<Error>());
 
     public static Result<T> Ok<T>(T value) => new(value, HttpCode.Ok, new List<Error>());
 
+    public static Result BadRequest(IList<Error> errors) => Fail(HttpCode.BadRequest, errors);
+
+    public static Result Fail(HttpCode code, IList<Error> errors) => new(code, errors);
+
     public static Result<T> Fail<T>(HttpCode code, IList<Error> errors, T value = default) => new(value, code, errors);
 
+    public static Result NotFound(IList<Error> errors) => new(HttpCode.NotFound, errors);
+
     public static Result<T> NotFound<T>(IList<Error> errors) => new(default, HttpCode.NotFound, errors);
+
+    public static Result Validate<TRequest, TValidator>(TRequest request) where TValidator : AbstractValidator<TRequest>, new()
+    {
+        var validationResult = new TValidator().Validate(request);
+        if (!validationResult.IsValid)
+        {
+            var errors = validationResult.Errors.Select(error => new Error(error.PropertyName, error.ErrorMessage));
+            return BadRequest(errors.ToList());
+        }
+
+        return Ok();
+    }
 
     public async Task<Result> BindAsync<T>(Func<Task<T>> f)
     {
@@ -49,6 +55,20 @@ public class Result : DomainResult
         }
 
         return this;
+    }
+
+    public ProblemDetails ToProblemDetails()
+    {
+        if (Success)
+        {
+            throw new InvalidOperationException("Can't convert result to problem details.");
+        }
+
+        return new ProblemDetails(
+            Code,
+            Errors
+                .GroupBy(error => error.Code)
+                .ToDictionary(group => group.Key, group => group.Select(item => item.Message).ToList()));
     }
 }
 

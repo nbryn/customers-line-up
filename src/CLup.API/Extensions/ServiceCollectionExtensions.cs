@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using CLup.Application;
 using CLup.Application.Auth;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -13,10 +14,9 @@ public static class ServiceCollectionExtensions
     {
         services.AddSwaggerGen(swaggerGenOptions =>
         {
-            swaggerGenOptions.CustomSchemaIds(type => type.ToString());
             swaggerGenOptions.SwaggerDoc("v1", new OpenApiInfo { Title = "Customers Lineup Api", Version = "v1" });
-
             swaggerGenOptions.EnableAnnotations();
+            swaggerGenOptions.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["action"]}");
             swaggerGenOptions.AddSecurityDefinition("Bearer",
                 new OpenApiSecurityScheme
                 {
@@ -42,6 +42,7 @@ public static class ServiceCollectionExtensions
             });
         });
 
+        services.AddFluentValidationRulesToSwagger();
         return services;
     }
 

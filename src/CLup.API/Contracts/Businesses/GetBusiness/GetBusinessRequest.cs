@@ -1,6 +1,3 @@
 ﻿namespace CLup.API.Contracts.Businesses.GetBusiness;
 
-public sealed class GetBusinessRequest
-{
-    public Guid BusinessId { get; set; }
-}
+public readonly record struct GetBusinessRequest(Guid BusinessId);

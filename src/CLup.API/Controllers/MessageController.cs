@@ -29,7 +29,7 @@ public sealed class MessageController : AuthorizedControllerBase
         return this.CreateActionResult(result);
     }
 
-    [HttpPatch]
+    [HttpPost]
     [Route("business")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -53,7 +53,7 @@ public sealed class MessageController : AuthorizedControllerBase
         return this.CreateActionResult(result);
     }
 
-    [HttpPut]
+    [HttpPatch]
     [Route("business")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

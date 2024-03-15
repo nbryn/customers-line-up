@@ -31,10 +31,11 @@ public sealed class EmployeeController : AuthorizedControllerBase
     [Route("{employeeId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteEmployee(DeleteEmployeeRequest request)
+    public async Task<IActionResult> DeleteEmployee(Guid employeeId, Guid businessId)
     {
-        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
-
-        return this.CreateActionResult(result);
+        var request = new DeleteEmployeeRequest(employeeId, businessId);
+        return await ValidateAndContinueOnSuccess<DeleteEmployeeRequest, DeleteEmployeeRequestValidator>(
+            request,
+            async () => await _mediator.Send(request.MapToCommand(GetUserIdFromJwt())));
     }
 }

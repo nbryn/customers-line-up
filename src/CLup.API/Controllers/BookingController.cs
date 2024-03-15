@@ -31,21 +31,23 @@ public sealed class BookingController : AuthorizedControllerBase
     [Route("user/{bookingId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteUserBooking([FromRoute] DeleteUserBookingRequest request)
+    public async Task<IActionResult> DeleteUserBooking([FromRoute] Guid bookingId)
     {
-        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
-
-        return this.CreateActionResult(result);
+        var request = new DeleteUserBookingRequest(bookingId);
+        return await ValidateAndContinueOnSuccess<DeleteUserBookingRequest, DeleteUserBookingRequestValidator>(
+            request,
+            async () => await _mediator.Send(request.MapToCommand(GetUserIdFromJwt())));
     }
 
     [HttpDelete]
     [Route("business/{businessId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteBusinessBooking(DeleteBusinessBookingRequest request)
+    public async Task<IActionResult> DeleteBusinessBooking([FromRoute] Guid businessId, Guid bookingId)
     {
-        var response = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
-
-        return this.CreateActionResult(response);
+        var request = new DeleteBusinessBookingRequest(businessId, bookingId);
+        return await ValidateAndContinueOnSuccess<DeleteBusinessBookingRequest, DeleteBusinessBookingRequestValidator>(
+            request,
+            async () => await _mediator.Send(request.MapToCommand(GetUserIdFromJwt())));
     }
 }

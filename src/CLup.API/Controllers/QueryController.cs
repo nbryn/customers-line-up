@@ -3,12 +3,14 @@ using CLup.API.Contracts.Businesses.GetBusiness;
 using CLup.API.Contracts.Users.GetUser;
 using CLup.API.Contracts.Users.UsersNotEmployedByBusiness;
 using CLup.Application.Businesses;
+using CLup.Application.Shared;
 using CLup.Application.Shared.Interfaces;
 using CLup.Application.Shared.Util;
 using CLup.Application.Users;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
+using CLup.Domain.Shared;
 using CLup.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,15 +46,18 @@ public sealed class QueryController : AuthorizedControllerBase
     [Route("user/business/{businessId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetBusinessResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetBusiness([FromRoute] GetBusinessRequest request)
+    public Task<IActionResult> GetBusiness([FromRoute] Guid businessId)
     {
-        var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), BusinessId.Create(request.BusinessId));
-        if (business == null)
-        {
-            return NotFound(BusinessErrors.NotFound);
-        }
-
-        return Ok(new GetBusinessResponse(BusinessDto.FromBusiness(business)));
+        var request = new GetBusinessRequest(businessId);
+        return ValidateAndContinueOnSuccess<GetBusinessRequest, GetBusinessRequestValidator>(
+            request,
+            async () =>
+            {
+                var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), BusinessId.Create(businessId));
+                return business == null
+                    ? Result.NotFound(new List<Error>() { BusinessErrors.NotFound })
+                    : Result.Ok(new GetBusinessResponse(BusinessDto.FromBusiness(business)));
+            });
     }
 
     [HttpGet]
@@ -101,20 +106,27 @@ public sealed class QueryController : AuthorizedControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusinessResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetUsersNotAlreadyEmployedByBusiness([FromRoute] Guid id)
+    public async Task<IActionResult> GetUsersNotAlreadyEmployedByBusiness([FromRoute] Guid businessId)
     {
-        var businessId = BusinessId.Create(id);
-        var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), businessId);
-        if (business == null)
-        {
-            return NotFound(BusinessErrors.NotFound);
-        }
+        var request = new UsersNotEmployedByBusinessRequest(businessId);
+        return await ValidateAndContinueOnSuccess<UsersNotEmployedByBusinessRequest,
+            UsersNotEmployedByBusinessRequestValidator>(
+            request,
+            async () =>
+            {
+                var businessId = BusinessId.Create(request.BusinessId);
+                var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), businessId);
+                if (business == null)
+                {
+                    return Result.BadRequest(new List<Error>() { BusinessErrors.NotFound });
+                }
 
-        var users = await _repository.FetchUsersNotEmployedByBusiness(businessId);
+                var users = await _repository.FetchUsersNotEmployedByBusiness(businessId);
 
-        return Ok(new UsersNotEmployedByBusinessResponse()
-        {
-            BusinessId = id, Users = users.Select(UserDto.FromUser).ToList()
-        });
+                return Result.Ok(new UsersNotEmployedByBusinessResponse()
+                {
+                    BusinessId = request.BusinessId, Users = users.Select(UserDto.FromUser).ToList()
+                });
+            });
     }
 }
