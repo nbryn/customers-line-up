@@ -1,4 +1,5 @@
-import axios, {AxiosRequestConfig} from 'axios';
+import type {InternalAxiosRequestConfig} from 'axios';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const apiClient = axios.create({
@@ -6,7 +7,7 @@ const apiClient = axios.create({
     timeout: 1800000,
 });
 
-apiClient.interceptors.request.use((request: AxiosRequestConfig) => {
+apiClient.interceptors.request.use((request: InternalAxiosRequestConfig) => {
     const accessToken = Cookies.get('access_token');
 
     if (!accessToken) {

@@ -6,7 +6,7 @@ import {
     selectReceivedUserMessages,
     selectSentUserMessages,
 } from '../../features/message/MessageState';
-import {SendMessage} from '../../features/message/Message';
+import type {SendMessage} from '../../features/message/Message';
 import {sendMessage} from '../../features/message/MessageState';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 

@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {omit} from 'lodash-es';
 
-import {BusinessDTO} from './Business';
+import type {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
 import {ErrorView} from '../../shared/views/ErrorView';
 import {fetchBusinessesTypes, selectBusinessTypes, updateBusinessInfo} from './BusinessState';
@@ -14,7 +14,7 @@ import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useAddress} from '../../shared/hooks/useAddress';
 import {useForm} from '../../shared/hooks/useForm';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     col: {
         marginTop: 25,
     },

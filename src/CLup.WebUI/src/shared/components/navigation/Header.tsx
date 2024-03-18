@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import AppBar from '@material-ui/core/AppBar';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import AppBar from '@mui/material/AppBar';
 import classNames from 'classnames';
-import {Grid, Paper, Popover} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import {makeStyles} from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import PeopleIcon from '@material-ui/icons/People';
-import Toolbar from '@material-ui/core/Toolbar';
+import {Grid, Paper, Popover} from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import makeStyles from '@mui/styles/makeStyles';
+import MenuIcon from '@mui/icons-material/Menu';
+import PeopleIcon from '@mui/icons-material/People';
+import Toolbar from '@mui/material/Toolbar';
 import useWindowScroll from '@react-hook/window-scroll';
 
 import {useUserContext} from '../../../features/user/UserContext';
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: '6px',
     },
     logo: {
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             backgroundImage: 'url(assets/logo_white.svg)',
             backgroundSize: 'contain',
             backgroundRepeat: 'no-repeat',
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: 5,
     },
     logoUltraDense: {
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
             height: '39px',
         },
     },
@@ -121,7 +121,7 @@ export const Header: React.FC<Props> = (props: Props) => {
                                 edge="start"
                                 onClick={props.onMenuToggle}
                                 className={menuButtonClasses}
-                            >
+                                size="large">
                                 <MenuIcon />
                             </IconButton>
                         </Grid>
@@ -133,7 +133,7 @@ export const Header: React.FC<Props> = (props: Props) => {
                                 color="inherit"
                                 aria-label="account"
                                 onClick={handleUserAccountToggle}
-                            >
+                                size="large">
                                 <AccountBoxIcon />
                             </IconButton>
                             <Popover

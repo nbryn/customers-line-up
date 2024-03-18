@@ -3,7 +3,7 @@ import {Container} from 'react-bootstrap';
 
 import {MessageContainer} from '../../shared/containers/MessageContainer';
 import {selectReceivedBusinessMessages, selectSentBusinessMessages} from '../../features/message/MessageState';
-import {SendMessage} from '../../features/message/Message';
+import type {SendMessage} from '../../features/message/Message';
 import {useAppSelector} from '../../app/Store';
 
 export const BusinessMessageView: React.FC = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
-import MUIList from '@material-ui/core/List';
-import MUIListItem, {ListItemProps} from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import MUIList from '@mui/material/List';
+import MUIListItem, {ListItemProps} from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
 
 export type ListItem = {

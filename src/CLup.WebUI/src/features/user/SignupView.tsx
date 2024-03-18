@@ -1,9 +1,10 @@
 import React from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import {Card} from '../../shared/components/card/Card';
-import {ComboBox, ComboBoxOption} from '../../shared/components/form/ComboBox';
+import {ComboBox} from '../../shared/components/form/ComboBox';
+import type {ComboBoxOption} from '../../shared/components/form/ComboBox';
 import {Form} from '../../shared/components/form/Form';
 import {register} from './UserState';
 import {signupValidationSchema} from './UserValidation';
@@ -13,9 +14,9 @@ import TextFieldUtil from '../../shared/util/TextFieldUtil';
 import {useAppDispatch} from '../../app/Store';
 import {useAddress} from '../../shared/hooks/useAddress';
 import {useForm} from '../../shared/hooks/useForm';
-import {UserDTO} from './User';
+import type {UserDTO} from './User';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     card: {
         marginTop: 60,
         height: 675,

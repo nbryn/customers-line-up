@@ -1,18 +1,18 @@
 import React from 'react';
-import Chip from '@material-ui/core/Chip';
+import Chip from '@mui/material/Chip';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-import {BookingDTO} from './Booking';
+import type {BookingDTO} from './Booking';
 import {deleteBookingForBusiness, selectBookingsByBusiness} from './BookingState';
 import {ErrorView} from '../../shared/views/ErrorView';
 import {Header} from '../../shared/components/Texts';
 import {selectCurrentBusiness} from '../business/BusinessState';
-import {TableColumn} from '../../shared/components/Table';
+import type {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     row: {
         justifyContent: 'center',
     },

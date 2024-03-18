@@ -1,13 +1,12 @@
 import React from 'react';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router-dom';
 
-import {CardInfo} from '../../shared/components/card/CardInfo';
 import {Header} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     row: {
         justifyContent: 'center',
     },

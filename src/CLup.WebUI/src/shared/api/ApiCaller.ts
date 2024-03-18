@@ -1,5 +1,5 @@
-import {Method} from 'axios';
-import {SerializedError} from '@reduxjs/toolkit';
+import type {Method} from 'axios';
+import type {SerializedError} from '@reduxjs/toolkit';
 
 import ApiClient from './ApiClient';
 

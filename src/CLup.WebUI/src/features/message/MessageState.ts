@@ -1,8 +1,8 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../shared/api/ApiCaller';
-import {MarkMessageAsDeleted, SendMessage} from './Message';
-import {RootState} from '../../app/Store';
+import type {MarkMessageAsDeleted, SendMessage} from './Message';
+import type {RootState} from '../../app/Store';
 import {selectCurrentUser} from '../user/UserState';
 
 const DEFAULT_MESSAGE_COMMAND_ROUTE = 'api/message';

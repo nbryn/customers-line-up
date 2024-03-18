@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import {makeStyles} from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import makeStyles from '@mui/styles/makeStyles';
+import Typography from '@mui/material/Typography';
 
 import {TextField} from '../form/TextField';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     buttons: {
         marginTop: 25,
     },
@@ -78,7 +78,7 @@ export const DialogModal: React.FC<Props> = ({
                     </Button>
                     <Button
                         variant="primary"
-                        disabled={primaryDisabled || replyMode && newMessageContent.length < 5}
+                        disabled={primaryDisabled || (replyMode && newMessageContent.length < 5)}
                         onClick={() => {
                             onSubmit(newMessageContent);
                             setNewMessageContent('');

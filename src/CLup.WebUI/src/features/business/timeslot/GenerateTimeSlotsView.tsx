@@ -1,17 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import {Card} from '../../../shared/components/card/Card';
 import {generateTimeSlots} from './TimeSlotState';
-import {ComboBox, ComboBoxOption} from '../../../shared/components/form/ComboBox';
+import {ComboBox} from '../../../shared/components/form/ComboBox';
+import type {ComboBoxOption} from '../../../shared/components/form/ComboBox';
 import DateUtil from '../../../shared/util/DateUtil';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
 import {selectCurrentBusiness} from '../BusinessState';
 import {useAppDispatch, useAppSelector} from '../../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     button: {
         marginTop: 100,
         width: '55%',

@@ -21,7 +21,7 @@ import {
     fetchUsersNotEmployedByBusiness,
     updateUserInfo,
 } from '../../features/user/UserState';
-import {RootState} from '../../app/Store';
+import type {RootState} from '../../app/Store';
 
 const BOOKING_CREATED_MSG = 'Success - Go to my bookings to see your bookings';
 const USER_DELETED_BOOKING_MSG = 'Booking Deleted';

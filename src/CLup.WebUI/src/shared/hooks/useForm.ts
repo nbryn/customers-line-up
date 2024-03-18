@@ -1,8 +1,9 @@
 import {useState} from 'react';
-import {ObjectSchema} from 'yup';
-import {useFormik, FormikComputedProps, FormikHandlers, FormikHelpers, FormikState} from 'formik';
+import type {ObjectSchema} from 'yup';
+import type { FormikComputedProps, FormikHandlers, FormikHelpers, FormikState} from 'formik';
+import {useFormik} from 'formik';
 
-import {Index} from '../models/General';
+import type {Index} from '../models/General';
 
 export type FormHandler<T> = FormikState<T> &
     FormikComputedProps<T> &

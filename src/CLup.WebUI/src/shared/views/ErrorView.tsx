@@ -1,11 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     link: {
         textAlign: 'center',
-        marginTop: 20
+        marginTop: 20,
     },
     text: {
         textAlign: 'center',

@@ -1,12 +1,13 @@
 import React, {useEffect} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
-import {MenuItem} from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
+import {MenuItem} from '@mui/material';
 
-import {BusinessDTO} from './Business';
+import type {BusinessDTO} from './Business';
 import {businessValidationSchema} from './BusinessValidation';
 import {Card} from '../../shared/components/card/Card';
-import {ComboBox, ComboBoxOption} from '../../shared/components/form/ComboBox';
+import {ComboBox} from '../../shared/components/form/ComboBox';
+import type {ComboBoxOption} from '../../shared/components/form/ComboBox';
 import {createBusiness, fetchBusinessesTypes, selectBusinessTypes} from './BusinessState';
 import {Form} from '../../shared/components/form/Form';
 import {Header} from '../../shared/components/Texts';
@@ -17,7 +18,7 @@ import {useAddress} from '../../shared/hooks/useAddress';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useForm} from '../../shared/hooks/useForm';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     card: {
         marginTop: 20,
         borderRadius: 15,

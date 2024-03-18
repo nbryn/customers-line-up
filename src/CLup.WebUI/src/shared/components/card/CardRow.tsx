@@ -1,10 +1,10 @@
-import Avatar from '@material-ui/core/Avatar';
+import Avatar from '@mui/material/Avatar';
 import {Badge, Col, Row} from 'react-bootstrap';
-import Chip from '@material-ui/core/Chip';
-import DoneIcon from '@material-ui/icons/Done';
+import Chip from '@mui/material/Chip';
+import DoneIcon from '@mui/icons-material/Done';
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
+import makeStyles from '@mui/styles/makeStyles';
+import Divider from '@mui/material/Divider';
 
 const useStyles = makeStyles({
    root: {
@@ -72,7 +72,7 @@ export const CardRow: React.FC<Props> = ({
                   color={color || 'primary'}
                   onClick={() => buttonAction()}
                   deleteIcon={<DoneIcon />}
-                  variant={variant || 'default'}
+                  variant={variant}
                />
             </Col>
          </Row>

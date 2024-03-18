@@ -1,9 +1,9 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../shared/api/ApiCaller';
-import {BusinessDTO} from './Business';
+import type {BusinessDTO} from './Business';
 import {callApiAndFetchUser, selectCurrentUser} from '../user/UserState';
-import {RootState} from '../../app/Store';
+import type {RootState} from '../../app/Store';
 
 const DEFAULT_BUSINESS_QUERY_ROUTE = 'api/query/business';
 const DEFAULT_BUSINESS_COMMAND_ROUTE = 'api/business';

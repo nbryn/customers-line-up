@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import {makeStyles} from '@material-ui/core/styles';
-import {MenuItem} from '@material-ui/core';
+import CircularProgress from '@mui/material/CircularProgress';
+import makeStyles from '@mui/styles/makeStyles';
+import {MenuItem} from '@mui/material';
 
 import {ComboBox, ComboBoxOption} from '../form/ComboBox';
 import {FormHandler} from '../../hooks/useForm';

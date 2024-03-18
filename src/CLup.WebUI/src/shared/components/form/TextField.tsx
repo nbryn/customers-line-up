@@ -1,9 +1,10 @@
-import React, {ReactText} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import MaterialUITextField from '@material-ui/core/TextField';
-import { DTO } from '../../models/General';
+import React from 'react';
+import type {ReactText} from 'react';
+import makeStyles from '@mui/styles/makeStyles';
+import MaterialUITextField from '@mui/material/TextField';
+import type {DTO} from '../../models/General';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     helperText: {
         color: 'red',
     },
@@ -33,14 +34,14 @@ type Props = {
     step?: number;
     maxLength?: number;
     multiline?: boolean;
-    style?: any
+    style?: any;
     setInputRef?: (element: HTMLInputElement) => void;
     onBlur?: (event: React.FocusEvent) => void;
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onClick?: (event?: React.MouseEvent<HTMLParagraphElement>) => void;
 };
 
-export const TextField = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
+export const TextField = React.forwardRef<HTMLInputElement, Props>((props) => {
     const styles = useStyles();
 
     return (

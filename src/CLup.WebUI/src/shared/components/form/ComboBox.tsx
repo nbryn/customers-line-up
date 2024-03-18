@@ -1,9 +1,9 @@
 import React from 'react';
-import Autocomplete, {createFilterOptions} from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TextField from '@material-ui/core/TextField';
+import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
 
-import {TextFieldType} from './TextField';
+import type {TextFieldType} from './TextField';
 
 export type ComboBoxOption = {
     label: string;
@@ -25,7 +25,7 @@ export type Props = {
     setInputRef?: (element: HTMLInputElement) => void;
 };
 
-export const ComboBox = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
+export const ComboBox = React.forwardRef<HTMLInputElement, Props>((props) => {
     const filterOptions = createFilterOptions<ComboBoxOption>({
         limit: props.options[0]?.label === 'Choose zip first' ? 1 : 10,
         matchFrom: 'start',

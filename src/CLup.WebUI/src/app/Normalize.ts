@@ -1,7 +1,8 @@
-import {normalize, schema, Schema} from 'normalizr';
-import {BusinessDTO} from '../features/business/Business';
-import {UserDTO} from '../features/user/User';
-import {EntityState} from './EntityState';
+import type { Schema} from 'normalizr';
+import {normalize, schema} from 'normalizr';
+import type {BusinessDTO} from '../features/business/Business';
+import type {UserDTO} from '../features/user/User';
+import type {EntityState} from './EntityState';
 
 const bookingSchema = new schema.Entity('bookings');
 const employeeSchema = new schema.Entity('employees');

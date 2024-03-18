@@ -1,17 +1,16 @@
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import {makeStyles} from '@material-ui/core/styles';
-import PeopleIcon from '@material-ui/icons/People';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import Hidden from '@mui/material/Hidden';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import makeStyles from '@mui/styles/makeStyles';
+import PeopleIcon from '@mui/icons-material/People';
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 
-import Booking from '../../../assets/images/Booking.png';
 import {selectCurrentUser} from '../../../features/user/UserState';
 import {useAppSelector} from '../../../app/Store';
 import {useUserContext} from '../../../features/user/UserContext';
@@ -182,7 +181,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
 
     return (
         <nav className={styles.drawer} aria-label="navigation">
-            <Hidden smDown implementation="css">
+            <Hidden mdDown implementation="css">
                 <Drawer
                     classes={{
                         paper: styles.drawerPaper,

@@ -1,18 +1,19 @@
 import React, {useState} from 'react';
-import Chip from '@material-ui/core/Chip';
+import Chip from '@mui/material/Chip';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router';
 
-import {BusinessDTO} from './Business';
+import type {BusinessDTO} from './Business';
 import {fetchAllBusinesses, selectAllBusinesses, setCurrentBusiness} from './BusinessState';
 import {Header} from '../../shared/components/Texts';
-import {MapModal, MapModalProps, defaultMapProps} from '../../shared/components/modal/MapModal';
-import {TableColumn} from '../../shared/components/Table';
+import {MapModal, defaultMapProps} from '../../shared/components/modal/MapModal';
+import type {MapModalProps} from '../../shared/components/modal/MapModal';
+import type {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     row: {
         justifyContent: 'center',
     },

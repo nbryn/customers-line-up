@@ -1,10 +1,10 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import {makeStyles} from '@material-ui/core/styles';
-import MUICard from '@material-ui/core/Card';
+import Button from '@mui/material/Button';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import makeStyles from '@mui/styles/makeStyles';
+import MUICard from '@mui/material/Card';
 
 const useStyles = makeStyles({
    root: {
@@ -26,7 +26,7 @@ type Props = {
    title?: string;
    subtitle?: string;
    buttonAction?: () => void;
-   buttonColor?: 'inherit' | 'default' | 'primary' | 'secondary';
+   buttonColor?: 'inherit' | 'primary' | 'secondary';
    buttonText?: string;
    buttonSize?: 'small' | 'medium' | 'large';
    disableButton?: boolean;

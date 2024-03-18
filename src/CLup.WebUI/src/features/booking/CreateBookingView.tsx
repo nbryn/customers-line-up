@@ -1,23 +1,21 @@
 import React, {useState} from 'react';
-import Chip from '@material-ui/core/Chip';
+import Chip from '@mui/material/Chip';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import {createBooking} from './BookingState';
 import {ErrorView} from '../../shared/views/ErrorView';
-import {
-    selectAvailableTimeSlotsForCurrentBusiness,
-} from '../business/timeslot/TimeSlotState';
+import {selectAvailableTimeSlotsForCurrentBusiness} from '../business/timeslot/TimeSlotState';
 import {Header} from '../../shared/components/Texts';
 
 import {MapModal} from '../../shared/components/modal/MapModal';
 import {selectCurrentBusiness} from '../business/BusinessState';
-import {TableColumn} from '../../shared/components/Table';
+import type {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
-import {TimeSlotDTO} from '../business/timeslot/TimeSlot';
+import type {TimeSlotDTO} from '../business/timeslot/TimeSlot';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     address: {
         marginTop: 10,
     },

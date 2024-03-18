@@ -8,8 +8,8 @@ import {
     Home,
     LocationCity,
     Whatshot,
-} from '@material-ui/icons';
-import {makeStyles} from '@material-ui/core/styles';
+} from '@mui/icons-material';
+import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({
     icon: {

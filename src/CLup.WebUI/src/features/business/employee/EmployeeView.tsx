@@ -1,18 +1,18 @@
 import React from 'react';
-import Chip from '@material-ui/core/Chip';
+import Chip from '@mui/material/Chip';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import {removeEmployee, selectEmployeesByBusiness} from './EmployeeState';
-import {EmployeeDTO} from './Employee';
+import type {EmployeeDTO} from './Employee';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
 import {selectCurrentBusiness} from '../BusinessState';
-import {RootState, useAppDispatch, useAppSelector} from '../../../app/Store';
-import {TableColumn} from '../../../shared/components/Table';
+import {useAppDispatch, useAppSelector} from '../../../app/Store';
+import type {TableColumn} from '../../../shared/components/Table';
 import {TableContainer} from '../../../shared/containers/TableContainer';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     row: {
         justifyContent: 'center',
     },

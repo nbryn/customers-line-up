@@ -1,10 +1,9 @@
 import Cookies from 'js-cookie';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {omit} from 'lodash-es';
 
 import ApiCaller from '../../shared/api/ApiCaller';
-import {LoginDTO, NotEmployedByBusiness, TokenResponse, UserDTO} from './User';
-import {RootState} from '../../app/Store';
+import type {LoginDTO, NotEmployedByBusiness, TokenResponse, UserDTO} from './User';
+import type {RootState} from '../../app/Store';
 
 const DEFAULT_USER_QUERY_ROUTE = 'api/query/user';
 const DEFAULT_USER_COMMAND_ROUTE = 'api/user';

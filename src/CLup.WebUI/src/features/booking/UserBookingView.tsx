@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
-import Chip from '@material-ui/core/Chip';
+import Chip from '@mui/material/Chip';
 import {Col, Container, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-import {BookingDTO} from './Booking';
+import type {BookingDTO} from './Booking';
 import {deleteBookingForUser, selectBookingsByUser} from './BookingState';
 import {Header} from '../../shared/components/Texts';
-import {MapModal, MapModalProps, defaultMapProps} from '../../shared/components/modal/MapModal';
-import {TableColumn} from '../../shared/components/Table';
+import {MapModal, defaultMapProps} from '../../shared/components/modal/MapModal';
+import type {MapModalProps} from '../../shared/components/modal/MapModal';
+import type {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     row: {
         justifyContent: 'center',
     },
@@ -30,7 +31,7 @@ export const UserBookingView: React.FC = () => {
         {title: 'Date', field: 'date'},
         {title: 'Interval', field: 'interval'},
         {title: 'Business & Zip', field: 'business'},
-        {title: 'Street', field: 'street'},      
+        {title: 'Street', field: 'street'},
     ];
 
     const actions = [

@@ -123,7 +123,7 @@ public sealed class QueryController : AuthorizedControllerBase
                 }
 
                 var users = await _repository.FetchUsersNotEmployedByBusiness(businessId);
-                return this.CreateActionResult(Result.FromValue(new UsersNotEmployedByBusinessResponse()
+                return this.CreateActionResult(Result.Ok(new UsersNotEmployedByBusinessResponse()
                 {
                     BusinessId = request.BusinessId, Users = users.Select(UserDto.FromUser).ToList()
                 }));

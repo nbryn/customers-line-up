@@ -1,6 +1,6 @@
 import React from 'react';
 import {Col, Container, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import {makeStyles} from '@mui/styles';
 import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../shared/components/card/CardInfo';
@@ -9,9 +9,9 @@ import {InfoCard} from '../../shared/components/card/InfoCard';
 import {selectBookingsByOwner, selectBookingsByUser, selectNextBookingByUser} from '../booking/BookingState';
 import {selectCurrentUser} from '../user/UserState';
 import {selectEmployeesByOwner} from '../business/employee/EmployeeState';
-import {useAppDispatch, useAppSelector} from '../../app/Store';
+import {useAppSelector} from '../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     card: {
         marginTop: 25,
     },
@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 export const HomeView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
-    const dispatch = useAppDispatch();
 
     const user = useAppSelector(selectCurrentUser);
     const userBookings = useAppSelector(selectBookingsByUser)

@@ -1,7 +1,7 @@
 import React from 'react';
 import {pick} from 'lodash-es';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import {ErrorView} from '../../shared/views/ErrorView';
 import {FormCard} from '../../shared/components/card/FormCard';
@@ -11,10 +11,10 @@ import {updateUserInfo} from './UserState';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 import {useAddress} from '../../shared/hooks/useAddress';
 import {useForm} from '../../shared/hooks/useForm';
-import {UserDTO} from './User';
+import type {UserDTO} from './User';
 import {userValidationSchema} from './UserValidation';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     card: {
         marginTop: 60,
         borderRadius: 15,

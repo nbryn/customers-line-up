@@ -1,6 +1,6 @@
-import Chip from '@material-ui/core/Chip';
+import Chip from '@mui/material/Chip';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 
 import {
@@ -10,12 +10,12 @@ import {
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
 import {selectCurrentBusiness} from '../BusinessState';
-import {TimeSlotDTO} from './TimeSlot';
-import {TableColumn} from '../../../shared/components/Table';
+import type {TimeSlotDTO} from './TimeSlot';
+import type {TableColumn} from '../../../shared/components/Table';
 import {TableContainer} from '../../../shared/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     row: {
         justifyContent: 'center',
     },

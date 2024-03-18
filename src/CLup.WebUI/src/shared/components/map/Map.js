@@ -11,8 +11,9 @@ export const Map = ({markers, zoom, center}) => {
     }.png?key=${MAPTILER_ACCESS_TOKEN}`;
   };
 
-  const handleMarkerClick = ({event, payload, anchor}) => {
-    //console.log(`Marker #${payload} clicked at: `, anchor)
+  const handleMarkerClick = () => {
+    // console.log(`Marker #${payload} clicked at: `, anchor)
+    // console.log(event)
   };
 
   return (

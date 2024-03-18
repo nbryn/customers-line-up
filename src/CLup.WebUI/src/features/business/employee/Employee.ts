@@ -1,4 +1,4 @@
-import {DTO} from '../../../shared/models/General';
+import type {DTO} from '../../../shared/models/General';
 
 export interface EmployeeDTO extends DTO {
     businessId?: string,

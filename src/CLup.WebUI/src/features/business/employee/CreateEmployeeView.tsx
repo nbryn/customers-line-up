@@ -1,23 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import {Card} from '../../../shared/components/card/Card';
-import {ComboBox, ComboBoxOption} from '../../../shared/components/form/ComboBox';
+import {ComboBox} from '../../../shared/components/form/ComboBox';
+import type {ComboBoxOption} from '../../../shared/components/form/ComboBox';
 import {createEmployee} from './EmployeeState';
 import {employeeValidationSchema} from '../BusinessValidation';
 import {ErrorView} from '../../../shared/views/ErrorView';
-import {fetchUsersNotEmployedByBusiness, selectUsersNotEmployedByBusiness} from '../../user/UserState';
+import {
+    fetchUsersNotEmployedByBusiness,
+    selectUsersNotEmployedByBusiness,
+} from '../../user/UserState';
 import {Form} from '../../../shared/components/form/Form';
 import {Header} from '../../../shared/components/Texts';
-import {EmployeeDTO, NewEmployeeDTO} from './Employee';
+import type {EmployeeDTO, NewEmployeeDTO} from './Employee';
 import {selectCurrentBusiness} from '../BusinessState';
 import {TextField} from '../../../shared/components/form/TextField';
 import {useAppDispatch, useAppSelector} from '../../../app/Store';
 import {useForm} from '../../../shared/hooks/useForm';
-import {UserDTO} from '../../user/User';
+import type {UserDTO} from '../../user/User';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     card: {
         borderRadius: 15,
         height: 600,
@@ -49,7 +53,9 @@ export const CreateEmployeeView: React.FC = () => {
         return <ErrorView />;
     }
 
-    const usersNotEmployedByBusiness = useAppSelector(selectUsersNotEmployedByBusiness(business.id));
+    const usersNotEmployedByBusiness = useAppSelector(
+        selectUsersNotEmployedByBusiness(business.id)
+    );
 
     const {formHandler, ...form} = useForm<NewEmployeeDTO>({
         initialValues: {companyEmail: ''} as NewEmployeeDTO,

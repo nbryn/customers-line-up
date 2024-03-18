@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Container} from 'react-bootstrap';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import {makeStyles} from '@material-ui/core/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router-dom';
 
 import {clearApiState} from '../shared/api/ApiState';
@@ -13,6 +13,13 @@ import {Routes} from './Routes';
 import {selectApiState} from '../shared/api/ApiState';
 import {selectCurrentUser} from '../features/user/UserState';
 import {useAppSelector, useAppDispatch} from '../app/Store';
+
+// it could be your App.tsx file or theme file that is included in your tsconfig.json
+import type { Theme } from '@mui/material/styles';
+
+declare module '@mui/styles/defaultTheme' {
+  interface DefaultTheme extends Theme {}
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {},

@@ -2,9 +2,9 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../shared/api/ApiCaller';
 import {callApiAndFetchUser, selectCurrentUser} from '../user/UserState';
-import {RootState} from '../../app/Store';
+import type {RootState} from '../../app/Store';
 import {selectBusinessesByOwner} from '../business/BusinessState';
-import {ThunkParam} from '../../app/AppTypes';
+import type {ThunkParam} from '../../app/AppTypes';
 
 const DEFAULT_BOOKING_COMMAND_ROUTE = 'api';
 

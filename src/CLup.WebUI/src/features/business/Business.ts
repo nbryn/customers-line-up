@@ -1,10 +1,9 @@
-import {Address} from '../../shared/services/AddressService';
-import {DTO, HasAddress} from '../../shared/models/General';
-import { BookingDTO } from '../booking/Booking';
-import { EmployeeDTO } from './employee/Employee';
-import { MessageDTO } from '../message/Message';
-import { TimeSlotDTO } from './timeslot/TimeSlot';
-
+import type {Address} from '../../shared/services/AddressService';
+import type {DTO, HasAddress} from '../../shared/models/General';
+import type {BookingDTO} from '../booking/Booking';
+import type {EmployeeDTO} from './employee/Employee';
+import type {MessageDTO} from '../message/Message';
+import type {TimeSlotDTO} from './timeslot/TimeSlot';
 
 export interface BusinessDTO extends DTO, HasAddress {
     name: string;
@@ -15,10 +14,10 @@ export interface BusinessDTO extends DTO, HasAddress {
     closes: string;
     businessHours?: string;
     ownerEmail?: string;
-    bookings?: BookingDTO[]
-    employees?: EmployeeDTO[]
-    messages?: MessageDTO[]
-    timeSlots?: TimeSlotDTO[]
+    bookings?: BookingDTO[];
+    employees?: EmployeeDTO[];
+    messages?: MessageDTO[];
+    timeSlots?: TimeSlotDTO[];
 }
 
 export type BusinessDataDTO = {

@@ -1,11 +1,13 @@
 import React, {useRef, useState} from 'react';
 import {Col, Row} from 'react-bootstrap';
-import Divider from '@material-ui/core/Divider';
-import {makeStyles} from '@material-ui/core/styles';
-import {MenuItem} from '@material-ui/core';
+import Divider from '@mui/material/Divider';
+import makeStyles from '@mui/styles/makeStyles';
+import {MenuItem} from '@mui/material';
 
-import {ComboBox, ComboBoxOption} from '../form/ComboBox';
-import {TextField, TextFieldType} from '../form/TextField';
+import {ComboBox} from '../form/ComboBox';
+import type {ComboBoxOption} from '../form/ComboBox';
+import {TextField} from '../form/TextField';
+import type {TextFieldType} from '../form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
 
 const useStyles = makeStyles({

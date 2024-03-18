@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import Chip from '@material-ui/core/Chip';
+import Chip from '@mui/material/Chip';
 import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import {DialogModal} from '../../shared/components/modal/DialogModal';
 import {Header} from '../../shared/components/Texts';
-import {MessageDTO, SendMessage} from '../../features/message/Message';
+import type {MessageDTO, SendMessage} from '../../features/message/Message';
 import StringUtil from '../util/StringUtil';
-import {TableColumn} from '../../shared/components/Table';
+import type {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     title: {
         marginTop: 10,
     },
@@ -92,6 +92,8 @@ export const MessageContainer: React.FC<Props> = ({
             icon: () => <Chip size="small" label="Delete" clickable color="secondary" />,
             tooltip: 'Delete Message',
             onClick: (event: any, message: MessageDTO) => {
+                console.log(event)
+                console.log(message)
                 console.log('Delete');
             },
         },

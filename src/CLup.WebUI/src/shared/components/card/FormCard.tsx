@@ -1,16 +1,17 @@
 import React from 'react';
 import {Col, Row} from 'react-bootstrap';
-import Divider from '@material-ui/core/Divider';
-import {makeStyles} from '@material-ui/core/styles';
+import Divider from '@mui/material/Divider';
+import makeStyles from '@mui/styles/makeStyles';
 
-import {AddressHandler} from '../../hooks/useAddress';
-import {BusinessDTO} from '../../../features/business/Business';
+import type {AddressHandler} from '../../hooks/useAddress';
+import type {BusinessDTO} from '../../../features/business/Business';
 import {Card} from './Card';
-import {FormHandler} from '../../hooks/useForm';
-import {HasAddress} from '../../models/General';
-import {TextFieldCardRow, FormCardData} from './TextFieldCardRow';
+import type {FormHandler} from '../../hooks/useForm';
+import type {HasAddress} from '../../models/General';
+import {TextFieldCardRow} from './TextFieldCardRow';
+import type {FormCardData} from './TextFieldCardRow';
 import TextFieldUtil from '../../util/TextFieldUtil';
-import {UserDTO} from '../../../features/user/User';
+import type {UserDTO} from '../../../features/user/User';
 
 const useStyles = makeStyles({
     root: {

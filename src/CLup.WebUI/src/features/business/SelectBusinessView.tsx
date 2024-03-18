@@ -1,8 +1,8 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import {Col, Row} from 'react-bootstrap';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import {makeStyles} from '@material-ui/core/styles';
+import CircularProgress from '@mui/material/CircularProgress';
+import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../shared/components/card/CardInfo';
@@ -13,7 +13,7 @@ import {selectApiState} from '../../shared/api/ApiState';
 import {setCurrentBusiness} from './BusinessState';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     noBusinessesButton: {
         justifyContent: 'center',
         top: 100,

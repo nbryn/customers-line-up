@@ -2,10 +2,10 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../../shared/api/ApiCaller';
 import {callApiAndFetchUser} from '../../user/UserState';
-import {EmployeeDTO} from './Employee';
-import {RootState} from '../../../app/Store';
+import type {EmployeeDTO} from './Employee';
+import type {RootState} from '../../../app/Store';
 import {selectBusinessesByOwner} from '../BusinessState';
-import {ThunkParam} from '../../../app/AppTypes';
+import type {ThunkParam} from '../../../app/AppTypes';
 
 const DEFAULT_EMPLOYEE_COMMAND_ROUTE = 'api/business/employee';
 

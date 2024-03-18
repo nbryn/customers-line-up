@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import {ComboBoxOption} from '../components/form/ComboBox';
+import type {ComboBoxOption} from '../components/form/ComboBox';
 
 function getNext7Days(): ComboBoxOption[] {
    const days: ComboBoxOption[] = [];

@@ -1,11 +1,11 @@
 import {Col, Container, FormGroup, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import React, {useState} from 'react';
 
 import {Card} from '../../shared/components/card/Card';
 import {Form} from '../../shared/components/form/Form';
 import {login} from './UserState';
-import {LoginDTO} from './User';
+import type {LoginDTO} from './User';
 import {loginValidationSchema} from './UserValidation';
 import {SignupView} from './SignupView';
 import StringUtil from '../../shared/util/StringUtil';
@@ -14,7 +14,7 @@ import TextFieldUtil from '../../shared/util/TextFieldUtil';
 import {useAppDispatch} from '../../app/Store';
 import {useForm} from '../../shared/hooks/useForm';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     button: {
         width: '38%',
     },

@@ -1,14 +1,16 @@
-import React, {ReactElement, useEffect} from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React, {useEffect} from 'react';
+import type {ReactElement} from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 import {Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-import {DTO} from '../models/General';
+import type {DTO} from '../models/General';
 import {selectApiState} from '../api/ApiState';
-import {Table, TableColumn} from '../components/Table';
+import {Table} from '../components/Table';
+import type {TableColumn} from '../components/Table';
 import {useAppSelector} from '../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     spinner: {
         justifyContent: 'center',
         marginTop: 100,

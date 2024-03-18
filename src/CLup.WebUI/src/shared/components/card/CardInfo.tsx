@@ -1,11 +1,11 @@
 import React from 'react';
-import {Col, Row} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import {Row} from 'react-bootstrap';
+import makeStyles from '@mui/styles/makeStyles';
+import Typography from '@mui/material/Typography';
 
 import {Icons} from '../Icons';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     icon: {
         top: -2,
     },
@@ -32,7 +32,7 @@ export const CardInfo: React.FC<Props> = ({infoTexts}: Props) => {
                 return (
                     <Row className={styles.infoText} key={infoText.icon}>
                         <Typography>
-                            <Icons icon={infoText.icon}  />
+                            <Icons icon={infoText.icon} />
                             {infoText.text}
                         </Typography>
                     </Row>

@@ -1,9 +1,10 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
+import type {ReactNode} from 'react';
 import BootModal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     modal: {
         top: 50,
     },

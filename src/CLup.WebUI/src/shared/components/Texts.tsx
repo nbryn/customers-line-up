@@ -1,8 +1,8 @@
 import {Badge} from 'react-bootstrap';
-import {makeStyles} from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     header: {
         marginTop: 85,
         marginBottom: 35,
@@ -19,7 +19,7 @@ export enum HeaderSize {
 export type HeaderProps = {
     text: string;
     size?: HeaderSize;
-    className?: string
+    className?: string;
 };
 
 export const Header: React.FC<HeaderProps> = ({text, size, className}: HeaderProps) => {

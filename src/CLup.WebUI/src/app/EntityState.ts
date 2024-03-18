@@ -1,17 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-import {BookingDTO} from '../features/booking/Booking';
-import {BusinessDTO} from '../features/business/Business';
-import {DTO} from '../shared/models/General';
-import {EmployeeDTO} from '../features/business/employee/Employee';
+import type {BookingDTO} from '../features/booking/Booking';
+import type {BusinessDTO} from '../features/business/Business';
+import type {DTO} from '../shared/models/General';
+import type {EmployeeDTO} from '../features/business/employee/Employee';
 import {fetchAllBusinesses} from '../features/business/BusinessState';
 import {fetchUser} from '../features/user/UserState';
-import {MessageDTO} from '../features/message/Message';
-import {NormalizedEntityState} from './AppTypes';
+import type {MessageDTO} from '../features/message/Message';
+import type {NormalizedEntityState} from './AppTypes';
 import {normalizeBusinesses, normalizeUser} from './Normalize';
-import {RootState} from './Store';
-import {TimeSlotDTO} from '../features/business/timeslot/TimeSlot';
-import {UserDTO} from '../features/user/User';
+import type {TimeSlotDTO} from '../features/business/timeslot/TimeSlot';
+import type {UserDTO} from '../features/user/User';
 
 export interface EntityState {
     [key: string]: NormalizedEntityState<DTO | UserDTO>;

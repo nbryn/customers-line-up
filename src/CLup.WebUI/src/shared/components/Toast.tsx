@@ -1,9 +1,11 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import {Row} from 'react-bootstrap';
-import {makeStyles, Theme} from '@material-ui/core/styles';
-import MuiAlert, {AlertProps, Color} from '@material-ui/lab/Alert';
-import Snackbar from '@material-ui/core/Snackbar';
+import type {Theme} from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import MuiAlert from '@mui/material/Alert';
+import type {AlertProps} from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 const Alert = (props: AlertProps) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -42,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface ToastProps {
     message: string;
-    severity: Color;
+    severity: 'error' | 'info' | 'success' | 'warning';
     onClose: () => void;
 }
 

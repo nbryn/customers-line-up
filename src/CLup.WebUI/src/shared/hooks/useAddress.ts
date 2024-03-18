@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
 
 import AddressService from '../services/AddressService';
-import {Address} from '../services/AddressService';
-import {ComboBoxOption} from '../components/form/ComboBox';
-import {FormHandler} from './useForm';
-import {Index} from '../models/General';
+import type {Address} from '../services/AddressService';
+import type {ComboBoxOption} from '../components/form/ComboBox';
+import type {FormHandler} from './useForm';
+import type {Index} from '../models/General';
 
 type AddressKey = 'zip' | 'street';
 
