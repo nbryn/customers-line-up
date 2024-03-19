@@ -56,13 +56,8 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             Name = business.BusinessData.Name,
             Capacity = business.BusinessData.Capacity,
             TimeSlotLengthInMinutes = business.BusinessData.TimeSlotLengthInMinutes,
-            Zip = business.Address.Zip,
-            City = business.Address.City,
-            Street = business.Address.Street,
-            Longitude = business.Address.Coords.Longitude,
-            Latitude = business.Address.Coords.Latitude,
-            Opens = business.BusinessHours.Start,
-            Closes = business.BusinessHours.End,
+            Address = business.Address,
+            BusinessHours = business.BusinessHours,
             Type = business.Type
         };
 
@@ -84,11 +79,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             Email = newUser.UserData.Email,
             Password = newUser.UserData.Password,
             Name = newUser.UserData.Name,
-            Zip = newUser.Address.Zip,
-            Street = newUser.Address.Street,
-            City = newUser.Address.City,
-            Longitude = newUser.Address.Coords.Longitude,
-            Latitude = newUser.Address.Coords.Latitude,
+            Address = newUser.Address
         };
 
         var tokenResponse = await PostAsyncAndEnsureSuccess<RegisterRequest, TokenResponse>(

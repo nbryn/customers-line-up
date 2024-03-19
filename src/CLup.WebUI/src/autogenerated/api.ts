@@ -26,6 +26,37 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface Address
+ */
+export interface Address {
+    /**
+     * 
+     * @type {string}
+     * @memberof Address
+     */
+    'street': string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Address
+     */
+    'zip': number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Address
+     */
+    'city': string;
+    /**
+     * 
+     * @type {Coords}
+     * @memberof Address
+     */
+    'coords': Coords;
+}
+/**
+ * 
+ * @export
  * @interface BookingDto
  */
 export interface BookingDto {
@@ -128,58 +159,22 @@ export interface BusinessDto {
     'name'?: string | null;
     /**
      * 
-     * @type {number}
+     * @type {Address}
      * @memberof BusinessDto
      */
-    'zip'?: number;
+    'address'?: Address;
     /**
      * 
-     * @type {string}
+     * @type {TimeInterval}
      * @memberof BusinessDto
      */
-    'city'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof BusinessDto
-     */
-    'street'?: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof BusinessDto
-     */
-    'longitude'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof BusinessDto
-     */
-    'latitude'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof BusinessDto
-     */
-    'opens'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof BusinessDto
-     */
-    'closes'?: string | null;
+    'businessHours'?: TimeInterval;
     /**
      * 
      * @type {number}
      * @memberof BusinessDto
      */
     'timeSlotLength'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof BusinessDto
-     */
-    'businessHours'?: string | null;
     /**
      * 
      * @type {BusinessType}
@@ -247,6 +242,25 @@ export type BusinessType = typeof BusinessType[keyof typeof BusinessType];
 /**
  * 
  * @export
+ * @interface Coords
+ */
+export interface Coords {
+    /**
+     * 
+     * @type {number}
+     * @memberof Coords
+     */
+    'latitude': number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Coords
+     */
+    'longitude': number;
+}
+/**
+ * 
+ * @export
  * @interface CreateBookingRequest
  */
 export interface CreateBookingRequest {
@@ -277,46 +291,16 @@ export interface CreateBusinessRequest {
     'name': string;
     /**
      * 
-     * @type {number}
+     * @type {Address}
      * @memberof CreateBusinessRequest
      */
-    'zip': number;
+    'address': Address;
     /**
      * 
-     * @type {string}
+     * @type {TimeInterval}
      * @memberof CreateBusinessRequest
      */
-    'city': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof CreateBusinessRequest
-     */
-    'street': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreateBusinessRequest
-     */
-    'longitude': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof CreateBusinessRequest
-     */
-    'latitude': number;
-    /**
-     * 
-     * @type {TimeOnly}
-     * @memberof CreateBusinessRequest
-     */
-    'opens': TimeOnly;
-    /**
-     * 
-     * @type {TimeOnly}
-     * @memberof CreateBusinessRequest
-     */
-    'closes': TimeOnly;
+    'businessHours': TimeInterval;
     /**
      * 
      * @type {number}
@@ -725,35 +709,27 @@ export interface RegisterRequest {
     'name': string;
     /**
      * 
-     * @type {number}
+     * @type {Address}
      * @memberof RegisterRequest
      */
-    'zip': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterRequest
-     */
-    'street': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RegisterRequest
-     */
-    'city': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof RegisterRequest
-     */
-    'longitude': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof RegisterRequest
-     */
-    'latitude': number;
+    'address': Address;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+
+export const Role = {
+    NUMBER_1: 1,
+    NUMBER_2: 2,
+    NUMBER_3: 3,
+    NUMBER_4: 4
+} as const;
+
+export type Role = typeof Role[keyof typeof Role];
+
+
 /**
  * 
  * @export
@@ -826,6 +802,25 @@ export interface SendUserMessageRequest {
 }
 
 
+/**
+ * 
+ * @export
+ * @interface TimeInterval
+ */
+export interface TimeInterval {
+    /**
+     * 
+     * @type {TimeOnly}
+     * @memberof TimeInterval
+     */
+    'start': TimeOnly;
+    /**
+     * 
+     * @type {TimeOnly}
+     * @memberof TimeInterval
+     */
+    'end': TimeOnly;
+}
 /**
  * 
  * @export
@@ -907,22 +902,10 @@ export interface TimeSlotDto {
     'date'?: string | null;
     /**
      * 
-     * @type {string}
+     * @type {TimeInterval}
      * @memberof TimeSlotDto
      */
-    'start'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof TimeSlotDto
-     */
-    'end'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof TimeSlotDto
-     */
-    'interval'?: string | null;
+    'timeInterval'?: TimeInterval;
     /**
      * 
      * @type {string}
@@ -969,46 +952,16 @@ export interface UpdateBusinessRequest {
     'name': string;
     /**
      * 
-     * @type {number}
+     * @type {Address}
      * @memberof UpdateBusinessRequest
      */
-    'zip': number;
+    'address': Address;
     /**
      * 
-     * @type {string}
+     * @type {TimeInterval}
      * @memberof UpdateBusinessRequest
      */
-    'city': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateBusinessRequest
-     */
-    'street': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateBusinessRequest
-     */
-    'longitude': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateBusinessRequest
-     */
-    'latitude': number;
-    /**
-     * 
-     * @type {TimeOnly}
-     * @memberof UpdateBusinessRequest
-     */
-    'opens': TimeOnly;
-    /**
-     * 
-     * @type {TimeOnly}
-     * @memberof UpdateBusinessRequest
-     */
-    'closes': TimeOnly;
+    'businessHours'?: TimeInterval;
     /**
      * 
      * @type {number}
@@ -1050,34 +1003,10 @@ export interface UpdateUserRequest {
     'name': string;
     /**
      * 
-     * @type {number}
+     * @type {Address}
      * @memberof UpdateUserRequest
      */
-    'zip': number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateUserRequest
-     */
-    'street': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof UpdateUserRequest
-     */
-    'city': string;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateUserRequest
-     */
-    'longitude': number;
-    /**
-     * 
-     * @type {number}
-     * @memberof UpdateUserRequest
-     */
-    'latitude': number;
+    'address': Address;
 }
 /**
  * 
@@ -1105,40 +1034,16 @@ export interface UserDto {
     'email'?: string | null;
     /**
      * 
-     * @type {string}
+     * @type {Address}
      * @memberof UserDto
      */
-    'city'?: string | null;
+    'address'?: Address;
     /**
      * 
-     * @type {number}
+     * @type {Role}
      * @memberof UserDto
      */
-    'zip'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserDto
-     */
-    'street'?: string | null;
-    /**
-     * 
-     * @type {number}
-     * @memberof UserDto
-     */
-    'longitude'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof UserDto
-     */
-    'latitude'?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof UserDto
-     */
-    'role'?: string | null;
+    'role'?: Role;
     /**
      * 
      * @type {Array<BookingDto>}
@@ -1164,6 +1069,8 @@ export interface UserDto {
      */
     'sentMessages'?: Array<MessageDto> | null;
 }
+
+
 /**
  * 
  * @export

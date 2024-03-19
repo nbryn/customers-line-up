@@ -1,3 +1,4 @@
+using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.TimeSlots;
 
 namespace CLup.Application.TimeSlots;
@@ -12,11 +13,7 @@ public sealed class TimeSlotDto
 
     public string Date { get; init; }
 
-    public string Start { get; init; }
-
-    public string End { get; init; }
-
-    public string Interval { get; init; }
+    public TimeInterval TimeInterval { get; init; }
 
     public string Capacity { get; init; }
 
@@ -30,9 +27,7 @@ public sealed class TimeSlotDto
             BusinessId = timeSlot.BusinessId.Value,
             Business = timeSlot.BusinessName,
             Date = timeSlot.Date.ToString("dd/MM/yyyy"),
-            Start = timeSlot.TimeInterval.Start.ToString(),
-            End = timeSlot.TimeInterval.End.ToString(),
-            Interval = timeSlot.FormatInterval(),
+            TimeInterval = timeSlot.TimeInterval,
             Capacity = $"{timeSlot.Bookings.Count}/{timeSlot.Capacity.ToString()}",
             Available = timeSlot.IsAvailable().Success,
         };

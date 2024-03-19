@@ -4,18 +4,11 @@ public sealed class CreateBusinessRequestValidator : AbstractValidator<CreateBus
 {
     public CreateBusinessRequestValidator()
     {
-        RuleFor(command => command.Name).NotEmpty();
-        RuleFor(command => command.Zip).NotEmpty();
-        RuleFor(command => command.City).NotEmpty();
-        RuleFor(command => command.Street).NotEmpty();
-        RuleFor(command => command.Opens).NotEmpty();
-        RuleFor(command => command.Closes).NotEmpty();
-
-        RuleFor(command => command.Closes).NotEmpty();
-        RuleFor(command => command.Capacity).NotEmpty();
-        RuleFor(command => command.TimeSlotLengthInMinutes).NotEmpty();
-        RuleFor(command => command.Type).NotEmpty().IsInEnum();
-        RuleFor(coords => coords.Latitude).NotEmpty().InclusiveBetween(-90, 90);
-        RuleFor(coords => coords.Longitude).NotEmpty().InclusiveBetween(-180, 180);
+        RuleFor(request => request.Name).NotEmpty();
+        RuleFor(request => request.Address).NotEmpty();
+        RuleFor(request => request.BusinessHours).NotEmpty();
+        RuleFor(request => request.Capacity).NotEmpty();
+        RuleFor(request => request.TimeSlotLengthInMinutes).NotEmpty();
+        RuleFor(request => request.Type).NotEmpty().IsInEnum();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CLup.API.Contracts.Users.UpdateUser;
+using CLup.Domain.Shared.ValueObjects;
 
 namespace tests.CLup.IntegrationTests.Tests;
 
@@ -18,11 +19,7 @@ public class UserControllerTests : IntegrationTestsBase
         {
             Email = "new_email@test.com",
             Name = "Test123",
-            Zip = 3520,
-            Street = "Temp",
-            City = "Hejsa",
-            Longitude = user.Longitude,
-            Latitude = user.Latitude
+            Address = new Address("Temp", 3520, "Hejsa", user.Address.Coords)
         };
 
         await PutAsyncAndEnsureSuccess($"{UserRoute}/update", updateUserRequest);
@@ -30,9 +27,7 @@ public class UserControllerTests : IntegrationTestsBase
 
         updatedUser.Email.Should().Be(updateUserRequest.Email);
         updatedUser.Name.Should().Be(updateUserRequest.Name);
-        updatedUser.Zip.Should().Be(updateUserRequest.Zip);
-        updatedUser.Street.Should().Be(updateUserRequest.Street);
-        updatedUser.City.Should().Be(updateUserRequest.City);
+        updatedUser.Address.Should().Be(updateUserRequest.Address);
     }
 
     [Fact]

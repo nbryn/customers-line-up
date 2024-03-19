@@ -7,10 +7,6 @@ public sealed class RegisterRequestValidator : AbstractValidator<RegisterRequest
         RuleFor(request => request.Email).EmailAddress();
         RuleFor(request => request.Password).NotEmpty();
         RuleFor(request => request.Name).NotEmpty();
-        RuleFor(request => request.Zip).NotEmpty();
-        RuleFor(request => request.Street).NotEmpty();
-        RuleFor(request => request.City).NotEmpty();
-        RuleFor(request => request.Latitude).NotEmpty().InclusiveBetween(-90, 90);
-        RuleFor(request => request.Longitude).NotEmpty().InclusiveBetween(-180, 180);
+        RuleFor(request => request.Address).NotEmpty();
     }
 }

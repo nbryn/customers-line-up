@@ -8,13 +8,8 @@ public readonly record struct RegisterRequest(
     string Email,
     string Password,
     string Name,
-    int Zip,
-    string Street,
-    string City,
-    double? Longitude,
-    double? Latitude)
+    Address Address)
 {
     public RegisterCommand MapToCommand() =>
-        new(new UserData(Name, Email, Password),
-            new Address(Street, Zip, City, new Coords(Longitude!.Value, Latitude!.Value)));
+        new(new UserData(Name, Email, Password), Address);
 }

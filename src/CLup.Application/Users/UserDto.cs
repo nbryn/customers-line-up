@@ -1,6 +1,8 @@
 using CLup.Application.Bookings;
 using CLup.Application.Messages;
+using CLup.Domain.Shared.ValueObjects;
 using CLup.Domain.Users;
+using CLup.Domain.Users.Enums;
 
 namespace CLup.Application.Users;
 
@@ -12,17 +14,9 @@ public sealed class UserDto
 
     public string Email { get; init; }
 
-    public string City { get; init; }
+    public Address Address { get; init; }
 
-    public int Zip { get; init; }
-
-    public string Street { get; init; }
-
-    public double Longitude { get; init; }
-
-    public double Latitude { get; init; }
-
-    public string Role { get; init; }
+    public Role Role { get; init; }
 
     public IList<BookingDto> Bookings { get; init; }
 
@@ -39,12 +33,8 @@ public sealed class UserDto
             Id = user.Id.Value,
             Name = user.UserData.Name,
             Email = user.UserData.Email,
-            City = user.Address.City,
-            Zip = user.Address.Zip,
-            Street = user.Address.Street,
-            Longitude = user.Address.Coords.Longitude,
-            Latitude = user.Address.Coords.Latitude,
-            Role = user.Role.ToString(),
+            Address = user.Address,
+            Role = user.Role,
             Bookings = user.Bookings.Select(BookingDto.FromBooking).ToList(),
             BusinessIds = user.Businesses.Select(business => business.Id.Value).ToList(),
             ReceivedMessages = user.ReceivedMessages

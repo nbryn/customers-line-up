@@ -4,6 +4,7 @@ using CLup.Application.Messages;
 using CLup.Application.TimeSlots;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
+using CLup.Domain.Shared.ValueObjects;
 
 namespace CLup.Application.Businesses;
 
@@ -15,23 +16,12 @@ public sealed class BusinessDto
 
     public string Name { get; init; }
 
-    public int Zip { get; init; }
+    public Address Address { get; init; }
 
-    public string City { get; init; }
-
-    public string Street { get; init; }
-
-    public double Longitude { get; init; }
-
-    public double Latitude { get; init; }
-
-    public string Opens { get; init; }
-
-    public string Closes { get; init; }
+    public TimeInterval BusinessHours { get; init; }
 
     public int TimeSlotLength { get; init; }
 
-    public string BusinessHours { get; init; }
 
     public BusinessType Type { get; init; }
 
@@ -54,17 +44,11 @@ public sealed class BusinessDto
             Id = business.Id.Value,
             OwnerId = business.OwnerId.Value,
             Name = business.BusinessData.Name,
-            Zip = business.Address.Zip,
-            City = business.Address.City,
-            Street = business.Address.Street,
-            Longitude = business.Address.Coords.Longitude,
-            Latitude = business.Address.Coords.Latitude,
-            Opens = business.BusinessHours.Start.ToString(),
-            Closes = business.BusinessHours.End.ToString(),
+            Address = business.Address,
+            BusinessHours = business.BusinessHours,
             Capacity = business.BusinessData.Capacity,
             TimeSlotLength = business.BusinessData.TimeSlotLengthInMinutes,
             Type = business.Type,
-            BusinessHours = $"{business.BusinessHours.Start.ToString()} - {business.BusinessHours.End.ToString()}",
             Bookings = business.Bookings.Select(BookingDto.FromBooking).ToList(),
             Employees = business.Employees.Select(EmployeeDto.FromEmployee).ToList(),
             TimeSlots = business.TimeSlots.Select(TimeSlotDto.FromTimeSlot).ToList(),

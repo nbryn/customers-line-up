@@ -2,6 +2,7 @@
 using CLup.API.Contracts.Businesses.UpdateBusiness;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
+using CLup.Domain.Shared.ValueObjects;
 
 namespace tests.CLup.IntegrationTests.Tests;
 
@@ -45,13 +46,8 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
             Capacity = 2,
             TimeSlotLengthInMinutes = 15,
             Type = BusinessType.Hairdresser,
-            Zip = business.Zip,
-            City = business.City,
-            Street = business.Street,
-            Longitude = business.Longitude,
-            Latitude = business.Latitude,
-            Opens = TimeOnly.Parse(business.Opens),
-            Closes = TimeOnly.Parse(business.Closes),
+            Address = business.Address,
+            BusinessHours = business.BusinessHours,
         };
 
         await PutAsyncAndEnsureSuccess(BusinessRoute, updateBusinessRequest);
@@ -88,13 +84,8 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
             Capacity = business.Capacity,
             TimeSlotLengthInMinutes = timeSlotLengthInMinutes,
             Type = business.Type,
-            Zip = business.Zip,
-            City = business.City,
-            Street = business.Street,
-            Longitude = business.Longitude,
-            Latitude = business.Latitude,
-            Opens = TimeOnly.Parse(business.Opens),
-            Closes = TimeOnly.Parse(business.Closes),
+            Address = business.Address,
+            BusinessHours = business.BusinessHours,
         };
 
         var problemDetails =
@@ -123,13 +114,8 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
             Capacity = business.Capacity,
             TimeSlotLengthInMinutes = timeSlotLengthInMinutes,
             Type = business.Type,
-            Zip = business.Zip,
-            City = business.City,
-            Street = business.Street,
-            Longitude = business.Longitude,
-            Latitude = business.Latitude,
-            Opens = new TimeOnly(opens, 0),
-            Closes = new TimeOnly(closes, 0),
+            Address = business.Address,
+            BusinessHours = new TimeInterval(new TimeOnly(opens, 0), new TimeOnly(closes, 0))
         };
 
         var problemDetails =
