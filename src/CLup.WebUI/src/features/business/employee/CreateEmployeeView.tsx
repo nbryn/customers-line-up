@@ -11,11 +11,11 @@ import {ErrorView} from '../../../shared/views/ErrorView';
 import {
     fetchUsersNotEmployedByBusiness,
     selectUsersNotEmployedByBusiness,
-} from '../../user/UserState';
+} from '../../user/UserApi';
 import {Form} from '../../../shared/components/form/Form';
 import {Header} from '../../../shared/components/Texts';
 import type {EmployeeDTO, NewEmployeeDTO} from './Employee';
-import {selectCurrentBusiness} from '../BusinessState';
+import {selectCurrentBusiness} from '../BusinessApi';
 import {TextField} from '../../../shared/components/form/TextField';
 import {useAppDispatch, useAppSelector} from '../../../app/Store';
 import {useForm} from '../../../shared/hooks/useForm';

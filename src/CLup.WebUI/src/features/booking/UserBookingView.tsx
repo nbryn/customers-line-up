@@ -4,7 +4,7 @@ import {Col, Container, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 
 import type {BookingDTO} from './Booking';
-import {deleteBookingForUser, selectBookingsByUser} from './BookingState';
+import {deleteBookingForUser, selectBookingsByUser} from './BookingApi';
 import {Header} from '../../shared/components/Texts';
 import {MapModal, defaultMapProps} from '../../shared/components/modal/MapModal';
 import type {MapModalProps} from '../../shared/components/modal/MapModal';

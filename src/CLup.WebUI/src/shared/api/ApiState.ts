@@ -4,15 +4,15 @@ import {
     createBooking,
     deleteBookingForBusiness,
     deleteBookingForUser,
-} from '../../features/booking/BookingState';
+} from '../../features/booking/BookingApi';
 import {
     createBusiness,
     fetchAllBusinesses,
     fetchBusinessesTypes,
     updateBusinessInfo,
-} from '../../features/business/BusinessState';
+} from '../../features/business/BusinessApi';
 import {createEmployee, removeEmployee} from '../../features/business/employee/EmployeeState';
-import {sendMessage} from '../../features/message/MessageState';
+import {sendMessage} from '../../features/message/MessageApi';
 import {deleteTimeSlot, generateTimeSlots} from '../../features/business/timeslot/TimeSlotState';
 import {
     login,
@@ -20,7 +20,7 @@ import {
     fetchUser,
     fetchUsersNotEmployedByBusiness,
     updateUserInfo,
-} from '../../features/user/UserState';
+} from '../../features/user/UserApi';
 import type {RootState} from '../../app/Store';
 
 const BOOKING_CREATED_MSG = 'Success - Go to my bookings to see your bookings';

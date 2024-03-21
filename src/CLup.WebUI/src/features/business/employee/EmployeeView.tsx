@@ -7,7 +7,7 @@ import {removeEmployee, selectEmployeesByBusiness} from './EmployeeState';
 import type {EmployeeDTO} from './Employee';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
-import {selectCurrentBusiness} from '../BusinessState';
+import {selectCurrentBusiness} from '../BusinessApi';
 import {useAppDispatch, useAppSelector} from '../../../app/Store';
 import type {TableColumn} from '../../../shared/components/Table';
 import {TableContainer} from '../../../shared/containers/TableContainer';

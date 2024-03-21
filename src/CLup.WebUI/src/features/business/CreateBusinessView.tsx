@@ -8,7 +8,7 @@ import {businessValidationSchema} from './BusinessValidation';
 import {Card} from '../../shared/components/card/Card';
 import {ComboBox} from '../../shared/components/form/ComboBox';
 import type {ComboBoxOption} from '../../shared/components/form/ComboBox';
-import {createBusiness, fetchBusinessesTypes, selectBusinessTypes} from './BusinessState';
+import {createBusiness, fetchBusinessesTypes, selectBusinessTypes} from './BusinessApi';
 import {Form} from '../../shared/components/form/Form';
 import {Header} from '../../shared/components/Texts';
 import StringUtil from '../../shared/util/StringUtil';

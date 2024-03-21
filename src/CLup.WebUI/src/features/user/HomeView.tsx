@@ -6,8 +6,8 @@ import {useHistory} from 'react-router-dom';
 import {CardInfo} from '../../shared/components/card/CardInfo';
 import {Header} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
-import {selectBookingsByOwner, selectBookingsByUser, selectNextBookingByUser} from '../booking/BookingState';
-import {selectCurrentUser} from '../user/UserState';
+import {selectBookingsByOwner, selectBookingsByUser, selectNextBookingByUser} from '../booking/BookingApi';
+import {selectCurrentUser} from './UserApi';
 import {selectEmployeesByOwner} from '../business/employee/EmployeeState';
 import {useAppSelector} from '../../app/Store';
 

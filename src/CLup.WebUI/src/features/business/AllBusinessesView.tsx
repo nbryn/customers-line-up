@@ -5,7 +5,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router';
 
 import type {BusinessDTO} from './Business';
-import {fetchAllBusinesses, selectAllBusinesses, setCurrentBusiness} from './BusinessState';
+import {fetchAllBusinesses, selectAllBusinesses, setCurrentBusiness} from './BusinessApi';
 import {Header} from '../../shared/components/Texts';
 import {MapModal, defaultMapProps} from '../../shared/components/modal/MapModal';
 import type {MapModalProps} from '../../shared/components/modal/MapModal';

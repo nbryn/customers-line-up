@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CLup.API.Controllers;
 
-[Route("api/timeslot")]
+[Route("api/timeSlot")]
 public sealed class TimeSlotController : AuthorizedControllerBase
 {
     private readonly IMediator _mediator;
@@ -32,7 +32,7 @@ public sealed class TimeSlotController : AuthorizedControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public Task<IActionResult> DeleteTimeSlot([FromRoute] Guid timeSlotId, Guid businessId)
+    public Task<IActionResult> DeleteTimeSlot([FromRoute] Guid timeSlotId, [FromQuery] Guid businessId)
     {
         var request = new DeleteTimeSlotRequest(timeSlotId, businessId);
         return ValidateAndContinueOnSuccess<DeleteTimeSlotRequest, DeleteTimeSlotRequestValidator>(

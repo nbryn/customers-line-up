@@ -1,9 +1,11 @@
 import {useState} from 'react';
 import type {ObjectSchema} from 'yup';
-import type { FormikComputedProps, FormikHandlers, FormikHelpers, FormikState} from 'formik';
+import type {FormikComputedProps, FormikHandlers, FormikHelpers, FormikState} from 'formik';
 import {useFormik} from 'formik';
 
 import type {Index} from '../models/General';
+import type {FetchBaseQueryError} from '@reduxjs/toolkit/query';
+import type {SerializedError} from '@reduxjs/toolkit';
 
 export type FormHandler<T> = FormikState<T> &
     FormikComputedProps<T> &
@@ -18,8 +20,9 @@ export type Form<T> = {
 export type FormProps<T> = {
     initialValues: T;
     validationSchema: ObjectSchema;
-    onSubmit: (values: T) => void;
-    beforeSubmit?: (dto: T) => T;
+    // TODO: Fix this weird function signature
+    onSubmit: (values: T) => Promise<{data: void} | {error: FetchBaseQueryError | SerializedError}>;
+    beforeSubmit?: (request: T) => T;
 };
 
 export const useForm = <T extends Index>({
@@ -37,7 +40,7 @@ export const useForm = <T extends Index>({
         onSubmit: async (values) => {
             if (beforeSubmit) values = beforeSubmit(values);
 
-            onSubmit(request || values);
+            await onSubmit(request || values);
         },
     });
 

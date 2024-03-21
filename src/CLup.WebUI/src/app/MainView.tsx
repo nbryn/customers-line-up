@@ -8,10 +8,10 @@ import {useHistory} from 'react-router-dom';
 import {clearApiState, selectApiState} from '../shared/api/ApiState';
 import {ExtendedToastMessage, ToastMessage} from '../shared/components/Toast';
 import {Header} from '../shared/components/navigation/Header';
-import {LoginView} from '../features/user/LoginView';
+import {LoginView} from '../features/auth/LoginView';
 import {MainMenu} from '../shared/components/navigation/MainMenu';
 import {Routes} from './Routes';
-import {selectCurrentUser} from '../features/user/UserState';
+import {useGetUserQuery} from '../features/user/UserApi';
 import {useAppSelector, useAppDispatch} from '../app/Store';
 
 declare module '@mui/styles/defaultTheme' {
@@ -31,8 +31,9 @@ export const MainView: React.FC = () => {
     const history = useHistory();
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    const {data: user} = useGetUserQuery();
+
     const apiState = useAppSelector(selectApiState);
-    const user = useAppSelector(selectCurrentUser);
     const dispatch = useAppDispatch();
 
     const handleMenuToggle = () => {

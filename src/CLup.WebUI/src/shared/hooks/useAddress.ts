@@ -6,7 +6,7 @@ import type {ComboBoxOption} from '../components/form/ComboBox';
 import type {FormHandler} from './useForm';
 import type {Index} from '../models/General';
 
-type AddressKey = 'zip' | 'street';
+export type AddressKey = 'zip' | 'street';
 
 export type AddressHandler = {
     addresses: Address[];
@@ -32,8 +32,8 @@ export const useAddress = <T extends Index>(formHandler: FormHandler<T>): Addres
     };
 
     const getLabels = (key: AddressKey): ComboBoxOption[] => {
-        return addresses.map((a) => ({
-            label: key === 'zip' ? a.zipCity : a.street ?? 'Choose zip first',
+        return addresses.map((address) => ({
+            label: key === 'zip' ? address.zipCity : address.street ?? 'Choose zip first',
         }));
     };
 

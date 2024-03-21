@@ -5,9 +5,9 @@ import {MessageContainer} from '../../shared/containers/MessageContainer';
 import {
     selectReceivedUserMessages,
     selectSentUserMessages,
-} from '../../features/message/MessageState';
+} from '../message/MessageApi';
 import type {SendMessage} from '../../features/message/Message';
-import {sendMessage} from '../../features/message/MessageState';
+import {sendMessage} from '../message/MessageApi';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 export const UserMessageView: React.FC = () => {

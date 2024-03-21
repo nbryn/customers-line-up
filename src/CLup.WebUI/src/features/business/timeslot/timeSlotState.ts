@@ -2,7 +2,7 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 
 import ApiCaller from '../../../shared/api/ApiCaller';
 import type {RootState} from '../../../app/Store';
-import {callApiAndFetchUser} from '../../user/UserState';
+import {callApiAndFetchUser} from '../../user/UserApi';
 
 const DEFAULT_TIMESLOT_COMMAND_ROUTE = 'api/business/timeslot';
 

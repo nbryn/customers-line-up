@@ -3,13 +3,13 @@ import Chip from '@mui/material/Chip';
 import {Col, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 
-import {createBooking} from './BookingState';
+import {createBooking} from './BookingApi';
 import {ErrorView} from '../../shared/views/ErrorView';
 import {selectAvailableTimeSlotsForCurrentBusiness} from '../business/timeslot/TimeSlotState';
 import {Header} from '../../shared/components/Texts';
 
 import {MapModal} from '../../shared/components/modal/MapModal';
-import {selectCurrentBusiness} from '../business/BusinessState';
+import {selectCurrentBusiness} from '../business/BusinessApi';
 import type {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
 import type {TimeSlotDTO} from '../business/timeslot/TimeSlot';

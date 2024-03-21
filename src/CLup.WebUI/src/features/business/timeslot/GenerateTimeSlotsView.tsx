@@ -9,7 +9,7 @@ import type {ComboBoxOption} from '../../../shared/components/form/ComboBox';
 import DateUtil from '../../../shared/util/DateUtil';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
-import {selectCurrentBusiness} from '../BusinessState';
+import {selectCurrentBusiness} from '../BusinessApi';
 import {useAppDispatch, useAppSelector} from '../../../app/Store';
 
 const useStyles = makeStyles(() => ({

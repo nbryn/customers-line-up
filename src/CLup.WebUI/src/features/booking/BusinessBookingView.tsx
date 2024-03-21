@@ -4,10 +4,10 @@ import {Col, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 
 import type {BookingDTO} from './Booking';
-import {deleteBookingForBusiness, selectBookingsByBusiness} from './BookingState';
+import {deleteBookingForBusiness, selectBookingsByBusiness} from './BookingApi';
 import {ErrorView} from '../../shared/views/ErrorView';
 import {Header} from '../../shared/components/Texts';
-import {selectCurrentBusiness} from '../business/BusinessState';
+import {selectCurrentBusiness} from '../business/BusinessApi';
 import type {TableColumn} from '../../shared/components/Table';
 import {TableContainer} from '../../shared/containers/TableContainer';
 import {useAppDispatch, useAppSelector} from '../../app/Store';

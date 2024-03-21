@@ -9,7 +9,7 @@ import {
 } from './TimeSlotState';
 import {ErrorView} from '../../../shared/views/ErrorView';
 import {Header} from '../../../shared/components/Texts';
-import {selectCurrentBusiness} from '../BusinessState';
+import {selectCurrentBusiness} from '../BusinessApi';
 import type {TimeSlotDTO} from './TimeSlot';
 import type {TableColumn} from '../../../shared/components/Table';
 import {TableContainer} from '../../../shared/containers/TableContainer';

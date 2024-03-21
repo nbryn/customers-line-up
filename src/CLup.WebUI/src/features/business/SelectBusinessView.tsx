@@ -6,11 +6,11 @@ import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../shared/components/card/CardInfo';
-import {selectBusinessesByOwner} from './BusinessState';
+import {selectBusinessesByOwner} from './BusinessApi';
 import {Header, HeaderSize} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
 import {selectApiState} from '../../shared/api/ApiState';
-import {setCurrentBusiness} from './BusinessState';
+import {setCurrentBusiness} from './BusinessApi';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles(() => ({

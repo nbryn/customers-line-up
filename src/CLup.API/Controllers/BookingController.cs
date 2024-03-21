@@ -43,7 +43,7 @@ public sealed class BookingController : AuthorizedControllerBase
     [Route("business/{businessId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteBusinessBooking([FromRoute] Guid businessId, Guid bookingId)
+    public async Task<IActionResult> DeleteBusinessBooking([FromRoute] Guid businessId, [FromQuery] Guid bookingId)
     {
         var request = new DeleteBusinessBookingRequest(businessId, bookingId);
         return await ValidateAndContinueOnSuccess<DeleteBusinessBookingRequest, DeleteBusinessBookingRequestValidator>(

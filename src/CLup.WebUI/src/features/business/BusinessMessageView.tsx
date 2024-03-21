@@ -2,7 +2,7 @@ import React from 'react';
 import {Container} from 'react-bootstrap';
 
 import {MessageContainer} from '../../shared/containers/MessageContainer';
-import {selectReceivedBusinessMessages, selectSentBusinessMessages} from '../../features/message/MessageState';
+import {selectReceivedBusinessMessages, selectSentBusinessMessages} from '../message/MessageApi';
 import type {SendMessage} from '../../features/message/Message';
 import {useAppSelector} from '../../app/Store';
 

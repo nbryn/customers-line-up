@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie';
 import React, {useContext, useEffect} from 'react';
 
-import {fetchUser} from './UserState';
+import {fetchUser} from './UserApi';
 import {clearCurrentUser} from '../../app/EntityState'; 
 import {useAppDispatch} from '../../app/Store';
 

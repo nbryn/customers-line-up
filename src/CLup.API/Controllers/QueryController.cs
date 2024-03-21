@@ -103,7 +103,7 @@ public sealed class QueryController : AuthorizedControllerBase
         return Ok(types);
     }
 
-    [Route("user/notEmployedByBusiness/{id:guid}")]
+    [Route("user/notEmployedByBusiness/{businessId:guid}")]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusinessResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

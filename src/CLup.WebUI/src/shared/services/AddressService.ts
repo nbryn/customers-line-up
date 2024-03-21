@@ -1,5 +1,7 @@
 import ApiCaller from '../api/ApiCaller';
 
+// TODO: Move to RTK Query?
+
 const DAWA_ZIP_URL = 'https://dawa.aws.dk/postnumre?landpostnumre&struktur=mini';
 
 const getAddressUrl = (zip: string) =>

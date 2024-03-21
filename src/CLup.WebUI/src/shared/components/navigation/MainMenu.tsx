@@ -11,7 +11,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 
-import {selectCurrentUser} from '../../../features/user/UserState';
+import {selectCurrentUser} from '../../../features/user/UserApi';
 import {useAppSelector} from '../../../app/Store';
 import {useUserContext} from '../../../features/user/UserContext';
 
