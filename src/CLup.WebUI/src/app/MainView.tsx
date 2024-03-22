@@ -3,16 +3,14 @@ import {Container} from 'react-bootstrap';
 import CssBaseline from '@mui/material/CssBaseline';
 import makeStyles from '@mui/styles/makeStyles';
 import type {Theme} from '@mui/material/styles';
-import {useHistory} from 'react-router-dom';
+// import {useHistory} from 'react-router-dom';
 
-import {clearApiState, selectApiState} from '../shared/api/ApiState';
-import {ExtendedToastMessage, ToastMessage} from '../shared/components/Toast';
+// import {ExtendedToastMessage, ToastMessage} from '../shared/components/Toast';
 import {Header} from '../shared/components/navigation/Header';
 import {LoginView} from '../features/auth/LoginView';
 import {MainMenu} from '../shared/components/navigation/MainMenu';
 import {Routes} from './Routes';
 import {useGetUserQuery} from '../features/user/UserApi';
-import {useAppSelector, useAppDispatch} from '../app/Store';
 
 declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
@@ -28,13 +26,10 @@ const useStyles = makeStyles((theme) => ({
 
 export const MainView: React.FC = () => {
     const styles = useStyles();
-    const history = useHistory();
+    //    const history = useHistory();
+
     const [mobileOpen, setMobileOpen] = useState(false);
-
     const {data: user} = useGetUserQuery();
-
-    const apiState = useAppSelector(selectApiState);
-    const dispatch = useAppDispatch();
 
     const handleMenuToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -55,7 +50,7 @@ export const MainView: React.FC = () => {
                     <MainMenu mobileOpen={mobileOpen} onClose={handleMenuClose} />
 
                     <Container className={styles.root}>
-                        {apiState.message && !apiState.toastInfo && (
+                        {/* {apiState.message && !apiState.toastInfo && (
                             <ToastMessage
                                 onClose={() => dispatch(clearApiState())}
                                 message={apiState.message}
@@ -71,7 +66,7 @@ export const MainView: React.FC = () => {
                                     history.push(apiState.toastInfo?.navigateTo ?? '/home')
                                 }
                             />
-                        )}
+                        )} */}
                         <Routes />
                     </Container>
                 </>

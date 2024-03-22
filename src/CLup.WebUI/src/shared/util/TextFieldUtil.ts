@@ -1,4 +1,4 @@
-import type {Address} from '../services/AddressService';
+import type {ExtendedAddress} from '../services/AddressService';
 import type {HasAddress} from '../models/General';
 import type {Index} from '../models/General';
 import StringUtil from './StringUtil';
@@ -29,7 +29,7 @@ function mapKeyToType(key: string): TextFieldType {
 function mapKeyToValue(
     key: string,
     values: Index,
-    addresses: Address[],
+    addresses: ExtendedAddress[],
     entity: HasAddress
 ): string {
     if (key === 'zip') {

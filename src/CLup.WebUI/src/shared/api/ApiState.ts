@@ -11,9 +11,9 @@ import {
     fetchBusinessesTypes,
     updateBusinessInfo,
 } from '../../features/business/BusinessApi';
-import {createEmployee, removeEmployee} from '../../features/business/employee/EmployeeState';
+import {createEmployee, removeEmployee} from '../../features/employee/EmployeeApi';
 import {sendMessage} from '../../features/message/MessageApi';
-import {deleteTimeSlot, generateTimeSlots} from '../../features/business/timeslot/TimeSlotState';
+import {deleteTimeSlot, generateTimeSlots} from '../../features/timeslot/TimeSlotApi';
 import {
     login,
     register,
@@ -21,9 +21,10 @@ import {
     fetchUsersNotEmployedByBusiness,
     updateUserInfo,
 } from '../../features/user/UserApi';
-import type {RootState} from '../../app/Store';
+import {useAppSelector, type RootState} from '../../app/Store';
+import { QueryStatus } from '@reduxjs/toolkit/query';
 
-const BOOKING_CREATED_MSG = 'Success - Go to my bookings to see your bookings';
+
 const USER_DELETED_BOOKING_MSG = 'Booking Deleted';
 
 const BUSINESS_CREATED_MSG = 'Business Created - Go to my businesses to see your businesses';
@@ -47,24 +48,30 @@ export type ToastInfo = {
 
 interface ApiState {
     error: boolean;
-    loading: boolean;
     message: string;
     toastInfo?: ToastInfo;
 }
 
 const initialState: ApiState = {
     error: false,
-    loading: false,
     message: '',
     toastInfo: undefined,
 };
+
+export const isLoading = useAppSelector((state) => {
+    return Object.values(state.api.queries).some((query) => {
+        return query && query.status === QueryStatus.pending;
+    });
+});
 
 export const apiSlice = createSlice({
     name: 'api',
     initialState,
     reducers: {
+        setApiState: (state: ApiState) => {
+            state = state;
+        },
         clearApiState: (state) => {
-            state.loading = false;
             state.error = false;
             state.message = '';
             state.toastInfo = undefined;
@@ -72,22 +79,13 @@ export const apiSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(createBooking.fulfilled, (state) => {
-                state.loading = false;
-                state.error = false;
-                state.message = BOOKING_CREATED_MSG;
-                state.toastInfo = {buttonText: 'My Bookings', navigateTo: '/user/bookings'};
-            })
-
             .addCase(createBusiness.fulfilled, (state) => {
-                state.loading = false;
                 state.error = false;
                 state.message = BUSINESS_CREATED_MSG;
                 state.toastInfo = {buttonText: 'My Businesses', navigateTo: '/business'};
             })
 
             .addCase(createEmployee.fulfilled, (state) => {
-                state.loading = false;
                 state.error = false;
                 state.message = EMPLOYEE_CREATED_MSG;
                 state.toastInfo = {
@@ -97,13 +95,11 @@ export const apiSlice = createSlice({
             })
 
             .addCase(updateBusinessInfo.fulfilled, (state) => {
-                state.loading = false;
                 state.error = false;
                 state.message = BUSINESS_UPDATED_MSG;
             })
 
             .addCase(generateTimeSlots.fulfilled, (state) => {
-                state.loading = false;
                 state.error = false;
                 state.message = TIMESLOTS_GENERATED_MSG;
                 state.toastInfo = {
@@ -113,37 +109,31 @@ export const apiSlice = createSlice({
             })
 
             .addCase(login.rejected, (state) => {
-                state.loading = false;
                 state.error = true;
                 state.message = LOGIN_FAILED_MSG;
             })
 
             .addCase(deleteBookingForUser.fulfilled, (state) => {
-                state.loading = false;
                 state.error = false;
                 state.message = USER_DELETED_BOOKING_MSG;
             })
 
             .addCase(deleteTimeSlot.fulfilled, (state) => {
-                state.loading = false;
                 state.error = false;
                 state.message = TIMESLOT_DELETED_MSG;
             })
 
             .addCase(updateUserInfo.fulfilled, (state) => {
-                state.loading = false;
                 state.error = false;
                 state.message = USER_UPDATED_MSG;
             })
 
             .addCase(deleteBookingForBusiness.fulfilled, (state) => {
-                state.loading = false;
                 state.error = false;
                 state.message = BUSINESS_DELETED_BOOKING_MSG;
             })
 
             .addCase(sendMessage.fulfilled, (state) => {
-                state.loading = false;
                 state.error = false;
                 state.message = MESSAGE_SEND;
             })
@@ -158,7 +148,6 @@ export const apiSlice = createSlice({
                     fetchUser.fulfilled
                 ),
                 (state) => {
-                    state.loading = false;
                     state.error = false;
                     state.message = '';
                 }
@@ -185,13 +174,12 @@ export const apiSlice = createSlice({
                     fetchUser.pending
                 ),
                 (state) => {
-                    state.loading = true;
+                     = true;
                 }
             )
 
             .addMatcher(
                 isAnyOf(
-                    createBooking.rejected,
                     deleteBookingForBusiness.rejected,
                     deleteBookingForUser.rejected,
                     fetchAllBusinesses.rejected,
@@ -210,7 +198,7 @@ export const apiSlice = createSlice({
                     fetchUser.rejected
                 ),
                 (state, action) => {
-                    state.loading = false;
+                     = false;
                     state.error = true;
                     state.message = action.error.message!;
                 }
@@ -218,7 +206,7 @@ export const apiSlice = createSlice({
     },
 });
 
-export const {clearApiState} = apiSlice.actions;
+export const {clearApiState, setApiState} = apiSlice.actions;
 
 export const selectApiState = (state: RootState) => state.api;
 

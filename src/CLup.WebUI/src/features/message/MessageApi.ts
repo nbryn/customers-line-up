@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-import {BUSINESS_BY_OWNER_TAG, BUSINESS_TAG, emptySplitApi, USER_TAG} from '../../app/Store';
+import {BUSINESS_BY_OWNER_TAG, BUSINESS_TAG, baseApi, USER_TAG} from '../../app/Store';
 import {
     Configuration,
     MessageApi,
@@ -14,7 +14,7 @@ const messageApiInstance = new MessageApi(
     new Configuration({accessToken: Cookies.get('access_token')})
 );
 
-const messageApi = emptySplitApi.injectEndpoints({
+const messageApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         sendUserMessage: builder.mutation<void, SendUserMessageRequest>({
             invalidatesTags: [BUSINESS_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],

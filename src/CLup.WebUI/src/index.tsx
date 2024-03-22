@@ -8,7 +8,6 @@ import {ThemeProvider} from '@mui/styles';
 
 import {MainView} from './app/MainView';
 import {store} from './app/Store';
-import {UserContextProvider} from './features/user/UserContext';
 
 const App = () => {
     const theme = createTheme();
@@ -23,11 +22,9 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
     <React.StrictMode>
         <Provider store={store}>
-            <UserContextProvider>
-                <Router>
-                    <App />
-                </Router>
-            </UserContextProvider>
+            <Router>
+                <App />
+            </Router>
         </Provider>
     </React.StrictMode>
 );

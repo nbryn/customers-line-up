@@ -14,7 +14,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import Toolbar from '@mui/material/Toolbar';
 import useWindowScroll from '@react-hook/window-scroll';
 
-import {useUserContext} from '../../../features/user/UserContext';
+import {baseApi, useAppDispatch} from '../../../app/Store';
 
 type Props = {
     onMenuToggle: () => void;
@@ -85,13 +85,13 @@ export const Header: React.FC<Props> = (props: Props) => {
     const styles = useStyles();
     const scrollY = useWindowScroll(60);
     const isUltraDense = scrollY > 10;
-    const {logout} = useUserContext();
     const [userAccountEl, setUserAccountEl] = useState<HTMLElement | null>(null);
 
     const handleUserAccountToggle = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         setUserAccountEl(!userAccountEl ? event.currentTarget : null);
     };
 
+    const dispatch = useAppDispatch();
     const showUserAccount = !!userAccountEl;
 
     const menuButtonClasses = classNames({
@@ -121,7 +121,8 @@ export const Header: React.FC<Props> = (props: Props) => {
                                 edge="start"
                                 onClick={props.onMenuToggle}
                                 className={menuButtonClasses}
-                                size="large">
+                                size="large"
+                            >
                                 <MenuIcon />
                             </IconButton>
                         </Grid>
@@ -133,7 +134,8 @@ export const Header: React.FC<Props> = (props: Props) => {
                                 color="inherit"
                                 aria-label="account"
                                 onClick={handleUserAccountToggle}
-                                size="large">
+                                size="large"
+                            >
                                 <AccountBoxIcon />
                             </IconButton>
                             <Popover
@@ -156,11 +158,12 @@ export const Header: React.FC<Props> = (props: Props) => {
                                             className={styles.listItem}
                                             button
                                             onClick={() => {
-                                                window.location.href = window.location.href.substring(
-                                                    0,
-                                                    window.location.href.indexOf('/') + 1
-                                                );
-                                                logout();
+                                                window.location.href =
+                                                    window.location.href.substring(
+                                                        0,
+                                                        window.location.href.indexOf('/') + 1
+                                                    );
+                                                dispatch(baseApi.util.resetApiState());
                                             }}
                                         >
                                             <ListItemIcon className={styles.listItemIcon}>

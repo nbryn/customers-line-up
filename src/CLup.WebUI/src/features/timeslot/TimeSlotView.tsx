@@ -6,14 +6,14 @@ import React from 'react';
 import {
     deleteTimeSlot,
     selectTimeSlotsByBusiness,
-} from './TimeSlotState';
-import {ErrorView} from '../../../shared/views/ErrorView';
-import {Header} from '../../../shared/components/Texts';
-import {selectCurrentBusiness} from '../BusinessApi';
+} from './TimeSlotApi';
+import {ErrorView} from '../../shared/views/ErrorView';
+import {Header} from '../../shared/components/Texts';
+import {selectCurrentBusiness} from '../business/BusinessApi';
 import type {TimeSlotDTO} from './TimeSlot';
-import type {TableColumn} from '../../../shared/components/Table';
-import {TableContainer} from '../../../shared/containers/TableContainer';
-import {useAppDispatch, useAppSelector} from '../../../app/Store';
+import type {TableColumn} from '../../shared/components/Table';
+import {TableContainer} from '../../shared/containers/TableContainer';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles(() => ({
     row: {

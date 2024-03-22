@@ -1,22 +1,22 @@
 import {useEffect, useState} from 'react';
 
 import AddressService from '../services/AddressService';
-import type {Address} from '../services/AddressService';
+import type {ExtendedAddress} from '../services/AddressService';
 import type {ComboBoxOption} from '../components/form/ComboBox';
 import type {FormHandler} from './useForm';
-import type {Index} from '../models/General';
+import type {Index} from '../hooks/useForm';
 
 export type AddressKey = 'zip' | 'street';
 
 export type AddressHandler = {
-    addresses: Address[];
+    addresses: ExtendedAddress[];
     fetchAddresses: (zip: string | undefined) => Promise<void>;
     fetchZips: () => Promise<void>;
     getLabels: (key: AddressKey) => ComboBoxOption[];
 };
 
 export const useAddress = <T extends Index>(formHandler: FormHandler<T>): AddressHandler => {
-    const [addresses, setAddresses] = useState<Address[]>([]);
+    const [addresses, setAddresses] = useState<ExtendedAddress[]>([]);
 
     const fetchZips = async (): Promise<void> => {
         setAddresses(await AddressService.fetchZips());
@@ -24,7 +24,7 @@ export const useAddress = <T extends Index>(formHandler: FormHandler<T>): Addres
 
     const fetchAddresses = async (zip: string | undefined): Promise<void> => {
         if (zip) {
-            const address = addresses.find((a) => a.zipCity === zip);
+            const address = addresses.find((address) => address.zipCity === zip);
             const newAddresses = await AddressService.fetchAddresses(address);
 
             setAddresses(newAddresses);

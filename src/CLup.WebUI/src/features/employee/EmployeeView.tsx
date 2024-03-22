@@ -3,14 +3,14 @@ import Chip from '@mui/material/Chip';
 import {Col, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 
-import {removeEmployee, selectEmployeesByBusiness} from './EmployeeState';
+import {removeEmployee, selectEmployeesByBusiness} from './EmployeeApi';
 import type {EmployeeDTO} from './Employee';
-import {ErrorView} from '../../../shared/views/ErrorView';
-import {Header} from '../../../shared/components/Texts';
-import {selectCurrentBusiness} from '../BusinessApi';
-import {useAppDispatch, useAppSelector} from '../../../app/Store';
-import type {TableColumn} from '../../../shared/components/Table';
-import {TableContainer} from '../../../shared/containers/TableContainer';
+import {ErrorView} from '../../shared/views/ErrorView';
+import {Header} from '../../shared/components/Texts';
+import {selectCurrentBusiness} from '../business/BusinessApi';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
+import type {TableColumn} from '../../shared/components/Table';
+import {TableContainer} from '../../shared/containers/TableContainer';
 
 const useStyles = makeStyles(() => ({
     row: {

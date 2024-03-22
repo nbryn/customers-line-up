@@ -8,7 +8,7 @@ import {Header} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
 import {selectBookingsByOwner, selectBookingsByUser, selectNextBookingByUser} from '../booking/BookingApi';
 import {selectCurrentUser} from './UserApi';
-import {selectEmployeesByOwner} from '../business/employee/EmployeeState';
+import {selectEmployeesByOwner} from '../employee/EmployeeApi';
 import {useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles(() => ({

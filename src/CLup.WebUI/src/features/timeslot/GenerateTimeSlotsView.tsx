@@ -2,15 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {Col, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 
-import {Card} from '../../../shared/components/card/Card';
-import {generateTimeSlots} from './TimeSlotState';
-import {ComboBox} from '../../../shared/components/form/ComboBox';
-import type {ComboBoxOption} from '../../../shared/components/form/ComboBox';
-import DateUtil from '../../../shared/util/DateUtil';
-import {ErrorView} from '../../../shared/views/ErrorView';
-import {Header} from '../../../shared/components/Texts';
-import {selectCurrentBusiness} from '../BusinessApi';
-import {useAppDispatch, useAppSelector} from '../../../app/Store';
+import {Card} from '../../shared/components/card/Card';
+import {generateTimeSlots} from './TimeSlotApi';
+import {ComboBox} from '../../shared/components/form/ComboBox';
+import type {ComboBoxOption} from '../../shared/components/form/ComboBox';
+import DateUtil from '../../shared/util/DateUtil';
+import {ErrorView} from '../../shared/views/ErrorView';
+import {Header} from '../../shared/components/Texts';
+import {selectCurrentBusiness} from '../business/BusinessApi';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles(() => ({
     button: {

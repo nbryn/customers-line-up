@@ -2,23 +2,23 @@ import React, {useEffect, useState} from 'react';
 import {Col, FormGroup, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 
-import {Card} from '../../../shared/components/card/Card';
-import {ComboBox} from '../../../shared/components/form/ComboBox';
-import type {ComboBoxOption} from '../../../shared/components/form/ComboBox';
-import {createEmployee} from './EmployeeState';
-import {employeeValidationSchema} from '../BusinessValidation';
-import {ErrorView} from '../../../shared/views/ErrorView';
+import {Card} from '../../shared/components/card/Card';
+import {ComboBox} from '../../shared/components/form/ComboBox';
+import type {ComboBoxOption} from '../../shared/components/form/ComboBox';
+import {createEmployee} from './EmployeeApi';
+import {employeeValidationSchema} from '../business/BusinessValidation';
+import {ErrorView} from '../../shared/views/ErrorView';
 import {
     fetchUsersNotEmployedByBusiness,
     selectUsersNotEmployedByBusiness,
-} from '../../user/UserApi';
-import {Form} from '../../../shared/components/form/Form';
-import {Header} from '../../../shared/components/Texts';
+} from '../user/UserApi';
+import {Form} from '../../shared/components/form/Form';
+import {Header} from '../../shared/components/Texts';
 import type {EmployeeDTO, NewEmployeeDTO} from './Employee';
-import {selectCurrentBusiness} from '../BusinessApi';
-import {TextField} from '../../../shared/components/form/TextField';
-import {useAppDispatch, useAppSelector} from '../../../app/Store';
-import {useForm} from '../../../shared/hooks/useForm';
+import {selectCurrentBusiness} from '../business/BusinessApi';
+import {TextField} from '../../shared/components/form/TextField';
+import {useAppDispatch, useAppSelector} from '../../app/Store';
+import {useForm} from '../../shared/hooks/useForm';
 import type {UserDTO} from '../../user/User';
 
 const useStyles = makeStyles(() => ({

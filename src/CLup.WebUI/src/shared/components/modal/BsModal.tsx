@@ -34,34 +34,32 @@ export const BsModal: React.FC<Props> = ({
     const styles = useStyles();
 
     return (
-        <>
-            <BootModal className={styles.modal} show={show} onHide={secondaryAction}>
-                <BootModal.Dialog>
-                    <BootModal.Header>
-                        <BootModal.Title>{title}</BootModal.Title>
-                    </BootModal.Header>
+        <BootModal className={styles.modal} show={show} onHide={secondaryAction}>
+            <BootModal.Dialog>
+                <BootModal.Header>
+                    <BootModal.Title>{title}</BootModal.Title>
+                </BootModal.Header>
 
-                    <BootModal.Body>
-                        <p>{text}</p>
-                        {children}
-                    </BootModal.Body>
+                <BootModal.Body>
+                    <p>{text}</p>
+                    {children}
+                </BootModal.Body>
 
-                    <BootModal.Footer>
-                        <Button variant="secondary" onClick={secondaryAction}>
-                            Close
+                <BootModal.Footer>
+                    <Button variant="secondary" onClick={secondaryAction}>
+                        Close
+                    </Button>
+                    {primaryAction && (
+                        <Button
+                            variant="primary"
+                            onClick={primaryAction}
+                            disabled={primaryDisabled}
+                        >
+                            {primaryActionText}
                         </Button>
-                        {primaryAction && (
-                            <Button
-                                variant="primary"
-                                onClick={primaryAction}
-                                disabled={primaryDisabled}
-                            >
-                                {primaryActionText}
-                            </Button>
-                        )}
-                    </BootModal.Footer>
-                </BootModal.Dialog>
-            </BootModal>
-        </>
+                    )}
+                </BootModal.Footer>
+            </BootModal.Dialog>
+        </BootModal>
     );
 };
