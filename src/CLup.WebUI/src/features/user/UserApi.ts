@@ -37,7 +37,7 @@ const userApi = baseApi.injectEndpoints({
                     );
                     return {data: response.data};
                 } catch (error) {
-                    return {error} as {data: UsersNotEmployedByBusinessResponse; error: any};
+                    return {error} as any;
                 }
             },
         }),
