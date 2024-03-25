@@ -7,19 +7,18 @@ import {apiMutation} from '../../shared/api/Api';
 
 const LOGIN_FAILED_MSG = 'Wrong Email/Password';
 
-const authApiInstance = new AuthApi();
-
 const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation<void, LoginRequest>({
             invalidatesTags: [USER_TAG],
             queryFn: async (loginRequest, api) => ({
                 data: await apiMutation(
-                    async () => {
-                        const response = await authApiInstance.login(loginRequest);
+                    async (authApi) => {
+                        const response = await authApi.login(loginRequest);
                         Cookies.set('access_token', response.data.token!);
                         return response;
                     },
+                    AuthApi,
                     api,
                     {message: LOGIN_FAILED_MSG}
                 ),
@@ -28,11 +27,15 @@ const authApi = baseApi.injectEndpoints({
         register: builder.mutation<void, RegisterRequest>({
             invalidatesTags: [USER_TAG],
             queryFn: async (registerRequest, api) => ({
-                data: await apiMutation(async () => {
-                    const response = await authApiInstance.register(registerRequest);
-                    Cookies.set('access_token', response.data.token!);
-                    return response;
-                }, api),
+                data: await apiMutation(
+                    async (authApi) => {
+                        const response = await authApi.register(registerRequest);
+                        Cookies.set('access_token', response.data.token!);
+                        return response;
+                    },
+                    AuthApi,
+                    api
+                ),
             }),
         }),
     }),

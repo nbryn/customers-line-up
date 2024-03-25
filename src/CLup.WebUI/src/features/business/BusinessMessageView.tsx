@@ -2,17 +2,17 @@ import React from 'react';
 import {Container} from 'react-bootstrap';
 
 import {MessageContainer} from '../../shared/containers/MessageContainer';
-import {selectReceivedBusinessMessages, selectSentBusinessMessages} from '../message/MessageApi';
-import type {SendMessage} from '../../features/message/Message';
 import {useAppSelector} from '../../app/Store';
+import {selectCurrentBusiness} from './BusinessState';
 
 export const BusinessMessageView: React.FC = () => {
+    const business = useAppSelector(selectCurrentBusiness);
     return (
         <Container>
             <MessageContainer
-                receivedMessages={useAppSelector(selectReceivedBusinessMessages)}
-                sentMessages={useAppSelector(selectSentBusinessMessages)}
-                sendMessage={(message: SendMessage) => console.log(message)}
+                receivedMessages={business?.receivedMessages ?? []}
+                sentMessages={business?.sentMessages ?? []}
+                sendMessage={(message: any) => console.log(message)}
             />
         </Container>
     );

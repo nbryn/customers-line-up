@@ -1,5 +1,3 @@
-import Cookies from 'js-cookie';
-
 import {
     BUSINESS_ALL_TAG,
     BUSINESS_BY_OWNER_TAG,
@@ -9,7 +7,6 @@ import {
 } from '../../app/Store';
 import {
     BusinessApi,
-    Configuration,
     type CreateBusinessRequest,
     type GetAllBusinessesResponse,
     type UpdateBusinessRequest,
@@ -24,10 +21,6 @@ const BUSINESS_CREATED_SUCCESS_INFO = {
     message: 'Business Created - Go to my businesses to see your businesses',
     toastInfo: {buttonText: 'My Businesses', navigateTo: BUSINESS_ROUTE},
 };
-
-const businessApiInstance = new BusinessApi(
-    new Configuration({accessToken: Cookies.get('access_token')})
-);
 
 const businessApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -51,7 +44,8 @@ const businessApi = baseApi.injectEndpoints({
             invalidatesTags: [BUSINESS_ALL_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
             queryFn: async (createBusinessRequest, api) => ({
                 data: await apiMutation(
-                    async () => await businessApiInstance.createBusiness(createBusinessRequest),
+                    async (businessApi) => await businessApi.createBusiness(createBusinessRequest),
+                    BusinessApi,
                     api,
                     BUSINESS_CREATED_SUCCESS_INFO
                 ),
@@ -61,7 +55,8 @@ const businessApi = baseApi.injectEndpoints({
             invalidatesTags: [BUSINESS_ALL_TAG, BUSINESS_BY_OWNER_TAG],
             queryFn: async (updateBusinessRequest, api) => ({
                 data: await apiMutation(
-                    async () => await businessApiInstance.updateBusiness(updateBusinessRequest),
+                    async (businessApi) => await businessApi.updateBusiness(updateBusinessRequest),
+                    BusinessApi,
                     api,
                     {message: BUSINESS_UPDATED_MSG}
                 ),

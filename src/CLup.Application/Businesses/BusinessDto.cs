@@ -20,8 +20,7 @@ public sealed class BusinessDto
 
     public TimeInterval BusinessHours { get; init; }
 
-    public int TimeSlotLength { get; init; }
-
+    public int TimeSlotLengthInMinutes { get; init; }
 
     public BusinessType Type { get; init; }
 
@@ -47,7 +46,7 @@ public sealed class BusinessDto
             Address = business.Address,
             BusinessHours = business.BusinessHours,
             Capacity = business.BusinessData.Capacity,
-            TimeSlotLength = business.BusinessData.TimeSlotLengthInMinutes,
+            TimeSlotLengthInMinutes = business.BusinessData.TimeSlotLengthInMinutes,
             Type = business.Type,
             Bookings = business.Bookings.Select(BookingDto.FromBooking).ToList(),
             Employees = business.Employees.Select(EmployeeDto.FromEmployee).ToList(),

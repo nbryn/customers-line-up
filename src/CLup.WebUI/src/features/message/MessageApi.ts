@@ -1,8 +1,5 @@
-import Cookies from 'js-cookie';
-
 import {BUSINESS_BY_OWNER_TAG, BUSINESS_TAG, baseApi, USER_TAG} from '../../app/Store';
 import {
-    Configuration,
     MessageApi,
     type SendUserMessageRequest,
     type SendBusinessMessageRequest,
@@ -13,17 +10,14 @@ import {apiMutation} from '../../shared/api/Api';
 
 const MESSAGE_SENT = 'Message successfully send';
 
-const messageApiInstance = new MessageApi(
-    new Configuration({accessToken: Cookies.get('access_token')})
-);
-
 const messageApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         sendUserMessage: builder.mutation<void, SendUserMessageRequest>({
             invalidatesTags: [BUSINESS_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
             queryFn: async (sendUserMessageRequest, api) => ({
                 data: await apiMutation(
-                    async () => await messageApiInstance.sendUserMessage(sendUserMessageRequest),
+                    async (messageApi) => await messageApi.sendUserMessage(sendUserMessageRequest),
+                    MessageApi,
                     api,
                     {message: MESSAGE_SENT}
                 ),
@@ -33,8 +27,9 @@ const messageApi = baseApi.injectEndpoints({
             invalidatesTags: [BUSINESS_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
             queryFn: async (sendBusinessMessageRequest, api) => ({
                 data: await apiMutation(
-                    async () =>
-                        await messageApiInstance.sendBusinessMessage(sendBusinessMessageRequest),
+                    async (messageApi) =>
+                        await messageApi.sendBusinessMessage(sendBusinessMessageRequest),
+                    MessageApi,
                     api
                 ),
             }),
@@ -43,10 +38,11 @@ const messageApi = baseApi.injectEndpoints({
             invalidatesTags: [BUSINESS_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
             queryFn: async (markMessageAsDeletedForUserRequest, api) => ({
                 data: await apiMutation(
-                    async () =>
-                        await messageApiInstance.markMessageAsDeletedForUser(
+                    async (messageApi) =>
+                        await messageApi.markMessageAsDeletedForUser(
                             markMessageAsDeletedForUserRequest
                         ),
+                    MessageApi,
                     api
                 ),
             }),
@@ -58,10 +54,11 @@ const messageApi = baseApi.injectEndpoints({
             invalidatesTags: [BUSINESS_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
             queryFn: async (markMessageAsDeletedForBusinessRequest, api) => ({
                 data: await apiMutation(
-                    async () =>
-                        await messageApiInstance.markMessageAsDeletedForBusiness(
+                    async (messageApi) =>
+                        await messageApi.markMessageAsDeletedForBusiness(
                             markMessageAsDeletedForBusinessRequest
                         ),
+                    MessageApi,
                     api
                 ),
             }),

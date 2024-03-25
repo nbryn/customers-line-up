@@ -55,7 +55,7 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
 
         updatedBusiness.Name.Should().Be(updateBusinessRequest.Name);
         updatedBusiness.Capacity.Should().Be(updateBusinessRequest.Capacity);
-        updatedBusiness.TimeSlotLength.Should().Be(updateBusinessRequest.TimeSlotLengthInMinutes);
+        updatedBusiness.TimeSlotLengthInMinutes.Should().Be(updateBusinessRequest.TimeSlotLengthInMinutes);
         updatedBusiness.Type.Should().Be(updateBusinessRequest.Type);
     }
 

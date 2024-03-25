@@ -13,11 +13,11 @@ export function getConfiguration() {
     });
 }
 
-export async function apiQuery<T>(
-    query: (queryApi: QueryApi) => Promise<AxiosResponse<T, any>>,
+export async function apiQuery<TResponse>(
+    query: (queryApi: QueryApi) => Promise<AxiosResponse<TResponse, any>>,
     api: BaseQueryApi,
     successInfo?: Omit<ApiState, 'error'>
-): Promise<T> {
+): Promise<TResponse> {
     try {
         const response = await query(new QueryApi(getConfiguration()));
         if (successInfo) {
@@ -32,13 +32,14 @@ export async function apiQuery<T>(
     }
 }
 
-export async function apiMutation(
-    mutation: () => Promise<AxiosResponse<void | TokenResponse, any>>,
+export async function apiMutation<TApi>(
+    mutation: (api: TApi) => Promise<AxiosResponse<void | TokenResponse, any>>,
+    apiConstructor: new (config: Configuration) => TApi,
     api: BaseQueryApi,
     successInfo?: Omit<ApiState, 'error'>
 ): Promise<void> {
     try {
-        await mutation();
+        await mutation(new apiConstructor(getConfiguration()));
         if (successInfo) {
             api.dispatch(setApiState(successInfo));
         }
