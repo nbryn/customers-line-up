@@ -3,14 +3,14 @@ import {Col, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 
 import {Card} from '../../shared/components/card/Card';
-import {generateTimeSlots} from './TimeSlotApi';
+import {useGenerateTimeSlotsMutation} from './TimeSlotApi';
 import {ComboBox} from '../../shared/components/form/ComboBox';
 import type {ComboBoxOption} from '../../shared/components/form/ComboBox';
 import DateUtil from '../../shared/util/DateUtil';
 import {ErrorView} from '../../shared/views/ErrorView';
 import {Header} from '../../shared/components/Texts';
-import {selectCurrentBusiness} from '../business/BusinessApi';
-import {useAppDispatch, useAppSelector} from '../../app/Store';
+import {selectCurrentBusiness} from '../business/BusinessState';
+import {useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -28,12 +28,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const GenerateTimeSlotsView: React.FC = () => {
-    const styles = useStyles();
-    const dispatch = useAppDispatch();
-    const business = useAppSelector(selectCurrentBusiness);
-
     const [dateOptions, setDateOptions] = useState<ComboBoxOption[]>(DateUtil.getNext7Days());
     const [selectedDate, setSelectedDate] = useState<ComboBoxOption>();
+
+    const styles = useStyles();
+    const business = useAppSelector(selectCurrentBusiness);
+    const [generateTimeSlots] = useGenerateTimeSlotsMutation();
 
     if (!business) {
         return <ErrorView />;
@@ -46,7 +46,7 @@ export const GenerateTimeSlotsView: React.FC = () => {
     return (
         <>
             <Row className={styles.row}>
-                <Header text={business.name} />
+                <Header text={business.name ?? ''} />
             </Row>
             <Row className={styles.row}>
                 <Col lg={6}>
@@ -60,13 +60,15 @@ export const GenerateTimeSlotsView: React.FC = () => {
                         buttonStyle={styles.button}
                         buttonSize="large"
                         disableButton={!selectedDate || !dateOptions.length}
-                        buttonAction={() =>
-                            dispatch(
-                                generateTimeSlots({
-                                    businessId: business.id,
-                                    start: selectedDate!.value!,
-                                })
-                            )
+                        buttonAction={async () =>
+                            await generateTimeSlots({
+                                businessId: business.id ?? '',
+                                date: {
+                                    year: selectedDate?.date?.year(),
+                                    month: selectedDate?.date?.month(),
+                                    day: selectedDate?.date?.date(),
+                                },
+                            })
                         }
                     >
                         <ComboBox

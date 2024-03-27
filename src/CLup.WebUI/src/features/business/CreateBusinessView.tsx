@@ -46,7 +46,7 @@ export const CreateBusinessView: React.FC = () => {
         name: '',
         zip: '',
         street: '',
-        type: BusinessType.NUMBER_1,
+        type: BusinessType.Bakery,
         capacity: 0,
         timeSlotLengthInMinutes: 0,
         opens: '',
@@ -63,12 +63,12 @@ export const CreateBusinessView: React.FC = () => {
 
             const createBusinessRequest = {
                 ...formValues,
+                address,
                 businessHours: {
                     // TODO: This will not work if the user enters a time with minutes
                     start: {hour: parseInt(formValues.opens)},
                     end: {hour: parseInt(formValues.closes)},
                 },
-                address,
             } as CreateBusinessRequest;
 
             await createBusiness(createBusinessRequest);

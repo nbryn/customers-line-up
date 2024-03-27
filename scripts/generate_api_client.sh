@@ -26,7 +26,7 @@ if [ $? -eq 0 ]; then
     rm -rf $OUTPUT_DIR/*
     mkdir -p $OUTPUT_DIR
 
-    openapi-generator-cli generate -i api-spec.json -g typescript-axios -o $OUTPUT_DIR
+    openapi-generator-cli generate -i api-spec.json -g typescript-axios --additional-properties=stringEnums=true -o $OUTPUT_DIR
     rm api-spec.json
     if [ $? -eq 0 ]; then
         echo "TypeScript client generated successfully in $OUTPUT_DIR"

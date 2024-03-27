@@ -6,11 +6,11 @@ import makeStyles from '@mui/styles/makeStyles';
 import {useHistory} from 'react-router-dom';
 
 import {CardInfo} from '../../shared/components/card/CardInfo';
-import {selectBusinessesByOwner} from './BusinessApi';
+import {useGetBusinessesByOwnerQuery} from './BusinessApi';
+import {setCurrentBusiness} from './BusinessState';
 import {Header, HeaderSize} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
-import {selectApiState} from '../../shared/api/ApiState';
-import {setCurrentBusiness} from './BusinessApi';
+import {isLoading} from '../../shared/api/ApiState';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles(() => ({
@@ -33,26 +33,28 @@ export const SelectBusinessView: React.FC = () => {
     const styles = useStyles();
     const history = useHistory();
     const dispatch = useAppDispatch();
+    const loading = useAppSelector(isLoading);
 
-    const apiState = useAppSelector(selectApiState);
-    const businesses = useAppSelector(selectBusinessesByOwner);
+    const {data: businessesByOwnerResponse} = useGetBusinessesByOwnerQuery();
     return (
         <>
             <Row className={styles.row}>
                 <Header
                     text={
-                        businesses.length ? 'Choose Business' : 'You dont have any businesses yet'
+                        businessesByOwnerResponse?.businesses?.length
+                            ? 'Choose Business'
+                            : 'You dont have any businesses yet'
                     }
                     size={HeaderSize.H1}
                 />
             </Row>
-            {apiState.loading ? (
+            {loading ? (
                 <Row className={styles.spinner}>
                     <CircularProgress />
                 </Row>
             ) : (
                 <Row className={styles.row}>
-                    {!businesses.length ? (
+                    {!businessesByOwnerResponse?.businesses?.length ? (
                         <Row>
                             <Button
                                 className={styles.noBusinessesButton}
@@ -65,11 +67,11 @@ export const SelectBusinessView: React.FC = () => {
                             </Button>
                         </Row>
                     ) : (
-                        businesses.map((business) => {
+                        businessesByOwnerResponse?.businesses.map((business) => {
                             return (
                                 <Col key={business.id} sm={6} md={8} lg={4}>
                                     <InfoCard
-                                        title={business.name}
+                                        title={business.name ?? ''}
                                         buttonText="Select Business"
                                         buttonAction={() => {
                                             dispatch(setCurrentBusiness(business));
@@ -78,8 +80,8 @@ export const SelectBusinessView: React.FC = () => {
                                     >
                                         <CardInfo
                                             infoTexts={[
-                                                {text: `${business.zip}`, icon: 'City'},
-                                                {text: `${business.street}`, icon: 'Home'},
+                                                {text: `${business.address?.zip}`, icon: 'City'},
+                                                {text: `${business.address?.street}`, icon: 'Home'},
                                             ]}
                                         />
                                     </InfoCard>

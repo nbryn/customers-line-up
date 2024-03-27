@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import makeStyles from '@mui/styles/makeStyles';
 
-import {selectApiState} from '../../api/ApiState';
+import {isLoading, selectApiState} from '../../api/ApiState';
 import {useAppSelector} from '../../../app/Store';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,34 +54,33 @@ export const Form: React.FC<Props> = ({
 }) => {
     const styles = useStyles();
     const apiState = useAppSelector(selectApiState);
+    const loading = useAppSelector(isLoading);
 
     return (
-        <>
-            <form style={style} noValidate onSubmit={onSubmit}>
-                {showMessage && apiState.message && (
-                    <Alert className={styles.alert} variant="danger">
-                        {apiState.message}
-                    </Alert>
-                )}
+        <form style={style} noValidate onSubmit={onSubmit}>
+            {showMessage && apiState.message && (
+                <Alert className={styles.alert} variant="danger">
+                    {apiState.message}
+                </Alert>
+            )}
 
-                {apiState.loading ? (
-                    <CircularProgress className={styles.working} />
-                ) : (
-                    <>
-                        {children}
-                        <Button
-                            className={styles.button}
-                            disabled={!valid}
-                            color="primary"
-                            size="medium"
-                            type="submit"
-                            variant="contained"
-                        >
-                            {buttonText}
-                        </Button>
-                    </>
-                )}
-            </form>
-        </>
+            {loading ? (
+                <CircularProgress className={styles.working} />
+            ) : (
+                <>
+                    {children}
+                    <Button
+                        className={styles.button}
+                        disabled={!valid}
+                        color="primary"
+                        size="medium"
+                        type="submit"
+                        variant="contained"
+                    >
+                        {buttonText}
+                    </Button>
+                </>
+            )}
+        </form>
     );
 };

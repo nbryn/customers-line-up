@@ -2,12 +2,14 @@ import React from 'react';
 import Autocomplete, {createFilterOptions} from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
+import type moment from 'moment';
 
 import type {TextFieldType} from './TextField';
 
 export type ComboBoxOption = {
     label: string;
-    value?: string;
+    value?: string
+    date?: moment.Moment;
 };
 
 export type Props = {

@@ -4,14 +4,11 @@ import Divider from '@mui/material/Divider';
 import makeStyles from '@mui/styles/makeStyles';
 
 import type {AddressHandler} from '../../hooks/useAddress';
-import type {BusinessDTO} from '../../../features/business/Business';
 import {Card} from './Card';
-import type {FormHandler} from '../../hooks/useForm';
-import type {HasAddress} from '../../models/General';
+import type {FormHandler, Index} from '../../hooks/useForm';
 import {TextFieldCardRow} from './TextFieldCardRow';
 import type {FormCardData} from './TextFieldCardRow';
-import TextFieldUtil from '../../util/TextFieldUtil';
-import type {UserDTO} from '../../../features/user/User';
+import TextFieldUtil, {type HasAddress} from '../../util/TextFieldUtil';
 
 const useStyles = makeStyles({
     root: {
@@ -34,7 +31,7 @@ const useStyles = makeStyles({
 });
 
 function convertToFormData(
-    data: UserDTO | BusinessDTO,
+    data: Index,
     formHandler: FormHandler<any>,
     addressHandler: AddressHandler,
     entity: HasAddress,
@@ -63,35 +60,33 @@ function convertToFormData(
 }
 
 type Props = {
-    formData: UserDTO | BusinessDTO;
+    formData: Index;
     entity: HasAddress;
     formHandler: FormHandler<any>;
     addressHandler: AddressHandler;
-    buttonAction?: () => void;
     title: string;
     buttonText?: string;
-    primaryAction?: () => void;
-    getIndex?: (key: string) => number | undefined;
-    primaryActionText?: string;
     primaryDisabled?: boolean;
     selectOptions?: string[];
+    buttonAction?: () => void;
+    getIndex?: (key: string) => number | undefined;
 };
 
 export const FormCard: React.FC<Props> = ({
-    buttonAction,
     primaryDisabled,
     buttonText,
     title,
-    formData,
+    formData: data,
     formHandler,
     addressHandler,
     entity,
+    buttonAction,
     getIndex,
     selectOptions,
 }: Props) => {
     const styles = useStyles();
 
-    let formCardData = convertToFormData(formData, formHandler, addressHandler, entity, getIndex);
+    let formCardData = convertToFormData(data, formHandler, addressHandler, entity, getIndex);
 
     if (formCardData[0].index) formCardData = formCardData.sort((a, b) => a.index! - b.index!);
     return (

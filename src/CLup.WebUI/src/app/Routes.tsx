@@ -19,6 +19,9 @@ import {HomeView} from '../features/user/HomeView';
 import {ProfileView} from '../features/user/ProfileView';
 import {UserMessageView} from '../features/user/UserMessageView';
 import {BusinessMessageView} from '../features/business/BusinessMessageView';
+import {BUSINESS_ROUTE} from '../features/business/BusinessApi';
+import {MANAGE_EMPLOYEES_ROUTE} from '../features/employee/EmployeeApi';
+import {MANAGE_TIMESLOTS_ROUTE} from '../features/timeslot/TimeSlotApi';
 
 const HOME_ROUTE = '/';
 
@@ -30,7 +33,6 @@ const USER_MESSAGES_ROUTE = '/user/messages';
 const CREATE_BOOKING_ROUTE = '/booking/new';
 const CREATE_BUSINESS_ROUTE = '/business/new';
 
-export const BUSINESS_ROUTE = '/business';
 const BUSINESS_OVERVIEW_ROUTE = '/business/overview';
 const BUSINESS_BOOKINGS_ROUTE = '/business/bookings';
 const BUSINESS_TIMESLOTS_ROUTE = '/business/timeslots';
@@ -38,10 +40,8 @@ const BUSINESS_EMPLOYEES_ROUTE = '/business/employees';
 const BUSINESS_MESSAGES_ROUTE = '/business/messages';
 
 const CREATE_EMPLOYEE_ROUTE = '/business/employees/new';
-export const MANAGE_EMPLOYEES_ROUTE = '/business/employees/manage';
 
 const MANAGE_BOOKINGS_ROUTE = '/business/bookings/manage';
-export const MANAGE_TIMESLOTS_ROUTE = '/business/timeslots/manage';
 const MANAGE_BUSINESS_MESSAGES_ROUTE = '/business/messages/manage';
 const GENERATE_TIMESLOTS_ROUTE = '/business/timeslots/new';
 const MANAGE_BUSINESS_ROUTE = '/business/manage';

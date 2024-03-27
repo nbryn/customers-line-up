@@ -63,7 +63,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
     const styles = useStyles();
 
     const dispatch = useAppDispatch();
-    const {data: user} = useGetUserQuery();
+    const {data: getUserResponse} = useGetUserQuery();
 
     const menuItems: MenuItem[] = [
         {
@@ -161,8 +161,7 @@ export const MainMenu: React.FC<Props> = (props: Props) => {
                         <ListItemText primary={menuItem.label} />
                     </ListItem>
                 ))}
-                {user?.role === Role.NUMBER_3 &&
-                    // TODO: Fix when enum is correct
+                {getUserResponse?.user?.role === Role.Employee &&
                     employeeItems.map((menuItem) => (
                         <ListItem
                             className={styles.listItem}

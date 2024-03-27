@@ -2,23 +2,19 @@ import React from 'react';
 import {Container} from 'react-bootstrap';
 
 import {MessageContainer} from '../../shared/containers/MessageContainer';
-import {
-    selectReceivedUserMessages,
-    selectSentUserMessages,
-} from '../message/MessageApi';
-import type {SendMessage} from '../../features/message/Message';
-import {sendMessage} from '../message/MessageApi';
-import {useAppDispatch, useAppSelector} from '../../app/Store';
+import {useSendUserMessageMutation} from '../message/MessageApi';
+import {useGetUserQuery} from './UserApi';
 
 export const UserMessageView: React.FC = () => {
-    const dispatch = useAppDispatch();
+    const {data: getUserResponse} = useGetUserQuery();
+    const [sendUserMessage] = useSendUserMessageMutation();
 
     return (
         <Container>
             <MessageContainer
-                receivedMessages={useAppSelector(selectReceivedUserMessages)}
-                sentMessages={useAppSelector(selectSentUserMessages)}
-                sendMessage={(message: SendMessage) => dispatch(sendMessage(message))}
+                receivedMessages={getUserResponse?.user?.receivedMessages ?? []}
+                sentMessages={getUserResponse?.user?.sentMessages ?? []}
+                sendMessage={async (message: any) => await sendUserMessage(message)}
             />
         </Container>
     );

@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using CLup.API.Exceptions;
 using CLup.API.Extensions;
 using CLup.API.Middleware;
@@ -62,6 +63,10 @@ public class Program
                 config.AddPolicy(Policies.User, Policies.UserPolicy());
             })
             .AddControllers()
+            .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                })
             .AddFluentValidation(fv =>
             {
                 fv.ImplicitlyValidateChildProperties = true;

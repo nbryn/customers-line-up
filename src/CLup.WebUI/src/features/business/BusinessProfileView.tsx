@@ -28,7 +28,7 @@ const getIndex = (key: string) => {
     if (key === 'street') return 3;
     if (key === 'type') return 4;
     if (key === 'capacity') return 5;
-    if (key === 'timeSlotLength') return 6;
+    if (key === 'timeSlotLengthInMinutes') return 6;
     if (key === 'opens') return 7;
     if (key === 'closes') return 8;
 };
@@ -48,9 +48,9 @@ export const BusinessProfileView: React.FC = () => {
         street: business.address?.street,
         type: business.type,
         capacity: business.capacity,
-        timeSlotLength: business.timeSlotLength,
-        opens: business.businessHours?.start,
-        closes: business.businessHours?.end,
+        timeSlotLengthInMinutes: business.timeSlotLengthInMinutes,
+        opens: business.businessHours?.start?.hour?.toString() ?? '',
+        closes: business.businessHours?.end?.hour?.toString() ?? '',
     };
 
     const {formHandler} = useForm<typeof formValues & Index>({
@@ -65,6 +65,10 @@ export const BusinessProfileView: React.FC = () => {
                 ...formValues,
                 businessId: business.id,
                 address,
+                businessHours: {
+                    start: {hour: parseInt(formValues.opens)},
+                    end: {hour: parseInt(formValues.closes)},
+                },
             } as UpdateBusinessRequest);
         },
     });

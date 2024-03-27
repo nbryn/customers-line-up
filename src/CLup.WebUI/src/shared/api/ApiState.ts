@@ -1,27 +1,27 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {QueryStatus} from '@reduxjs/toolkit/query';
 
-import {useAppSelector, type RootState} from '../../app/Store';
+import {type RootState} from '../../app/Store';
 
 export type ToastInfo = {
     buttonText: string;
     navigateTo: string;
 };
 
-export interface ApiState {
+export interface ApiInfo {
     error: boolean;
     message: string;
     toastInfo?: ToastInfo;
 }
 
-const initialState: ApiState = {
+const initialState: ApiInfo = {
     error: false,
     message: '',
     toastInfo: undefined,
 };
 
 export const apiSlice = createSlice({
-    name: 'api',
+    name: 'apiState',
     initialState,
     reducers: {
         setApiState: (state, {payload}) => {
@@ -37,14 +37,13 @@ export const apiSlice = createSlice({
     },
 });
 
-export const isLoading = useAppSelector((state) => {
-    return Object.values(state.api.queries).some((query) => {
+export const isLoading = (state: RootState) =>
+    Object.values(state.api.queries).some((query) => {
         return query && query.status === QueryStatus.pending;
     });
-});
 
 export const {clearApiState, setApiState} = apiSlice.actions;
 
-export const selectApiState = (state: RootState) => state.api;
+export const selectApiState = (state: RootState): ApiInfo => state.apiInfo;
 
 export default apiSlice.reducer;

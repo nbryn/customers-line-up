@@ -174,7 +174,7 @@ export interface BusinessDto {
      * @type {number}
      * @memberof BusinessDto
      */
-    'timeSlotLength'?: number;
+    'timeSlotLengthInMinutes'?: number;
     /**
      * 
      * @type {BusinessType}
@@ -226,17 +226,15 @@ export interface BusinessDto {
  * @enum {string}
  */
 
-export const BusinessType = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_3: 3,
-    NUMBER_4: 4,
-    NUMBER_5: 5,
-    NUMBER_6: 6,
-    NUMBER_7: 7
-} as const;
-
-export type BusinessType = typeof BusinessType[keyof typeof BusinessType];
+export enum BusinessType {
+    Supermarket = 'Supermarket',
+    Museum = 'Museum',
+    Kiosk = 'Kiosk',
+    Hairdresser = 'Hairdresser',
+    Bakery = 'Bakery',
+    Library = 'Library',
+    Other = 'Other'
+}
 
 
 /**
@@ -398,17 +396,15 @@ export interface DateOnly {
  * @enum {string}
  */
 
-export const DayOfWeek = {
-    NUMBER_0: 0,
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_3: 3,
-    NUMBER_4: 4,
-    NUMBER_5: 5,
-    NUMBER_6: 6
-} as const;
-
-export type DayOfWeek = typeof DayOfWeek[keyof typeof DayOfWeek];
+export enum DayOfWeek {
+    Sunday = 'Sunday',
+    Monday = 'Monday',
+    Tuesday = 'Tuesday',
+    Wednesday = 'Wednesday',
+    Thursday = 'Thursday',
+    Friday = 'Friday',
+    Saturday = 'Saturday'
+}
 
 
 /**
@@ -510,6 +506,19 @@ export interface GetBusinessResponse {
      * @memberof GetBusinessResponse
      */
     'business'?: BusinessDto;
+}
+/**
+ * 
+ * @export
+ * @interface GetBusinessesByOwnerResponse
+ */
+export interface GetBusinessesByOwnerResponse {
+    /**
+     * 
+     * @type {Array<BusinessDto>}
+     * @memberof GetBusinessesByOwnerResponse
+     */
+    'businesses'?: Array<BusinessDto> | null;
 }
 /**
  * 
@@ -636,12 +645,10 @@ export interface MessageDto {
  * @enum {string}
  */
 
-export const MessageType = {
-    NUMBER_1: 1,
-    NUMBER_2: 2
-} as const;
-
-export type MessageType = typeof MessageType[keyof typeof MessageType];
+export enum MessageType {
+    BookingDeleted = 'BookingDeleted',
+    Enquiry = 'Enquiry'
+}
 
 
 /**
@@ -720,14 +727,12 @@ export interface RegisterRequest {
  * @enum {string}
  */
 
-export const Role = {
-    NUMBER_1: 1,
-    NUMBER_2: 2,
-    NUMBER_3: 3,
-    NUMBER_4: 4
-} as const;
-
-export type Role = typeof Role[keyof typeof Role];
+export enum Role {
+    User = 'User',
+    Employee = 'Employee',
+    Owner = 'Owner',
+    Admin = 'Admin'
+}
 
 
 /**
@@ -2197,38 +2202,6 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        fetchBusinessTypes: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/query/business/types`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication Bearer required
-            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         getAllBusinesses: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/query/business/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -2359,18 +2332,14 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @param {string} businessId 
-         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUsersNotAlreadyEmployedByBusiness: async (businessId: string, id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getUsersNotAlreadyEmployedByBusiness: async (businessId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'businessId' is not null or undefined
             assertParamExists('getUsersNotAlreadyEmployedByBusiness', 'businessId', businessId)
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('getUsersNotAlreadyEmployedByBusiness', 'id', id)
-            const localVarPath = `/api/query/user/notemployedbybusiness/{id}`
-                .replace(`{${"businessId"}}`, encodeURIComponent(String(businessId)))
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            const localVarPath = `/api/query/user/notemployedbybusiness/{businessId}`
+                .replace(`{${"businessId"}}`, encodeURIComponent(String(businessId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -2411,17 +2380,6 @@ export const QueryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async fetchBusinessTypes(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.fetchBusinessTypes(options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['QueryApi.fetchBusinessTypes']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
         async getAllBusinesses(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetAllBusinessesResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getAllBusinesses(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
@@ -2445,7 +2403,7 @@ export const QueryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getBusinessesByOwner(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetUserResponse>> {
+        async getBusinessesByOwner(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBusinessesByOwnerResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getBusinessesByOwner(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['QueryApi.getBusinessesByOwner']?.[localVarOperationServerIndex]?.url;
@@ -2465,12 +2423,11 @@ export const QueryApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} businessId 
-         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUsersNotAlreadyEmployedByBusiness(businessId: string, id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UsersNotEmployedByBusinessResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getUsersNotAlreadyEmployedByBusiness(businessId, id, options);
+        async getUsersNotAlreadyEmployedByBusiness(businessId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UsersNotEmployedByBusinessResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getUsersNotAlreadyEmployedByBusiness(businessId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['QueryApi.getUsersNotAlreadyEmployedByBusiness']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -2485,14 +2442,6 @@ export const QueryApiFp = function(configuration?: Configuration) {
 export const QueryApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = QueryApiFp(configuration)
     return {
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        fetchBusinessTypes(options?: any): AxiosPromise<void> {
-            return localVarFp.fetchBusinessTypes(options).then((request) => request(axios, basePath));
-        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -2515,7 +2464,7 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getBusinessesByOwner(options?: any): AxiosPromise<GetUserResponse> {
+        getBusinessesByOwner(options?: any): AxiosPromise<GetBusinessesByOwnerResponse> {
             return localVarFp.getBusinessesByOwner(options).then((request) => request(axios, basePath));
         },
         /**
@@ -2529,12 +2478,11 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @param {string} businessId 
-         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUsersNotAlreadyEmployedByBusiness(businessId: string, id: string, options?: any): AxiosPromise<UsersNotEmployedByBusinessResponse> {
-            return localVarFp.getUsersNotAlreadyEmployedByBusiness(businessId, id, options).then((request) => request(axios, basePath));
+        getUsersNotAlreadyEmployedByBusiness(businessId: string, options?: any): AxiosPromise<UsersNotEmployedByBusinessResponse> {
+            return localVarFp.getUsersNotAlreadyEmployedByBusiness(businessId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -2546,16 +2494,6 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
  * @extends {BaseAPI}
  */
 export class QueryApi extends BaseAPI {
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof QueryApi
-     */
-    public fetchBusinessTypes(options?: RawAxiosRequestConfig) {
-        return QueryApiFp(this.configuration).fetchBusinessTypes(options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -2600,13 +2538,12 @@ export class QueryApi extends BaseAPI {
     /**
      * 
      * @param {string} businessId 
-     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof QueryApi
      */
-    public getUsersNotAlreadyEmployedByBusiness(businessId: string, id: string, options?: RawAxiosRequestConfig) {
-        return QueryApiFp(this.configuration).getUsersNotAlreadyEmployedByBusiness(businessId, id, options).then((request) => request(this.axios, this.basePath));
+    public getUsersNotAlreadyEmployedByBusiness(businessId: string, options?: RawAxiosRequestConfig) {
+        return QueryApiFp(this.configuration).getUsersNotAlreadyEmployedByBusiness(businessId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -63,7 +63,7 @@ public sealed class QueryController : AuthorizedControllerBase
 
     [HttpGet]
     [Route("user/businesses")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserResponse))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetBusinessesByOwnerResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBusinessesByOwner()
     {
@@ -90,21 +90,9 @@ public sealed class QueryController : AuthorizedControllerBase
         return Ok(new GetAllBusinessesResponse(businesses.Select(BusinessDto.FromBusiness).ToList()));
     }
 
+
     [HttpGet]
-    [Route("business/types")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public IActionResult FetchBusinessTypes()
-    {
-        var types = EnumUtil
-            .GetValues<BusinessType>()
-            .Select(type => type.ToString("G"))
-            .ToList();
-
-        return Ok(types);
-    }
-
     [Route("user/notEmployedByBusiness/{businessId:guid}")]
-    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusinessResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUsersNotAlreadyEmployedByBusiness([FromRoute] Guid businessId)

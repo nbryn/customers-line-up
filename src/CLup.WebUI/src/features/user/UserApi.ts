@@ -20,8 +20,7 @@ const userApi = baseApi.injectEndpoints({
         usersNotEmployedByBusiness: builder.query<UsersNotEmployedByBusinessResponse, string>({
             queryFn: async (businessId, api) => ({
                 data: await apiQuery(
-                    async (queryApi) =>
-                        queryApi.getUsersNotAlreadyEmployedByBusiness(businessId, ''),
+                    async (queryApi) => queryApi.getUsersNotAlreadyEmployedByBusiness(businessId),
                     api
                 ),
             }),
@@ -40,4 +39,4 @@ const userApi = baseApi.injectEndpoints({
     }),
 });
 
-export const {useGetUserQuery} = userApi;
+export const {useGetUserQuery, useUsersNotEmployedByBusinessQuery, useUpdateUserMutation} = userApi;

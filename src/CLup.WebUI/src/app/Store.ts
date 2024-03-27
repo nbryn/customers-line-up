@@ -1,7 +1,8 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import {QueryStatus, setupListeners} from '@reduxjs/toolkit/query';
+import {setupListeners} from '@reduxjs/toolkit/query';
 
+import apiReducer from '../shared/api/ApiState';
 import businessReducer from '../features/business/BusinessState';
 import {type TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
@@ -22,6 +23,7 @@ export const baseApi = createApi({
 export const store = configureStore({
     reducer: {
         business: businessReducer,
+        apiInfo: apiReducer,
         [baseApi.reducerPath]: baseApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(baseApi.middleware),

@@ -7,6 +7,7 @@ import makeStyles from '@mui/styles/makeStyles';
 import {isLoading} from '../api/ApiState';
 import {Table} from '../components/Table';
 import type {TableColumn} from '../components/Table';
+import {useAppSelector} from '../../app/Store';
 
 const useStyles = makeStyles(() => ({
     spinner: {
@@ -31,9 +32,10 @@ export const TableContainer: React.FC<Props> = ({
     emptyMessage,
 }: Props) => {
     const styles = useStyles();
+    const loading = useAppSelector(isLoading);
     return (
         <>
-            {isLoading ? (
+            {loading ? (
                 <Row className={styles.spinner}>
                     <CircularProgress />
                 </Row>

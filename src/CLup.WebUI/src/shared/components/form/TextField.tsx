@@ -1,8 +1,6 @@
 import React from 'react';
-import type {ReactText} from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import MaterialUITextField from '@mui/material/TextField';
-import type {DTO} from '../../models/General';
 
 const useStyles = makeStyles(() => ({
     helperText: {
@@ -15,9 +13,8 @@ export type TextFieldType = 'text' | 'number' | 'time' | 'password' | 'email' | 
 type Props = {
     id: string;
     label: string | undefined;
-    value?: ReactText | boolean | DTO | DTO[] | undefined;
+    value?: boolean | string | number | any[] | undefined;
     helperText?: string | boolean;
-    inputProps?: any;
     size?: 'small' | 'medium';
     margin?: 'none' | 'dense' | 'normal';
     type?: TextFieldType;
@@ -25,7 +22,7 @@ type Props = {
     select?: boolean;
     className?: any;
     variant?: 'filled' | 'outlined' | 'standard';
-    defaultValue?: ReactText;
+    defaultValue?: any;
     inputLabelProps?: any;
     error?: boolean;
     children?: React.ReactNode;
@@ -47,7 +44,7 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>((props) => {
     return (
         <MaterialUITextField
             className={props.className}
-            variant={props.variant || 'outlined'}
+            variant={props.variant ?? 'outlined'}
             margin={props.margin}
             size={props.size}
             helperText={props.helperText}
