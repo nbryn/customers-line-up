@@ -8,6 +8,7 @@ using CLup.Application.Auth;
 using CLup.Domain;
 using CLup.Infrastructure;
 using FluentValidation.AspNetCore;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -29,7 +30,8 @@ public class Program
 
         // TODO: Don't use in production
         builder.Host.UseSerilog((context, loggerConfiguration) =>
-            loggerConfiguration.ReadFrom.Configuration(context.Configuration));
+            loggerConfiguration.ReadFrom.Configuration(context.Configuration)
+                .WriteTo.ApplicationInsights(new TelemetryConfiguration{ConnectionString = "4b908660-9cba-4189-8a7a-431475e8fdf7;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"}, TelemetryConverter.Traces));
 
         var app = builder.Build();
         await Configure(app, builder.Environment);
