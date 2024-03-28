@@ -1,5 +1,8 @@
 name: Deploy UI
 
+env:
+  NPM_CONFIG_LEGACY_PEER_DEPS: true
+
 on:
   push:
     branches:
@@ -19,19 +22,6 @@ jobs:
         with:
           submodules: true
           lfs: false
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
-
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
-        working-directory: ./src/CLup.WebUI
-
-      - name: Build the project
-        run: npm run build
-        working-directory: ./src/CLup.WebUI
 
       - name: Build And Deploy
         id: builddeploy
