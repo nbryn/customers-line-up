@@ -28,7 +28,6 @@ public class Program
 
         ConfigureServices(builder.Services, builder.Configuration, appSettings, builder.Environment);
 
-        // TODO: Load settings from appsettings.json.
         if (builder.Environment.IsProduction())
         {
             builder.Host.UseSerilog((context, loggerConfiguration) =>
@@ -36,8 +35,7 @@ public class Program
                     .WriteTo.ApplicationInsights(
                         new TelemetryConfiguration
                         {
-                            ConnectionString =
-                                "InstrumentationKey=4b908660-9cba-4189-8a7a-431475e8fdf7;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
+                            ConnectionString = appSettings.ConnectionStrings.ApplicationInsights,
                         }, TelemetryConverter.Traces));
         }
         else
