@@ -57,6 +57,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(user => user.Bookings)
             .WithOne(booking => booking.User)
             .HasForeignKey(booking => booking.UserId)
+            .OnDelete(DeleteBehavior.ClientCascade)
             .IsRequired();
 
 

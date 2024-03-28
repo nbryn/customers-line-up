@@ -65,11 +65,13 @@ internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
         builder.HasMany(business => business.TimeSlots)
             .WithOne(timeSlot => timeSlot.Business)
             .HasForeignKey(timeSlot => timeSlot.BusinessId)
+            .OnDelete(DeleteBehavior.ClientCascade)
             .IsRequired();
 
         builder.HasMany(business => business.Bookings)
             .WithOne(booking => booking.Business)
             .HasForeignKey(booking => booking.BusinessId)
+            .OnDelete(DeleteBehavior.ClientCascade)
             .IsRequired();
 
         builder.HasMany(business => business.Employees)
