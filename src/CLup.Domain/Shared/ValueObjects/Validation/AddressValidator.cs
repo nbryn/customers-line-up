@@ -6,7 +6,7 @@ public class AddressValidator : AbstractValidator<Address>
     {
         RuleFor(address => address.Street).NotEmpty();
         RuleFor(address => address.City).NotEmpty();
-        RuleFor(address => address.Zip).NotEmpty().Must(zip => zip.ToString().Length == 4);
+        RuleFor(address => address.Zip).NotEmpty().GreaterThan(0).Must(zip => zip.ToString().Length == 4);
         RuleFor(address => address.Coords).NotEmpty().SetValidator(coordsValidator);
     }
 }

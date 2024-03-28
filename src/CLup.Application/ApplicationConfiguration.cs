@@ -6,7 +6,7 @@ namespace CLup.Application;
 
 public static class ApplicationConfiguration
 {
-    public static IServiceCollection ConfigureApplication(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureApplication(this IServiceCollection services)
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

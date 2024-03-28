@@ -81,7 +81,7 @@ public static class ServiceCollectionExtensions
         {
             options.AddPolicy("CorsApi", builder =>
             {
-                builder.WithOrigins("http://localhost:3000", "https://customers-lineup.azurewebsites.net", "https://kind-dune-01c004403.4.azurestaticapps.net/")
+                builder.WithOrigins("http://localhost:3000", "https://customers-lineup.azurewebsites.net", "https://kind-dune-01c004403.4.azurestaticapps.net")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();

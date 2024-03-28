@@ -12,6 +12,9 @@ export async function apiQuery<TResponse>(
     successInfo?: Omit<ApiInfo, 'error'>
 ): Promise<TResponse> {
     try {
+        const accessToken = Cookies.get('access_token');
+        if (!accessToken) return undefined as any;
+
         const response = await query(new QueryApi(getConfiguration()));
         if (successInfo) {
             api.dispatch(setApiState(successInfo));
