@@ -31,7 +31,6 @@ public static class InfrastructureConfiguration
         AppSettings appSettings,
         IWebHostEnvironment environment)
     {
-
         if (environment.IsDevelopment())
         {
             services.AddDbContext<CLupDbContext>(options =>
@@ -40,40 +39,9 @@ public static class InfrastructureConfiguration
         }
         else
         {
-            var connectionString = appSettings.ConnectionStrings.Production;
-            var normalizedConnString = NormalizeConnString(connectionString);
             services.AddDbContext<CLupDbContext>(options =>
-                    options.UseMySQL(normalizedConnString)
-                        .LogTo(Console.WriteLine, LogLevel.Information)
-                        .EnableSensitiveDataLogging()
-                        .EnableDetailedErrors()
-                , ServiceLifetime.Transient);
-
-
-            string NormalizeConnString(string raw)
-            {
-                string conn = string.Empty;
-                try
-                {
-                    var dict =
-                        raw.Split(';')
-                            .Where(kvp => kvp.Contains('='))
-                            .Select(kvp => kvp.Split(new char[] {'='}, 2))
-                            .ToDictionary(kvp => kvp[0].Trim(), kvp => kvp[1].Trim(),
-                                StringComparer.InvariantCultureIgnoreCase);
-                    var ds = dict["Data Source"];
-                    var dsa = ds.Split(":");
-                    //conn = $"server=127.0.0.1;userid=azure;password=;{dict["Password"]};database=localdb;Port={dsa[1]}";
-                    conn =
-                        $"Server={dsa[0]};Port={dsa[1]};Database={dict["Database"]};Uid={dict["User Id"]};Pwd={dict["Password"]};";
-                }
-                catch
-                {
-                    throw new Exception("Unexpected connection string: datasource is empty or null");
-                }
-
-                return conn;
-            }
+                    options.UseSqlServer(appSettings.ConnectionStrings.Production),
+                ServiceLifetime.Transient);
         }
     }
 }
