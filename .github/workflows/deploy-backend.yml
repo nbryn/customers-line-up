@@ -16,7 +16,7 @@ name: Deploy Backend
 
 env:
   AZURE_WEBAPP_NAME: customers-lineup # set this to the name of your Azure Web App
-  AZURE_WEBAPP_PACKAGE_PATH: "src/CLup.API"
+  AZURE_WEBAPP_PACKAGE_PATH: "./publish_output"
   DOTNET_VERSION: "8.0" # set this to the .NET Core version to use
 
 on:
