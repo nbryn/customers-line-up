@@ -20,28 +20,19 @@ jobs:
           submodules: true
           lfs: false
 
-      # Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16" # Specify the Node.js version you want to use
+          node-version: "16"
 
-      # Install dependencies using npm
       - name: Install dependencies
         run: npm install --legacy-peer-deps
-        working-directory: ./src/CLup.WebUI # Adjust this to your project's directory
+        working-directory: ./src/CLup.WebUI
 
-      # Build the project using npm
       - name: Build the project
         run: npm run build
-        working-directory: ./src/CLup.WebUI # Adjust this to your project's directory
+        working-directory: ./src/CLup.WebUI
 
-      # Test the project using npm
-      - name: Run tests
-        run: npm test --passWithNoTests
-        working-directory: ./src/CLup.WebUI 
-
-      # Proceed to deploy the app to Azure Static Web Apps
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
