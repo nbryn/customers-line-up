@@ -59,7 +59,7 @@ public class Program
             .ConfigureSwagger()
             .ConfigureJwt(appSettings)
             .AddSingleton(configuration)
-            .ConfigureCors(configuration)
+            .ConfigureCors()
             .ConfigureDomain(configuration)
             .ConfigureApplication(configuration)
             .ConfigureInfrastructure(appSettings, environment)

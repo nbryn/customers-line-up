@@ -75,13 +75,13 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection ConfigureCors(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection ConfigureCors(this IServiceCollection services)
     {
         services.AddCors(options =>
         {
             options.AddPolicy("CorsApi", builder =>
             {
-                builder.WithOrigins("http://localhost:3000")
+                builder.WithOrigins("http://localhost:3000", "https://customers-lineup.azurewebsites.net", "https://kind-dune-01c004403.4.azurestaticapps.net/")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials();

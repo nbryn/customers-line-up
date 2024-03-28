@@ -7,7 +7,7 @@ on:
   push:
     branches:
       - master
-  
+
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push'
@@ -29,6 +29,5 @@ jobs:
           app_location: "/src/CLup.WebUI"
           api_location: ""
           output_location: "build"
-      
         env:
-          REACT_APP_API_URL: https://customers-lineup.azurewebsites.net:8080
+          REACT_APP_API_URL: https://customers-lineup.azurewebsites.net
