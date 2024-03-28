@@ -29,3 +29,6 @@ jobs:
           app_location: "/src/CLup.WebUI"
           api_location: ""
           output_location: "build"
+      
+        env:
+          REACT_APP_API_URL: https://customers-lineup.azurewebsites.net:8080
