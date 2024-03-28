@@ -11,7 +11,7 @@ public static class AppExtensions
         using var scope = app.ApplicationServices.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<CLupDbContext>();
 
-        await context.Database.MigrateAsync();
+        context.Database.Migrate();
         var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
 
         await seeder.Seed();
