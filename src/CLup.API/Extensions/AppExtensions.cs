@@ -1,5 +1,6 @@
 ﻿using CLup.Infrastructure.Persistence;
 using CLup.Infrastructure.Persistence.Seed;
+using Microsoft.EntityFrameworkCore;
 
 namespace CLup.API.Extensions;
 
@@ -10,7 +11,7 @@ public static class AppExtensions
         using var scope = app.ApplicationServices.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<CLupDbContext>();
 
-        context.Database.EnsureCreated();
+        await context.Database.MigrateAsync();
         var seeder = scope.ServiceProvider.GetRequiredService<ISeeder>();
 
         await seeder.Seed();

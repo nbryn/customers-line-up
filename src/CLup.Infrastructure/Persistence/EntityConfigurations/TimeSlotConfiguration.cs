@@ -28,6 +28,7 @@ internal sealed class TimeSlotConfiguration : IEntityTypeConfiguration<TimeSlot>
         builder.HasMany(timeSlot => timeSlot.Bookings)
             .WithOne(booking => booking.TimeSlot)
             .HasForeignKey(booking => booking.TimeSlotId)
+            .OnDelete(DeleteBehavior.ClientCascade)
             .IsRequired();
     }
 }
