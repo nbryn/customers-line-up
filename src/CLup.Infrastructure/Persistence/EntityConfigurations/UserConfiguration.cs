@@ -51,7 +51,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasMany(user => user.Businesses)
             .WithOne()
-            .HasForeignKey(business  => business.OwnerId)
+            .HasForeignKey(business => business.OwnerId)
             .IsRequired();
 
         builder.HasMany(user => user.Bookings)
@@ -63,6 +63,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(user => user.SentMessages)
             .WithOne()
             .HasForeignKey(message => message.SenderId)
+            .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
 
         builder.HasMany(user => user.ReceivedMessages)

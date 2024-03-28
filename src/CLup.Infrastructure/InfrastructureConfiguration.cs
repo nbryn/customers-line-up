@@ -39,7 +39,7 @@ public static class InfrastructureConfiguration
         else
         {
             services.AddDbContext<CLupDbContext>(options =>
-                    options.UseSqlServer(appSettings.ConnectionStrings.Production, options => options.EnableRetryOnFailure()),
+                    options.UseSqlServer(appSettings.ConnectionStrings.Production, options => options.EnableRetryOnFailure(12)),
                 ServiceLifetime.Transient);
         }
     }

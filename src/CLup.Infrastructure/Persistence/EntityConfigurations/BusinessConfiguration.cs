@@ -80,6 +80,7 @@ internal sealed class BusinessConfiguration : IEntityTypeConfiguration<Business>
         builder.HasMany(business => business.SentMessages)
             .WithOne()
             .HasForeignKey(message => message.SenderId)
+            .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
 
         builder.HasMany(business => business.ReceivedMessages)
