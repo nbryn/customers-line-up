@@ -39,7 +39,8 @@ public class Program
                             ConnectionString =
                                 "InstrumentationKey=4b908660-9cba-4189-8a7a-431475e8fdf7;IngestionEndpoint=https://northeurope-2.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
                         }, TelemetryConverter.Traces));
-        } else
+        }
+        else
         {
             builder.Host.UseSerilog((context, loggerConfiguration) =>
                 loggerConfiguration.ReadFrom.Configuration(context.Configuration));
@@ -78,9 +79,9 @@ public class Program
             })
             .AddControllers()
             .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                })
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            })
             .AddFluentValidation(fv =>
             {
                 fv.ImplicitlyValidateChildProperties = true;
