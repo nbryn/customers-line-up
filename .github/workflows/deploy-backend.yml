@@ -47,11 +47,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
 
-      - name: Run tests
-        run: dotnet test --no-restore --verbosity normal
+      - name: Restore with dotnet
+        run: dotnet restore
 
       - name: Build with dotnet
         run: dotnet build --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ./publish_output --no-restore
