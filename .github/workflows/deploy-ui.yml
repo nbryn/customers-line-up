@@ -28,7 +28,7 @@ jobs:
 
       # Install dependencies using npm
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
         working-directory: ./src/CLup.WebUI # Adjust this to your project's directory
 
       # Build the project using npm
