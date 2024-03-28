@@ -63,7 +63,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasMany(user => user.SentMessages)
             .WithOne()
             .HasForeignKey(message => message.SenderId)
-            .OnDelete(DeleteBehavior.NoAction)
+            .OnDelete(DeleteBehavior.ClientCascade)
             .IsRequired();
 
         builder.HasMany(user => user.ReceivedMessages)
@@ -74,6 +74,7 @@ internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasOne<Employee>()
             .WithOne(employee => employee.User)
             .HasForeignKey<Employee>(employee => employee.UserId)
+            .OnDelete(DeleteBehavior.ClientCascade)
             .IsRequired();
     }
 }
