@@ -6,10 +6,8 @@ using CLup.API.Extensions;
 using CLup.Application.Businesses;
 using CLup.Application.Shared;
 using CLup.Application.Shared.Interfaces;
-using CLup.Application.Shared.Util;
 using CLup.Application.Users;
 using CLup.Domain.Businesses;
-using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Businesses.ValueObjects;
 using CLup.Domain.Shared;
 using CLup.Domain.Users;
@@ -87,6 +85,7 @@ public sealed class QueryController : AuthorizedControllerBase
     {
         var businesses = await _repository.FetchAllBusinesses();
 
+        // TODO: This shouldn't include business messages
         return Ok(new GetAllBusinessesResponse(businesses.Select(BusinessDto.FromBusiness).ToList()));
     }
 
