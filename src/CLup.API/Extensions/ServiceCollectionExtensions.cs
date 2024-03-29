@@ -5,6 +5,8 @@ using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace CLup.API.Extensions;
 
@@ -87,6 +89,27 @@ public static class ServiceCollectionExtensions
                     .AllowCredentials();
             });
         });
+
+        return services;
+    }
+
+    public static IServiceCollection ConfigureSerilog(this IServiceCollection services, WebApplicationBuilder builder, AppSettings appSettings)
+    {
+        if (builder.Environment.IsProduction())
+        {
+            builder.Host.UseSerilog((context, loggerConfiguration) =>
+                loggerConfiguration.ReadFrom.Configuration(context.Configuration)
+                    .WriteTo.ApplicationInsights(
+                        new TelemetryConfiguration
+                        {
+                            ConnectionString = appSettings.ConnectionStrings.ApplicationInsights,
+                        }, TelemetryConverter.Traces));
+        }
+        else
+        {
+            builder.Host.UseSerilog((context, loggerConfiguration) =>
+                loggerConfiguration.ReadFrom.Configuration(context.Configuration));
+        }
 
         return services;
     }

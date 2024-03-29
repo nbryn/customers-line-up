@@ -8,7 +8,6 @@ using CLup.Application.Auth;
 using CLup.Domain;
 using CLup.Infrastructure;
 using FluentValidation.AspNetCore;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using Swashbuckle.AspNetCore.SwaggerUI;
@@ -26,23 +25,7 @@ public class Program
         builder.Services.AddSingleton(appSettings);
         builder.WebHost.UseUrls(appSettings.Url);
 
-        ConfigureServices(builder.Services, builder.Configuration, appSettings, builder.Environment);
-
-        if (builder.Environment.IsProduction())
-        {
-            builder.Host.UseSerilog((context, loggerConfiguration) =>
-                loggerConfiguration.ReadFrom.Configuration(context.Configuration)
-                    .WriteTo.ApplicationInsights(
-                        new TelemetryConfiguration
-                        {
-                            ConnectionString = appSettings.ConnectionStrings.ApplicationInsights,
-                        }, TelemetryConverter.Traces));
-        }
-        else
-        {
-            builder.Host.UseSerilog((context, loggerConfiguration) =>
-                loggerConfiguration.ReadFrom.Configuration(context.Configuration));
-        }
+        ConfigureServices(builder.Services, appSettings, builder);
 
         var app = builder.Build();
         await Configure(app, builder.Environment);
@@ -51,18 +34,17 @@ public class Program
 
     private static void ConfigureServices(
         IServiceCollection services,
-        IConfiguration configuration,
         AppSettings appSettings,
-        IWebHostEnvironment environment)
+        WebApplicationBuilder builder)
     {
         services
-            .ConfigureSwagger()
-            .ConfigureJwt(appSettings)
-            .AddSingleton(configuration)
             .ConfigureCors()
             .ConfigureDomain()
+            .ConfigureSwagger()
             .ConfigureApplication()
-            .ConfigureInfrastructure(appSettings, environment)
+            .ConfigureJwt(appSettings)
+            .ConfigureSerilog(builder, appSettings)
+            .ConfigureInfrastructure(appSettings, builder.Environment)
             .AddExceptionHandler<GlobalExceptionHandler>()
             .AddRouting(options => options.LowercaseUrls = true)
             .AddValidatorsFromAssembly(Assembly.GetExecutingAssembly())
