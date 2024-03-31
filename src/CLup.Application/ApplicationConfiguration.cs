@@ -1,6 +1,7 @@
 using System.Reflection;
 using CLup.Application.Auth;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CLup.Application;
 

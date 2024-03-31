@@ -1,8 +1,12 @@
 version: "3.4"
 
+networks:
+  clup-network:
+    driver: bridge
+
 services:
-  db:
-    container_name: clup-db
+  postgres:
+    container_name: clup-postgres
     image: postgres:latest
     restart: always
     environment:
@@ -10,32 +14,37 @@ services:
       - POSTGRES_PASSWORD=postgres
     ports:
       - '5432:5432'
+    networks:
+      - clup-network
 
   server:
     container_name: clup-server
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5001
     build:
-      context: ./src
-      dockerfile: CLup.API/Dockerfile
+      context: .
+      dockerfile: src/CLup.API/Dockerfile
     ports:
       - "5001:5001"
     restart: always
     depends_on:
-      - db
+      - postgres
+    networks:
+      - clup-network
 
   client:
     container_name: clup-client
     build:
-      context: ./src/CLup.WebUI
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./src/CLup.WebUI/Dockerfile
     ports:
       - "3000:3000"
     restart: always
     depends_on:
       - server
-    links:
-      - server
+    networks:
+      - clup-network
 
   seq:
     container_name: clup-seq
@@ -46,3 +55,5 @@ services:
       - "5341:5341"
       - "8081:80"
     restart: always
+    networks:
+      - clup-network
