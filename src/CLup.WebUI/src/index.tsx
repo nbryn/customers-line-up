@@ -8,13 +8,11 @@ import {ThemeProvider} from '@mui/styles';
 
 import {MainView} from './app/MainView';
 import {store} from './app/Store';
-import {LoginAndRegisterRoutes} from './app/Routes';
 
 const App = () => {
     const theme = createTheme();
     return (
         <ThemeProvider theme={theme}>
-            <LoginAndRegisterRoutes />
             <MainView />
         </ThemeProvider>
     );

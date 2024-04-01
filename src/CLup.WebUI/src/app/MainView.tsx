@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
+import {useHistory} from 'react-router-dom';
 import {Container} from 'react-bootstrap';
 import CssBaseline from '@mui/material/CssBaseline';
 import makeStyles from '@mui/styles/makeStyles';
 import type {Theme} from '@mui/material/styles';
-import {useHistory} from 'react-router-dom';
 
 import {ExtendedToastMessage, ToastMessage} from '../shared/components/Toast';
 import {Header} from '../shared/components/navigation/Header';
-import {LoginView} from '../features/auth/LoginView';
 import {MainMenu} from '../shared/components/navigation/MainMenu';
-import {AuthRoutes} from './Routes';
+import {PublicRoutes, Routes} from './Routes';
 import {useGetUserQuery} from '../features/user/UserApi';
 import {useAppDispatch, useAppSelector} from './Store';
 import {clearApiState, selectApiState} from '../shared/api/ApiState';
@@ -29,30 +28,21 @@ const useStyles = makeStyles((theme) => ({
 export const MainView: React.FC = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
 
+    const dispatch = useAppDispatch();
     const history = useHistory();
     const styles = useStyles();
-    const dispatch = useAppDispatch();
 
-    const {data: user} = useGetUserQuery();
     const apiState = useAppSelector(selectApiState);
-
-    const handleMenuToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
-
-    const handleMenuClose = () => {
-        setMobileOpen(false);
-    };
-
+    const {data: user} = useGetUserQuery();
     return (
         <div className={styles.root}>
             <CssBaseline />
             {!user ? (
-                <LoginView />
+                <PublicRoutes />
             ) : (
                 <>
-                    <Header onMenuToggle={handleMenuToggle} />
-                    <MainMenu mobileOpen={mobileOpen} onClose={handleMenuClose} />
+                    <Header onMenuToggle={() => setMobileOpen(!mobileOpen)} />
+                    <MainMenu mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
 
                     <Container className={styles.root}>
                         {apiState.message && !apiState.toastInfo && (
@@ -72,7 +62,7 @@ export const MainView: React.FC = () => {
                                 }
                             />
                         )}
-                        <AuthRoutes />
+                        <Routes />
                     </Container>
                 </>
             )}

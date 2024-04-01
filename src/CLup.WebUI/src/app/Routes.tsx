@@ -48,8 +48,7 @@ import {
 } from './RouteConstants';
 
 const history = createBrowserHistory();
-
-export const LoginAndRegisterRoutes: React.FC = () => {
+export const PublicRoutes: React.FC = () => {
     return (
         <Router history={history}>
             <Switch>
@@ -60,7 +59,7 @@ export const LoginAndRegisterRoutes: React.FC = () => {
     );
 };
 
-export const AuthRoutes: React.FC = () => {
+export const Routes: React.FC = () => {
     return (
         <Router history={history}>
             <Switch>

@@ -4,8 +4,6 @@ import {Alert} from 'react-bootstrap';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import makeStyles from '@mui/styles/makeStyles';
 
 import {isLoading, selectApiState} from '../../api/ApiState';
@@ -33,16 +31,14 @@ type Props = {
     valid: boolean;
     submitButtonStyle?: string;
     showMessage?: boolean;
-    formControlLabel?: string;
     onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 };
 
 export const Form: React.FC<Props> = ({
     children,
-    submitButtonText: buttonText,
-    valid,
+    submitButtonText,
     submitButtonStyle,
-    formControlLabel,
+    valid,
     showMessage = false,
     onSubmit,
 }) => {
@@ -63,12 +59,6 @@ export const Form: React.FC<Props> = ({
             ) : (
                 <>
                     {children}
-                    {formControlLabel && (
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label={formControlLabel}
-                        />
-                    )}
                     <Button
                         className={submitButtonStyle}
                         disabled={!valid}
@@ -76,7 +66,7 @@ export const Form: React.FC<Props> = ({
                         variant="contained"
                         fullWidth
                     >
-                        {buttonText}
+                        {submitButtonText}
                     </Button>
                 </>
             )}

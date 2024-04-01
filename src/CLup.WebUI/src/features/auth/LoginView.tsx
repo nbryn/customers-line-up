@@ -18,6 +18,7 @@ import {useForm} from '../../shared/hooks/useForm';
 import type {Index} from '../../shared/hooks/useForm';
 import {useLoginMutation} from './AuthApi';
 import {REGISTER_ROUTE} from '../../app/RouteConstants';
+import {Checkbox, FormControlLabel} from '@mui/material';
 
 const useStyles = makeStyles({
     avatar: {
@@ -62,11 +63,10 @@ export const LoginView: React.FC = () => {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    {'Login'}
                 </Typography>
                 <Form
                     submitButtonText="Login"
-                    formControlLabel="Remember me"
                     submitButtonStyle={styles.submitButton}
                     onSubmit={formHandler.handleSubmit}
                     valid={formHandler.isValid}
@@ -86,6 +86,10 @@ export const LoginView: React.FC = () => {
                             margin="normal"
                         />
                     ))}
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Remember me"
+                    />
                 </Form>
                 <Grid container className={styles.links}>
                     <Grid item xs>
@@ -94,9 +98,9 @@ export const LoginView: React.FC = () => {
                         </Link>
                     </Grid>
 
-                    <Grid item xs>
+                    <Grid item xs marginLeft={15}>
                         <Link onClick={() => history.push(REGISTER_ROUTE)} href="" variant="body2">
-                            {"Don't have an account? Sign Up"}
+                            {'No account? Register'}
                         </Link>
                     </Grid>
                 </Grid>
