@@ -66,7 +66,7 @@ export const RegisterView: React.FC = () => {
                 <Card className={styles.card} title="Register">
                     <Form
                         onSubmit={formHandler.handleSubmit}
-                        buttonText="Register"
+                        submitButtonText="Register"
                         valid={formHandler.isValid}
                         showMessage
                     >

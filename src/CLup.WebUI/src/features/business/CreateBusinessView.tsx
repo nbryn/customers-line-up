@@ -86,7 +86,7 @@ export const CreateBusinessView: React.FC = () => {
                     <Card className={styles.card} title="Business Data" variant="outlined">
                         <Form
                             onSubmit={formHandler.handleSubmit}
-                            buttonText="Create"
+                            submitButtonText="Create"
                             valid={formHandler.isValid}
                         >
                             <Row>

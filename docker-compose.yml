@@ -5,7 +5,7 @@ networks:
     driver: bridge
 
 services:
-  postgres:
+  db:
     container_name: clup-postgres
     image: postgres:latest
     restart: always
@@ -21,7 +21,8 @@ services:
     container_name: clup-server
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5001
+      - Settings__ConnectionStrings__Development=User ID=postgres;Password=postgres;Server=clup-postgres;Port=5432;Database=postgres;Pooling=true
+      - Settings__Url=http://+:5001
     build:
       context: .
       dockerfile: src/CLup.API/Dockerfile

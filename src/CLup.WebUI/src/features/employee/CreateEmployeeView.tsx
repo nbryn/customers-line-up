@@ -99,7 +99,7 @@ export const CreateEmployeeView: React.FC = () => {
                                 }))}
                                 setFieldValue={(option: ComboBoxOption) =>
                                     setSelectedUser(
-                                        usersNotEmployedByBusinessResponse!.users!.find(
+                                        usersNotEmployedByBusinessResponse.users?.find(
                                             (user) => user.email === option.label
                                         )
                                     )
@@ -109,7 +109,6 @@ export const CreateEmployeeView: React.FC = () => {
                         )}
                         {!showComboBox && (
                             <Form
-                                style={{marginTop: 20}}
                                 onSubmit={(e: React.FormEvent) => {
                                     e.preventDefault();
                                     form.setRequest({
@@ -120,7 +119,7 @@ export const CreateEmployeeView: React.FC = () => {
 
                                     formHandler.handleSubmit();
                                 }}
-                                buttonText="Create"
+                                submitButtonText="Create"
                                 valid={formHandler.isValid}
                             >
                                 <FormGroup className={styles.formGroup}>

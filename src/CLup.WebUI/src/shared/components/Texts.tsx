@@ -2,12 +2,12 @@ import {Badge} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles({
     header: {
         marginTop: 85,
         marginBottom: 35,
     },
-}));
+});
 
 export enum HeaderSize {
     H1 = 'H1',

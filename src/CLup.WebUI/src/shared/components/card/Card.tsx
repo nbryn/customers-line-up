@@ -7,68 +7,68 @@ import makeStyles from '@mui/styles/makeStyles';
 import MUICard from '@mui/material/Card';
 
 const useStyles = makeStyles({
-   root: {
-      minWidth: 275,
-   },
-   button: {
-      justifyContent: 'center',
-   },
-   content: {
-      padding: 5,
-   },
-   header: {
-      textAlign: 'center',
-      marginBottom: 15,
-   },
+    root: {
+        minWidth: 275,
+    },
+    button: {
+        justifyContent: 'center',
+    },
+    content: {
+        padding: 5,
+    },
+    header: {
+        textAlign: 'center',
+        marginBottom: 15,
+    },
 });
 
 type Props = {
-   title?: string;
-   subtitle?: string;
-   buttonAction?: () => void;
-   buttonColor?: 'inherit' | 'primary' | 'secondary';
-   buttonText?: string;
-   buttonSize?: 'small' | 'medium' | 'large';
-   disableButton?: boolean;
-   variant?: 'outlined' | 'elevation';
-   className?: string;
-   buttonStyle?: any;
-   children?: React.ReactNode;
+    title?: string;
+    subtitle?: string;
+    buttonAction?: () => void;
+    buttonColor?: 'inherit' | 'primary' | 'secondary';
+    buttonText?: string;
+    buttonSize?: 'small' | 'medium' | 'large';
+    disableButton?: boolean;
+    variant?: 'outlined' | 'elevation';
+    className?: string;
+    buttonStyle?: any;
+    children?: React.ReactNode;
 };
 
 export const Card: React.FC<Props> = ({
-   children,
-   className,
-   buttonAction,
-   buttonColor,
-   buttonText,
-   buttonSize,
-   disableButton = false,
-   title,
-   subtitle,
-   variant,
-   buttonStyle,
+    children,
+    className,
+    buttonAction,
+    buttonColor,
+    buttonText,
+    buttonSize,
+    disableButton = false,
+    title,
+    subtitle,
+    variant,
+    buttonStyle,
 }: Props) => {
-   const styles = useStyles();
+    const styles = useStyles();
 
-   return (
-      <MUICard className={className} variant={variant}>
-         <CardHeader className={styles.header} title={title} subheader={subtitle} />
-         <CardContent className={styles.content}>{children}</CardContent>
-         <CardActions className={styles.button}>
-            {buttonText && (
-               <Button
-                  className={buttonStyle}
-                  variant="contained"
-                  color={buttonColor}
-                  onClick={buttonAction}
-                  size={buttonSize}
-                  disabled={disableButton}
-               >
-                  {buttonText}
-               </Button>
-            )}
-         </CardActions>
-      </MUICard>
-   );
+    return (
+        <MUICard className={className} variant={variant}>
+            <CardHeader className={styles.header} title={title} subheader={subtitle} />
+            <CardContent className={styles.content}>{children}</CardContent>
+            <CardActions className={styles.button}>
+                {buttonText && (
+                    <Button
+                        className={buttonStyle}
+                        variant="contained"
+                        color={buttonColor}
+                        onClick={buttonAction}
+                        size={buttonSize}
+                        disabled={disableButton}
+                    >
+                        {buttonText}
+                    </Button>
+                )}
+            </CardActions>
+        </MUICard>
+    );
 };

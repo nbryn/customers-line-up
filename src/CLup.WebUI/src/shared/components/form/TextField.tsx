@@ -49,7 +49,6 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>((props) => {
             size={props.size}
             helperText={props.helperText}
             FormHelperTextProps={{className: styles.helperText}}
-            fullWidth
             id={props.id}
             multiline={props.multiline}
             onClick={props.onClick}
@@ -67,6 +66,7 @@ export const TextField = React.forwardRef<HTMLInputElement, Props>((props) => {
             disabled={props.disabled || false}
             inputRef={props.setInputRef}
             style={props.style}
+            fullWidth
             autoComplete="off"
             inputProps={{
                 maxLength: props.maxLength ?? 500,

@@ -2,31 +2,24 @@ import React from 'react';
 import type {FormEvent} from 'react';
 import {Alert} from 'react-bootstrap';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import makeStyles from '@mui/styles/makeStyles';
 
 import {isLoading, selectApiState} from '../../api/ApiState';
 import {useAppSelector} from '../../../app/Store';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
     alert: {
         display: 'inline-block',
         marginTop: -20,
         marginBottom: 40,
         maxWidth: 380,
     },
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
     form: {
-        marginTop: theme.spacing(1),
-    },
-    button: {
-        marginTop: 30,
-        width: '38%',
+        marginTop: 8,
     },
     working: {
         transform: 'translateX(90%)',
@@ -36,20 +29,21 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
     children?: React.ReactNode;
-    buttonText: string;
+    submitButtonText: string;
     valid: boolean;
+    submitButtonStyle?: string;
     showMessage?: boolean;
-    image?: number;
-    style?: any;
-    onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+    formControlLabel?: string;
+    onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 };
 
 export const Form: React.FC<Props> = ({
     children,
-    buttonText,
+    submitButtonText: buttonText,
     valid,
+    submitButtonStyle,
+    formControlLabel,
     showMessage = false,
-    style,
     onSubmit,
 }) => {
     const styles = useStyles();
@@ -57,7 +51,7 @@ export const Form: React.FC<Props> = ({
     const loading = useAppSelector(isLoading);
 
     return (
-        <form style={style} noValidate onSubmit={onSubmit}>
+        <Box component="form" onSubmit={onSubmit} className={styles.form} noValidate>
             {showMessage && apiState.message && (
                 <Alert className={styles.alert} variant="danger">
                     {apiState.message}
@@ -69,18 +63,23 @@ export const Form: React.FC<Props> = ({
             ) : (
                 <>
                     {children}
+                    {formControlLabel && (
+                        <FormControlLabel
+                            control={<Checkbox value="remember" color="primary" />}
+                            label={formControlLabel}
+                        />
+                    )}
                     <Button
-                        className={styles.button}
+                        className={submitButtonStyle}
                         disabled={!valid}
-                        color="primary"
-                        size="medium"
                         type="submit"
                         variant="contained"
+                        fullWidth
                     >
                         {buttonText}
                     </Button>
                 </>
             )}
-        </form>
+        </Box>
     );
 };

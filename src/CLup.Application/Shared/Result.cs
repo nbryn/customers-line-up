@@ -13,11 +13,13 @@ public class Result : DomainResult
         Code = code;
     }
 
-    public static new Result Ok() => new(HttpCode.Ok, new List<Error>());
+    public static new Result Ok() => new(HttpCode.Ok, []);
 
-    public static Result<T> Ok<T>(T value) => new(value, HttpCode.Ok, new List<Error>());
+    public static Result<T> Ok<T>(T value) => new(value, HttpCode.Ok, []);
 
     public static Result BadRequest(IList<Error> errors) => Fail(HttpCode.BadRequest, errors);
+
+    public static Result<T> BadRequest<T>(IList<Error> errors) => new(default, HttpCode.BadRequest, errors);
 
     public static Result Fail(HttpCode code, IList<Error> errors) => new(code, errors);
 
@@ -28,7 +30,7 @@ public class Result : DomainResult
     public static Result<T> NotFound<T>(IList<Error> errors) => new(default, HttpCode.NotFound, errors);
 
     public static Result<T> FromValue<T>(T? value, Error? error = null)
-        => value is null ? NotFound<T>(new List<Error>() { error }) : Ok<T>(value);
+        => value is null ? NotFound<T>([error]) : Ok(value);
 
     public static Result Validate<TRequest, TValidator>(TRequest request) where TValidator : AbstractValidator<TRequest>, new()
     {
@@ -226,8 +228,7 @@ public sealed class Result<T> : Result
         if (Failure || !validationResult.IsValid)
         {
             var validationErrors =
-                validationResult?.Errors.Select(error => new Error(error.PropertyName, error.ErrorMessage)) ??
-                new List<Error>();
+                validationResult?.Errors.Select(error => new Error(error.PropertyName, error.ErrorMessage)) ?? [];
 
             Errors.AddRange(validationErrors);
             Code = HttpCode.BadRequest;

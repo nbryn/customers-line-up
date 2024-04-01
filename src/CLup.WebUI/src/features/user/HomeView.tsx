@@ -8,6 +8,12 @@ import {Header} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
 import {useGetUserQuery} from './UserApi';
 import {useGetBusinessesByOwnerQuery} from '../business/BusinessApi';
+import {
+    BUSINESS_ROUTE,
+    CREATE_BUSINESS_ROUTE,
+    USER_BOOKINGS_ROUTE,
+    USER_BUSINESS_ROUTE,
+} from '../../app/RouteConstants';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -33,9 +39,9 @@ export const HomeView: React.FC = () => {
             <Row className={styles.center}>
                 <Col className={styles.card} sm={6} md={8} lg={5}>
                     <InfoCard
-                        buttonAction={() => history.push('/user/bookings')}
+                        buttonAction={() => history.push(USER_BOOKINGS_ROUTE)}
                         buttonText="My Bookings"
-                        secondaryAction={() => history.push('/user/business')}
+                        secondaryAction={() => history.push(USER_BUSINESS_ROUTE)}
                         secondaryButtonText="New Booking"
                         title="Booking Info"
                         subtitle="Summary"
@@ -66,10 +72,10 @@ export const HomeView: React.FC = () => {
                 </Col>
                 <Col className={styles.card} sm={6} md={8} lg={5}>
                     <InfoCard
-                        buttonAction={() => history.push('/business')}
+                        buttonAction={() => history.push(BUSINESS_ROUTE)}
                         buttonText="My Businesses"
                         primaryButtonDisabled={!getBusinessesByOwnerResponse?.businesses?.length}
-                        secondaryAction={() => history.push('/business/new')}
+                        secondaryAction={() => history.push(CREATE_BUSINESS_ROUTE)}
                         secondaryButtonText="Create Business"
                         title="Business Info"
                         subtitle="Summary"

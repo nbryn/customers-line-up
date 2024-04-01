@@ -1,3 +1,4 @@
+import {BUSINESS_ROUTE} from '../../app/RouteConstants';
 import {
     BUSINESS_ALL_TAG,
     BUSINESS_BY_OWNER_TAG,
@@ -17,7 +18,6 @@ import {apiMutation, apiQuery} from '../../shared/api/Api';
 
 const BUSINESS_UPDATED_MSG = 'Business Updated';
 
-export const BUSINESS_ROUTE = '/business';
 const BUSINESS_CREATED_SUCCESS_INFO = {
     message: 'Business Created - Go to my businesses to see your businesses',
     toastInfo: {buttonText: 'My Businesses', navigateTo: BUSINESS_ROUTE},

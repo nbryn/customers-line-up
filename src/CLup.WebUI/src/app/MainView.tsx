@@ -9,7 +9,7 @@ import {ExtendedToastMessage, ToastMessage} from '../shared/components/Toast';
 import {Header} from '../shared/components/navigation/Header';
 import {LoginView} from '../features/auth/LoginView';
 import {MainMenu} from '../shared/components/navigation/MainMenu';
-import {Routes} from './Routes';
+import {AuthRoutes} from './Routes';
 import {useGetUserQuery} from '../features/user/UserApi';
 import {useAppDispatch, useAppSelector} from './Store';
 import {clearApiState, selectApiState} from '../shared/api/ApiState';
@@ -72,7 +72,7 @@ export const MainView: React.FC = () => {
                                 }
                             />
                         )}
-                        <Routes />
+                        <AuthRoutes />
                     </Container>
                 </>
             )}

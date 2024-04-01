@@ -16,7 +16,7 @@ RUN dotnet publish --no-restore --no-build --configuration Release -o /out .
 FROM runtime
 WORKDIR /app
 
-ENV ASPNETCORE_URLS=http://+:5001
+ENV Settings__Url=http://+:5001
 EXPOSE 5001
 
 COPY --from=build /out .

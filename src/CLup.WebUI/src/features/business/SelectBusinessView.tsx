@@ -12,6 +12,7 @@ import {Header, HeaderSize} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
 import {isLoading} from '../../shared/api/ApiState';
 import {useAppDispatch, useAppSelector} from '../../app/Store';
+import {BUSINESS_OVERVIEW_ROUTE, CREATE_BUSINESS_ROUTE} from '../../app/RouteConstants';
 
 const useStyles = makeStyles(() => ({
     noBusinessesButton: {
@@ -60,7 +61,7 @@ export const SelectBusinessView: React.FC = () => {
                                 className={styles.noBusinessesButton}
                                 variant="contained"
                                 color="primary"
-                                onClick={() => history.push('/business/new')}
+                                onClick={() => history.push(CREATE_BUSINESS_ROUTE)}
                                 size="small"
                             >
                                 Create Business
@@ -75,7 +76,7 @@ export const SelectBusinessView: React.FC = () => {
                                         buttonText="Select Business"
                                         buttonAction={() => {
                                             dispatch(setCurrentBusiness(business));
-                                            history.push('/business/overview');
+                                            history.push(BUSINESS_OVERVIEW_ROUTE);
                                         }}
                                     >
                                         <CardInfo

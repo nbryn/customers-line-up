@@ -16,7 +16,7 @@ public static class TaskExtensions
     {
         var maybe = await task;
 
-        return maybe == null ? Result.NotFound<T>(new List<Error>() { error }) : Result.Ok(maybe);
+        return maybe == null ? Result.NotFound<T>([error]) : Result.Ok(maybe);
     }
 
     public static async Task<Result<TU>> FailureIfNotFound<T, TU>(
@@ -30,6 +30,14 @@ public static class TaskExtensions
         Func<T, Task<TU>> f,
         Error error)
         => await (await task).FailureIfNotFoundAsync(f, error);
+
+
+    public static async Task<Result<T>> BadRequestIfNotFound<T>(this Task<T> task, Error error)
+    {
+        var maybe = await task;
+
+        return maybe == null ? Result.BadRequest<T>([error]) : Result.Ok(maybe);
+    }
 
     public static async Task<Result<T>> AddDomainEvent<T>(this Task<Result<T>> task, Action<T> f) =>
         (await task).AddDomainEvent(f);
