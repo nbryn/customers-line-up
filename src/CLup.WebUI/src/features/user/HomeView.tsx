@@ -17,7 +17,7 @@ import {
 
 const useStyles = makeStyles(() => ({
     card: {
-        marginTop: 25,
+        marginTop: -10,
     },
     center: {
         justifyContent: 'center',
@@ -56,13 +56,13 @@ export const HomeView: React.FC = () => {
                                 },
                                 {
                                     text: `Next: ${
-                                        getUserResponse?.user?.bookings?.[0]?.date ?? ''
+                                        getUserResponse?.user?.bookings?.[0]?.date ?? 'No upcoming bookings'
                                     }`,
                                     icon: 'Hot',
                                 },
                                 {
                                     text: `Where: ${
-                                        getUserResponse?.user?.bookings?.[0]?.business ?? ''
+                                        getUserResponse?.user?.bookings?.[0]?.business ?? 'No upcoming bookings'
                                     }`,
                                     icon: 'Grain',
                                 },

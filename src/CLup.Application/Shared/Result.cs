@@ -81,7 +81,7 @@ public sealed class Result<T> : Result
 {
     public T? Value { get; }
 
-    protected internal Result(T value, HttpCode code, IList<Error> errors)
+    internal Result(T value, HttpCode code, IList<Error> errors)
         : base(code, errors)
     {
         Value = value;

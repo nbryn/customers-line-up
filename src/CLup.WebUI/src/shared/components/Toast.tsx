@@ -56,12 +56,14 @@ export const ToastMessage = ({message, severity, onClose}: ToastProps) => {
             <Snackbar
                 anchorOrigin={{vertical: 'top', horizontal: 'center'}}
                 open={message ? true : false}
-                autoHideDuration={5000}
+                autoHideDuration={10000}
                 onClose={onClose}
             >
-                <Alert onClose={onClose} severity={severity}>
-                    {message}
-                </Alert>
+                <div>
+                    <Alert onClose={onClose} severity={severity}>
+                        {message}
+                    </Alert>
+                </div>
             </Snackbar>
         </div>
     );
@@ -88,22 +90,24 @@ export const ExtendedToastMessage = ({
                 autoHideDuration={10000}
                 onClose={onClose}
             >
-                <Alert className={styles.alert} onClose={onClose} severity="success">
-                    <Row className={styles.alertText}>{message}</Row>
-                    <Row className={styles.buttonRow}>
-                        <Button size="sm" variant="secondary" onClick={onClose}>
-                            Close
-                        </Button>
-                        <Button
-                            className={styles.primaryButton}
-                            size="sm"
-                            variant="primary"
-                            onClick={primaryAction}
-                        >
-                            {primaryButtonText}
-                        </Button>
-                    </Row>
-                </Alert>
+                <div>
+                    <Alert className={styles.alert} onClose={onClose} severity="success">
+                        <Row className={styles.alertText}>{message}</Row>
+                        <Row className={styles.buttonRow}>
+                            <Button size="sm" variant="secondary" onClick={onClose}>
+                                Close
+                            </Button>
+                            <Button
+                                className={styles.primaryButton}
+                                size="sm"
+                                variant="primary"
+                                onClick={primaryAction}
+                            >
+                                {primaryButtonText}
+                            </Button>
+                        </Row>
+                    </Alert>
+                </div>
             </Snackbar>
         </div>
     );

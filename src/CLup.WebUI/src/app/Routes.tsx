@@ -45,6 +45,7 @@ import {
     MANAGE_EMPLOYEES_ROUTE,
     BUSINESS_OVERVIEW_ROUTE,
     USER_BUSINESS_ROUTE,
+    CREATE_BUSINESS_ROUTE,
 } from './RouteConstants';
 
 const history = createBrowserHistory();
@@ -69,7 +70,7 @@ export const Routes: React.FC = () => {
                 <Route exact path={USER_BUSINESS_ROUTE} component={AllBusinessesView} />
                 <Route exact path={USER_MESSAGES_ROUTE} component={UserMessageView} />
                 <Route exact path={CREATE_BOOKING_ROUTE} component={CreateBookingView} />
-                <Route exact path={BUSINESS_ROUTE} component={CreateBusinessView} />
+                <Route exact path={CREATE_BUSINESS_ROUTE} component={CreateBusinessView} />
                 <Route exact path={BUSINESS_ROUTE} component={SelectBusinessView} />
                 <Route exact path={BUSINESS_OVERVIEW_ROUTE} component={BusinessOverview} />
                 <Route exact path={BUSINESS_BOOKINGS_ROUTE} component={BusinessBookingView} />

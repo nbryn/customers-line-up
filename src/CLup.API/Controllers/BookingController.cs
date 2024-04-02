@@ -4,6 +4,8 @@ using CLup.API.Contracts.Bookings.DeleteUserBooking;
 using CLup.API.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
+using ProblemDetails = CLup.Application.Shared.ProblemDetails;
+
 namespace CLup.API.Controllers;
 
 [Route("api/booking")]
@@ -19,7 +21,7 @@ public sealed class BookingController : AuthorizedControllerBase
     [HttpPost]
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateBooking([FromBody] CreateBookingRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
@@ -30,7 +32,7 @@ public sealed class BookingController : AuthorizedControllerBase
     [HttpDelete]
     [Route("user/{bookingId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteUserBooking([FromRoute] Guid bookingId)
     {
         var request = new DeleteUserBookingRequest(bookingId);
@@ -42,7 +44,7 @@ public sealed class BookingController : AuthorizedControllerBase
     [HttpDelete]
     [Route("business/{businessId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteBusinessBooking([FromRoute] Guid businessId, [FromQuery] Guid bookingId)
     {
         var request = new DeleteBusinessBookingRequest(businessId, bookingId);

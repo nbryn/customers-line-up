@@ -1,12 +1,11 @@
 import React from 'react';
 import type {FormEvent} from 'react';
-import {Alert} from 'react-bootstrap';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import makeStyles from '@mui/styles/makeStyles';
 
-import {isLoading, selectApiState} from '../../api/ApiState';
+import {isLoading} from '../../api/ApiState';
 import {useAppSelector} from '../../../app/Store';
 
 const useStyles = makeStyles(() => ({
@@ -30,7 +29,6 @@ type Props = {
     submitButtonText: string;
     valid: boolean;
     submitButtonStyle?: string;
-    showMessage?: boolean;
     onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 };
 
@@ -39,21 +37,13 @@ export const Form: React.FC<Props> = ({
     submitButtonText,
     submitButtonStyle,
     valid,
-    showMessage = false,
     onSubmit,
 }) => {
-    const styles = useStyles();
-    const apiState = useAppSelector(selectApiState);
     const loading = useAppSelector(isLoading);
+    const styles = useStyles();
 
     return (
         <Box component="form" onSubmit={onSubmit} className={styles.form} noValidate>
-            {showMessage && apiState.message && (
-                <Alert className={styles.alert} variant="danger">
-                    {apiState.message}
-                </Alert>
-            )}
-
             {loading ? (
                 <CircularProgress className={styles.working} />
             ) : (

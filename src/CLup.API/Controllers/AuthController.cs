@@ -3,6 +3,8 @@ using CLup.API.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using ProblemDetails = CLup.Application.Shared.ProblemDetails;
+
 namespace CLup.API.Controllers;
 
 [ApiController]
@@ -20,7 +22,7 @@ public sealed class AuthController : ControllerBase
     [Route("register")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand());
@@ -32,8 +34,8 @@ public sealed class AuthController : ControllerBase
     [Route("login")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TokenResponse))]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand());

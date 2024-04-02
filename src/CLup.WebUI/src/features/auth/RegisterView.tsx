@@ -87,7 +87,6 @@ export const RegisterView: React.FC = () => {
                     onSubmit={formHandler.handleSubmit}
                     submitButtonStyle={styles.submitButton}
                     valid={formHandler.isValid}
-                    showMessage
                 >
                     <Grid container spacing={2}>
                         {Object.keys(formValues).map((key) => {
@@ -100,6 +99,7 @@ export const RegisterView: React.FC = () => {
                                             label={StringUtil.capitalize(key)}
                                             options={addressHandler.getLabels(key as AddressKey)}
                                             onBlur={formHandler.handleBlur}
+                                            partOfForm
                                             helperText={
                                                 formHandler.touched[key] && formHandler.errors[key]
                                             }
@@ -138,7 +138,11 @@ export const RegisterView: React.FC = () => {
                                 </Grid>
                             );
                         })}
-                        <FormControlLabel control={<React.Fragment />} label="" />
+                        <FormControlLabel
+                            sx={{marginTop: 3}}
+                            control={<React.Fragment />}
+                            label=""
+                        />
                     </Grid>
                 </Form>
                 <Grid container className={styles.links}>

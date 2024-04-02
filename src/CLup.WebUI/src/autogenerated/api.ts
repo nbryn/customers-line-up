@@ -536,6 +536,21 @@ export interface GetUserResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+
+export enum HttpCode {
+    Ok = 'Ok',
+    BadRequest = 'BadRequest',
+    Unauthorized = 'Unauthorized',
+    NotFound = 'NotFound',
+    InternalServerError = 'InternalServerError'
+}
+
+
+/**
+ * 
+ * @export
  * @interface LoginRequest
  */
 export interface LoginRequest {
@@ -657,8 +672,6 @@ export enum MessageType {
  * @interface ProblemDetails
  */
 export interface ProblemDetails {
-    [key: string]: any;
-
     /**
      * 
      * @type {string}
@@ -673,23 +686,19 @@ export interface ProblemDetails {
     'title'?: string | null;
     /**
      * 
-     * @type {number}
+     * @type {HttpCode}
      * @memberof ProblemDetails
      */
-    'status'?: number | null;
+    'statusCode'?: HttpCode;
     /**
      * 
-     * @type {string}
+     * @type {{ [key: string]: Array<string>; }}
      * @memberof ProblemDetails
      */
-    'detail'?: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof ProblemDetails
-     */
-    'instance'?: string | null;
+    'errors'?: { [key: string]: Array<string>; } | null;
 }
+
+
 /**
  * 
  * @export

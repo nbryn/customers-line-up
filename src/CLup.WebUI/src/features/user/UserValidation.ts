@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 export const emailSchemaObject: yup.ObjectSchema = yup.object({
-    email: yup.string().email().required('Email is required'),
+    email: yup.string().email("Email must be a valid email").required('Email is required'),
 });
 
 export const passwordValidationObject: yup.ObjectSchema = yup.object({

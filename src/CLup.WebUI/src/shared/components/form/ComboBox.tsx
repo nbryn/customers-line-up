@@ -42,7 +42,7 @@ export const ComboBox = React.forwardRef<HTMLInputElement, Props>((props) => {
                     id={props.id}
                     filterOptions={filterOptions}
                     onBlur={props.onBlur}
-                    onChange={(event: any, newValue: ComboBoxOption | null) => {
+                    onChange={(_: any, newValue: ComboBoxOption | null) => {
                         props.setFieldValue(newValue || {label: ''}, props.id);
                     }}
                     options={props.options}

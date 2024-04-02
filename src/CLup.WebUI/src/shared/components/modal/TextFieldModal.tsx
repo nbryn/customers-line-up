@@ -1,19 +1,12 @@
 import React, {useState} from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import makeStyles from '@mui/styles/makeStyles';
 import {MenuItem} from '@mui/material';
 
-import {ComboBox, ComboBoxOption} from '../form/ComboBox';
-import {FormHandler} from '../../hooks/useForm';
+import {ComboBox, type ComboBoxOption} from '../form/ComboBox';
+import {type FormHandler} from '../../hooks/useForm';
 import {BsModal} from './BsModal';
-import {TextField, TextFieldType} from '../form/TextField';
+import {TextField, type TextFieldType} from '../form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
-
-const useStyles = makeStyles((theme) => ({
-   col: {
-       marginBottom: 25,
-   },
-}));
 
 type Props = {
     show: boolean;

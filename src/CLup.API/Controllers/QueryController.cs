@@ -13,6 +13,8 @@ using CLup.Domain.Shared;
 using CLup.Domain.Users;
 using Microsoft.AspNetCore.Mvc;
 
+using ProblemDetails = CLup.Application.Shared.ProblemDetails;
+
 namespace CLup.API.Controllers;
 
 [ApiController]
@@ -29,7 +31,7 @@ public sealed class QueryController : AuthorizedControllerBase
     [HttpGet]
     [Route("user")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetUserResponse))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUser()
     {
         var user = await _repository.FetchUserAggregate(GetUserIdFromJwt());
@@ -44,7 +46,7 @@ public sealed class QueryController : AuthorizedControllerBase
     [HttpGet]
     [Route("user/business/{businessId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetBusinessResponse))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public Task<IActionResult> GetBusiness([FromRoute] Guid businessId)
     {
         var request = new GetBusinessRequest(businessId);
@@ -62,7 +64,7 @@ public sealed class QueryController : AuthorizedControllerBase
     [HttpGet]
     [Route("user/businesses")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetBusinessesByOwnerResponse))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBusinessesByOwner()
     {
         var userId = GetUserIdFromJwt();
@@ -80,7 +82,7 @@ public sealed class QueryController : AuthorizedControllerBase
     [HttpGet]
     [Route("business/all")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetAllBusinessesResponse))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAllBusinesses()
     {
         var businesses = await _repository.FetchAllBusinesses();
@@ -93,7 +95,7 @@ public sealed class QueryController : AuthorizedControllerBase
     [HttpGet]
     [Route("user/notEmployedByBusiness/{businessId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UsersNotEmployedByBusinessResponse))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUsersNotAlreadyEmployedByBusiness([FromRoute] Guid businessId)
     {
         var request = new UsersNotEmployedByBusinessRequest(businessId);
@@ -106,7 +108,7 @@ public sealed class QueryController : AuthorizedControllerBase
                 var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), businessId);
                 if (business == null)
                 {
-                    return this.CreateActionResult(Result.BadRequest(new List<Error>() { BusinessErrors.NotFound }));
+                    return this.CreateActionResult(Result.BadRequest([BusinessErrors.NotFound]));
                 }
 
                 var users = await _repository.FetchUsersNotEmployedByBusiness(businessId);

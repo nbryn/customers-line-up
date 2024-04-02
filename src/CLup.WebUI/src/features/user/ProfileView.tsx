@@ -37,6 +37,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const ProfileView: React.FC = () => {
+    console.log("UES")
     const styles = useStyles();
     const {data: getUserResponse} = useGetUserQuery();
     const [updateUser] = useUpdateUserMutation();

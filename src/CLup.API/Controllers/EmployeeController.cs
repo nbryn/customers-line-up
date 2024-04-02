@@ -3,6 +3,8 @@ using CLup.API.Contracts.Employees.DeleteEmployee;
 using CLup.API.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
+using ProblemDetails = CLup.Application.Shared.ProblemDetails;
+
 namespace CLup.API.Controllers;
 
 [Route("api/employee")]
@@ -18,8 +20,8 @@ public sealed class EmployeeController : AuthorizedControllerBase
     [HttpPost]
     [Route("")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeRequest request)
     {
         var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
@@ -30,7 +32,7 @@ public sealed class EmployeeController : AuthorizedControllerBase
     [HttpDelete]
     [Route("{employeeId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteEmployee([FromRoute] Guid employeeId, [FromQuery] Guid businessId)
     {
         var request = new DeleteEmployeeRequest(employeeId, businessId);
