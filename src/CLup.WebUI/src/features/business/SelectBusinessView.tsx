@@ -1,9 +1,10 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import {Col, Row} from 'react-bootstrap';
 import CircularProgress from '@mui/material/CircularProgress';
 import makeStyles from '@mui/styles/makeStyles';
-import {useHistory} from 'react-router-dom';
+
 
 import {CardInfo} from '../../shared/components/card/CardInfo';
 import {useGetBusinessesByOwnerQuery} from './BusinessApi';
@@ -32,7 +33,7 @@ const useStyles = makeStyles(() => ({
 
 export const SelectBusinessView: React.FC = () => {
     const styles = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const loading = useAppSelector(isLoading);
 
@@ -61,7 +62,7 @@ export const SelectBusinessView: React.FC = () => {
                                 className={styles.noBusinessesButton}
                                 variant="contained"
                                 color="primary"
-                                onClick={() => history.push(CREATE_BUSINESS_ROUTE)}
+                                onClick={() => navigate(CREATE_BUSINESS_ROUTE)}
                                 size="small"
                             >
                                 Create Business
@@ -76,7 +77,7 @@ export const SelectBusinessView: React.FC = () => {
                                         buttonText="Select Business"
                                         buttonAction={() => {
                                             dispatch(setCurrentBusiness(business));
-                                            history.push(BUSINESS_OVERVIEW_ROUTE);
+                                            navigate(BUSINESS_OVERVIEW_ROUTE);
                                         }}
                                     >
                                         <CardInfo

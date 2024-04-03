@@ -1,10 +1,9 @@
 import React from 'react';
-import {Col, Container, Row} from 'react-bootstrap';
+import Grid from '@mui/material/Grid';
 import {makeStyles} from '@mui/styles';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 import {CardInfo} from '../../shared/components/card/CardInfo';
-import {Header} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
 import {useGetUserQuery} from './UserApi';
 import {useGetBusinessesByOwnerQuery} from '../business/BusinessApi';
@@ -14,8 +13,15 @@ import {
     USER_BOOKINGS_ROUTE,
     USER_BUSINESS_ROUTE,
 } from '../../app/RouteConstants';
+import {Box, Typography} from '@mui/material';
 
 const useStyles = makeStyles(() => ({
+    box: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        marginTop: 85,
+    },
     card: {
         marginTop: -10,
     },
@@ -25,23 +31,23 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const HomeView: React.FC = () => {
+    const navigate = useNavigate();
     const styles = useStyles();
-    const history = useHistory();
-
-    const {data: getUserResponse} = useGetUserQuery();
+    
     const {data: getBusinessesByOwnerResponse} = useGetBusinessesByOwnerQuery();
-
+    const {data: getUserResponse} = useGetUserQuery();
     return (
-        <Container>
-            <Row className={styles.center}>
-                <Header text={`Welcome ${getUserResponse?.user?.name}`} />
-            </Row>
-            <Row className={styles.center}>
-                <Col className={styles.card} sm={6} md={8} lg={5}>
+        <Box className={styles.box}>
+            <Typography component="h1" variant="h4" marginBottom={5} justifyContent="center">
+                {`Welcome ${getUserResponse?.user?.name}`}
+            </Typography>
+
+            <Grid container justifyContent="center" spacing={2}>
+                <Grid item xs={4}>
                     <InfoCard
-                        buttonAction={() => history.push(USER_BOOKINGS_ROUTE)}
+                        buttonAction={() => navigate(USER_BOOKINGS_ROUTE)}
                         buttonText="My Bookings"
-                        secondaryAction={() => history.push(USER_BUSINESS_ROUTE)}
+                        secondaryAction={() => navigate(USER_BUSINESS_ROUTE)}
                         secondaryButtonText="New Booking"
                         title="Booking Info"
                         subtitle="Summary"
@@ -56,26 +62,28 @@ export const HomeView: React.FC = () => {
                                 },
                                 {
                                     text: `Next: ${
-                                        getUserResponse?.user?.bookings?.[0]?.date ?? 'No upcoming bookings'
+                                        getUserResponse?.user?.bookings?.[0]?.date ??
+                                        'No upcoming bookings'
                                     }`,
                                     icon: 'Hot',
                                 },
                                 {
                                     text: `Where: ${
-                                        getUserResponse?.user?.bookings?.[0]?.business ?? 'No upcoming bookings'
+                                        getUserResponse?.user?.bookings?.[0]?.business ??
+                                        'No upcoming bookings'
                                     }`,
                                     icon: 'Grain',
                                 },
                             ]}
                         />
                     </InfoCard>
-                </Col>
-                <Col className={styles.card} sm={6} md={8} lg={5}>
+                </Grid>
+                <Grid item xs={4}>
                     <InfoCard
-                        buttonAction={() => history.push(BUSINESS_ROUTE)}
+                        buttonAction={() => navigate(BUSINESS_ROUTE)}
                         buttonText="My Businesses"
                         primaryButtonDisabled={!getBusinessesByOwnerResponse?.businesses?.length}
-                        secondaryAction={() => history.push(CREATE_BUSINESS_ROUTE)}
+                        secondaryAction={() => navigate(CREATE_BUSINESS_ROUTE)}
                         secondaryButtonText="Create Business"
                         title="Business Info"
                         subtitle="Summary"
@@ -107,8 +115,8 @@ export const HomeView: React.FC = () => {
                             ]}
                         />
                     </InfoCard>
-                </Col>
-            </Row>
-        </Container>
+                </Grid>
+            </Grid>
+        </Box>
     );
 };

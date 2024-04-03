@@ -1,10 +1,12 @@
-import React from 'react';
-import {useHistory} from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import type {Theme} from '@mui/material/styles';
+import Box from '@mui/material/Box';
 
+import {AppHeader} from '../shared/components/navigation/Header';
+import {MainMenu} from '../shared/components/navigation/MainMenu';
+import {AuthRoutes, PublicRoutes} from './Routes';
 import {ExtendedToastMessage, ToastMessage} from '../shared/components/Toast';
-import {AppFrame} from '../shared/components/navigation/AppFrame';
-import {PublicRoutes} from './Routes';
 import {useGetUserQuery} from '../features/user/UserApi';
 import {useAppDispatch, useAppSelector} from './Store';
 import {clearApiState, selectApiState} from '../shared/api/ApiState';
@@ -13,9 +15,10 @@ declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
 }
 
-export const MainView: React.FC = () => {
+export const AppShell: React.FC = () => {
+    const [open, setOpen] = useState(true);
     const dispatch = useAppDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const apiState = useAppSelector(selectApiState);
     const {data: user} = useGetUserQuery();
@@ -34,8 +37,6 @@ export const MainView: React.FC = () => {
                 </>
             ) : (
                 <>
-                    <AppFrame />
-
                     {apiState.message && !apiState.toastInfo && (
                         <ToastMessage
                             onClose={() => dispatch(clearApiState())}
@@ -49,10 +50,29 @@ export const MainView: React.FC = () => {
                             message={apiState.message}
                             primaryButtonText={apiState.toastInfo.buttonText}
                             primaryAction={() =>
-                                history.push(apiState.toastInfo?.navigateTo ?? '/home')
+                                navigate(apiState.toastInfo?.navigateTo ?? '/home')
                             }
                         />
                     )}
+
+                    <Box sx={{display: 'flex'}}>
+                        <AppHeader open={open} setOpen={setOpen} />
+                        <MainMenu open={open} setOpen={setOpen} />
+                        <Box
+                            component="main"
+                            sx={{
+                                backgroundColor: (theme) =>
+                                    theme.palette.mode === 'light'
+                                        ? theme.palette.grey[100]
+                                        : theme.palette.grey[900],
+                                flexGrow: 1,
+                                height: '100vh',
+                                overflow: 'auto',
+                            }}
+                        >
+                            <AuthRoutes />
+                        </Box>
+                    </Box>
                 </>
             )}
         </>

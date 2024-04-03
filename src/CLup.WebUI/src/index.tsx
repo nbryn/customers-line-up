@@ -6,14 +6,14 @@ import reportWebVitals from './reportWebVitals';
 import {createTheme} from '@mui/material';
 import {ThemeProvider} from '@mui/styles';
 
-import {MainView} from './app/MainView';
+import {AppShell} from './app/AppShell';
 import {store} from './app/Store';
 
 const App = () => {
     const theme = createTheme();
     return (
         <ThemeProvider theme={theme}>
-            <MainView />
+            <AppShell />
         </ThemeProvider>
     );
 };

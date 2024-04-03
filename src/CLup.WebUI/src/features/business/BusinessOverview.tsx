@@ -1,7 +1,7 @@
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 import {Col, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
-import {useHistory} from 'react-router-dom';
 
 import {Header} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
@@ -38,7 +38,7 @@ const businessAreas = [
 
 export const BusinessOverview: React.FC = () => {
     const styles = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
     return (
         <>
             <Row className={styles.row}>
@@ -53,10 +53,10 @@ export const BusinessOverview: React.FC = () => {
                                 <InfoCard
                                     title={entry.area}
                                     buttonText={entry.buttonText}
-                                    buttonAction={() => history.push(`/business/${entry.path}`)}
+                                    buttonAction={() => navigate(`/business/${entry.path}`)}
                                     secondaryButtonText={entry.secondaryButtonText}
                                     secondaryAction={() =>
-                                        history.push(`/business/${entry.secondaryPath}`)
+                                        navigate(`/business/${entry.secondaryPath}`)
                                     }
                                 ></InfoCard>
                             </Col>

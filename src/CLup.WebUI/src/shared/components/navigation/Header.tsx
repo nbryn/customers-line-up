@@ -11,7 +11,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import PeopleIcon from '@mui/icons-material/PeopleOutline';
 
 import {baseApi, useAppDispatch} from '../../../app/Store';
-import {DRAWER_WIDTH} from './AppFrame';
+import {DRAWER_WIDTH} from './MainMenu';
 
 interface Props extends MuiAppBarProps {
     open: boolean;

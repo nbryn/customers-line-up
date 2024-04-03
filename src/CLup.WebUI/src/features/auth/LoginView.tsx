@@ -1,5 +1,5 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 
 export const LoginView: React.FC = () => {
     const [login] = useLoginMutation();
-    const history = useHistory();
+    const navigate = useNavigate();
     const styles = useStyles();
 
     const formValues = {
@@ -99,7 +99,7 @@ export const LoginView: React.FC = () => {
                     </Grid>
 
                     <Grid item xs marginLeft={15}>
-                        <Link onClick={() => history.push(REGISTER_ROUTE)} href="" variant="body2">
+                        <Link onClick={() => navigate(REGISTER_ROUTE)} href="" variant="body2">
                             {'No account? Register'}
                         </Link>
                     </Grid>

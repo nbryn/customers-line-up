@@ -1,19 +1,8 @@
 import React from 'react';
-import {Row} from 'react-bootstrap';
-import makeStyles from '@mui/styles/makeStyles';
 import Typography from '@mui/material/Typography';
 
 import {Icons} from '../Icons';
-
-const useStyles = makeStyles(() => ({
-    icon: {
-        top: -2,
-    },
-    infoText: {
-        marginBottom: 30,
-        marginLeft: 25,
-    },
-}));
+import {Grid} from '@mui/material';
 
 type InfoText = {
     text: string;
@@ -25,19 +14,18 @@ type Props = {
 };
 
 export const CardInfo: React.FC<Props> = ({infoTexts}: Props) => {
-    const styles = useStyles();
     return (
-        <>
+        <Grid container spacing={2} flexDirection="column">
             {infoTexts.map((infoText) => {
                 return (
-                    <Row className={styles.infoText} key={infoText.icon}>
-                        <Typography>
+                    <Grid item xs={12} key={infoText.icon}>
+                        <Typography textAlign="left">
                             <Icons icon={infoText.icon} />
                             {infoText.text}
                         </Typography>
-                    </Row>
+                    </Grid>
                 );
             })}
-        </>
+        </Grid>
     );
 };

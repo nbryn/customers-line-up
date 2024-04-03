@@ -1,5 +1,5 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -49,7 +49,7 @@ const useStyles = makeStyles({
 
 export const RegisterView: React.FC = () => {
     const [register] = useRegisterMutation();
-    const history = useHistory();
+    const navigate = useNavigate();
     const styles = useStyles();
 
     const formValues = {
@@ -147,7 +147,7 @@ export const RegisterView: React.FC = () => {
                 </Form>
                 <Grid container className={styles.links}>
                     <Grid item>
-                        <Link onClick={() => history.push(LOGIN_ROUTE)} variant="body2" href="">
+                        <Link onClick={() => navigate(LOGIN_ROUTE)} variant="body2" href="">
                             {'Already have an account? Login'}
                         </Link>
                     </Grid>

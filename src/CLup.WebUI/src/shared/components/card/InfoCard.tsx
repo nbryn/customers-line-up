@@ -1,17 +1,17 @@
-import React from 'react';
-import type {ReactNode} from 'react';
+import React, {type ReactNode} from 'react';
 import Button from '@mui/material/Button';
+import {Box} from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 
 import {Card} from './Card';
 
 const useStyles = makeStyles({
-    root: {
-        minWidth: 275,
-    },
     card: {
         textAlign: 'center',
+    },
+    children: {
         marginBottom: 15,
+        marginTop: 15,
     },
     primaryButton: {
         width: '54%',
@@ -24,25 +24,25 @@ const useStyles = makeStyles({
 });
 
 type Props = {
-    buttonAction: () => void;
     buttonText: string;
     children?: ReactNode;
     primaryButtonDisabled?: boolean;
-    secondaryAction?: () => void;
     secondaryButtonText?: string;
     subtitle?: string;
     title: string;
+    secondaryAction?: () => void;
+    buttonAction: () => void;
 };
 
 export const InfoCard: React.FC<Props> = ({
-    buttonAction,
     buttonText,
     children,
     primaryButtonDisabled,
-    secondaryAction,
     secondaryButtonText,
     subtitle,
     title,
+    secondaryAction,
+    buttonAction,
 }: Props) => {
     const styles = useStyles();
 
@@ -58,7 +58,9 @@ export const InfoCard: React.FC<Props> = ({
             variant="outlined"
             buttonStyle={styles.secondaryButton}
         >
-            <div className={styles.card}>{children}</div>
+            <Box marginBottom={4} marginTop={-4}>
+                {children}
+            </Box>
             <Button
                 className={styles.primaryButton}
                 disabled={primaryButtonDisabled}
