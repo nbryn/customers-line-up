@@ -116,10 +116,10 @@ export interface BookingDto {
     'userEmail'?: string | null;
     /**
      * 
-     * @type {string}
+     * @type {TimeInterval}
      * @memberof BookingDto
      */
-    'interval'?: string | null;
+    'interval'?: TimeInterval;
     /**
      * 
      * @type {string}
@@ -2247,7 +2247,7 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
         getBusiness: async (businessId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'businessId' is not null or undefined
             assertParamExists('getBusiness', 'businessId', businessId)
-            const localVarPath = `/api/query/user/business/{businessId}`
+            const localVarPath = `/api/query/business/{businessId}`
                 .replace(`{${"businessId"}}`, encodeURIComponent(String(businessId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);

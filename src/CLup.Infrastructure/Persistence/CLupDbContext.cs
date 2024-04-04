@@ -51,6 +51,8 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
         => await Businesses
             .Include(business => business.Bookings)
             .ThenInclude(booking => booking.User)
+            .Include(business => business.Bookings)
+            .ThenInclude(booking => booking.TimeSlot)
             .Include(business => business.TimeSlots)
             .Include(business => business.Employees)
             .Include(business => business.SentMessages)

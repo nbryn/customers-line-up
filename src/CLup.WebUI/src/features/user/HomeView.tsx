@@ -13,14 +13,14 @@ import {
     USER_BOOKINGS_ROUTE,
     USER_BUSINESS_ROUTE,
 } from '../../app/RouteConstants';
-import {Box, Typography} from '@mui/material';
+import {Box} from '@mui/material';
+import {Header} from '../../shared/components/Texts';
 
 const useStyles = makeStyles(() => ({
     box: {
+        alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: 85,
     },
     card: {
         marginTop: -10,
@@ -33,15 +33,12 @@ const useStyles = makeStyles(() => ({
 export const HomeView: React.FC = () => {
     const navigate = useNavigate();
     const styles = useStyles();
-    
+
     const {data: getBusinessesByOwnerResponse} = useGetBusinessesByOwnerQuery();
     const {data: getUserResponse} = useGetUserQuery();
     return (
         <Box className={styles.box}>
-            <Typography component="h1" variant="h4" marginBottom={5} justifyContent="center">
-                {`Welcome ${getUserResponse?.user?.name}`}
-            </Typography>
-
+            <Header text={`Welcome ${getUserResponse?.user?.name}`} />
             <Grid container justifyContent="center" spacing={2}>
                 <Grid item xs={4}>
                     <InfoCard

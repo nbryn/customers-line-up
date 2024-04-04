@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Map} from '../map/Map.js';
+import {COPENHAGEN_COORDS, Map} from '../map/Map.js';
 import {BsModal} from './BsModal';
 
 export type Marker = Array<number[] | number>;
@@ -13,11 +13,12 @@ export type MapModalProps = {
     setVisible?: () => void;
 };
 
+
 export const defaultMapProps: MapModalProps = {
     visible: false,
-    center: [0, 0],
+    center: COPENHAGEN_COORDS,
     zoom: 10,
-    markers: [[0, 0], 0],
+    markers: [COPENHAGEN_COORDS, 0],
 };
 
 export const MapModal: React.FC<MapModalProps> = ({

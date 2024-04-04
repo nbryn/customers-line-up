@@ -1,4 +1,5 @@
 using CLup.Domain.Bookings;
+using CLup.Domain.Shared.ValueObjects;
 
 namespace CLup.Application.Bookings;
 
@@ -22,7 +23,7 @@ public sealed class BookingDto
 
     public string UserEmail { get; init; }
 
-    public string Interval { get; init; }
+    public TimeInterval Interval { get; init; }
 
     public string Date { get; init; }
 
@@ -38,7 +39,7 @@ public sealed class BookingDto
             TimeSlotId = booking.TimeSlotId.Value,
             Business = $"{booking.Business.BusinessData.Name} - {booking.Business.Address.Zip}",
             Date = booking.TimeSlot.Date.ToString("dd/MM/yyyy"),
-            Interval = booking.TimeSlot.FormatInterval(),
+            Interval = booking.TimeSlot.TimeInterval,
             Capacity = $"{booking.TimeSlot.Bookings.Count}/{booking.TimeSlot.Capacity}",
             Latitude = booking.Business.Address.Coords.Latitude,
             Longitude = booking.Business.Address.Coords.Longitude,

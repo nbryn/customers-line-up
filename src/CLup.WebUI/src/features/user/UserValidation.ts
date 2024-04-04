@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 export const emailSchemaObject: yup.ObjectSchema = yup.object({
-    email: yup.string().email("Email must be a valid email").required('Email is required'),
+    email: yup.string().email('Must be a valid email').required('Email is required'),
 });
 
 export const passwordValidationObject: yup.ObjectSchema = yup.object({
@@ -20,7 +20,6 @@ export const addressValidationSchema: yup.ObjectSchema = yup.object({
 });
 
 export const userValidationSchema: yup.ObjectSchema = yup.object({
-    email: yup.string().email().required('Email is required'),
     name: yup
         .string()
         .min(2, 'Name should be minimum 2 characters')
@@ -28,8 +27,8 @@ export const userValidationSchema: yup.ObjectSchema = yup.object({
         .max(50, 'Maximum 50 characters'),
 });
 
-export const registerValidationSchema = userValidationSchema.concat(
-    addressValidationSchema.concat(passwordValidationObject)
-);
+export const registerValidationSchema = emailSchemaObject
+    .concat(userValidationSchema)
+    .concat(addressValidationSchema.concat(passwordValidationObject));
 
 export const loginValidationSchema = emailSchemaObject.concat(passwordValidationObject);

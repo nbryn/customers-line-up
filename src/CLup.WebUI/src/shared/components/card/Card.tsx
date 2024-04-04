@@ -7,25 +7,23 @@ import makeStyles from '@mui/styles/makeStyles';
 import MUICard from '@mui/material/Card';
 
 const useStyles = makeStyles({
-    root: {
-        minWidth: 275,
-    },
     button: {
         justifyContent: 'center',
+        marginBottom: 12,
+        marginTop: -6,
     },
     content: {
         padding: 5,
     },
     header: {
-        textAlign: 'center',
         marginBottom: 15,
+        textAlign: 'center',
     },
 });
 
 type Props = {
     title?: string;
     subtitle?: string;
-    buttonAction?: () => void;
     buttonColor?: 'inherit' | 'primary' | 'secondary';
     buttonText?: string;
     buttonSize?: 'small' | 'medium' | 'large';
@@ -34,12 +32,12 @@ type Props = {
     className?: string;
     buttonStyle?: any;
     children?: React.ReactNode;
+    buttonAction?: () => void;
 };
 
 export const Card: React.FC<Props> = ({
     children,
     className,
-    buttonAction,
     buttonColor,
     buttonText,
     buttonSize,
@@ -48,6 +46,7 @@ export const Card: React.FC<Props> = ({
     subtitle,
     variant,
     buttonStyle,
+    buttonAction,
 }: Props) => {
     const styles = useStyles();
 

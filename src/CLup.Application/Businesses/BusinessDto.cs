@@ -26,17 +26,17 @@ public sealed class BusinessDto
 
     public int Capacity { get; init; }
 
-    public IList<BookingDto> Bookings { get; init; }
+    public required IList<BookingDto> Bookings { get; init; }
 
-    public IList<EmployeeDto> Employees { get; init; }
+    public required IList<EmployeeDto> Employees { get; init; }
 
-    public IList<MessageDto> ReceivedMessages { get; init; }
+    public required IList<MessageDto> ReceivedMessages { get; init; }
 
-    public IList<MessageDto> SentMessages { get; init; }
+    public required IList<MessageDto> SentMessages { get; init; }
 
-    public IList<TimeSlotDto> TimeSlots { get; init; }
+    public required IList<TimeSlotDto> TimeSlots { get; init; }
 
-    public static BusinessDto FromBusiness(Business business)
+    public static BusinessDto FromBusiness(Business business, bool includeMessages)
     {
         return new BusinessDto()
         {
@@ -51,16 +51,18 @@ public sealed class BusinessDto
             Bookings = business.Bookings.Select(BookingDto.FromBooking).ToList(),
             Employees = business.Employees.Select(EmployeeDto.FromEmployee).ToList(),
             TimeSlots = business.TimeSlots.Select(TimeSlotDto.FromTimeSlot).ToList(),
-
-            ReceivedMessages = business.ReceivedMessages
-                .Where(message => !message.Metadata.DeletedByReceiver)
-                .Select(MessageDto.FromMessage)
-                .ToList(),
-
-            SentMessages = business.SentMessages
-                .Where(message => !message.Metadata.DeletedBySender)
-                .Select(MessageDto.FromMessage)
-                .ToList(),
+            ReceivedMessages = !includeMessages
+                ? new List<MessageDto>()
+                : business.ReceivedMessages
+                    .Where(message => !message.Metadata.DeletedByReceiver)
+                    .Select(MessageDto.FromMessage)
+                    .ToList(),
+            SentMessages = !includeMessages
+                ? new List<MessageDto>()
+                : business.SentMessages
+                    .Where(message => !message.Metadata.DeletedBySender)
+                    .Select(MessageDto.FromMessage)
+                    .ToList(),
         };
     }
 }

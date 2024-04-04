@@ -44,7 +44,7 @@ public sealed class QueryController : AuthorizedControllerBase
     }
 
     [HttpGet]
-    [Route("user/business/{businessId:guid}")]
+    [Route("business/{businessId:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetBusinessResponse))]
     [ProducesResponseType((typeof(ProblemDetails)), StatusCodes.Status404NotFound)]
     public Task<IActionResult> GetBusiness([FromRoute] Guid businessId)
@@ -56,7 +56,7 @@ public sealed class QueryController : AuthorizedControllerBase
             {
                 var business = await _repository.FetchBusinessAggregate(GetUserIdFromJwt(), BusinessId.Create(businessId));
                 return this.CreateActionResult(
-                    Result.FromValue(new GetBusinessResponse(BusinessDto.FromBusiness(business)),
+                    Result.FromValue(new GetBusinessResponse(BusinessDto.FromBusiness(business, true)),
                         BusinessErrors.NotFound));
             });
     }
@@ -76,7 +76,7 @@ public sealed class QueryController : AuthorizedControllerBase
 
         var businesses = await _repository.FetchBusinessesByOwner(userId);
 
-        return Ok(new GetBusinessesByOwnerResponse(businesses.Select(BusinessDto.FromBusiness).ToList()));
+        return Ok(new GetBusinessesByOwnerResponse(businesses.Select(business => BusinessDto.FromBusiness(business, true)).ToList()));
     }
 
     [HttpGet]
@@ -87,8 +87,7 @@ public sealed class QueryController : AuthorizedControllerBase
     {
         var businesses = await _repository.FetchAllBusinesses();
 
-        // TODO: This shouldn't include business messages
-        return Ok(new GetAllBusinessesResponse(businesses.Select(BusinessDto.FromBusiness).ToList()));
+        return Ok(new GetAllBusinessesResponse(businesses.Select(business => BusinessDto.FromBusiness(business, false)).ToList()));
     }
 
 

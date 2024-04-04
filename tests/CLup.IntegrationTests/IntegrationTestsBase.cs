@@ -112,7 +112,7 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
             throw new InvalidOperationException("Not authenticated");
         }
 
-        var response = await GetAsyncAndEnsureSuccess<GetBusinessResponse>($"{QueryRoute}/user/business/{business.Id}");
+        var response = await GetAsyncAndEnsureSuccess<GetBusinessResponse>($"{QueryRoute}/business/{business.Id}");
         response.Should().NotBeNull();
 
         return response.Business;

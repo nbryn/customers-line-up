@@ -5,7 +5,6 @@ import {Col, Row} from 'react-bootstrap';
 import CircularProgress from '@mui/material/CircularProgress';
 import makeStyles from '@mui/styles/makeStyles';
 
-
 import {CardInfo} from '../../shared/components/card/CardInfo';
 import {useGetBusinessesByOwnerQuery} from './BusinessApi';
 import {setCurrentBusiness} from './BusinessState';
@@ -65,7 +64,7 @@ export const SelectBusinessView: React.FC = () => {
                                 onClick={() => navigate(CREATE_BUSINESS_ROUTE)}
                                 size="small"
                             >
-                                Create Business
+                                {'Create Business'}
                             </Button>
                         </Row>
                     ) : (

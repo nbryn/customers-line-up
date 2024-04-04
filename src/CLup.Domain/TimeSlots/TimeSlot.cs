@@ -9,7 +9,7 @@ namespace CLup.Domain.TimeSlots;
 
 public sealed class TimeSlot : Entity, IHasDomainEvent
 {
-    private readonly List<Booking> _bookings = new();
+    private readonly List<Booking> _bookings = [];
 
     public TimeSlotId Id { get; private set; }
 
@@ -25,7 +25,7 @@ public sealed class TimeSlot : Entity, IHasDomainEvent
 
     public TimeInterval TimeInterval { get; private set; }
 
-    public List<DomainEvent> DomainEvents { get; set; } = new();
+    public List<DomainEvent> DomainEvents { get; set; } = [];
 
     public IReadOnlyList<Booking> Bookings => _bookings.AsReadOnly();
 
@@ -59,16 +59,14 @@ public sealed class TimeSlot : Entity, IHasDomainEvent
     {
         if (Bookings.Count >= Capacity)
         {
-            return DomainResult.Fail(new[] { TimeSlotErrors.NoCapacity });
+            return DomainResult.Fail([TimeSlotErrors.NoCapacity]);
         }
 
         if (Date < DateOnly.FromDateTime(DateTime.UtcNow))
         {
-            return DomainResult.Fail(new[] { TimeSlotErrors.InThePast });
+            return DomainResult.Fail([TimeSlotErrors.InThePast]);
         }
 
         return DomainResult.Ok();
     }
-
-    public string FormatInterval() => $"{TimeInterval.Start.ToString()} - {TimeInterval.End.ToString()}";
 }
