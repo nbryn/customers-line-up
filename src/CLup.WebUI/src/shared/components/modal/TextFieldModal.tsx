@@ -4,7 +4,7 @@ import {MenuItem} from '@mui/material';
 
 import {ComboBox, type ComboBoxOption} from '../form/ComboBox';
 import {type FormHandler} from '../../hooks/useForm';
-import {BsModal} from './BsModal';
+import {Dialog} from './Dialog';
 import {TextField, type TextFieldType} from '../form/TextField';
 import TextFieldUtil from '../../util/TextFieldUtil';
 
@@ -40,8 +40,8 @@ export const TextFieldModal: React.FC<Props> = ({
     const [updating, setUpdating] = useState(false);
 
     return (
-        <BsModal
-            show={show}
+        <Dialog
+            open={show}
             title={`Update ${TextFieldUtil.mapKeyToLabel(textFieldKey, true)}`}
             primaryActionText={primaryActionText}
             primaryDisabled={!formHandler.isValid}
@@ -110,6 +110,6 @@ export const TextFieldModal: React.FC<Props> = ({
                         ))}
                 </TextField>
             )}
-        </BsModal>
+        </Dialog>
     );
 };

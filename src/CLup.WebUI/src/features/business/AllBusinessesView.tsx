@@ -60,7 +60,7 @@ export const AllBusinessesView: React.FC = () => {
             tooltip: 'See available time slots',
             onClick: (_: any, rowData: Partial<BusinessDto>) => {
                 const business = getAllBusinessResponse?.businesses?.find(
-                    (b) => b.id === rowData.id
+                    (business) => business.id === rowData.id
                 );
                 dispatch(setCurrentBusiness(business));
                 navigate(CREATE_BOOKING_ROUTE);
@@ -70,10 +70,13 @@ export const AllBusinessesView: React.FC = () => {
             icon: () => <Chip size="small" label="See on map" clickable color="secondary" />,
             tooltip: 'Show location on map',
             onClick: (_: any, rowData: Partial<BusinessDto>) => {
-                const coords = getAllBusinessResponse?.businesses?.find((b) => b.id === rowData.id)
-                    ?.address?.coords;
+                const business = getAllBusinessResponse?.businesses?.find(
+                    (business) => business.id === rowData.id
+                );
+                const {coords, city} = business!.address!;
                 setMapModalInfo({
-                    visible: true,
+                    open: true,
+                    title: `${business?.name} - ${city}`,
                     zoom: 14,
                     center: [coords?.longitude as number, coords?.latitude as number],
                     markers: [[coords?.longitude as number, coords?.latitude as number], 13],
@@ -85,17 +88,16 @@ export const AllBusinessesView: React.FC = () => {
     return (
         <Box className={styles.box}>
             <Header text="Available Businesses" />
-
             <Grid container justifyContent="center">
+                <MapModal
+                    open={mapModalInfo.open}
+                    setVisible={() => setMapModalInfo(defaultMapProps)}
+                    zoom={mapModalInfo.zoom}
+                    center={mapModalInfo.center}
+                    markers={mapModalInfo.markers}
+                    title={mapModalInfo.title}
+                />
                 <Grid item xs={8}>
-                    <MapModal
-                        visible={mapModalInfo.visible}
-                        setVisible={() => setMapModalInfo(defaultMapProps)}
-                        zoom={mapModalInfo.zoom}
-                        center={mapModalInfo.center}
-                        markers={mapModalInfo.markers}
-                    />
-
                     <Table
                         actions={actions}
                         columns={columns}

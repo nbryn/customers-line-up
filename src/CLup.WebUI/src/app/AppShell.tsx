@@ -10,6 +10,7 @@ import {ExtendedToastMessage, ToastMessage} from '../shared/components/Toast';
 import {useGetUserQuery} from '../features/user/UserApi';
 import {useAppDispatch, useAppSelector} from './Store';
 import {clearApiState, selectApiState} from '../shared/api/ApiState';
+import {Typography} from '@mui/material';
 
 declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
@@ -71,6 +72,16 @@ export const AppShell: React.FC = () => {
                             }}
                         >
                             <AuthRoutes />
+                            <Typography
+                                marginTop={30}
+                                align="center"
+                                color="text.secondary"
+                                variant="body2"
+                            >
+                                {'Copyright © Customers Lineup '}
+                                {new Date().getFullYear()}
+                                {'.'}
+                            </Typography>
                         </Box>
                     </Box>
                 </>

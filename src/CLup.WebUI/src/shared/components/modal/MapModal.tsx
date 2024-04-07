@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {COPENHAGEN_COORDS, Map} from '../map/Map.js';
-import {BsModal} from './BsModal';
+import {Dialog} from './Dialog';
 
 export type Marker = Array<number[] | number>;
 
@@ -9,28 +9,29 @@ export type MapModalProps = {
     center: number[];
     markers: Marker;
     zoom: number;
-    visible: boolean;
+    open: boolean;
+    title?: string;
     setVisible?: () => void;
 };
 
-
 export const defaultMapProps: MapModalProps = {
-    visible: false,
+    open: false,
     center: COPENHAGEN_COORDS,
     zoom: 10,
     markers: [COPENHAGEN_COORDS, 0],
 };
 
 export const MapModal: React.FC<MapModalProps> = ({
-    visible,
-    setVisible,
+    open,
     zoom,
     center,
     markers,
+    title,
+    setVisible,
 }: MapModalProps) => {
     return (
-        <BsModal show={visible} secondaryAction={() => setVisible!()} title="Map">
+        <Dialog open={open} secondaryAction={() => setVisible!()} title={title ?? 'Map'}>
             <Map center={center} markers={markers} zoom={zoom} />
-        </BsModal>
+        </Dialog>
     );
 };
