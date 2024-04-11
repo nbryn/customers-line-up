@@ -7,11 +7,10 @@ import makeStyles from '@mui/styles/makeStyles';
 
 import {CardInfo} from '../../shared/components/card/CardInfo';
 import {useGetBusinessesByOwnerQuery} from './BusinessApi';
-import {setCurrentBusiness} from './BusinessState';
 import {Header, HeaderSize} from '../../shared/components/Texts';
 import {InfoCard} from '../../shared/components/card/InfoCard';
 import {isLoading} from '../../shared/api/ApiState';
-import {useAppDispatch, useAppSelector} from '../../app/Store';
+import {useAppSelector} from '../../app/Store';
 import {BUSINESS_OVERVIEW_ROUTE, CREATE_BUSINESS_ROUTE} from '../../app/RouteConstants';
 
 const useStyles = makeStyles(() => ({
@@ -31,20 +30,17 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const SelectBusinessView: React.FC = () => {
-    const styles = useStyles();
-    const navigate = useNavigate();
-    const dispatch = useAppDispatch();
+    const {data: businesses} = useGetBusinessesByOwnerQuery();
     const loading = useAppSelector(isLoading);
+    const navigate = useNavigate();
+    const styles = useStyles();
 
-    const {data: businessesByOwnerResponse} = useGetBusinessesByOwnerQuery();
     return (
         <>
             <Row className={styles.row}>
                 <Header
                     text={
-                        businessesByOwnerResponse?.businesses?.length
-                            ? 'Choose Business'
-                            : 'You dont have any businesses yet'
+                        businesses?.length ? 'Choose Business' : 'You dont have any businesses yet'
                     }
                     size={HeaderSize.H1}
                 />
@@ -55,7 +51,7 @@ export const SelectBusinessView: React.FC = () => {
                 </Row>
             ) : (
                 <Row className={styles.row}>
-                    {!businessesByOwnerResponse?.businesses?.length ? (
+                    {!businesses?.length ? (
                         <Row>
                             <Button
                                 className={styles.noBusinessesButton}
@@ -68,20 +64,21 @@ export const SelectBusinessView: React.FC = () => {
                             </Button>
                         </Row>
                     ) : (
-                        businessesByOwnerResponse?.businesses.map((business) => {
+                        businesses.map((business) => {
                             return (
                                 <Col key={business.id} sm={6} md={8} lg={4}>
                                     <InfoCard
                                         title={business.name ?? ''}
-                                        buttonText="Select Business"
+                                        buttonText="Select"
                                         buttonAction={() => {
-                                            dispatch(setCurrentBusiness(business));
-                                            navigate(BUSINESS_OVERVIEW_ROUTE);
+                                            navigate(
+                                                `${BUSINESS_OVERVIEW_ROUTE}/${business.id ?? ''}`
+                                            );
                                         }}
                                     >
                                         <CardInfo
                                             infoTexts={[
-                                                {text: `${business.address?.zip}`, icon: 'City'},
+                                                {text: `${business.address?.zip} - ${business.address?.city}`, icon: 'City'},
                                                 {text: `${business.address?.street}`, icon: 'Home'},
                                             ]}
                                         />

@@ -25,11 +25,9 @@ public class Result : DomainResult
 
     public static Result<T> Fail<T>(HttpCode code, IList<Error> errors, T value = default) => new(value, code, errors);
 
-    public static Result NotFound(IList<Error> errors) => new(HttpCode.NotFound, errors);
-
     public static Result<T> NotFound<T>(IList<Error> errors) => new(default, HttpCode.NotFound, errors);
 
-    public static Result<T> FromValue<T>(T? value, Error? error = null)
+    public static Result<T> ToResult<T>(T? value, Error? error = null)
         => value is null ? NotFound<T>([error]) : Ok(value);
 
     public static Result Validate<TRequest, TValidator>(TRequest request) where TValidator : AbstractValidator<TRequest>, new()
@@ -42,6 +40,21 @@ public class Result : DomainResult
         }
 
         return Ok();
+    }
+
+    public Result<T> Combine<T>(T? value, IList<Error>? errors = null)
+    {
+        if (Failure)
+        {
+            return BadRequest<T>(Errors);
+        }
+
+        if (value is null)
+        {
+            return BadRequest<T>(errors ?? []);
+        }
+
+        return Ok(value);
     }
 
     public async Task<Result> BindAsync<T>(Func<Task<T>> f)

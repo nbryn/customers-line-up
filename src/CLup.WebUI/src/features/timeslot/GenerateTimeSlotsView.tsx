@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import {Col, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 
@@ -7,10 +8,8 @@ import {useGenerateTimeSlotsMutation} from './TimeSlotApi';
 import {ComboBox} from '../../shared/components/form/ComboBox';
 import type {ComboBoxOption} from '../../shared/components/form/ComboBox';
 import DateUtil from '../../shared/util/DateUtil';
-import {ErrorView} from '../../shared/views/ErrorView';
 import {Header} from '../../shared/components/Texts';
-import {selectCurrentBusiness} from '../business/BusinessState';
-import {useAppSelector} from '../../app/Store';
+import {useGetBusinessAggregateByIdQuery} from '../business/BusinessApi';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -31,13 +30,11 @@ export const GenerateTimeSlotsView: React.FC = () => {
     const [dateOptions, setDateOptions] = useState<ComboBoxOption[]>(DateUtil.getNext7Days());
     const [selectedDate, setSelectedDate] = useState<ComboBoxOption>();
 
+    const {businessId} = useParams();
     const styles = useStyles();
-    const business = useAppSelector(selectCurrentBusiness);
-    const [generateTimeSlots] = useGenerateTimeSlotsMutation();
 
-    if (!business) {
-        return <ErrorView />;
-    }
+    const {data: business} = useGetBusinessAggregateByIdQuery(businessId!);
+    const [generateTimeSlots] = useGenerateTimeSlotsMutation();
 
     useEffect(() => {
         setDateOptions(dateOptions.filter((date) => date.label !== selectedDate?.label));
@@ -46,7 +43,7 @@ export const GenerateTimeSlotsView: React.FC = () => {
     return (
         <>
             <Row className={styles.row}>
-                <Header text={business.name ?? ''} />
+                <Header text={business?.name ?? ''} />
             </Row>
             <Row className={styles.row}>
                 <Col lg={6}>
@@ -62,7 +59,7 @@ export const GenerateTimeSlotsView: React.FC = () => {
                         disableButton={!selectedDate || !dateOptions.length}
                         buttonAction={async () =>
                             await generateTimeSlots({
-                                businessId: business.id ?? '',
+                                businessId: business?.id ?? '',
                                 date: {
                                     year: selectedDate?.date?.year(),
                                     month: selectedDate?.date?.month(),

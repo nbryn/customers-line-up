@@ -34,7 +34,7 @@ function convertToFormData(
     data: Index,
     formHandler: FormHandler<any>,
     addressHandler: AddressHandler,
-    entity: HasAddress,
+    entity: HasAddress | undefined,
     getIndex?: (key: string) => number | undefined
 ): FormCardData[] {
     return Object.keys(data).map((key) => ({
@@ -61,7 +61,7 @@ function convertToFormData(
 
 type Props = {
     formData: Index;
-    entity: HasAddress;
+    entity: HasAddress | undefined;
     formHandler: FormHandler<any>;
     addressHandler: AddressHandler;
     title: string;
@@ -87,8 +87,9 @@ export const FormCard: React.FC<Props> = ({
     const styles = useStyles();
 
     let formCardData = convertToFormData(data, formHandler, addressHandler, entity, getIndex);
-
-    if (formCardData[0].index) formCardData = formCardData.sort((a, b) => a.index! - b.index!);
+    if (formCardData[0].index) {
+        formCardData = formCardData.sort((a, b) => a.index! - b.index!);
+    }
     return (
         <Card
             className={styles.card}
@@ -102,17 +103,24 @@ export const FormCard: React.FC<Props> = ({
         >
             <Row>
                 <Col sm={12} md={6} lg={formCardData.length < 5 ? 12 : 5}>
-                    {formCardData.slice(0, 4).map((x) => (
-                        <TextFieldCardRow data={x} selectOptions={selectOptions} />
+                    {formCardData.slice(0, 4).map((cardData) => (
+                        <TextFieldCardRow
+                            key={cardData.key}
+                            data={cardData}
+                            selectOptions={selectOptions}
+                        />
                     ))}
                 </Col>
                 {formCardData.length > 4 && (
                     <>
                         <Divider className={styles.divider} orientation="vertical" flexItem />
-
                         <Col className={styles.divider} sm={12} md={6} lg={5}>
-                            {formCardData.slice(4).map((x) => (
-                                <TextFieldCardRow data={x} selectOptions={selectOptions} />
+                            {formCardData.slice(4).map((cardData) => (
+                                <TextFieldCardRow
+                                    key={cardData.key}
+                                    data={cardData}
+                                    selectOptions={selectOptions}
+                                />
                             ))}
                         </Col>
                     </>

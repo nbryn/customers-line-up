@@ -1,12 +1,13 @@
 import React from 'react';
+import {useParams} from 'react-router-dom';
 import {Container} from 'react-bootstrap';
 
 import {MessageContainer} from '../../shared/containers/MessageContainer';
-import {useAppSelector} from '../../app/Store';
-import {selectCurrentBusiness} from './BusinessState';
+import {useGetBusinessAggregateByIdQuery} from './BusinessApi';
 
 export const BusinessMessageView: React.FC = () => {
-    const business = useAppSelector(selectCurrentBusiness);
+    const {businessId} = useParams();
+    const {data: business} = useGetBusinessAggregateByIdQuery(businessId!);
     return (
         <Container>
             <MessageContainer

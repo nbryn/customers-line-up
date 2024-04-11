@@ -12,7 +12,7 @@ import {
 import {type ApiInfo, setApiState} from './ApiState';
 
 export async function apiQuery<TResponse>(
-    query: (queryApi: QueryApi) => Promise<AxiosResponse<TResponse, any>>,
+    query: (queryApi: QueryApi) => Promise<TResponse>,
     api: BaseQueryApi,
     successInfo?: Omit<ApiInfo, 'error'>
 ): Promise<TResponse> {
@@ -24,8 +24,8 @@ export async function apiQuery<TResponse>(
         if (successInfo) {
             api.dispatch(setApiState(successInfo));
         }
-
-        return response.data;
+    
+        return response;
     } catch (error) {
         return handleError(api, error);
     }
@@ -47,7 +47,7 @@ export async function apiMutation<TApi>(
     }
 }
 
-function getConfiguration() {
+export function getConfiguration() {
     return new Configuration({
         basePath: process.env.REACT_APP_API_URL,
         apiKey: `Bearer ${Cookies.get('access_token')}`,
@@ -62,7 +62,7 @@ function handleError(api: BaseQueryApi, error: any) {
         const axiosError = error as AxiosError;
         const problemDetails = axiosError.response?.data as ProblemDetails;
         const errors = Object.entries(problemDetails.errors ?? {}).flatMap(([, value]) => value);
-        // TODO: Show all errors. Different toasts?
+        // TODO: Show all errors. One toast per error?
         api.dispatch(setApiState({message: errors[0], error: true}));
 
         return undefined as any;

@@ -53,7 +53,10 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
             .ThenInclude(booking => booking.User)
             .Include(business => business.Bookings)
             .ThenInclude(booking => booking.TimeSlot)
-            .Include(business => business.TimeSlots)
+            .Include(business => business.TimeSlots
+                .Where(timeSlot => timeSlot.Date >= DateOnly.FromDateTime(DateTime.Now))
+                .OrderBy(timeSlot => timeSlot.Date)
+                .ThenBy(timeSlot => timeSlot.TimeInterval.Start))
             .Include(business => business.Employees)
             .Include(business => business.SentMessages)
             .Include(business => business.ReceivedMessages)

@@ -2,4 +2,4 @@
 
 namespace CLup.API.Contracts.Businesses;
 
-public readonly record struct GetBusinessesByOwnerResponse(IList<BusinessDto> Businesses);
+public readonly record struct GetBusinessesByOwnerResponse(IList<BusinessAggregateDto> Businesses);

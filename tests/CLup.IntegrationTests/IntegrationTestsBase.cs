@@ -4,7 +4,7 @@ using System.Text;
 using CLup.API.Contracts.Auth;
 using CLup.API.Contracts.Businesses;
 using CLup.API.Contracts.Businesses.CreateBusiness;
-using CLup.API.Contracts.Businesses.GetBusiness;
+using CLup.API.Contracts.Businesses.GetBusinessAggregate;
 using CLup.API.Contracts.Users.GetUser;
 using CLup.Application.Businesses;
 using CLup.Application.Shared;
@@ -105,17 +105,17 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
         return response.User;
     }
 
-    protected async Task<BusinessDto> GetBusiness(BusinessDto business)
+    protected async Task<BusinessAggregateDto> GetBusinessAggregate(BusinessAggregateDto businessAggregate)
     {
         if (_httpClient.DefaultRequestHeaders.Authorization == null)
         {
             throw new InvalidOperationException("Not authenticated");
         }
 
-        var response = await GetAsyncAndEnsureSuccess<GetBusinessResponse>($"{QueryRoute}/business/{business.Id}");
+        var response = await GetAsyncAndEnsureSuccess<GetBusinessAggregateResponse>($"{QueryRoute}/business/aggregate/{businessAggregate.Id}");
         response.Should().NotBeNull();
 
-        return response.Business;
+        return response.BusinessAggregate;
     }
 
     protected async Task Login(string email, string password)
@@ -125,9 +125,9 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", response.Token);
     }
 
-    protected async Task<IList<BusinessDto>> GetBusinessesForCurrentUser()
+    protected async Task<IList<BusinessAggregateDto>> GetBusinessesForCurrentUser()
     {
-        var response = await GetAsyncAndEnsureSuccess<GetAllBusinessesResponse>($"{QueryRoute}/user/businesses");
+        var response = await GetAsyncAndEnsureSuccess<GetBusinessesByOwnerResponse>($"{QueryRoute}/user/businesses");
         response.Should().NotBeNull();
 
         return response.Businesses;

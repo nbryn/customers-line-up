@@ -38,12 +38,12 @@ import {
     MANAGE_BOOKINGS_ROUTE,
     MANAGE_BUSINESS_MESSAGES_ROUTE,
     GENERATE_TIMESLOTS_ROUTE,
-    MANAGE_BUSINESS_ROUTE,
+    BUSINESS_PROFILE_ROUTE,
     ERROR_ROUTE,
     BUSINESS_ROUTE,
     MANAGE_EMPLOYEES_ROUTE,
     BUSINESS_OVERVIEW_ROUTE,
-    USER_BUSINESS_ROUTE,
+    ALL_BUSINESSES_VIEW,
     CREATE_BUSINESS_ROUTE,
 } from './RouteConstants';
 
@@ -62,23 +62,23 @@ export const AuthRoutes: React.FC = () => {
             <Route path={HOME_ROUTE} element={<HomeView />} />
             <Route path={USER_PROFILE_ROUTE} element={<ProfileView />} />
             <Route path={USER_BOOKINGS_ROUTE} element={<UserBookingView />} />
-            <Route path={USER_BUSINESS_ROUTE} element={<AllBusinessesView />} />
+            <Route path={ALL_BUSINESSES_VIEW} element={<AllBusinessesView />} />
             <Route path={USER_MESSAGES_ROUTE} element={<UserMessageView />} />
-            <Route path={CREATE_BOOKING_ROUTE} element={<CreateBookingView />} />
+            <Route path={`${CREATE_BOOKING_ROUTE}/:businessId`} element={<CreateBookingView />} />
             <Route path={CREATE_BUSINESS_ROUTE} element={<CreateBusinessView />} />
             <Route path={BUSINESS_ROUTE} element={<SelectBusinessView />} />
-            <Route path={BUSINESS_OVERVIEW_ROUTE} element={<BusinessOverview />} />
-            <Route path={BUSINESS_BOOKINGS_ROUTE} element={<BusinessBookingView />} />
-            <Route path={BUSINESS_TIMESLOTS_ROUTE} element={<TimeSlotView />} />
-            <Route path={BUSINESS_EMPLOYEES_ROUTE} element={<EmployeeView />} />
-            <Route path={BUSINESS_MESSAGES_ROUTE} element={<BusinessMessageView />} />
-            <Route path={CREATE_EMPLOYEE_ROUTE} element={<CreateEmployeeView />} />
-            <Route path={MANAGE_EMPLOYEES_ROUTE} element={<EmployeeView />} />
-            <Route path={MANAGE_BOOKINGS_ROUTE} element={<BusinessBookingView />} />
-            <Route path={MANAGE_TIMESLOTS_ROUTE} element={<TimeSlotView />} />
-            <Route path={MANAGE_BUSINESS_MESSAGES_ROUTE} element={<BusinessMessageView />} />
-            <Route path={GENERATE_TIMESLOTS_ROUTE} element={<GenerateTimeSlotsView />} />
-            <Route path={MANAGE_BUSINESS_ROUTE} element={<BusinessProfileView />} />
+            <Route path={`${BUSINESS_OVERVIEW_ROUTE}/:businessId`} element={<BusinessOverview />} />
+            <Route path={`${BUSINESS_BOOKINGS_ROUTE}/:businessId`} element={<BusinessBookingView />} />
+            <Route path={`${BUSINESS_TIMESLOTS_ROUTE}/:businessId`} element={<TimeSlotView />} />
+            <Route path={`${BUSINESS_EMPLOYEES_ROUTE}/:businessId`} element={<EmployeeView />} />
+            <Route path={`${BUSINESS_MESSAGES_ROUTE}/:businessId`} element={<BusinessMessageView />} />
+            <Route path={`${CREATE_EMPLOYEE_ROUTE}/:businessId`} element={<CreateEmployeeView />} />
+            <Route path={`${MANAGE_EMPLOYEES_ROUTE}/:businessId`} element={<EmployeeView />} />
+            <Route path={`${MANAGE_BOOKINGS_ROUTE}/:businessId`} element={<BusinessBookingView />} />
+            <Route path={`${MANAGE_TIMESLOTS_ROUTE}/:businessId`} element={<TimeSlotView />} />
+            <Route path={`${MANAGE_BUSINESS_MESSAGES_ROUTE}/:businessId`} element={<BusinessMessageView />} />
+            <Route path={`${GENERATE_TIMESLOTS_ROUTE}}/:businessId`} element={<GenerateTimeSlotsView />} />
+            <Route path={`${BUSINESS_PROFILE_ROUTE}/:businessId`} element={<BusinessProfileView />} />
             <Route path={ERROR_ROUTE} element={<ErrorView />} />
             <Route path="*" element={<NotFoundView />} />
         </Routes>

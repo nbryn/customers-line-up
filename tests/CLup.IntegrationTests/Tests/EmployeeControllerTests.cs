@@ -25,7 +25,7 @@ public class EmployeeControllerTests : IntegrationTestsBase
         var createEmployeeRequest = new CreateEmployeeRequest(business.Id, employeeUserId);
         await PostAsyncAndEnsureSuccess(EmployeeRoute, createEmployeeRequest);
 
-        var updatedBusiness = await GetBusiness(business);
+        var updatedBusiness = await GetBusinessAggregate(business);
         updatedBusiness.Employees.Should().HaveCount(1);
         updatedBusiness.Employees.First().UserId.Should().Be(employeeUserId);
     }
@@ -98,12 +98,12 @@ public class EmployeeControllerTests : IntegrationTestsBase
 
         var createEmployeeRequest = new CreateEmployeeRequest(business.Id, employeeUserId);
         await PostAsyncAndEnsureSuccess(EmployeeRoute, createEmployeeRequest);
-        var businessWithEmployee = await GetBusiness(business);
+        var businessWithEmployee = await GetBusinessAggregate(business);
         var employee = businessWithEmployee.Employees.First();
 
         await DeleteAsyncAndEnsureSuccess($"{EmployeeRoute}/{employee.Id}?businessId={business.Id}");
 
-        var businessWithoutEmployee = await GetBusiness(business);
+        var businessWithoutEmployee = await GetBusinessAggregate(business);
         businessWithoutEmployee.Employees.Should().HaveCount(0);
     }
 
@@ -129,7 +129,7 @@ public class EmployeeControllerTests : IntegrationTestsBase
 
         var createEmployeeRequest = new CreateEmployeeRequest(business.Id, employeeUserId);
         await PostAsyncAndEnsureSuccess(EmployeeRoute, createEmployeeRequest);
-        var businessWithEmployee = await GetBusiness(business);
+        var businessWithEmployee = await GetBusinessAggregate(business);
         var employee = businessWithEmployee.Employees.First();
 
         var problemDetails = await DeleteAsyncAndEnsureNotFound($"{EmployeeRoute}/{employee.Id}?businessId={Guid.NewGuid()}");

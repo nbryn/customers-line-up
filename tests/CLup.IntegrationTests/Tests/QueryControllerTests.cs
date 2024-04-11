@@ -1,6 +1,5 @@
 using CLup.API.Contracts.Bookings.CreateBooking;
 using CLup.API.Contracts.Businesses;
-using CLup.API.Contracts.Businesses.GetBusiness;
 using CLup.API.Contracts.Employees.CreateEmployee;
 using CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
 
@@ -39,12 +38,12 @@ public sealed class QueryControllerTests : IntegrationTestsBase
             new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1)));
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
 
-        var businessWithTimeSlots = await GetBusiness(business);
+        var businessWithTimeSlots = await GetBusinessAggregate(business);
         var timeSlot = businessWithTimeSlots.TimeSlots.First();
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
         await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
 
-        var businessWithTimeSlotsBookingAndEmployee = await GetBusiness(business);
+        var businessWithTimeSlotsBookingAndEmployee = await GetBusinessAggregate(business);
 
         businessWithTimeSlotsBookingAndEmployee.Should().NotBeNull();
         businessWithTimeSlotsBookingAndEmployee.Employees.Should().HaveCount(1);

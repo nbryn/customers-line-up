@@ -40,7 +40,7 @@ public sealed class Seeder : ISeeder
         var ids = new List<UserId>();
         if (_dbContext.Users.Any())
         {
-            return ids;
+            return _dbContext.Users.Select(user => user.Id).ToList();
         }
 
         var user1 = new UserBuilder()
@@ -101,7 +101,7 @@ public sealed class Seeder : ISeeder
         var businesses = new List<Business>();
         if (_dbContext.Businesses.Any())
         {
-            return businesses;
+            return _dbContext.Businesses.ToList();
         }
 
         var business1 = new BusinessBuilder()
@@ -191,11 +191,6 @@ public sealed class Seeder : ISeeder
     private Dictionary<BusinessId, List<TimeSlotId>> AddTimeSlots(IList<Business> businesses)
     {
         var businessTimeSlots = new Dictionary<BusinessId, List<TimeSlotId>>();
-        if (_dbContext.TimeSlots.Any())
-        {
-            return businessTimeSlots;
-        }
-
         foreach (var business in businesses)
         {
             business.GenerateTimeSlots(DateOnly.FromDateTime(DateTime.Today.AddDays(1)));
@@ -210,12 +205,7 @@ public sealed class Seeder : ISeeder
         IList<BusinessId> businessIds,
         IList<UserId> userIds)
     {
-        if (_dbContext.Bookings.Any())
-        {
-            return;
-        }
-
-        _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[0], businessTimeSlots[businessIds[0]].First()));
+        _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[0], businessTimeSlots[businessIds[0]][0]));
         _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[1], businessTimeSlots[businessIds[1]][3]));
         _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[2], businessTimeSlots[businessIds[2]][5]));
         _dbContext.Add(BookingCreator.Create(userIds[0], businessIds[3], businessTimeSlots[businessIds[3]][10]));

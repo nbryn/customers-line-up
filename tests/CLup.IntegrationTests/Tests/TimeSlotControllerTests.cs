@@ -38,7 +38,7 @@ public class TimeSlotControllerTests : IntegrationTestsBase
 
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
 
-        var updatedBusiness = await GetBusiness(business);
+        var updatedBusiness = await GetBusinessAggregate(business);
         var expectedNumberOfTimeSlotsGenerated = (closesHour - opensHour) * (60 / timeSlotLengthInMinutes);
 
         var firstTimeSlot = updatedBusiness.TimeSlots.First();
@@ -89,13 +89,13 @@ public class TimeSlotControllerTests : IntegrationTestsBase
         var generateTimeSlotsRequest =
             new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.UtcNow));
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
-        var businessWithTimeSlots = await GetBusiness(business);
+        var businessWithTimeSlots = await GetBusinessAggregate(business);
         var timeSlotToBeDeleted = businessWithTimeSlots.TimeSlots.First();
 
         var deleteTimeSlotRoute = $"{TimeSlotRoute}/{timeSlotToBeDeleted.Id}?businessId={business.Id}";
         await DeleteAsyncAndEnsureSuccess(deleteTimeSlotRoute);
 
-        var updatedBusiness = await GetBusiness(business);
+        var updatedBusiness = await GetBusinessAggregate(business);
         updatedBusiness.TimeSlots.Should().HaveCount(businessWithTimeSlots.TimeSlots.Count - 1);
         updatedBusiness.TimeSlots.Select(timeSlot => timeSlot.Id).Should().NotContain(timeSlotToBeDeleted.Id);
     }

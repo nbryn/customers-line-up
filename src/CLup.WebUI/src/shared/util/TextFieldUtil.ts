@@ -34,11 +34,14 @@ function mapKeyToValue(
     key: string,
     values: Index,
     addresses: ExtendedAddress[],
-    entity: HasAddress
+    entity: HasAddress | undefined
 ): string {
     if (key === 'zip') {
-        if (!addresses.length) return `${entity.address?.zip ?? ''} - ${entity.address?.city ?? ''}`;
-        const address = addresses.find((a) => a.zip === values[key]);
+        if (!addresses.length) {
+            return `${entity?.address?.zip ?? ''} - ${entity?.address?.city ?? ''}`;
+        }
+
+        const address = addresses.find((address) => address.zip === values[key]);
         return `${values[key]} - ${address?.city ?? ''}`;
     }
 

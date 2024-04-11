@@ -1,4 +1,4 @@
-import {BUSINESS_BY_OWNER_TAG, BUSINESS_TAG, baseApi, USER_TAG} from '../../app/Store';
+import {BUSINESS_BY_OWNER_TAG, baseApi, USER_TAG, BUSINESS_AGGREGATE_TAG} from '../../app/Store';
 import {
     MessageApi,
     type SendUserMessageRequest,
@@ -13,7 +13,7 @@ const MESSAGE_SENT = 'Message successfully send';
 const messageApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         sendUserMessage: builder.mutation<void, SendUserMessageRequest>({
-            invalidatesTags: [BUSINESS_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
+            invalidatesTags: [BUSINESS_AGGREGATE_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
             queryFn: async (sendUserMessageRequest, api) => ({
                 data: await apiMutation(
                     async (messageApi) => await messageApi.sendUserMessage(sendUserMessageRequest),
@@ -24,7 +24,7 @@ const messageApi = baseApi.injectEndpoints({
             }),
         }),
         sendBusinessMessage: builder.mutation<void, SendBusinessMessageRequest>({
-            invalidatesTags: [BUSINESS_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
+            invalidatesTags: [BUSINESS_AGGREGATE_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
             queryFn: async (sendBusinessMessageRequest, api) => ({
                 data: await apiMutation(
                     async (messageApi) =>
@@ -35,7 +35,7 @@ const messageApi = baseApi.injectEndpoints({
             }),
         }),
         markMessageAsDeletedForUser: builder.mutation<void, MarkMessageAsDeletedForUserRequest>({
-            invalidatesTags: [BUSINESS_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
+            invalidatesTags: [USER_TAG],
             queryFn: async (markMessageAsDeletedForUserRequest, api) => ({
                 data: await apiMutation(
                     async (messageApi) =>
@@ -51,7 +51,7 @@ const messageApi = baseApi.injectEndpoints({
             void,
             MarkMessageAsDeletedForBusinessRequest
         >({
-            invalidatesTags: [BUSINESS_TAG, BUSINESS_BY_OWNER_TAG, USER_TAG],
+            invalidatesTags: [BUSINESS_AGGREGATE_TAG, BUSINESS_BY_OWNER_TAG],
             queryFn: async (markMessageAsDeletedForBusinessRequest, api) => ({
                 data: await apiMutation(
                     async (messageApi) =>

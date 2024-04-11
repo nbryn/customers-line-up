@@ -17,7 +17,7 @@ import {
     CREATE_BUSINESS_ROUTE,
     HOME_ROUTE,
     USER_BOOKINGS_ROUTE,
-    USER_BUSINESS_ROUTE,
+    ALL_BUSINESSES_VIEW,
     USER_MESSAGES_ROUTE,
     USER_PROFILE_ROUTE,
 } from '../../../app/RouteConstants';
@@ -65,7 +65,7 @@ const menuItems: MenuItem[] = [
     {
         label: 'Find Business',
         icon: <DashboardIcon />,
-        path: USER_BUSINESS_ROUTE,
+        path: ALL_BUSINESSES_VIEW,
     },
     {
         label: 'My Bookings',

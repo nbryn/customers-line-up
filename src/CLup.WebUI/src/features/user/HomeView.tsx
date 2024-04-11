@@ -11,7 +11,7 @@ import {
     BUSINESS_ROUTE,
     CREATE_BUSINESS_ROUTE,
     USER_BOOKINGS_ROUTE,
-    USER_BUSINESS_ROUTE,
+    ALL_BUSINESSES_VIEW,
 } from '../../app/RouteConstants';
 import {Box} from '@mui/material';
 import {Header} from '../../shared/components/Texts';
@@ -31,20 +31,20 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const HomeView: React.FC = () => {
+    const {data: businesses} = useGetBusinessesByOwnerQuery();
+    const {data: user} = useGetUserQuery();
     const navigate = useNavigate();
     const styles = useStyles();
 
-    const {data: getBusinessesByOwnerResponse} = useGetBusinessesByOwnerQuery();
-    const {data: getUserResponse} = useGetUserQuery();
     return (
         <Box className={styles.box}>
-            <Header text={`Welcome ${getUserResponse?.user?.name}`} />
+            <Header text={`Welcome ${user?.name}`} />
             <Grid container justifyContent="center" spacing={2}>
                 <Grid item xs={4}>
                     <InfoCard
                         buttonAction={() => navigate(USER_BOOKINGS_ROUTE)}
                         buttonText="My Bookings"
-                        secondaryAction={() => navigate(USER_BUSINESS_ROUTE)}
+                        secondaryAction={() => navigate(ALL_BUSINESSES_VIEW)}
                         secondaryButtonText="New Booking"
                         title="Booking Info"
                         subtitle="Summary"
@@ -52,22 +52,18 @@ export const HomeView: React.FC = () => {
                         <CardInfo
                             infoTexts={[
                                 {
-                                    text: `Bookings: ${
-                                        getUserResponse?.user?.bookings?.length ?? 0
-                                    }`,
+                                    text: `Bookings: ${user?.bookings?.length ?? 0}`,
                                     icon: 'Home',
                                 },
                                 {
                                     text: `Next: ${
-                                        getUserResponse?.user?.bookings?.[0]?.date ??
-                                        'No upcoming bookings'
+                                        user?.bookings?.[0]?.date ?? 'No upcoming bookings'
                                     }`,
                                     icon: 'Hot',
                                 },
                                 {
                                     text: `Where: ${
-                                        getUserResponse?.user?.bookings?.[0]?.business ??
-                                        'No upcoming bookings'
+                                        user?.bookings?.[0]?.business ?? 'No upcoming bookings'
                                     }`,
                                     icon: 'Grain',
                                 },
@@ -79,7 +75,7 @@ export const HomeView: React.FC = () => {
                     <InfoCard
                         buttonAction={() => navigate(BUSINESS_ROUTE)}
                         buttonText="My Businesses"
-                        primaryButtonDisabled={!getBusinessesByOwnerResponse?.businesses?.length}
+                        primaryButtonDisabled={!businesses?.length}
                         secondaryAction={() => navigate(CREATE_BUSINESS_ROUTE)}
                         secondaryButtonText="Create Business"
                         title="Business Info"
@@ -88,24 +84,20 @@ export const HomeView: React.FC = () => {
                         <CardInfo
                             infoTexts={[
                                 {
-                                    text: `Businesses: ${
-                                        getBusinessesByOwnerResponse?.businesses?.length ?? 0
-                                    }`,
+                                    text: `Businesses: ${businesses?.length ?? 0}`,
                                     icon: 'Home',
                                 },
                                 {
                                     text: `Employees: ${
-                                        getBusinessesByOwnerResponse?.businesses?.flatMap(
-                                            (business) => business.employees
-                                        ).length ?? 0
+                                        businesses?.flatMap((business) => business.employees)
+                                            .length ?? 0
                                     }`,
                                     icon: 'Hot',
                                 },
                                 {
                                     text: `Bookings: ${
-                                        getBusinessesByOwnerResponse?.businesses?.flatMap(
-                                            (business) => business.bookings
-                                        ).length ?? 0
+                                        businesses?.flatMap((business) => business.bookings)
+                                            .length ?? 0
                                     }`,
                                     icon: 'Grain',
                                 },

@@ -136,6 +136,93 @@ export interface BookingDto {
 /**
  * 
  * @export
+ * @interface BusinessAggregateDto
+ */
+export interface BusinessAggregateDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof BusinessAggregateDto
+     */
+    'id'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BusinessAggregateDto
+     */
+    'ownerId'?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BusinessAggregateDto
+     */
+    'name'?: string | null;
+    /**
+     * 
+     * @type {Address}
+     * @memberof BusinessAggregateDto
+     */
+    'address'?: Address;
+    /**
+     * 
+     * @type {TimeInterval}
+     * @memberof BusinessAggregateDto
+     */
+    'businessHours'?: TimeInterval;
+    /**
+     * 
+     * @type {number}
+     * @memberof BusinessAggregateDto
+     */
+    'timeSlotLengthInMinutes'?: number;
+    /**
+     * 
+     * @type {BusinessType}
+     * @memberof BusinessAggregateDto
+     */
+    'type'?: BusinessType;
+    /**
+     * 
+     * @type {number}
+     * @memberof BusinessAggregateDto
+     */
+    'capacity'?: number;
+    /**
+     * 
+     * @type {Array<BookingDto>}
+     * @memberof BusinessAggregateDto
+     */
+    'bookings'?: Array<BookingDto> | null;
+    /**
+     * 
+     * @type {Array<EmployeeDto>}
+     * @memberof BusinessAggregateDto
+     */
+    'employees'?: Array<EmployeeDto> | null;
+    /**
+     * 
+     * @type {Array<MessageDto>}
+     * @memberof BusinessAggregateDto
+     */
+    'receivedMessages'?: Array<MessageDto> | null;
+    /**
+     * 
+     * @type {Array<MessageDto>}
+     * @memberof BusinessAggregateDto
+     */
+    'sentMessages'?: Array<MessageDto> | null;
+    /**
+     * 
+     * @type {Array<TimeSlotDto>}
+     * @memberof BusinessAggregateDto
+     */
+    'timeSlots'?: Array<TimeSlotDto> | null;
+}
+
+
+/**
+ * 
+ * @export
  * @interface BusinessDto
  */
 export interface BusinessDto {
@@ -187,30 +274,6 @@ export interface BusinessDto {
      * @memberof BusinessDto
      */
     'capacity'?: number;
-    /**
-     * 
-     * @type {Array<BookingDto>}
-     * @memberof BusinessDto
-     */
-    'bookings'?: Array<BookingDto> | null;
-    /**
-     * 
-     * @type {Array<EmployeeDto>}
-     * @memberof BusinessDto
-     */
-    'employees'?: Array<EmployeeDto> | null;
-    /**
-     * 
-     * @type {Array<MessageDto>}
-     * @memberof BusinessDto
-     */
-    'receivedMessages'?: Array<MessageDto> | null;
-    /**
-     * 
-     * @type {Array<MessageDto>}
-     * @memberof BusinessDto
-     */
-    'sentMessages'?: Array<MessageDto> | null;
     /**
      * 
      * @type {Array<TimeSlotDto>}
@@ -497,6 +560,19 @@ export interface GetAllBusinessesResponse {
 /**
  * 
  * @export
+ * @interface GetBusinessAggregateResponse
+ */
+export interface GetBusinessAggregateResponse {
+    /**
+     * 
+     * @type {BusinessAggregateDto}
+     * @memberof GetBusinessAggregateResponse
+     */
+    'business'?: BusinessAggregateDto;
+}
+/**
+ * 
+ * @export
  * @interface GetBusinessResponse
  */
 export interface GetBusinessResponse {
@@ -515,10 +591,10 @@ export interface GetBusinessResponse {
 export interface GetBusinessesByOwnerResponse {
     /**
      * 
-     * @type {Array<BusinessDto>}
+     * @type {Array<BusinessAggregateDto>}
      * @memberof GetBusinessesByOwnerResponse
      */
-    'businesses'?: Array<BusinessDto> | null;
+    'businesses'?: Array<BusinessAggregateDto> | null;
 }
 /**
  * 
@@ -2276,6 +2352,42 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @param {string} businessId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBusinessAggregate: async (businessId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'businessId' is not null or undefined
+            assertParamExists('getBusinessAggregate', 'businessId', businessId)
+            const localVarPath = `/api/query/business/aggregate/{businessId}`
+                .replace(`{${"businessId"}}`, encodeURIComponent(String(businessId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Bearer required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2409,6 +2521,18 @@ export const QueryApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} businessId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBusinessAggregate(businessId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GetBusinessAggregateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBusinessAggregate(businessId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['QueryApi.getBusinessAggregate']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2470,6 +2594,15 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @param {string} businessId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBusinessAggregate(businessId: string, options?: any): AxiosPromise<GetBusinessAggregateResponse> {
+            return localVarFp.getBusinessAggregate(businessId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2522,6 +2655,17 @@ export class QueryApi extends BaseAPI {
      */
     public getBusiness(businessId: string, options?: RawAxiosRequestConfig) {
         return QueryApiFp(this.configuration).getBusiness(businessId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} businessId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof QueryApi
+     */
+    public getBusinessAggregate(businessId: string, options?: RawAxiosRequestConfig) {
+        return QueryApiFp(this.configuration).getBusinessAggregate(businessId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

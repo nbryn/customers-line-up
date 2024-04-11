@@ -2,6 +2,7 @@
 using CLup.API.Contracts.Bookings.DeleteBusinessBooking;
 using CLup.API.Contracts.Bookings.DeleteUserBooking;
 using CLup.API.Extensions;
+using CLup.Application.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 using ProblemDetails = CLup.Application.Shared.ProblemDetails;
@@ -36,9 +37,14 @@ public sealed class BookingController : AuthorizedControllerBase
     public async Task<IActionResult> DeleteUserBooking([FromRoute] Guid bookingId)
     {
         var request = new DeleteUserBookingRequest(bookingId);
-        return await ValidateAndContinueOnSuccess<DeleteUserBookingRequest, DeleteUserBookingRequestValidator>(
-            request,
-            async () => await _mediator.Send(request.MapToCommand(GetUserIdFromJwt())));
+        var validationResult = Result.Validate<DeleteUserBookingRequest, DeleteUserBookingRequestValidator>(request);
+        if (validationResult.Failure)
+        {
+            return BadRequest(validationResult);
+        };
+
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
+        return this.CreateActionResult(result);
     }
 
     [HttpDelete]
@@ -48,8 +54,13 @@ public sealed class BookingController : AuthorizedControllerBase
     public async Task<IActionResult> DeleteBusinessBooking([FromRoute] Guid businessId, [FromQuery] Guid bookingId)
     {
         var request = new DeleteBusinessBookingRequest(businessId, bookingId);
-        return await ValidateAndContinueOnSuccess<DeleteBusinessBookingRequest, DeleteBusinessBookingRequestValidator>(
-            request,
-            async () => await _mediator.Send(request.MapToCommand(GetUserIdFromJwt())));
+        var validationResult = Result.Validate<DeleteBusinessBookingRequest, DeleteBusinessBookingRequestValidator>(request);
+        if (validationResult.Failure)
+        {
+            return BadRequest(validationResult);
+        }
+
+        var result = await _mediator.Send(request.MapToCommand(GetUserIdFromJwt()));
+        return this.CreateActionResult(result);
     }
 }

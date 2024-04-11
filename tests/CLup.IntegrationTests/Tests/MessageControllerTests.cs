@@ -25,7 +25,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
         await PostAsyncAndEnsureSuccess($"{MessageRoute}/user", sendUserMessageRequest);
 
         var userWithMessage = await GetUser();
-        var businessWithMessage = await GetBusiness(business);
+        var businessWithMessage = await GetBusinessAggregate(business);
 
         userWithMessage.SentMessages.Should().HaveCount(1);
         userWithMessage.SentMessages.First().ReceiverId.Should().Be(business.Id);
@@ -73,7 +73,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
         await PostAsyncAndEnsureSuccess($"{MessageRoute}/business", sendBusinessMessageRequest);
 
         var userWithMessage = await GetUser();
-        var businessWithMessage = await GetBusiness(business);
+        var businessWithMessage = await GetBusinessAggregate(business);
 
         userWithMessage.ReceivedMessages.Should().HaveCount(1);
         userWithMessage.ReceivedMessages.First().SenderId.Should().Be(business.Id);
@@ -184,7 +184,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
             new SendBusinessMessageRequest(business.Id, userId, "Temp", "Hello", MessageType.Enquiry);
         await PostAsyncAndEnsureSuccess($"{MessageRoute}/business", sendBusinessMessageRequest);
 
-        var updatedBusiness = await GetBusiness(business);
+        var updatedBusiness = await GetBusinessAggregate(business);
         var message = updatedBusiness.SentMessages.First();
 
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForBusinessRequest(business.Id, message.Id, false);

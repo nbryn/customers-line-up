@@ -34,8 +34,8 @@ export const UserBookingView: React.FC = () => {
     const [mapModalInfo, setMapModalInfo] = useState<MapModalProps>(defaultMapProps);
     const styles = useStyles();
 
-    const {data: getUserResponse} = useGetUserQuery();
     const [deleteBookingForUser] = useDeleteUserBookingMutation();
+    const {data: user} = useGetUserQuery();
 
     const columns: TableColumn[] = [
         {title: 'id', field: 'id', hidden: true},
@@ -84,7 +84,7 @@ export const UserBookingView: React.FC = () => {
                     <Table
                         actions={actions}
                         columns={columns}
-                        data={mapBookingsToTableData(getUserResponse?.user?.bookings)}
+                        data={mapBookingsToTableData(user?.bookings)}
                         title="Bookings"
                         emptyMessage="No Bookings Yet"
                     />

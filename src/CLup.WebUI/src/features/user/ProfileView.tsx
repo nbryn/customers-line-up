@@ -2,7 +2,6 @@ import React from 'react';
 import {Col, Row} from 'react-bootstrap';
 import makeStyles from '@mui/styles/makeStyles';
 
-import {ErrorView} from '../../shared/views/ErrorView';
 import {FormCard} from '../../shared/components/card/FormCard';
 import {Header} from '../../shared/components/Texts';
 import {useGetUserQuery, useUpdateUserMutation} from './UserApi';
@@ -37,20 +36,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 export const ProfileView: React.FC = () => {
-    console.log("UES")
-    const styles = useStyles();
-    const {data: getUserResponse} = useGetUserQuery();
     const [updateUser] = useUpdateUserMutation();
-
-    if (!getUserResponse?.user) {
-        return <ErrorView />;
-    }
+    const {data: user} = useGetUserQuery();
+    const styles = useStyles();
 
     const formValues = {
-        email: getUserResponse.user.email ?? '',
-        name: getUserResponse.user.name ?? '',
-        zip: getUserResponse.user.address?.zip ?? 0,
-        street: getUserResponse.user.address?.street ?? '',
+        email: user?.email ?? '',
+        name: user?.name ?? '',
+        zip: user?.address?.zip ?? 0,
+        street: user?.address?.street ?? '',
     };
 
     const {formHandler} = useForm<typeof formValues & Index>({
@@ -76,7 +70,7 @@ export const ProfileView: React.FC = () => {
                     <FormCard
                         title="User Data"
                         formData={formValues}
-                        entity={getUserResponse.user}
+                        entity={user}
                         buttonText="Save Changes"
                         primaryDisabled={!formHandler.isValid}
                         buttonAction={formHandler.handleSubmit}

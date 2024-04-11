@@ -51,7 +51,7 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
         };
 
         await PutAsyncAndEnsureSuccess(BusinessRoute, updateBusinessRequest);
-        var updatedBusiness = await GetBusiness(business);
+        var updatedBusiness = await GetBusinessAggregate(business);
 
         updatedBusiness.Name.Should().Be(updateBusinessRequest.Name);
         updatedBusiness.Capacity.Should().Be(updateBusinessRequest.Capacity);

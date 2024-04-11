@@ -216,11 +216,11 @@ public sealed class BookingControllerTests : IntegrationTestsBase
         problemDetails?.Errors.First().Key.Should().Be(BookingErrors.NotFound.Code);
     }
 
-    private async Task<TimeSlotDto> GenerateTimeSlotsAndReturnFirst(BusinessDto business)
+    private async Task<TimeSlotDto> GenerateTimeSlotsAndReturnFirst(BusinessAggregateDto businessAggregate)
     {
-        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.Today));
+        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(businessAggregate.Id, DateOnly.FromDateTime(DateTime.Today));
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
-        var businessWithTimeSlots = await GetBusiness(business);
+        var businessWithTimeSlots = await GetBusinessAggregate(businessAggregate);
 
         return businessWithTimeSlots.TimeSlots.First();
     }
