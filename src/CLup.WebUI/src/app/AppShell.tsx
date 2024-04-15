@@ -16,6 +16,7 @@ declare module '@mui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
 }
 
+// TODO: Handle loading here? Problem: No headers
 export const AppShell: React.FC = () => {
     const [open, setOpen] = useState(true);
     const dispatch = useAppDispatch();

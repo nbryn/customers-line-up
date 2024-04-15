@@ -7,21 +7,21 @@ namespace CLup.Application.Businesses;
 
 public sealed class BusinessDto
 {
-    public Guid Id { get; init; }
+    public required Guid Id { get; init; }
 
-    public Guid OwnerId { get; init; }
+    public required Guid OwnerId { get; init; }
 
-    public string Name { get; init; }
+    public required string Name { get; init; }
 
-    public Address Address { get; init; }
+    public required Address Address { get; init; }
 
-    public TimeInterval BusinessHours { get; init; }
+    public required TimeInterval BusinessHours { get; init; }
 
-    public int TimeSlotLengthInMinutes { get; init; }
+    public required int TimeSlotLengthInMinutes { get; init; }
 
-    public BusinessType Type { get; init; }
+    public required BusinessType Type { get; init; }
 
-    public int Capacity { get; init; }
+    public required int Capacity { get; init; }
 
     public required IList<TimeSlotDto> TimeSlots { get; init; }
 

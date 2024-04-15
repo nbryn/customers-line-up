@@ -52,7 +52,7 @@ export const EmployeeView: React.FC = () => {
                         columns={columns}
                         title="Employees"
                         data={business?.employees as TableData}
-                        emptyMessage="No Employees Yet"
+                        noDataMessage="No Employees Yet"
                     />
                 </Col>
             </Row>

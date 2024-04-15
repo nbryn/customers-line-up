@@ -37,7 +37,7 @@ public sealed class BookingDto
             UserId = booking.UserId.Value,
             BusinessId = booking.BusinessId.Value,
             TimeSlotId = booking.TimeSlotId.Value,
-            Business = $"{booking.Business.BusinessData.Name} - {booking.Business.Address.Zip}",
+            Business = $"{booking.Business.BusinessData.Name} - {booking.Business.Address.City}",
             Date = booking.TimeSlot.Date.ToString("dd/MM/yyyy"),
             Interval = booking.TimeSlot.TimeInterval,
             Capacity = $"{booking.TimeSlot.Bookings.Count}/{booking.TimeSlot.Capacity}",

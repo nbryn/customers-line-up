@@ -116,7 +116,7 @@ export const MessageContainer: React.FC<Props> = ({
                         actions={actions}
                         columns={columns}
                         data={(showSentMessages ? sentMessages : receivedMessages) as TableData}
-                        emptyMessage="No messages yet"
+                        noDataMessage="No messages yet"
                         title={
                             <Chip
                                 className={styles.badge}

@@ -25,7 +25,7 @@ public sealed class Booking : Entity, IHasDomainEvent
 
     public Business Business { get; private set; }
 
-    public List<DomainEvent> DomainEvents { get; set; } = new();
+    public List<DomainEvent> DomainEvents { get; set; } = [];
 
     public Booking(UserId userId, BusinessId businessId, TimeSlotId timeSlotId)
     {

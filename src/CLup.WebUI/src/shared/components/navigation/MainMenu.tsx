@@ -86,7 +86,7 @@ const menuItems: MenuItem[] = [
 
 const businessItems: MenuItem[] = [
     {
-        label: 'Businesses',
+        label: 'My Businesses',
         icon: <DashboardIcon />,
         path: BUSINESS_ROUTE,
     },

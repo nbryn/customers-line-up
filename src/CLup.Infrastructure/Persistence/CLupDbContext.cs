@@ -49,39 +49,35 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
     public async Task<IList<Business>> FetchAllBusinesses()
         => await Businesses
-            .Include(business => business.Bookings)
-            .ThenInclude(booking => booking.User)
-            .Include(business => business.Bookings)
-            .ThenInclude(booking => booking.TimeSlot)
             .Include(business => business.TimeSlots
                 .Where(timeSlot => timeSlot.Date >= DateOnly.FromDateTime(DateTime.Now))
                 .OrderBy(timeSlot => timeSlot.Date)
                 .ThenBy(timeSlot => timeSlot.TimeInterval.Start))
-            .Include(business => business.Employees)
-            .Include(business => business.SentMessages)
-            .Include(business => business.ReceivedMessages)
-            .AsSplitQuery()
             .AsNoTracking()
             .ToListAsync();
 
     public async Task<Business?> FetchBusinessAggregate(UserId userId, BusinessId businessId)
         => await Businesses
-            .Include(business => business.Bookings)
+            .Include(business => business.ReceivedMessages).ThenInclude(message => message.Metadata)
+            .Include(business => business.ReceivedMessages).OrderByDescending(message => message.CreatedAt)
+            .Include(business => business.SentMessages).ThenInclude(message => message.Metadata)
+            .Include(business => business.SentMessages).OrderByDescending(message => message.CreatedAt)
+            .Include(business => business.Employees).ThenInclude(employee => employee.User)
+            .Include(business => business.Bookings
+                .Where(booking => booking.TimeSlot.Date >= DateOnly.FromDateTime(DateTime.Now))
+                .OrderBy(booking => booking.TimeSlot.Date)
+                .ThenBy(booking => booking.TimeSlot.TimeInterval.Start))
             .ThenInclude(booking => booking.User)
-            .Include(business => business.Employees)
-            .ThenInclude(employee => employee.User)
-            .Include(business => business.TimeSlots)
-            .Include(user => user.SentMessages)
-            .ThenInclude(message => message.Metadata)
-            .Include(user => user.ReceivedMessages)
-            .ThenInclude(message => message.Metadata)
+            .Include(business => business.TimeSlots
+                .Where(timeSlot => timeSlot.Date >= DateOnly.FromDateTime(DateTime.Now))
+                .OrderBy(timeSlot => timeSlot.Date)
+                .ThenBy(timeSlot => timeSlot.TimeInterval.Start))
             .AsSplitQuery()
             .FirstOrDefaultAsync(business => business.OwnerId == userId && business.Id == businessId);
 
     public async Task<Business?> FetchBusinessById(BusinessId businessId)
         => await Businesses
-            .Include(business => business.TimeSlots)
-            .ThenInclude(timeSlot => timeSlot.Bookings)
+            .Include(business => business.TimeSlots).ThenInclude(timeSlot => timeSlot.Bookings)
             .FirstOrDefaultAsync(business => business.Id == businessId);
 
     public async Task<IList<Business>> FetchBusinessesByOwner(UserId ownerId)
@@ -91,15 +87,17 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
 
     public async Task<User?> FetchUserAggregate(UserId userId)
         => await Users
-            .Include(user => user.Bookings)
-            .ThenInclude(booking => booking.Business)
-            .Include(user => user.Bookings)
+            .Include(user => user.Bookings
+                .Where(booking => booking.TimeSlot.Date >= DateOnly.FromDateTime(DateTime.Now))
+                .OrderBy(booking => booking.TimeSlot.Date)
+                .ThenBy(booking => booking.TimeSlot.TimeInterval.Start))
             .ThenInclude(booking => booking.TimeSlot)
             .ThenInclude(timeSlot => timeSlot.Business)
-            .Include(user => user.SentMessages)
-            .ThenInclude(message => message.Metadata)
-            .Include(user => user.ReceivedMessages)
-            .ThenInclude(message => message.Metadata)
+            .Include(user => user.ReceivedMessages).ThenInclude(message => message.Metadata)
+            .Include(user => user.ReceivedMessages).OrderByDescending(message => message.CreatedAt)
+            .Include(user => user.SentMessages).ThenInclude(message => message.Metadata)
+            .Include(user => user.SentMessages).OrderByDescending(message => message.CreatedAt)
+            .Include(user => user.Bookings).ThenInclude(booking => booking.Business)
             .AsSplitQuery()
             .FirstOrDefaultAsync(user => user.Id == userId);
 
@@ -121,14 +119,14 @@ public sealed class CLupDbContext : DbContext, ICLupRepository
     }
 
     public override async Task<int> SaveChangesAsync(
-        bool acceptChanges = true,
+        bool acceptAllChangesOnSuccess = true,
         CancellationToken cancellationToken = default)
     {
         MarkEntitiesAsUpdated();
         DeleteOrphanMessages();
         await DispatchEvents();
 
-        return await base.SaveChangesAsync(acceptChanges, cancellationToken);
+        return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
     }
 
     public async Task<int> AddAndSave(CancellationToken cancellationToken, params Entity[] entities)

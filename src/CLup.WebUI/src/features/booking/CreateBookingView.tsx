@@ -50,7 +50,6 @@ export const CreateBookingView: React.FC = () => {
         {
             icon: () => <Chip size="small" label="Book" clickable color="primary" />,
             onClick: async (_: any, rowData: Partial<TimeSlotDto>) => {
-                console.log(rowData);
                 await createBooking({
                     timeSlotId: rowData.id ?? '',
                     businessId: business?.id ?? '',
@@ -63,7 +62,6 @@ export const CreateBookingView: React.FC = () => {
     return (
         <Box className={styles.box}>
             <Header text={'Create Booking'} />
-
             <Grid container justifyContent="center">
                 <MapModal
                     open={showMapModal}
@@ -99,7 +97,7 @@ export const CreateBookingView: React.FC = () => {
                                 />
                             </>
                         }
-                        emptyMessage="No Time Slots Available"
+                        noDataMessage="No Time Slots Available"
                     />
                 </Grid>
             </Grid>
