@@ -28,7 +28,7 @@ public sealed class Seeder : ISeeder
     {
         var userIds = AddUsers();
         var businesses = AddBusinesses(userIds);
-        var businessTimeSlots = AddTimeSlots(businesses);
+        var businessTimeSlots = await AddTimeSlots(businesses);
         AddBookings(businessTimeSlots, businesses.Select(business => business.Id).ToList(), userIds);
         AddEmployees(businesses.Select(business => business.Id).ToList(), userIds);
 
@@ -188,12 +188,21 @@ public sealed class Seeder : ISeeder
         return businesses;
     }
 
-    private Dictionary<BusinessId, List<TimeSlotId>> AddTimeSlots(IList<Business> businesses)
+    private async Task<Dictionary<BusinessId, List<TimeSlotId>>> AddTimeSlots(IList<Business> businesses)
     {
+        var tomorrow = DateOnly.FromDateTime(DateTime.Today.AddDays(1));
+        var timeSlots = await _dbContext.TimeSlots.Where(timeSlot => timeSlot.Date >= tomorrow).ToListAsync();
+        if (timeSlots.Count > 0)
+        {
+            return timeSlots
+                .GroupBy(timeSlot => timeSlot.BusinessId)
+                .ToDictionary(group => group.Key, group => group.Select(timeSlot => timeSlot.Id).ToList());
+        }
+
         var businessTimeSlots = new Dictionary<BusinessId, List<TimeSlotId>>();
         foreach (var business in businesses)
         {
-            business.GenerateTimeSlots(DateOnly.FromDateTime(DateTime.Today.AddDays(1)));
+            business.GenerateTimeSlots(tomorrow);
             businessTimeSlots.Add(business.Id, business.TimeSlots.Select(timeSlot => timeSlot.Id).ToList());
         }
 

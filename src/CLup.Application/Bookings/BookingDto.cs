@@ -15,9 +15,7 @@ public sealed class BookingDto
 
     public string Business { get; init; }
 
-    public double Longitude { get; init; }
-
-    public double Latitude { get; init; }
+    public Coords Coords { get; init; }
 
     public string Street { get; init; }
 
@@ -41,8 +39,7 @@ public sealed class BookingDto
             Date = booking.TimeSlot.Date.ToString("dd/MM/yyyy"),
             Interval = booking.TimeSlot.TimeInterval,
             Capacity = $"{booking.TimeSlot.Bookings.Count}/{booking.TimeSlot.Capacity}",
-            Latitude = booking.Business.Address.Coords.Latitude,
-            Longitude = booking.Business.Address.Coords.Longitude,
+            Coords = booking.Business.Address.Coords,
             Street = booking.Business.Address.Street,
             UserEmail = booking.User.UserData.Email,
         };

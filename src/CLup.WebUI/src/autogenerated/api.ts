@@ -92,16 +92,10 @@ export interface BookingDto {
     'business'?: string | null;
     /**
      * 
-     * @type {number}
+     * @type {Coords}
      * @memberof BookingDto
      */
-    'longitude'?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof BookingDto
-     */
-    'latitude'?: number;
+    'coords'?: Coords;
     /**
      * 
      * @type {string}

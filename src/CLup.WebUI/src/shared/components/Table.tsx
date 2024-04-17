@@ -9,7 +9,7 @@ import {useAppSelector} from '../../app/Store';
 import {isLoading} from '../api/ApiState';
 
 export type TableData = {
-    [key: string]: string;
+    [key: string]: string | number;
 }[];
 
 export type TableColumn = {

@@ -1,8 +1,7 @@
 import React from 'react';
 import {useNavigate} from 'react-router';
-import Chip from '@mui/material/Chip';
 import makeStyles from '@mui/styles/makeStyles';
-import {Box} from '@mui/material';
+import {Box, Chip} from '@mui/material';
 
 import {useGetAllBusinessesQuery} from './BusinessApi';
 import {CREATE_BOOKING_ROUTE} from '../../app/RouteConstants';

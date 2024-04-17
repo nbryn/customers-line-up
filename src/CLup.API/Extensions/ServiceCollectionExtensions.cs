@@ -56,6 +56,7 @@ public static class ServiceCollectionExtensions
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
+                options.UseSecurityTokenValidators = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = false,
