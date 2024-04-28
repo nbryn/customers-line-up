@@ -1,11 +1,13 @@
-﻿using CLup.API.Contracts.Messages.MarkMessageAsDeletedForBusiness;
-using CLup.API.Contracts.Messages.MarkMessageAsDeletedForUser;
-using CLup.API.Contracts.Messages.SendBusinessMessage;
-using CLup.API.Contracts.Messages.SendUserMessage;
+﻿using CLup.API.Messages.Contracts.MarkMessageAsDeletedForBusiness;
+using CLup.API.Messages.Contracts.MarkMessageAsDeletedForUser;
+using CLup.API.Messages.Contracts.SendBusinessMessage;
+using CLup.API.Messages.Contracts.SendUserMessage;
+using CLup.Application.Businesses;
 using CLup.Domain.Businesses;
 using CLup.Domain.Messages.Enums;
 using CLup.Domain.Users;
 
+#pragma warning disable CA1707
 namespace tests.CLup.IntegrationTests.Tests;
 
 public sealed class MessageControllerTests : IntegrationTestsBase
@@ -17,15 +19,12 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequest_SendUserMessageSucceeds()
     {
-        const string email = "test@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (userId, business) = await CreateUserWithBusiness();
         var sendUserMessageRequest = new SendUserMessageRequest(business.Id, "Temp", "Hello", MessageType.Enquiry);
         await PostAsyncAndEnsureSuccess($"{MessageRoute}/user", sendUserMessageRequest);
 
         var userWithMessage = await GetUser();
-        var businessWithMessage = await GetBusinessAggregate(business);
+        var businessWithMessage = await GetBusinessAggregate(business.Id);
 
         userWithMessage.SentMessages.Should().HaveCount(1);
         userWithMessage.SentMessages.First().ReceiverId.Should().Be(business.Id);
@@ -39,9 +38,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task EmptyRequest_SendUserMessageFails()
     {
-        const string email = "test1@test.com";
-        await CreateUserWithBusiness(email);
-
+        await CreateUserWithBusiness();
         var sendUserMessageRequest = new SendUserMessageRequest();
         var problemDetails = await PostAsyncAndEnsureBadRequest($"{MessageRoute}/user", sendUserMessageRequest);
 
@@ -51,9 +48,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidBusinessId_SendUserMessage_ReturnsBusinessNotFound()
     {
-        const string email = "test2@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var sendUserMessageRequest = new SendUserMessageRequest(Guid.NewGuid(), "Temp", "Hello", MessageType.Enquiry);
         var problemDetails = await PostAsyncAndEnsureNotFound($"{MessageRoute}/user", sendUserMessageRequest);
 
@@ -64,16 +59,13 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequest_SendBusinessMessageSucceeds()
     {
-        const string email = "test3@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (userId, business) = await CreateUserWithBusiness();
         var sendBusinessMessageRequest =
             new SendBusinessMessageRequest(business.Id, userId, "Temp", "Hello", MessageType.Enquiry);
         await PostAsyncAndEnsureSuccess($"{MessageRoute}/business", sendBusinessMessageRequest);
 
         var userWithMessage = await GetUser();
-        var businessWithMessage = await GetBusinessAggregate(business);
+        var businessWithMessage = await GetBusinessAggregate(business.Id);
 
         userWithMessage.ReceivedMessages.Should().HaveCount(1);
         userWithMessage.ReceivedMessages.First().SenderId.Should().Be(business.Id);
@@ -87,9 +79,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task EmptyRequest_SendBusinessMessageFails()
     {
-        const string email = "test4@test.com";
-        await CreateUserWithBusiness(email);
-
+        await CreateUserWithBusiness();
         var sendBusinessMessageRequest = new SendBusinessMessageRequest();
         var problemDetails = await PostAsyncAndEnsureBadRequest($"{MessageRoute}/business", sendBusinessMessageRequest);
 
@@ -99,9 +89,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidBusinessId_SendBusinessMessage_ReturnsBusinessNotFound()
     {
-        const string email = "test5@test.com";
-        var userId = await CreateUserWithBusiness(email);
-
+        var (userId, _) = await CreateUserWithBusiness();
         var sendBusinessMessageRequest =
             new SendBusinessMessageRequest(Guid.NewGuid(), userId, "Temp", "Hello", MessageType.Enquiry);
         var problemDetails = await PostAsyncAndEnsureNotFound($"{MessageRoute}/business", sendBusinessMessageRequest);
@@ -113,10 +101,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidUserId_SendBusinessMessage_ReturnsUserNotFound()
     {
-        const string email = "test6@test.com";
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (_, business) = await CreateUserWithBusiness();
         var sendBusinessMessageRequest =
             new SendBusinessMessageRequest(business.Id, Guid.NewGuid(), "Temp", "Hello", MessageType.Enquiry);
         var problemDetails = await PostAsyncAndEnsureNotFound($"{MessageRoute}/business", sendBusinessMessageRequest);
@@ -128,10 +113,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequest_MarkUserMessageAsDeleted_Succeeds()
     {
-        const string email = "test7@test.com";
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+       var (_, business) = await CreateUserWithBusiness();
         var sendUserMessageRequest = new SendUserMessageRequest(business.Id, "Temp", "Hello", MessageType.Enquiry);
         await PostAsyncAndEnsureSuccess($"{MessageRoute}/user", sendUserMessageRequest);
 
@@ -151,9 +133,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task InvalidRequest_MarkUserMessageAsDeleted_Fails()
     {
-        const string email = "test8@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForUserRequest(Guid.Empty, null);
         var problemDetails = await PatchAsyncAndEnsureBadRequest($"{MessageRoute}/user", markMessageAsDeletedRequest);
 
@@ -163,9 +143,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidMessageId_MarkUserMessageAsDeleted_ReturnsMessageNotFound()
     {
-        const string email = "test9@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForUserRequest(Guid.NewGuid(), false);
         var problemDetails = await PatchAsyncAndEnsureNotFound($"{MessageRoute}/user", markMessageAsDeletedRequest);
 
@@ -176,15 +154,12 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequest_MarkBusinessMessageAsDeleted_Succeeds()
     {
-        const string email = "test10@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (userId, business) = await CreateUserWithBusiness();
         var sendBusinessMessageRequest =
             new SendBusinessMessageRequest(business.Id, userId, "Temp", "Hello", MessageType.Enquiry);
         await PostAsyncAndEnsureSuccess($"{MessageRoute}/business", sendBusinessMessageRequest);
 
-        var updatedBusiness = await GetBusinessAggregate(business);
+        var updatedBusiness = await GetBusinessAggregate(business.Id);
         var message = updatedBusiness.SentMessages.First();
 
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForBusinessRequest(business.Id, message.Id, false);
@@ -200,22 +175,19 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task InvalidRequest_MarkBusinessMessageAsDeleted_Fails()
     {
-        const string email = "test11@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var markMessageAsDeletedRequest = new MarkMessageAsDeletedForBusinessRequest(Guid.Empty, Guid.Empty, null);
         var problemDetails = await PatchAsyncAndEnsureBadRequest($"{MessageRoute}/business", markMessageAsDeletedRequest);
 
-        problemDetails?.Errors.Should()
+        problemDetails?.Errors
+            .Should()
             .HaveCount(typeof(MarkMessageAsDeletedForBusinessRequest).GetProperties().Length);
     }
 
     [Fact]
     public async Task RequestWithInvalidBusinessId_MarkBusinessMessageAsDeleted_ReturnsBusinessNotFound()
     {
-        const string email = "test12@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var markMessageAsDeletedRequest =
             new MarkMessageAsDeletedForBusinessRequest(Guid.NewGuid(), Guid.NewGuid(), false);
         var problemDetails = await PatchAsyncAndEnsureNotFound($"{MessageRoute}/business", markMessageAsDeletedRequest);
@@ -227,10 +199,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidMessageId_MarkBusinessMessageAsDeleted_ReturnsMessageNotFound()
     {
-        const string email = "test13@test.com";
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (_, business) = await CreateUserWithBusiness();
         var markMessageAsDeletedRequest =
             new MarkMessageAsDeletedForBusinessRequest(business.Id, Guid.NewGuid(), false);
         var problemDetails = await PatchAsyncAndEnsureNotFound($"{MessageRoute}/business", markMessageAsDeletedRequest);
@@ -242,10 +211,7 @@ public sealed class MessageControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequests_MessageDeletedByReceiverAndSender_MessageDeleted()
     {
-        const string email = "test14@test.com";
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (_, business) = await CreateUserWithBusiness();
         var sendUserMessageRequest = new SendUserMessageRequest(business.Id, "Temp", "Hello", MessageType.Enquiry);
         await PostAsyncAndEnsureSuccess($"{MessageRoute}/user", sendUserMessageRequest);
 

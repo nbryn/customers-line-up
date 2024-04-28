@@ -1,6 +1,7 @@
-﻿using CLup.API.Contracts.Users.UpdateUser;
+﻿using CLup.API.Users.Contracts.UpdateUser;
 using CLup.Domain.Shared.ValueObjects;
 
+#pragma warning disable CA1707
 namespace tests.CLup.IntegrationTests.Tests;
 
 public class UserControllerTests : IntegrationTestsBase
@@ -12,8 +13,7 @@ public class UserControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequest_UpdateUserSucceeds()
     {
-        const string email = "test@test.com";
-        await CreateUserAndSetJwtToken(email);
+        await CreateUserAndSetJwtToken();
         var user = await GetUser();
         var updateUserRequest = new UpdateUserRequest()
         {
@@ -33,12 +33,10 @@ public class UserControllerTests : IntegrationTestsBase
     [Fact]
     public async Task EmptyRequest_UpdateUserFails()
     {
-        const string email = "test1@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var emptyRequest = new UpdateUserRequest();
-        var errorDetails = await PutAsyncAndEnsureBadRequest($"{UserRoute}/update", emptyRequest);
+        var problemDetails = await PutAsyncAndEnsureBadRequest($"{UserRoute}/update", emptyRequest);
 
-        errorDetails?.Errors.Should().HaveCount(typeof(UpdateUserRequest).GetProperties().Length);
+        problemDetails?.Errors.Should().HaveCount(typeof(UpdateUserRequest).GetProperties().Length);
     }
 }

@@ -1,9 +1,10 @@
-﻿using CLup.API.Contracts.Businesses.CreateBusiness;
-using CLup.API.Contracts.Businesses.UpdateBusiness;
+﻿using CLup.API.Businesses.Contracts.CreateBusiness;
+using CLup.API.Businesses.Contracts.UpdateBusiness;
 using CLup.Domain.Businesses;
 using CLup.Domain.Businesses.Enums;
 using CLup.Domain.Shared.ValueObjects;
 
+#pragma warning disable CA1707
 namespace tests.CLup.IntegrationTests.Tests;
 
 public sealed class BusinessControllerTests : IntegrationTestsBase
@@ -15,17 +16,14 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequest_CreateBusinessSucceeds()
     {
-        const string email = "test@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        userId.Should().NotBeEmpty();
+        var (_, business) = await CreateUserWithBusiness();
+        business.Should().NotBeNull();
     }
 
     [Fact]
     public async Task InvalidRequest_CreateBusinessFails()
     {
-        const string email = "test1@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var emptyRequest = new CreateBusinessRequest();
         var problemDetails = await PostAsyncAndEnsureBadRequest(BusinessRoute, emptyRequest);
 
@@ -35,10 +33,7 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequest_UpdateBusinessSucceeds()
     {
-        const string email = "test2@test.com";
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (_, business) = await CreateUserWithBusiness();
         var updateBusinessRequest = new UpdateBusinessRequest
         {
             BusinessId = business.Id,
@@ -51,7 +46,7 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
         };
 
         await PutAsyncAndEnsureSuccess(BusinessRoute, updateBusinessRequest);
-        var updatedBusiness = await GetBusinessAggregate(business);
+        var updatedBusiness = await GetBusinessAggregate(business.Id);
 
         updatedBusiness.Name.Should().Be(updateBusinessRequest.Name);
         updatedBusiness.Capacity.Should().Be(updateBusinessRequest.Capacity);
@@ -62,7 +57,7 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
     [Fact]
     public async Task InvalidRequest_UpdateBusinessFails()
     {
-        await CreateUserAndSetJwtToken("test3@test.com");
+        await CreateUserAndSetJwtToken();
         var emptyRequest = new UpdateBusinessRequest();
         var problemDetails =await PutAsyncAndEnsureBadRequest(BusinessRoute, emptyRequest);
 
@@ -70,13 +65,12 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
     }
 
     [Theory]
-    [InlineData("test4@test.com", 7)]
-    [InlineData("test5@test.com", 11)]
-    [InlineData("test6@test.com", 61)]
-    public async Task RequestWithTimeSlotLength_ThatIsNotDivisibleBy5_UpdateBusinessFails(string email, int timeSlotLengthInMinutes)
+    [InlineData( 7)]
+    [InlineData( 11)]
+    [InlineData( 61)]
+    public async Task RequestWithTimeSlotLength_ThatIsNotDivisibleBy5_UpdateBusinessFails(int timeSlotLengthInMinutes)
     {
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
+        var (_, business) = await CreateUserWithBusiness();
         var updateBusinessRequest = new UpdateBusinessRequest
         {
             BusinessId = business.Id,
@@ -96,17 +90,15 @@ public sealed class BusinessControllerTests : IntegrationTestsBase
     }
 
     [Theory]
-    [InlineData("test7@test.com", 65, 10, 11)]
-    [InlineData("test8@test.com", 125, 12, 14)]
-    [InlineData("test9@test.com", 550, 15, 19)]
+    [InlineData( 65, 10, 11)]
+    [InlineData( 125, 12, 14)]
+    [InlineData( 550, 15, 19)]
     public async Task RequestWithTimeSlotLength_ThatExceedsOpeningHours_UpdateBusinessFails(
-        string email,
         int timeSlotLengthInMinutes,
         int opens,
         int closes)
     {
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
+        var (_, business) = await CreateUserWithBusiness();
         var updateBusinessRequest = new UpdateBusinessRequest
         {
             BusinessId = business.Id,

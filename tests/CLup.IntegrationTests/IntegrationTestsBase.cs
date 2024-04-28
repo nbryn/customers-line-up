@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using CLup.API.Contracts.Auth;
-using CLup.API.Contracts.Businesses;
-using CLup.API.Contracts.Businesses.CreateBusiness;
-using CLup.API.Contracts.Businesses.GetBusinessAggregate;
-using CLup.API.Contracts.Users.GetUser;
+using CLup.API.Auth.Contracts;
+using CLup.API.Businesses.Contracts;
+using CLup.API.Businesses.Contracts.CreateBusiness;
+using CLup.API.Businesses.Contracts.GetBusinessAggregate;
+using CLup.API.Users.Contracts.GetUser;
 using CLup.Application.Businesses;
 using CLup.Application.Shared;
 using CLup.Application.Users;
@@ -22,27 +22,26 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
 {
     private readonly HttpClient _httpClient;
     protected static string BaseRoute = "api";
-    protected string BookingRoute = $"{BaseRoute}/booking";
-    protected string BusinessRoute = $"{BaseRoute}/business";
-    protected string EmployeeRoute = $"{BaseRoute}/employee";
-    protected string MessageRoute = $"{BaseRoute}/message";
-    protected string TimeSlotRoute = $"{BaseRoute}/timeslot";
-    protected string QueryRoute = $"{BaseRoute}/query";
-    protected string UserRoute = $"{BaseRoute}/user";
+    protected string BookingRoute { get; } = $"{BaseRoute}/booking";
+    protected string BusinessRoute { get; } = $"{BaseRoute}/business";
+    protected string EmployeeRoute { get; } = $"{BaseRoute}/employee";
+    protected string MessageRoute { get; } = $"{BaseRoute}/message";
+    protected string TimeSlotRoute { get; } = $"{BaseRoute}/timeslot";
+    protected string QueryRoute { get; } = $"{BaseRoute}/query";
+    protected string UserRoute { get; } = $"{BaseRoute}/user";
 
     protected IntegrationTestsBase(IntegrationTestWebAppFactory factory)
     {
         _httpClient = factory.CreateClient();
     }
 
-    protected async Task<Guid> CreateUserWithBusiness(
-        string ownerEmail,
+    protected async Task<(Guid UserId, BusinessAggregateDto Business)> CreateUserWithBusiness(
         int capacity = 50,
         TimeOnly? opens = null,
         TimeOnly? closes = null,
         int timeSlotLengthInMinutes = 30)
     {
-        var userId = await CreateUserAndSetJwtToken(ownerEmail);
+        var userId = await CreateUserAndSetJwtToken();
         var business = new BusinessBuilder()
             .WithOwner(UserId.Create(userId))
             .WithBusinessData("Super Brugsen", capacity, timeSlotLengthInMinutes)
@@ -62,14 +61,16 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
         };
 
         await PostAsyncAndEnsureSuccess(BusinessRoute, request);
+        var businessAggregate = (await GetBusinessesForCurrentUser()).First();
 
-        return userId;
+        return (userId, businessAggregate);
     }
 
-    protected async Task<Guid> CreateUserAndSetJwtToken(string email, string? password = null)
+    protected async Task<Guid> CreateUserAndSetJwtToken(string? password = null)
     {
+        var userEmail = $"{Guid.NewGuid()}@test.com";
         var newUser = new UserBuilder()
-            .WithUserData("Peter", email, password ?? "1234")
+            .WithUserData("Peter", userEmail, password ?? "1234")
             .WithAddress("Farum Hovedgade 15", 3520, "Farum", new Coords(55.8122540, 12.3706760))
             .WithRole(Role.User)
             .Build();
@@ -105,17 +106,17 @@ public abstract class IntegrationTestsBase : IClassFixture<IntegrationTestWebApp
         return response.User;
     }
 
-    protected async Task<BusinessAggregateDto> GetBusinessAggregate(BusinessAggregateDto businessAggregate)
+    protected async Task<BusinessAggregateDto> GetBusinessAggregate(Guid businessId)
     {
         if (_httpClient.DefaultRequestHeaders.Authorization == null)
         {
             throw new InvalidOperationException("Not authenticated");
         }
 
-        var response = await GetAsyncAndEnsureSuccess<GetBusinessAggregateResponse>($"{QueryRoute}/business/aggregate/{businessAggregate.Id}");
+        var response = await GetAsyncAndEnsureSuccess<GetBusinessAggregateResponse>($"{QueryRoute}/business/aggregate/{businessId}");
         response.Should().NotBeNull();
 
-        return response.BusinessAggregate;
+        return response.Business;
     }
 
     protected async Task Login(string email, string password)

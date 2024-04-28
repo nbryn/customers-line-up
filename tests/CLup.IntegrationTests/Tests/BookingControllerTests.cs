@@ -1,7 +1,7 @@
-﻿using CLup.API.Contracts.Bookings.CreateBooking;
-using CLup.API.Contracts.Bookings.DeleteBusinessBooking;
-using CLup.API.Contracts.Bookings.DeleteUserBooking;
-using CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
+﻿using CLup.API.Bookings.Contracts.CreateBooking;
+using CLup.API.Bookings.Contracts.DeleteBusinessBooking;
+using CLup.API.Bookings.Contracts.DeleteUserBooking;
+using CLup.API.TimeSlots.Contracts.GenerateTimeSlots;
 using CLup.Application.Businesses;
 using CLup.Application.TimeSlots;
 using CLup.Domain.Bookings;
@@ -9,6 +9,7 @@ using CLup.Domain.Businesses;
 using CLup.Domain.TimeSlots;
 using CLup.Domain.Users;
 
+#pragma warning disable CA1707
 namespace tests.CLup.IntegrationTests.Tests;
 
 public sealed class BookingControllerTests : IntegrationTestsBase
@@ -20,15 +21,13 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidBusinessAndTimeSlotId_TimeSlotIsNotFull_CreateBookingSucceeds()
     {
-        const string email = "test2@test.com";
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
-        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
+        var (_, business) = await CreateUserWithBusiness();
+        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business.Id);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
-        await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
-        var user = await GetUser();
 
+        await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
+
+        var user = await GetUser();
         user.Bookings.Should().HaveCount(1);
         user.Bookings.First().TimeSlotId.Should().Be(timeSlot.Id);
     }
@@ -36,12 +35,10 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidBusinessAndTimeSlotId_BookingExists_CreateBookingFails()
     {
-        const string email = "test3@test.com";
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
-        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
+        var (_, business) = await CreateUserWithBusiness();
+        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business.Id);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
+
         await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
         var problemDetails = await PostAsyncAndEnsureBadRequest(BookingRoute, createBookingRequest);
 
@@ -52,11 +49,8 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidBusinessAndTimeSlotId_TimeSlotIsFull_CreateBookingFails()
     {
-        const string email = "test4@test.com";
-        await CreateUserWithBusiness(email, 1);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
-        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
+        var (_, business) = await CreateUserWithBusiness( 1);
+        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business.Id);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
         await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
 
@@ -70,9 +64,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithNoIds_CreateBooking_ReturnsBadRequest()
     {
-        const string email = "test6@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var request = new CreateBookingRequest(Guid.Empty, Guid.Empty);
         var problemDetails = await PostAsyncAndEnsureBadRequest(BookingRoute, request);
 
@@ -82,9 +74,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidBusinessId_CreateBooking_ReturnsBusinessNotFound()
     {
-        const string email = "test7@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var request = new CreateBookingRequest(Guid.NewGuid(), Guid.NewGuid());
         var problemDetails = await PostAsyncAndEnsureNotFound(BookingRoute, request);
 
@@ -95,8 +85,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidTimeSlotId_CreateBooking_ReturnsTimeSlotNotFound()
     {
-        const string email = "test8@test.com";
-        await CreateUserWithBusiness(email);
+        await CreateUserWithBusiness();
         var business = (await GetBusinessesForCurrentUser()).First();
 
         var request = new CreateBookingRequest(business.Id, Guid.NewGuid());
@@ -109,14 +98,11 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithBookingIdAndBookingExist_DeleteUserBooking_BookingIsDeleted()
     {
-        const string email = "test9@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
-        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
+        var (userId, business) = await CreateUserWithBusiness();
+        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business.Id);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
-        await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
 
+        await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
         var user = await GetUser();
         var booking = user.Bookings.First();
 
@@ -137,20 +123,20 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithoutBookingId_DeleteUserBooking_DeleteBookingFails()
     {
-        const string email = "test10@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var problemDetails = await DeleteAsyncAndEnsureBadRequest($"{BookingRoute}/user/{Guid.Empty}");
+
+        problemDetails?.Should().NotBeNull();
         problemDetails?.Errors.Count.Should().Be(typeof(DeleteUserBookingRequest).GetProperties().Length);
     }
 
     [Fact]
     public async Task RequestWithInvalidBookingId_DeleteUserBooking_ReturnsBookingNotFound()
     {
-        const string email = "test11@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var problemDetails = await DeleteAsyncAndEnsureNotFound($"{BookingRoute}/user/{Guid.NewGuid()}");
+
+        problemDetails?.Should().NotBeNull();
         problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(BookingErrors.NotFound.Code);
     }
@@ -158,11 +144,8 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithBookingIdAndBookingExist_DeleteBusinessBooking_BookingIsDeleted()
     {
-        const string email = "test12@test.com";
-        var userId = await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
-        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business);
+        var (userId, business) = await CreateUserWithBusiness();
+        var timeSlot = await GenerateTimeSlotsAndReturnFirst(business.Id);
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
         await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
 
@@ -186,9 +169,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithoutIds_DeleteBusinessBooking_DeleteBookingFails()
     {
-        const string email = "test13@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var problemDetails = await DeleteAsyncAndEnsureBadRequest($"{BookingRoute}/business/{Guid.Empty}?bookingId={Guid.Empty}");
         problemDetails?.Errors.Count.Should().Be(typeof(DeleteBusinessBookingRequest).GetProperties().Length);
     }
@@ -196,9 +177,7 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidBusinessId_DeleteBusinessBooking_ReturnsBusinessNotFound()
     {
-        const string email = "test14@test.com";
-        await CreateUserAndSetJwtToken(email);
-
+        await CreateUserAndSetJwtToken();
         var problemDetails = await DeleteAsyncAndEnsureNotFound($"{BookingRoute}/business/{Guid.NewGuid()}?bookingId={Guid.NewGuid()}");
         problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(BusinessErrors.NotFound.Code);
@@ -207,20 +186,17 @@ public sealed class BookingControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidBookingId_DeleteBusinessBooking_ReturnsBookingNotFound()
     {
-        const string email = "test15@test.com";
-        await CreateUserWithBusiness(email);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (_, business) = await CreateUserWithBusiness();
         var problemDetails = await DeleteAsyncAndEnsureNotFound($"{BookingRoute}/business/{business.Id}?bookingId={Guid.NewGuid()}");
         problemDetails?.Errors.Should().HaveCount(1);
         problemDetails?.Errors.First().Key.Should().Be(BookingErrors.NotFound.Code);
     }
 
-    private async Task<TimeSlotDto> GenerateTimeSlotsAndReturnFirst(BusinessAggregateDto businessAggregate)
+    private async Task<TimeSlotDto> GenerateTimeSlotsAndReturnFirst(Guid businessId)
     {
-        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(businessAggregate.Id, DateOnly.FromDateTime(DateTime.Today));
+        var generateTimeSlotsRequest = new GenerateTimeSlotsRequest(businessId, DateOnly.FromDateTime(DateTime.Today));
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
-        var businessWithTimeSlots = await GetBusinessAggregate(businessAggregate);
+        var businessWithTimeSlots = await GetBusinessAggregate(businessId);
 
         return businessWithTimeSlots.TimeSlots.First();
     }

@@ -1,6 +1,7 @@
 ﻿using System.Net;
-using CLup.API.Contracts.Auth;
+using CLup.API.Auth.Contracts;
 
+#pragma warning disable CA1707
 namespace tests.CLup.IntegrationTests.Tests;
 
 public sealed class AuthControllerTests : IntegrationTestsBase
@@ -12,31 +13,29 @@ public sealed class AuthControllerTests : IntegrationTestsBase
     [Fact]
     public async Task GivenValidRequests_CanRegisterAndLogin()
     {
-        const string email = "test@test.com";
         const string password = "1234";
-
-        await CreateUserAndSetJwtToken(email, password);
-        await Login(email, password);
+        await CreateUserAndSetJwtToken(password);
+        var user = await GetUser();
+        await Login(user.Email, password);
     }
 
     [Fact]
     public async Task GivenInvalidRequest_RegisterFails()
     {
         var request = new RegisterRequest();
-        var response = await PostAsyncAndEnsureBadRequest($"{BaseRoute}/register", request);
+        var problemDetails = await PostAsyncAndEnsureBadRequest($"{BaseRoute}/register", request);
 
-        response.Should().NotBeNull();
-        response?.Errors.Count.Should().Be(typeof(RegisterRequest).GetProperties().Length);
+        problemDetails.Should().NotBeNull();
+        problemDetails?.Errors.Count.Should().Be(typeof(RegisterRequest).GetProperties().Length);
     }
 
     [Fact]
     public async Task GivenInvalidCredentials_LoginFails()
     {
-        const string email = "test1@test.com";
         const string password = "1234";
-
-        await CreateUserAndSetJwtToken(email, password);
-        var request = new LoginRequest(email, password + "h");
+        await CreateUserAndSetJwtToken(password);
+        var user = await GetUser();
+        var request = new LoginRequest(user.Email, password + "h");
 
         await PostAsyncAndEnsureStatus($"{BaseRoute}/login", request, HttpStatusCode.Unauthorized);
     }

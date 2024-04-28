@@ -1,9 +1,11 @@
-﻿using CLup.API.Contracts.Employees.CreateEmployee;
-using CLup.API.Contracts.Employees.DeleteEmployee;
+﻿using CLup.API.Employees.Contracts.CreateEmployee;
+using CLup.API.Employees.Contracts.DeleteEmployee;
+using CLup.Application.Businesses;
 using CLup.Domain.Businesses;
 using CLup.Domain.Employees;
 using CLup.Domain.Users;
 
+#pragma warning disable CA1707
 namespace tests.CLup.IntegrationTests.Tests;
 
 public class EmployeeControllerTests : IntegrationTestsBase
@@ -15,17 +17,13 @@ public class EmployeeControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequest_CreateEmployeeSucceeds()
     {
-        const string employeeEmail = "test@test.com";
-        var employeeUserId = await CreateUserAndSetJwtToken(employeeEmail);
-
-        const string ownerEmail = "test1@test.com";
-        await CreateUserWithBusiness(ownerEmail);
-        var business = (await GetBusinessesForCurrentUser()).First();
+        var employeeUserId = await CreateUserAndSetJwtToken();
+        var (_, business) = await CreateUserWithBusiness();
 
         var createEmployeeRequest = new CreateEmployeeRequest(business.Id, employeeUserId);
         await PostAsyncAndEnsureSuccess(EmployeeRoute, createEmployeeRequest);
 
-        var updatedBusiness = await GetBusinessAggregate(business);
+        var updatedBusiness = await GetBusinessAggregate(business.Id);
         updatedBusiness.Employees.Should().HaveCount(1);
         updatedBusiness.Employees.First().UserId.Should().Be(employeeUserId);
     }
@@ -33,10 +31,7 @@ public class EmployeeControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWhereUserIsOwner_CreateEmployee_ReturnsOwnerCantBeEmployee()
     {
-        const string ownerEmail = "test2@test.com";
-        var userId = await CreateUserWithBusiness(ownerEmail);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (userId, business) = await CreateUserWithBusiness();
         var createEmployeeRequest = new CreateEmployeeRequest(business.Id, userId);
         var problemDetails = await PostAsyncAndEnsureBadRequest(EmployeeRoute, createEmployeeRequest);
 
@@ -47,9 +42,7 @@ public class EmployeeControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithoutIds_CreateEmployeeFails()
     {
-        const string ownerEmail = "test3@test.com";
-        await CreateUserAndSetJwtToken(ownerEmail);
-
+        await CreateUserAndSetJwtToken();
         var createEmployeeRequest = new CreateEmployeeRequest();
         var problemDetails = await PostAsyncAndEnsureBadRequest(EmployeeRoute, createEmployeeRequest);
 
@@ -59,11 +52,8 @@ public class EmployeeControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidBusinessId_CreateEmployee_ReturnsBusinessNotFound()
     {
-        const string employeeEmail = "test4@test.com";
-        var employeeUserId = await CreateUserAndSetJwtToken(employeeEmail);
-
-        const string ownerEmail = "test5@test.com";
-        await CreateUserAndSetJwtToken(ownerEmail);
+        var employeeUserId = await CreateUserAndSetJwtToken();
+        await CreateUserAndSetJwtToken();
 
         var createEmployeeRequest = new CreateEmployeeRequest(Guid.NewGuid(), employeeUserId);
         var problemDetails = await PostAsyncAndEnsureNotFound(EmployeeRoute, createEmployeeRequest);
@@ -75,10 +65,7 @@ public class EmployeeControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidUserId_CreateEmployee_ReturnsUserNotFound()
     {
-        const string ownerEmail = "test6@test.com";
-        await CreateUserWithBusiness(ownerEmail);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (_, business) = await CreateUserWithBusiness();
         var createEmployeeRequest = new CreateEmployeeRequest(business.Id, Guid.NewGuid());
         var problemDetails = await PostAsyncAndEnsureNotFound(EmployeeRoute, createEmployeeRequest);
 
@@ -89,30 +76,24 @@ public class EmployeeControllerTests : IntegrationTestsBase
     [Fact]
     public async Task ValidRequest_DeleteEmployeeSucceeds()
     {
-        const string employeeEmail = "test7@test.com";
-        var employeeUserId = await CreateUserAndSetJwtToken(employeeEmail);
-
-        const string ownerEmail = "test8@test.com";
-        await CreateUserWithBusiness(ownerEmail);
-        var business = (await GetBusinessesForCurrentUser()).First();
+        var employeeUserId = await CreateUserAndSetJwtToken();
+        var (_, business) = await CreateUserWithBusiness();
 
         var createEmployeeRequest = new CreateEmployeeRequest(business.Id, employeeUserId);
         await PostAsyncAndEnsureSuccess(EmployeeRoute, createEmployeeRequest);
-        var businessWithEmployee = await GetBusinessAggregate(business);
+        var businessWithEmployee = await GetBusinessAggregate(business.Id);
         var employee = businessWithEmployee.Employees.First();
 
         await DeleteAsyncAndEnsureSuccess($"{EmployeeRoute}/{employee.Id}?businessId={business.Id}");
 
-        var businessWithoutEmployee = await GetBusinessAggregate(business);
+        var businessWithoutEmployee = await GetBusinessAggregate(business.Id);
         businessWithoutEmployee.Employees.Should().HaveCount(0);
     }
 
     [Fact]
     public async Task RequestWithoutIds_DeleteEmployeeFails()
     {
-        const string ownerEmail = "test9@test.com";
-        await CreateUserAndSetJwtToken(ownerEmail);
-
+        await CreateUserAndSetJwtToken();
         var problemDetails = await DeleteAsyncAndEnsureBadRequest($"{EmployeeRoute}/{Guid.Empty}?businessId={Guid.Empty}");
         problemDetails?.Errors.Should().HaveCount(typeof(DeleteEmployeeRequest).GetProperties().Length);
     }
@@ -120,16 +101,12 @@ public class EmployeeControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidBusinessId_DeleteEmployee_ReturnBusinessNotFound()
     {
-        const string employeeEmail = "test10@test.com";
-        var employeeUserId = await CreateUserAndSetJwtToken(employeeEmail);
-
-        const string ownerEmail = "test11@test.com";
-        await CreateUserWithBusiness(ownerEmail);
-        var business = (await GetBusinessesForCurrentUser()).First();
+        var employeeUserId = await CreateUserAndSetJwtToken();
+        var (_, business) = await CreateUserWithBusiness();
 
         var createEmployeeRequest = new CreateEmployeeRequest(business.Id, employeeUserId);
         await PostAsyncAndEnsureSuccess(EmployeeRoute, createEmployeeRequest);
-        var businessWithEmployee = await GetBusinessAggregate(business);
+        var businessWithEmployee = await GetBusinessAggregate(business.Id);
         var employee = businessWithEmployee.Employees.First();
 
         var problemDetails = await DeleteAsyncAndEnsureNotFound($"{EmployeeRoute}/{employee.Id}?businessId={Guid.NewGuid()}");
@@ -141,10 +118,7 @@ public class EmployeeControllerTests : IntegrationTestsBase
     [Fact]
     public async Task RequestWithInvalidEmployeeId_DeleteEmployee_ReturnEmployeeNotFound()
     {
-        const string userEmail = "test12@test.com";
-        await CreateUserWithBusiness(userEmail);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var (_, business) = await CreateUserWithBusiness();
         var problemDetails = await DeleteAsyncAndEnsureNotFound($"{EmployeeRoute}/{Guid.NewGuid()}?businessId={business.Id}");
 
         problemDetails?.Errors.Should().HaveCount(1);

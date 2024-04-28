@@ -1,8 +1,9 @@
-using CLup.API.Contracts.Bookings.CreateBooking;
-using CLup.API.Contracts.Businesses;
-using CLup.API.Contracts.Employees.CreateEmployee;
-using CLup.API.Contracts.TimeSlots.GenerateTimeSlots;
+using CLup.API.Bookings.Contracts.CreateBooking;
+using CLup.API.Businesses.Contracts;
+using CLup.API.Employees.Contracts.CreateEmployee;
+using CLup.API.TimeSlots.Contracts.GenerateTimeSlots;
 
+#pragma warning disable CA1707
 namespace tests.CLup.IntegrationTests.Tests;
 
 public sealed class QueryControllerTests : IntegrationTestsBase
@@ -14,23 +15,18 @@ public sealed class QueryControllerTests : IntegrationTestsBase
     [Fact]
     public async Task GetExistingUser_ReturnsCorrectUser()
     {
-        const string email = "test10@test.com";
-        await CreateUserAndSetJwtToken(email);
+        var userId = await CreateUserAndSetJwtToken();
         var user = await GetUser();
 
         user.Should().NotBeNull();
-        user.Email.Should().Be(email);
+        user.Id.Should().Be(userId);
     }
 
     [Fact]
     public async Task BusinessWithTimeSlotsBookingAndEmployee_GetBusinesses_Succeeds()
     {
-        const string employeeEmail = "test8@test.com";
-        var employeeUserId = await CreateUserAndSetJwtToken(employeeEmail);
-        const string ownerEmail = "test9@test.com";
-        await CreateUserWithBusiness(ownerEmail);
-        var business = (await GetBusinessesForCurrentUser()).First();
-
+        var employeeUserId = await CreateUserAndSetJwtToken();
+        var (_, business) = await CreateUserWithBusiness();
         var createEmployeeRequest = new CreateEmployeeRequest(business.Id, employeeUserId);
         await PostAsyncAndEnsureSuccess(EmployeeRoute, createEmployeeRequest);
 
@@ -38,12 +34,12 @@ public sealed class QueryControllerTests : IntegrationTestsBase
             new GenerateTimeSlotsRequest(business.Id, DateOnly.FromDateTime(DateTime.UtcNow.AddDays(1)));
         await PostAsyncAndEnsureSuccess(TimeSlotRoute, generateTimeSlotsRequest);
 
-        var businessWithTimeSlots = await GetBusinessAggregate(business);
+        var businessWithTimeSlots = await GetBusinessAggregate(business.Id);
         var timeSlot = businessWithTimeSlots.TimeSlots.First();
         var createBookingRequest = new CreateBookingRequest(business.Id, timeSlot.Id);
         await PostAsyncAndEnsureSuccess(BookingRoute, createBookingRequest);
 
-        var businessWithTimeSlotsBookingAndEmployee = await GetBusinessAggregate(business);
+        var businessWithTimeSlotsBookingAndEmployee = await GetBusinessAggregate(business.Id);
 
         businessWithTimeSlotsBookingAndEmployee.Should().NotBeNull();
         businessWithTimeSlotsBookingAndEmployee.Employees.Should().HaveCount(1);
@@ -53,10 +49,8 @@ public sealed class QueryControllerTests : IntegrationTestsBase
     [Fact]
     public async Task TwoBusinessesWithDifferentOwner_GetAllBusinesses_ReturnsBoth()
     {
-        const string firstEmail = "test11@test.com";
-        const string secondEmail = "test12@test.com";
-        var firstUserId = await CreateUserWithBusiness(firstEmail);
-        var secondUserId = await CreateUserWithBusiness(secondEmail);
+        var (firstUserId, _) = await CreateUserWithBusiness();
+        var (secondUserId, _) = await CreateUserWithBusiness();
 
         var response = await GetAsyncAndEnsureSuccess<GetAllBusinessesResponse>($"{QueryRoute}/business/all");
 
@@ -70,10 +64,8 @@ public sealed class QueryControllerTests : IntegrationTestsBase
     [Fact]
     public async Task OwnerWithOneBusiness_TwoBusinessesExist_GetBusinessesByOwner_ReturnsTheRightBusiness()
     {
-        const string firstEmail = "test13@test.com";
-        const string secondEmail = "test14@test.com";
-        await CreateUserWithBusiness(firstEmail);
-        var userId = await CreateUserWithBusiness(secondEmail);
+        await CreateUserWithBusiness();
+        var (userId, _) = await CreateUserWithBusiness();
 
         var businesses = await GetBusinessesForCurrentUser();
 
